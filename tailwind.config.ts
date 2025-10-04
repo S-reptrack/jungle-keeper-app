@@ -57,6 +57,22 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        "jungle-deep": "hsl(var(--jungle-deep))",
+        "jungle-mid": "hsl(var(--jungle-mid))",
+        "jungle-light": "hsl(var(--jungle-light))",
+        earth: "hsl(var(--earth))",
+        amber: "hsl(var(--amber))",
+      },
+      backgroundImage: {
+        "gradient-jungle": "var(--gradient-jungle)",
+        "gradient-tropical": "var(--gradient-tropical)",
+      },
+      boxShadow: {
+        soft: "var(--shadow-soft)",
+        elevated: "var(--shadow-elevated)",
+      },
+      transitionProperty: {
+        smooth: "var(--transition-smooth)",
       },
       borderRadius: {
         lg: "var(--radius)",
