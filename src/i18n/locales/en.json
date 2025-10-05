@@ -1,0 +1,54 @@
+{
+  "common": {
+    "appName": "S-reptrack",
+    "tagline": "Professional tracking for your reptiles",
+    "home": "Home",
+    "reptiles": "Reptiles",
+    "feeding": "Feeding",
+    "settings": "Settings",
+    "add": "Add",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search",
+    "language": "Language"
+  },
+  "stats": {
+    "totalReptiles": "Total Reptiles",
+    "feedingsDue": "Feedings Due",
+    "avgWeight": "Avg Weight",
+    "activeBreeding": "Active Breeding"
+  },
+  "reptile": {
+    "addReptile": "Add Reptile",
+    "editReptile": "Edit Reptile",
+    "recentReptiles": "Recent Reptiles",
+    "name": "Name",
+    "species": "Species",
+    "category": "Category",
+    "age": "Age",
+    "weight": "Weight",
+    "purchaseDate": "Purchase Date",
+    "lastFed": "Last Fed",
+    "selectCategory": "Select a category",
+    "selectSpecies": "Select a species",
+    "snake": "Snake",
+    "lizard": "Lizard",
+    "turtle": "Turtle",
+    "years": "years",
+    "months": "months",
+    "grams": "grams"
+  },
+  "validation": {
+    "nameRequired": "Name is required",
+    "nameMin": "Name must be at least 2 characters",
+    "categoryRequired": "Category is required",
+    "speciesRequired": "Species is required",
+    "ageRequired": "Age is required",
+    "ageMin": "Age must be positive",
+    "weightRequired": "Weight is required",
+    "weightMin": "Weight must be positive",
+    "dateRequired": "Date is required"
+  }
+}

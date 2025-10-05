@@ -1,0 +1,54 @@
+{
+  "common": {
+    "appName": "S-reptrack",
+    "tagline": "Monitoraggio professionale dei tuoi rettili",
+    "home": "Home",
+    "reptiles": "Rettili",
+    "feeding": "Alimentazione",
+    "settings": "Impostazioni",
+    "add": "Aggiungi",
+    "cancel": "Annulla",
+    "save": "Salva",
+    "edit": "Modifica",
+    "delete": "Elimina",
+    "search": "Cerca",
+    "language": "Lingua"
+  },
+  "stats": {
+    "totalReptiles": "Totale Rettili",
+    "feedingsDue": "Pasti in Scadenza",
+    "avgWeight": "Peso Medio",
+    "activeBreeding": "Riproduzioni Attive"
+  },
+  "reptile": {
+    "addReptile": "Aggiungi Rettile",
+    "editReptile": "Modifica Rettile",
+    "recentReptiles": "Rettili Recenti",
+    "name": "Nome",
+    "species": "Specie",
+    "category": "Categoria",
+    "age": "Età",
+    "weight": "Peso",
+    "purchaseDate": "Data di Acquisto",
+    "lastFed": "Ultimo Pasto",
+    "selectCategory": "Seleziona una categoria",
+    "selectSpecies": "Seleziona una specie",
+    "snake": "Serpente",
+    "lizard": "Lucertola",
+    "turtle": "Tartaruga",
+    "years": "anni",
+    "months": "mesi",
+    "grams": "grammi"
+  },
+  "validation": {
+    "nameRequired": "Il nome è obbligatorio",
+    "nameMin": "Il nome deve contenere almeno 2 caratteri",
+    "categoryRequired": "La categoria è obbligatoria",
+    "speciesRequired": "La specie è obbligatoria",
+    "ageRequired": "L'età è obbligatoria",
+    "ageMin": "L'età deve essere positiva",
+    "weightRequired": "Il peso è obbligatorio",
+    "weightMin": "Il peso deve essere positivo",
+    "dateRequired": "La data è obbligatoria"
+  }
+}

@@ -1,10 +1,14 @@
 import { Users, Calendar, Scale, TrendingUp } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import StatsCard from "@/components/StatsCard";
 import ReptileCard from "@/components/ReptileCard";
+import AddReptileDialog from "@/components/AddReptileDialog";
 import jungleHero from "@/assets/jungle-hero.jpg";
 
 const Index = () => {
+  const { t } = useTranslation();
+  
   const mockReptiles = [
     {
       name: "Kaa",
@@ -43,10 +47,10 @@ const Index = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
         <div className="absolute bottom-8 left-4 right-4 md:left-8">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">
-            S-reptrack
+            {t("common.appName")}
           </h1>
           <p className="text-lg text-muted-foreground">
-            Suivez vos reptiles avec précision
+            {t("common.tagline")}
           </p>
         </div>
       </div>
@@ -56,23 +60,23 @@ const Index = () => {
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
           <StatsCard
-            title="Total reptiles"
+            title={t("stats.totalReptiles")}
             value="12"
             icon={Users}
             trend="+2 ce mois"
           />
           <StatsCard
-            title="Repas cette semaine"
+            title={t("stats.feedingsDue")}
             value="24"
             icon={Calendar}
           />
           <StatsCard
-            title="Poids moyen"
+            title={t("stats.avgWeight")}
             value="1.8kg"
             icon={Scale}
           />
           <StatsCard
-            title="Croissance"
+            title={t("stats.activeBreeding")}
             value="+12%"
             icon={TrendingUp}
             trend="Ce trimestre"
@@ -82,10 +86,8 @@ const Index = () => {
         {/* Recent Reptiles */}
         <div>
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-foreground">Reptiles récents</h2>
-            <button className="text-sm text-primary hover:text-primary/80 font-medium transition-colors">
-              Voir tout →
-            </button>
+            <h2 className="text-2xl font-bold text-foreground">{t("reptile.recentReptiles")}</h2>
+            <AddReptileDialog />
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

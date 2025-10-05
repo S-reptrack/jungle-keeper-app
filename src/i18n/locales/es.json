@@ -1,0 +1,54 @@
+{
+  "common": {
+    "appName": "S-reptrack",
+    "tagline": "Seguimiento profesional de tus reptiles",
+    "home": "Inicio",
+    "reptiles": "Reptiles",
+    "feeding": "Alimentación",
+    "settings": "Ajustes",
+    "add": "Añadir",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "search": "Buscar",
+    "language": "Idioma"
+  },
+  "stats": {
+    "totalReptiles": "Total Reptiles",
+    "feedingsDue": "Comidas Pendientes",
+    "avgWeight": "Peso Promedio",
+    "activeBreeding": "Reproducciones Activas"
+  },
+  "reptile": {
+    "addReptile": "Añadir Reptil",
+    "editReptile": "Editar Reptil",
+    "recentReptiles": "Reptiles Recientes",
+    "name": "Nombre",
+    "species": "Especie",
+    "category": "Categoría",
+    "age": "Edad",
+    "weight": "Peso",
+    "purchaseDate": "Fecha de Compra",
+    "lastFed": "Última Comida",
+    "selectCategory": "Seleccionar categoría",
+    "selectSpecies": "Seleccionar especie",
+    "snake": "Serpiente",
+    "lizard": "Lagarto",
+    "turtle": "Tortuga",
+    "years": "años",
+    "months": "meses",
+    "grams": "gramos"
+  },
+  "validation": {
+    "nameRequired": "El nombre es obligatorio",
+    "nameMin": "El nombre debe tener al menos 2 caracteres",
+    "categoryRequired": "La categoría es obligatoria",
+    "speciesRequired": "La especie es obligatoria",
+    "ageRequired": "La edad es obligatoria",
+    "ageMin": "La edad debe ser positiva",
+    "weightRequired": "El peso es obligatorio",
+    "weightMin": "El peso debe ser positivo",
+    "dateRequired": "La fecha es obligatoria"
+  }
+}

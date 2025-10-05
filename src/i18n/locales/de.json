@@ -1,0 +1,54 @@
+{
+  "common": {
+    "appName": "S-reptrack",
+    "tagline": "Professionelle Verfolgung Ihrer Reptilien",
+    "home": "Startseite",
+    "reptiles": "Reptilien",
+    "feeding": "Fütterung",
+    "settings": "Einstellungen",
+    "add": "Hinzufügen",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "search": "Suchen",
+    "language": "Sprache"
+  },
+  "stats": {
+    "totalReptiles": "Gesamt Reptilien",
+    "feedingsDue": "Fällige Fütterungen",
+    "avgWeight": "Durchschn. Gewicht",
+    "activeBreeding": "Aktive Zucht"
+  },
+  "reptile": {
+    "addReptile": "Reptil Hinzufügen",
+    "editReptile": "Reptil Bearbeiten",
+    "recentReptiles": "Letzte Reptilien",
+    "name": "Name",
+    "species": "Art",
+    "category": "Kategorie",
+    "age": "Alter",
+    "weight": "Gewicht",
+    "purchaseDate": "Kaufdatum",
+    "lastFed": "Zuletzt Gefüttert",
+    "selectCategory": "Kategorie auswählen",
+    "selectSpecies": "Art auswählen",
+    "snake": "Schlange",
+    "lizard": "Eidechse",
+    "turtle": "Schildkröte",
+    "years": "Jahre",
+    "months": "Monate",
+    "grams": "Gramm"
+  },
+  "validation": {
+    "nameRequired": "Name ist erforderlich",
+    "nameMin": "Name muss mindestens 2 Zeichen lang sein",
+    "categoryRequired": "Kategorie ist erforderlich",
+    "speciesRequired": "Art ist erforderlich",
+    "ageRequired": "Alter ist erforderlich",
+    "ageMin": "Alter muss positiv sein",
+    "weightRequired": "Gewicht ist erforderlich",
+    "weightMin": "Gewicht muss positiv sein",
+    "dateRequired": "Datum ist erforderlich"
+  }
+}
