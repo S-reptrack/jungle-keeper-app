@@ -28,6 +28,7 @@
     "species": "Especie",
     "category": "Categoría",
     "age": "Edad",
+    "birthDate": "Fecha de Nacimiento",
     "weight": "Peso",
     "purchaseDate": "Fecha de Compra",
     "lastFed": "Última Comida",

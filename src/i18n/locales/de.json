@@ -28,6 +28,7 @@
     "species": "Art",
     "category": "Kategorie",
     "age": "Alter",
+    "birthDate": "Geburtsdatum",
     "weight": "Gewicht",
     "purchaseDate": "Kaufdatum",
     "lastFed": "Zuletzt Gefüttert",

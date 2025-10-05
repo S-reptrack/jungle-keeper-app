@@ -45,7 +45,9 @@ const formSchema = z.object({
     required_error: "validation.categoryRequired",
   }),
   species: z.string().min(1, "validation.speciesRequired"),
-  age: z.coerce.number().min(0, "validation.ageMin"),
+  birthDate: z.date({
+    required_error: "validation.dateRequired",
+  }),
   weight: z.coerce.number().min(1, "validation.weightMin"),
   purchaseDate: z.date({
     required_error: "validation.dateRequired",
@@ -63,7 +65,6 @@ const AddReptileDialog = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      age: 0,
       weight: 0,
     },
   });
@@ -174,35 +175,62 @@ const AddReptileDialog = () => {
               )}
             />
 
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="age"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("reptile.age")} ({t("reptile.months")})</FormLabel>
-                    <FormControl>
-                      <Input type="number" placeholder="12" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="birthDate"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>{t("reptile.birthDate")}</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>{t("reptile.birthDate")}</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date > new Date() || date < new Date("1900-01-01")
+                        }
+                        initialFocus
+                        className="pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="weight"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("reptile.weight")} ({t("reptile.grams")})</FormLabel>
-                    <FormControl>
-                      <Input type="number" placeholder="500" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="weight"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("reptile.weight")} ({t("reptile.grams")})</FormLabel>
+                  <FormControl>
+                    <Input type="number" placeholder="500" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
