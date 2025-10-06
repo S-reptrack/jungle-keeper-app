@@ -9,20 +9,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
-import AddRodentDialog from "./AddRodentDialog";
 import { supabase } from "@/integrations/supabase/client";
+import AddRodentDialog from "./AddRodentDialog";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+import { Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 interface Rodent {
   id: string;
   type: string;
   stage: string;
-  weight?: number;
+  weight: number | null;
   quantity: number;
-  purchase_date?: string;
-  notes?: string;
+  purchase_date: string;
+  notes: string | null;
 }
 
 const FeedingTab = () => {
@@ -32,19 +34,16 @@ const FeedingTab = () => {
 
   const fetchRodents = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
       const { data, error } = await supabase
         .from("rodents")
         .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
+        .order("purchase_date", { ascending: false });
 
       if (error) throw error;
       setRodents(data || []);
     } catch (error) {
       console.error("Error fetching rodents:", error);
+      toast.error("Erreur lors du chargement des rongeurs");
     } finally {
       setLoading(false);
     }
@@ -54,7 +53,7 @@ const FeedingTab = () => {
     fetchRodents();
   }, []);
 
-  const handleDelete = async (id: string) => {
+  const handleDeleteRodent = async (id: string) => {
     try {
       const { error } = await supabase
         .from("rodents")
@@ -62,7 +61,7 @@ const FeedingTab = () => {
         .eq("id", id);
 
       if (error) throw error;
-
+      
       toast.success("Rongeur supprimé");
       fetchRodents();
     } catch (error) {
@@ -71,13 +70,17 @@ const FeedingTab = () => {
     }
   };
 
-  const getRodentTypeName = (type: string) => {
-    const types: Record<string, string> = {
-      rat: "Rat",
-      mouse: "Souris",
-      rabbit: "Lapin"
+  const getTypeLabel = (type: string) => {
+    const labels: Record<string, string> = {
+      rat: t("feeding.rats.title"),
+      mouse: t("feeding.mice.title"),
+      rabbit: t("feeding.rabbits.title"),
     };
-    return types[type] || type;
+    return labels[type] || type;
+  };
+
+  const getStageLabel = (type: string, stage: string) => {
+    return t(`feeding.${type}s.${stage}`) || stage;
   };
 
   const rats = [
@@ -113,56 +116,63 @@ const FeedingTab = () => {
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Inventaire de rongeurs</CardTitle>
-          <AddRodentDialog onRodentAdded={fetchRodents} />
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <p className="text-muted-foreground text-center py-4">Chargement...</p>
-          ) : rodents.length === 0 ? (
-            <p className="text-muted-foreground text-center py-4">
-              Aucun rongeur dans l'inventaire. Ajoutez-en un pour commencer.
-            </p>
-          ) : (
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Gestion des rongeurs</h2>
+        <AddRodentDialog onRodentAdded={fetchRodents} />
+      </div>
+
+      {loading ? (
+        <Card>
+          <CardContent className="py-8">
+            <p className="text-muted-foreground text-center">Chargement...</p>
+          </CardContent>
+        </Card>
+      ) : rodents.length > 0 ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>Inventaire des rongeurs</CardTitle>
+          </CardHeader>
+          <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Type</TableHead>
                   <TableHead>Stade</TableHead>
-                  <TableHead className="text-right">Poids</TableHead>
-                  <TableHead className="text-right">Quantité</TableHead>
+                  <TableHead>Poids</TableHead>
+                  <TableHead>Quantité</TableHead>
+                  <TableHead>Date d'achat</TableHead>
+                  <TableHead>Notes</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {rodents.map((rodent) => (
                   <TableRow key={rodent.id}>
-                    <TableCell className="font-medium">
-                      {getRodentTypeName(rodent.type)}
+                    <TableCell className="font-medium">{getTypeLabel(rodent.type)}</TableCell>
+                    <TableCell>{getStageLabel(rodent.type, rodent.stage)}</TableCell>
+                    <TableCell>{rodent.weight ? `${rodent.weight}g` : "-"}</TableCell>
+                    <TableCell>{rodent.quantity}</TableCell>
+                    <TableCell>
+                      {format(new Date(rodent.purchase_date), "dd MMM yyyy", { locale: fr })}
                     </TableCell>
-                    <TableCell>{rodent.stage}</TableCell>
-                    <TableCell className="text-right">
-                      {rodent.weight ? `${rodent.weight}g` : "-"}
-                    </TableCell>
-                    <TableCell className="text-right">{rodent.quantity}</TableCell>
+                    <TableCell className="max-w-[200px] truncate">{rodent.notes || "-"}</TableCell>
                     <TableCell className="text-right">
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handleDelete(rodent.id)}
+                        onClick={() => handleDeleteRodent(rodent.id)}
+                        className="text-destructive hover:text-destructive"
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="w-4 h-4" />
                       </Button>
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      ) : null}
 
       <Card>
         <CardHeader>
