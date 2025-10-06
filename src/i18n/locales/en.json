@@ -39,6 +39,7 @@
     "noHealthRecords": "No health records yet",
     "tabs": {
       "overview": "Overview",
+      "feeding": "Feeding",
       "reproduction": "Reproduction",
       "health": "Health"
     },
@@ -62,6 +63,41 @@
         "laying": "Egg laying",
         "other": "Other"
       }
+    }
+  },
+  "feeding": {
+    "stage": "Stage",
+    "weight": "Weight",
+    "rats": {
+      "title": "Rats",
+      "pinky": "Pinky",
+      "fuzzy": "Fuzzy",
+      "hopper": "Hopper",
+      "weaner": "Weaner",
+      "small": "Small Adult",
+      "medium": "Medium Adult",
+      "large": "Large Adult",
+      "jumbo": "Jumbo",
+      "extraLarge": "Extra Large"
+    },
+    "mice": {
+      "title": "Mice",
+      "pinky": "Pinky",
+      "fuzzy": "Fuzzy",
+      "hopper": "Hopper",
+      "weaner": "Weaner",
+      "small": "Small Adult",
+      "medium": "Medium Adult",
+      "large": "Large Adult",
+      "jumbo": "Jumbo"
+    },
+    "rabbits": {
+      "title": "Rabbits",
+      "baby": "Baby",
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large",
+      "extraLarge": "Extra Large"
     }
   },
   "validation": {

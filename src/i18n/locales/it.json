@@ -53,6 +53,7 @@
     "noHealthRecords": "Nessuna cartella clinica ancora",
     "tabs": {
       "overview": "Panoramica",
+      "feeding": "Alimentazione",
       "reproduction": "Riproduzione",
       "health": "Salute"
     },
@@ -76,6 +77,41 @@
         "laying": "Deposizione uova",
         "other": "Altro"
       }
+    }
+  },
+  "feeding": {
+    "stage": "Stadio",
+    "weight": "Peso",
+    "rats": {
+      "title": "Ratti",
+      "pinky": "Pinky",
+      "fuzzy": "Fuzzy",
+      "hopper": "Hopper",
+      "weaner": "Svezzato",
+      "small": "Adulto Piccolo",
+      "medium": "Adulto Medio",
+      "large": "Adulto Grande",
+      "jumbo": "Jumbo",
+      "extraLarge": "Extra Grande"
+    },
+    "mice": {
+      "title": "Topi",
+      "pinky": "Pinky",
+      "fuzzy": "Fuzzy",
+      "hopper": "Hopper",
+      "weaner": "Svezzato",
+      "small": "Adulto Piccolo",
+      "medium": "Adulto Medio",
+      "large": "Adulto Grande",
+      "jumbo": "Jumbo"
+    },
+    "rabbits": {
+      "title": "Conigli",
+      "baby": "Cucciolo",
+      "small": "Piccolo",
+      "medium": "Medio",
+      "large": "Grande",
+      "extraLarge": "Extra Grande"
     }
   },
   "validation": {

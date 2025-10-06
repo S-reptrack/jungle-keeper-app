@@ -55,6 +55,7 @@
     "noHealthRecords": "Noch keine Gesundheitsunterlagen",
     "tabs": {
       "overview": "Übersicht",
+      "feeding": "Fütterung",
       "reproduction": "Zucht",
       "health": "Gesundheit"
     },
@@ -78,6 +79,41 @@
         "laying": "Eiablage",
         "other": "Andere"
       }
+    }
+  },
+  "feeding": {
+    "stage": "Stadium",
+    "weight": "Gewicht",
+    "rats": {
+      "title": "Ratten",
+      "pinky": "Pinky",
+      "fuzzy": "Fuzzy",
+      "hopper": "Hopper",
+      "weaner": "Abgesetzt",
+      "small": "Kleiner Erwachsener",
+      "medium": "Mittlerer Erwachsener",
+      "large": "Großer Erwachsener",
+      "jumbo": "Jumbo",
+      "extraLarge": "Extra Groß"
+    },
+    "mice": {
+      "title": "Mäuse",
+      "pinky": "Pinky",
+      "fuzzy": "Fuzzy",
+      "hopper": "Hopper",
+      "weaner": "Abgesetzt",
+      "small": "Kleiner Erwachsener",
+      "medium": "Mittlerer Erwachsener",
+      "large": "Großer Erwachsener",
+      "jumbo": "Jumbo"
+    },
+    "rabbits": {
+      "title": "Kaninchen",
+      "baby": "Baby",
+      "small": "Klein",
+      "medium": "Mittel",
+      "large": "Groß",
+      "extraLarge": "Extra Groß"
     }
   },
   "validation": {

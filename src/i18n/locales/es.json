@@ -53,6 +53,7 @@
     "noHealthRecords": "Aún no hay registros de salud",
     "tabs": {
       "overview": "Resumen",
+      "feeding": "Alimentación",
       "reproduction": "Reproducción",
       "health": "Salud"
     },
@@ -76,6 +77,41 @@
         "laying": "Puesta de huevos",
         "other": "Otro"
       }
+    }
+  },
+  "feeding": {
+    "stage": "Etapa",
+    "weight": "Peso",
+    "rats": {
+      "title": "Ratas",
+      "pinky": "Pinky",
+      "fuzzy": "Fuzzy",
+      "hopper": "Hopper",
+      "weaner": "Destetado",
+      "small": "Adulto Pequeño",
+      "medium": "Adulto Mediano",
+      "large": "Adulto Grande",
+      "jumbo": "Jumbo",
+      "extraLarge": "Extra Grande"
+    },
+    "mice": {
+      "title": "Ratones",
+      "pinky": "Pinky",
+      "fuzzy": "Fuzzy",
+      "hopper": "Hopper",
+      "weaner": "Destetado",
+      "small": "Adulto Pequeño",
+      "medium": "Adulto Mediano",
+      "large": "Adulto Grande",
+      "jumbo": "Jumbo"
+    },
+    "rabbits": {
+      "title": "Conejos",
+      "baby": "Bebé",
+      "small": "Pequeño",
+      "medium": "Mediano",
+      "large": "Grande",
+      "extraLarge": "Extra Grande"
     }
   },
   "validation": {

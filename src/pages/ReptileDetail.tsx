@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import ReproductionTab from "@/components/ReproductionTab";
+import FeedingTab from "@/components/FeedingTab";
 
 const ReptileDetail = () => {
   const { id } = useParams();
@@ -110,8 +111,9 @@ const ReptileDetail = () => {
           {/* Contenu principal avec onglets */}
           <div className="lg:col-span-2">
             <Tabs defaultValue="overview" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="overview">{t("reptile.tabs.overview")}</TabsTrigger>
+                <TabsTrigger value="feeding">{t("reptile.tabs.feeding")}</TabsTrigger>
                 <TabsTrigger value="reproduction">{t("reptile.tabs.reproduction")}</TabsTrigger>
                 <TabsTrigger value="health">{t("reptile.tabs.health")}</TabsTrigger>
               </TabsList>
@@ -134,6 +136,10 @@ const ReptileDetail = () => {
                     </div>
                   </CardContent>
                 </Card>
+              </TabsContent>
+              
+              <TabsContent value="feeding">
+                <FeedingTab />
               </TabsContent>
               
               <TabsContent value="reproduction">

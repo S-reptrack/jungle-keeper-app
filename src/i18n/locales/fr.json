@@ -37,6 +37,7 @@
     "noHealthRecords": "Aucun enregistrement de santé pour le moment",
     "tabs": {
       "overview": "Aperçu",
+      "feeding": "Alimentation",
       "reproduction": "Reproduction",
       "health": "Santé"
     },
@@ -60,6 +61,41 @@
         "laying": "Ponte",
         "other": "Autre"
       }
+    }
+  },
+  "feeding": {
+    "stage": "Stade",
+    "weight": "Poids",
+    "rats": {
+      "title": "Rats",
+      "pinky": "Blanchon (Pinky)",
+      "fuzzy": "Duveteux (Fuzzy)",
+      "hopper": "Sauteur (Hopper)",
+      "weaner": "Sevré (Weaner)",
+      "small": "Petit adulte",
+      "medium": "Adulte moyen",
+      "large": "Grand adulte",
+      "jumbo": "Jumbo",
+      "extraLarge": "Très grand"
+    },
+    "mice": {
+      "title": "Souris",
+      "pinky": "Blanchon (Pinky)",
+      "fuzzy": "Duveteux (Fuzzy)",
+      "hopper": "Sauteur (Hopper)",
+      "weaner": "Sevré (Weaner)",
+      "small": "Petit adulte",
+      "medium": "Adulte moyen",
+      "large": "Grand adulte",
+      "jumbo": "Jumbo"
+    },
+    "rabbits": {
+      "title": "Lapins",
+      "baby": "Bébé",
+      "small": "Petit",
+      "medium": "Moyen",
+      "large": "Grand",
+      "extraLarge": "Très grand"
     }
   },
   "validation": {
