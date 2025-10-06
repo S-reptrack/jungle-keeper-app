@@ -17,6 +17,48 @@ export const citesAnnexASpecies: ReptileSpecies[] = [
     category: 'snake',
     citesAnnex: 'A',
   },
+  {
+    id: 'boa-constrictor-occidentalis',
+    scientificName: 'Boa constrictor occidentalis',
+    commonName: 'Boa constricteur d\'Argentine / Argentine Boa',
+    category: 'snake',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'acrantophis',
+    scientificName: 'Acrantophis spp.',
+    commonName: 'Boa de Madagascar / Madagascar Ground Boa',
+    category: 'snake',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'sanzinia-madagascariensis',
+    scientificName: 'Sanzinia madagascariensis',
+    commonName: 'Boa arboricole de Madagascar / Madagascar Tree Boa',
+    category: 'snake',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'epicrates-inornatus',
+    scientificName: 'Epicrates inornatus',
+    commonName: 'Boa de Porto Rico / Puerto Rican Boa',
+    category: 'snake',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'epicrates-monensis',
+    scientificName: 'Epicrates monensis',
+    commonName: 'Boa de Mona / Mona Boa',
+    category: 'snake',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'epicrates-subflavus',
+    scientificName: 'Epicrates subflavus',
+    commonName: 'Boa de Jamaïque / Jamaican Boa',
+    category: 'snake',
+    citesAnnex: 'A',
+  },
 ];
 
 // CITES Annexe B - Espèces non menacées mais surveillées (équivalent CITES Annexe II)
@@ -49,7 +91,7 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
   {
     id: 'boa-constrictor',
     scientificName: 'Boa constrictor',
-    commonName: 'Boa constricteur / Boa Constrictor',
+    commonName: 'Boa constricteur / Boa Constrictor (sauf sous-espèce occidentalis)',
     category: 'snake',
     citesAnnex: 'B',
     morphs: ['Normal', 'Fire', 'Super Fire', 'Blood', 'Aztec', 'Leopard', 'Motley', 'Eclipse', 'Jungle', 'Anery (Anerythristic)', 'Albino T-', 'Albino T+', 'Kahl Albino', 'Hypo (Hypomelanistic)', 'Ghost', 'Jungle Boa', 'Caramel', 'Paradigm', 'Snow', 'Snowglow', 'Sunglow', 'Arabesque', 'IMG (Increased Melanism Gene)', 'Pastel', 'VPI (VPI T+)', 'Key West', 'Sharp', 'Axanthic', 'Black Stripe'],
