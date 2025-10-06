@@ -1,7 +1,6 @@
 import { Home, List, Utensils, Settings } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import ThemeToggle from "./ThemeToggle";
 import LanguageSelector from "./LanguageSelector";
 
 const Navigation = () => {
@@ -42,7 +41,6 @@ const Navigation = () => {
           </div>
           <div className="hidden md:flex md:gap-2">
             <LanguageSelector />
-            <ThemeToggle />
           </div>
         </div>
       </div>
