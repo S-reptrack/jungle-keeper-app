@@ -181,21 +181,21 @@ const ReptileDetail = () => {
           <div className="lg:col-span-2">
             <Tabs defaultValue="overview" className="w-full">
               <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="overview" className="flex items-center gap-2">
-                  <Eye className="w-4 h-4" />
-                  <span>{t("reptile.tabs.overview")}</span>
+                <TabsTrigger value="overview" className="flex items-center justify-center gap-1.5 px-2">
+                  <Eye className="w-4 h-4 shrink-0" />
+                  <span className="truncate text-xs md:text-sm">{t("reptile.tabs.overview")}</span>
                 </TabsTrigger>
-                <TabsTrigger value="feeding" className="flex items-center gap-2">
-                  <Utensils className="w-4 h-4" />
-                  <span>{t("reptile.tabs.feeding")}</span>
+                <TabsTrigger value="feeding" className="flex items-center justify-center gap-1.5 px-2">
+                  <Utensils className="w-4 h-4 shrink-0" />
+                  <span className="truncate text-xs md:text-sm">{t("reptile.tabs.feeding")}</span>
                 </TabsTrigger>
-                <TabsTrigger value="reproduction" className="flex items-center gap-2">
-                  <Heart className="w-4 h-4" />
-                  <span>{t("reptile.tabs.reproduction")}</span>
+                <TabsTrigger value="reproduction" className="flex items-center justify-center gap-1.5 px-2">
+                  <Heart className="w-4 h-4 shrink-0" />
+                  <span className="truncate text-xs md:text-sm">{t("reptile.tabs.reproduction")}</span>
                 </TabsTrigger>
-                <TabsTrigger value="health" className="flex items-center gap-2">
-                  <Activity className="w-4 h-4" />
-                  <span>{t("reptile.tabs.health")}</span>
+                <TabsTrigger value="health" className="flex items-center justify-center gap-1.5 px-2">
+                  <Activity className="w-4 h-4 shrink-0" />
+                  <span className="truncate text-xs md:text-sm">{t("reptile.tabs.health")}</span>
                 </TabsTrigger>
               </TabsList>
               
