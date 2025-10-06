@@ -7,6 +7,7 @@ import { ThemeProvider } from "next-themes";
 import "./i18n/config";
 import Index from "./pages/Index";
 import ReptileDetail from "./pages/ReptileDetail";
+import Feeding from "./pages/Feeding";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/reptile/:id" element={<ReptileDetail />} />
+            <Route path="/feeding" element={<Feeding />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
