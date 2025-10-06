@@ -56,6 +56,45 @@ export type Database = {
         }
         Relationships: []
       }
+      health_records: {
+        Row: {
+          condition: string
+          created_at: string
+          diagnosis_date: string
+          id: string
+          notes: string | null
+          reptile_id: string
+          resolved: boolean | null
+          treatment: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          condition: string
+          created_at?: string
+          diagnosis_date: string
+          id?: string
+          notes?: string | null
+          reptile_id: string
+          resolved?: boolean | null
+          treatment?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          condition?: string
+          created_at?: string
+          diagnosis_date?: string
+          id?: string
+          notes?: string | null
+          reptile_id?: string
+          resolved?: boolean | null
+          treatment?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string

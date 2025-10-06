@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import ReproductionTab from "@/components/ReproductionTab";
 import FeedingTab from "@/components/FeedingTab";
+import HealthTab from "@/components/HealthTab";
 import EditReptileDialog from "@/components/EditReptileDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -229,14 +230,7 @@ const ReptileDetail = () => {
               </TabsContent>
               
               <TabsContent value="health" className="space-y-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>{t("reptile.tabs.health")}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">{t("reptile.noHealthRecords")}</p>
-                  </CardContent>
-                </Card>
+                <HealthTab reptileId={reptile.id} />
               </TabsContent>
             </Tabs>
           </div>
