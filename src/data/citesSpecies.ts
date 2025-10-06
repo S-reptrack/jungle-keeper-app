@@ -33,14 +33,14 @@ export const citesAnnexIISpecies: ReptileSpecies[] = [
     scientificName: 'Boa constrictor',
     commonName: 'Boa constricteur / Boa Constrictor',
     category: 'snake',
-    morphs: ['Normal', 'Fire', 'Super Fire', 'Blood', 'Aztec', 'Leopard', 'Motley', 'Eclipse', 'Jungle', 'Anery (Anerythristic)', 'Albino T-', 'Albino T+', 'Kahl Albino', 'Hypo (Hypomelanistic)', 'Ghost', 'Jungle Boa', 'Caramel', 'Paradigm', 'Snow', 'Snowglow', 'Sunglow', 'Arabesque', 'IMG (Increased Melanism Gene)', 'Pastel', 'VPI (VPI T+)', 'Key West', 'Sharp', 'Axanthic'],
+    morphs: ['Normal', 'Fire', 'Super Fire', 'Blood', 'Aztec', 'Leopard', 'Motley', 'Eclipse', 'Jungle', 'Anery (Anerythristic)', 'Albino T-', 'Albino T+', 'Kahl Albino', 'Hypo (Hypomelanistic)', 'Ghost', 'Jungle Boa', 'Caramel', 'Paradigm', 'Snow', 'Snowglow', 'Sunglow', 'Arabesque', 'IMG (Increased Melanism Gene)', 'Pastel', 'VPI (VPI T+)', 'Key West', 'Sharp', 'Axanthic', 'Black Stripe'],
   },
   {
     id: 'boa-imperator',
     scientificName: 'Boa imperator',
     commonName: 'Boa imperator / Common Boa',
     category: 'snake',
-    morphs: ['Normal', 'Fire', 'Super Fire', 'Blood', 'Aztec', 'Leopard', 'Motley', 'Eclipse', 'Jungle', 'Anery (Anerythristic)', 'Albino T-', 'Albino T+', 'Kahl Albino', 'Hypo (Hypomelanistic)', 'Ghost', 'Jungle Boa', 'Caramel', 'Paradigm', 'Snow', 'Snowglow', 'Sunglow', 'Salmon', 'Arabesque', 'IMG (Increased Melanism Gene)', 'Pastel', 'VPI (VPI T+)', 'Key West', 'Axanthic'],
+    morphs: ['Normal', 'Fire', 'Super Fire', 'Blood', 'Aztec', 'Leopard', 'Motley', 'Eclipse', 'Jungle', 'Anery (Anerythristic)', 'Albino T-', 'Albino T+', 'Kahl Albino', 'Hypo (Hypomelanistic)', 'Ghost', 'Jungle Boa', 'Caramel', 'Paradigm', 'Snow', 'Snowglow', 'Sunglow', 'Salmon', 'Arabesque', 'IMG (Increased Melanism Gene)', 'Pastel', 'VPI (VPI T+)', 'Key West', 'Axanthic', 'Black Stripe'],
   },
   {
     id: 'epicrates-cenchria',
