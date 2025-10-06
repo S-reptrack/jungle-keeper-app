@@ -75,14 +75,43 @@ const AddReptileDialog = () => {
     },
   });
 
-  const onSubmit = (data: FormValues) => {
-    // TODO: Intégrer avec la base de données
-    console.log("Reptile data:", data);
-    toast.success(t("reptile.addReptile"), {
-      description: `${data.name} a été ajouté avec succès!`,
-    });
-    form.reset();
-    setOpen(false);
+  const onSubmit = async (data: FormValues) => {
+    try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast.error("Vous devez être connecté pour ajouter un reptile");
+        return;
+      }
+
+      const { error } = await supabase.from("reptiles").insert({
+        user_id: user.id,
+        name: data.name,
+        category: data.category,
+        species: data.species,
+        sex: data.sex,
+        morphs: data.morphs || [],
+        birth_date: data.birthDate.toISOString().split('T')[0],
+        weight: data.weight,
+        purchase_date: data.purchaseDate.toISOString().split('T')[0],
+      });
+
+      if (error) throw error;
+
+      toast.success(t("reptile.addReptile"), {
+        description: `${data.name} a été ajouté avec succès!`,
+      });
+      form.reset();
+      setSelectedMorphs([]);
+      setOpen(false);
+      
+      // Refresh the page to show the new reptile
+      window.location.reload();
+    } catch (error: any) {
+      console.error("Error adding reptile:", error);
+      toast.error("Erreur lors de l'ajout du reptile");
+    }
   };
 
   const filteredSpecies = selectedCategory 

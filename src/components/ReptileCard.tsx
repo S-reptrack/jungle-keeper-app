@@ -4,6 +4,7 @@ import { QrCode } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface ReptileCardProps {
+  id: string;
   name: string;
   species: string;
   age: string;
@@ -12,12 +13,11 @@ interface ReptileCardProps {
   image?: string;
 }
 
-const ReptileCard = ({ name, species, age, weight, lastFed, image }: ReptileCardProps) => {
+const ReptileCard = ({ id, name, species, age, weight, lastFed, image }: ReptileCardProps) => {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    // TODO: Utiliser l'ID réel du reptile
-    navigate(`/reptile/1`);
+    navigate(`/reptile/${id}`);
   };
 
   return (
