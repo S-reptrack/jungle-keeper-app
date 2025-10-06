@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { ArrowLeft, Calendar, Scale, QrCode } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
@@ -8,28 +9,90 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import ReproductionTab from "@/components/ReproductionTab";
 import FeedingTab from "@/components/FeedingTab";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { differenceInYears, differenceInMonths } from "date-fns";
+
+interface Reptile {
+  id: string;
+  name: string;
+  species: string;
+  category: string;
+  sex: string;
+  morphs: string[];
+  birth_date: string;
+  weight: number;
+  purchase_date: string;
+  image_url: string | null;
+}
 
 const ReptileDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [reptile, setReptile] = useState<Reptile | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // TODO: Récupérer les données depuis la base de données
-  const reptile = {
-    id: id || "1",
-    name: "Kaa",
-    species: "Python royal",
-    scientificName: "Python regius",
-    category: "snake",
-    sex: "female",
-    morph: "Ghost",
-    age: "3 ans",
-    birthDate: "2021-06-15",
-    weight: "1.5 kg",
-    lastFed: "Il y a 5 jours",
-    purchaseDate: "2022-01-10",
-    image: undefined,
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchReptile = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("reptiles")
+          .select("*")
+          .eq("id", id)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        if (!data) {
+          toast.error("Reptile introuvable");
+          navigate("/");
+          return;
+        }
+
+        setReptile(data);
+      } catch (error) {
+        console.error("Error fetching reptile:", error);
+        toast.error("Erreur lors du chargement du reptile");
+        navigate("/");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReptile();
+  }, [id, navigate]);
+
+  const calculateAge = (birthDate: string) => {
+    const birth = new Date(birthDate);
+    const now = new Date();
+    const years = differenceInYears(now, birth);
+    const months = differenceInMonths(now, birth) % 12;
+
+    if (years > 0) {
+      return `${years} ${t("reptile.years")}${months > 0 ? ` ${months} ${t("reptile.months")}` : ""}`;
+    }
+    return `${months} ${t("reptile.months")}`;
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <main className="max-w-7xl mx-auto px-4 py-8 mt-16">
+          <div className="flex justify-center items-center h-64">
+            <p className="text-muted-foreground">Chargement...</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (!reptile) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -50,9 +113,9 @@ const ReptileDetail = () => {
           <div className="lg:col-span-1 space-y-4">
             <Card>
               <div className="h-64 bg-gradient-to-br from-jungle-mid to-jungle-light relative overflow-hidden">
-                {reptile.image && (
+                {reptile.image_url && (
                   <img 
-                    src={reptile.image} 
+                    src={reptile.image_url} 
                     alt={reptile.name}
                     className="w-full h-full object-cover"
                   />
@@ -67,11 +130,10 @@ const ReptileDetail = () => {
                 <div className="flex items-start justify-between">
                   <div>
                     <CardTitle className="text-2xl">{reptile.name}</CardTitle>
-                    <p className="text-sm text-muted-foreground italic">{reptile.scientificName}</p>
                     <p className="text-sm text-muted-foreground">{reptile.species}</p>
                   </div>
                   <Badge variant="secondary" className="bg-accent/20 text-accent-foreground border-accent/30">
-                    {reptile.age}
+                    {calculateAge(reptile.birth_date)}
                   </Badge>
                 </div>
               </CardHeader>
@@ -84,10 +146,10 @@ const ReptileDetail = () => {
                      t("reptile.unknown")}
                   </Badge>
                 </div>
-                {reptile.morph && (
+                {reptile.morphs && reptile.morphs.length > 0 && (
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">{t("reptile.morph")}</span>
-                    <span className="font-medium text-foreground">{reptile.morph}</span>
+                    <span className="text-sm text-muted-foreground">{t("reptile.morphs")}</span>
+                    <span className="font-medium text-foreground">{reptile.morphs.join(", ")}</span>
                   </div>
                 )}
                 <div className="flex justify-between items-center">
@@ -95,14 +157,7 @@ const ReptileDetail = () => {
                     <Scale className="w-4 h-4" />
                     {t("reptile.weight")}
                   </span>
-                  <span className="font-medium text-foreground">{reptile.weight}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    {t("reptile.lastFed")}
-                  </span>
-                  <span className="font-medium text-foreground">{reptile.lastFed}</span>
+                  <span className="font-medium text-foreground">{reptile.weight}g</span>
                 </div>
               </CardContent>
             </Card>
@@ -127,11 +182,19 @@ const ReptileDetail = () => {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <p className="text-sm text-muted-foreground">{t("reptile.birthDate")}</p>
-                        <p className="font-medium">{reptile.birthDate}</p>
+                        <p className="font-medium">{new Date(reptile.birth_date).toLocaleDateString('fr-FR')}</p>
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">{t("reptile.purchaseDate")}</p>
-                        <p className="font-medium">{reptile.purchaseDate}</p>
+                        <p className="font-medium">{new Date(reptile.purchase_date).toLocaleDateString('fr-FR')}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">{t("reptile.category")}</p>
+                        <p className="font-medium">
+                          {reptile.category === "snake" ? t("reptile.snake") : 
+                           reptile.category === "lizard" ? t("reptile.lizard") : 
+                           t("reptile.turtle")}
+                        </p>
                       </div>
                     </div>
                   </CardContent>
