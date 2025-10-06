@@ -67,8 +67,8 @@ const EditReptileDialog = ({
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      birthDate: new Date(currentBirthDate),
-      purchaseDate: new Date(currentPurchaseDate),
+      birthDate: new Date(Number(currentBirthDate.slice(0,4)), Number(currentBirthDate.slice(5,7)) - 1, Number(currentBirthDate.slice(8,10))),
+      purchaseDate: new Date(Number(currentPurchaseDate.slice(0,4)), Number(currentPurchaseDate.slice(5,7)) - 1, Number(currentPurchaseDate.slice(8,10))),
       weight: currentWeight,
     },
   });
@@ -103,12 +103,12 @@ const EditReptileDialog = ({
   useEffect(() => {
     if (open) {
       form.reset({
-        birthDate: new Date(currentBirthDate),
-        purchaseDate: new Date(currentPurchaseDate),
+        birthDate: new Date(Number(currentBirthDate.slice(0,4)), Number(currentBirthDate.slice(5,7)) - 1, Number(currentBirthDate.slice(8,10))),
+        purchaseDate: new Date(Number(currentPurchaseDate.slice(0,4)), Number(currentPurchaseDate.slice(5,7)) - 1, Number(currentPurchaseDate.slice(8,10))),
         weight: currentWeight,
       });
-      setBirthDateInput(formatDateToInput(new Date(currentBirthDate)));
-      setPurchaseDateInput(formatDateToInput(new Date(currentPurchaseDate)));
+      setBirthDateInput(formatDateToInput(new Date(Number(currentBirthDate.slice(0,4)), Number(currentBirthDate.slice(5,7)) - 1, Number(currentBirthDate.slice(8,10)))));
+      setPurchaseDateInput(formatDateToInput(new Date(Number(currentPurchaseDate.slice(0,4)), Number(currentPurchaseDate.slice(5,7)) - 1, Number(currentPurchaseDate.slice(8,10)))));
     }
   }, [open, currentBirthDate, currentPurchaseDate, currentWeight]);
 
@@ -117,8 +117,8 @@ const EditReptileDialog = ({
       const { error } = await supabase
         .from("reptiles")
         .update({
-          birth_date: data.birthDate.toISOString().split('T')[0],
-          purchase_date: data.purchaseDate.toISOString().split('T')[0],
+          birth_date: `${data.birthDate.getFullYear()}-${String(data.birthDate.getMonth() + 1).padStart(2, '0')}-${String(data.birthDate.getDate()).padStart(2, '0')}`,
+          purchase_date: `${data.purchaseDate.getFullYear()}-${String(data.purchaseDate.getMonth() + 1).padStart(2, '0')}-${String(data.purchaseDate.getDate()).padStart(2, '0')}`,
           weight: data.weight,
         })
         .eq("id", reptileId);

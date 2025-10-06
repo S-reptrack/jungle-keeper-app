@@ -96,9 +96,9 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
         species: data.species,
         sex: data.sex,
         morphs: data.morphs || [],
-        birth_date: data.birthDate.toISOString().split('T')[0],
+        birth_date: `${data.birthDate.getFullYear()}-${String(data.birthDate.getMonth() + 1).padStart(2, '0')}-${String(data.birthDate.getDate()).padStart(2, '0')}`,
         weight: data.weight,
-        purchase_date: data.purchaseDate.toISOString().split('T')[0],
+        purchase_date: `${data.purchaseDate.getFullYear()}-${String(data.purchaseDate.getMonth() + 1).padStart(2, '0')}-${String(data.purchaseDate.getDate()).padStart(2, '0')}`,
       });
 
       if (error) throw error;
