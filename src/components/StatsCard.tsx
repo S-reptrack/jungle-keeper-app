@@ -11,8 +11,8 @@ interface StatsCardProps {
 const StatsCard = ({ title, value, icon: Icon, trend }: StatsCardProps) => {
   return (
     <Card className="border-border/50 bg-card/80 backdrop-blur-sm hover:shadow-soft transition-all duration-300 overflow-hidden">
-      <CardContent className="pt-6">
-        <div className="flex items-center justify-between">
+      <CardContent className="p-4 sm:p-6">
+        <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-sm text-muted-foreground mb-1">{title}</p>
             <p className="text-3xl font-bold text-foreground">{value}</p>
