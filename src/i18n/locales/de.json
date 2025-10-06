@@ -18,7 +18,7 @@
   "stats": {
     "totalReptiles": "Gesamt Reptilien",
     "feedingsDue": "Fällige Fütterungen",
-    "avgWeight": "Durchschn. Gewicht",
+    "health": "Gesundheit",
     "activeBreeding": "Aktive Zucht"
   },
   "reptile": {

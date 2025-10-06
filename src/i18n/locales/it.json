@@ -18,7 +18,7 @@
   "stats": {
     "totalReptiles": "Totale Rettili",
     "feedingsDue": "Pasti in Scadenza",
-    "avgWeight": "Peso Medio",
+    "health": "Salute",
     "activeBreeding": "Riproduzioni Attive"
   },
   "reptile": {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Users, Calendar, Scale, TrendingUp } from "lucide-react";
+import { Users, Calendar, Activity, TrendingUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import StatsCard from "@/components/StatsCard";
@@ -16,7 +16,7 @@ const Index = () => {
   const [reptiles, setReptiles] = useState<any[]>([]);
   const [stats, setStats] = useState({
     total: 0,
-    avgWeight: 0,
+    healthIssues: 0,
   });
 
   useEffect(() => {
@@ -44,11 +44,16 @@ const Index = () => {
         .select("*", { count: "exact", head: true });
       
       const total = count || 0;
-      const avgWeight = reptileData.length > 0
-        ? reptileData.reduce((sum: number, r: any) => sum + (r.weight || 0), 0) / reptileData.length
-        : 0;
       
-      setStats({ total, avgWeight });
+      // Count unresolved health issues
+      const { count: healthCount } = await supabase
+        .from("health_records")
+        .select("*", { count: "exact", head: true })
+        .eq("resolved", false);
+      
+      const healthIssues = healthCount || 0;
+      
+      setStats({ total, healthIssues });
     } catch (error) {
       console.error("Error fetching reptiles:", error);
     }
@@ -111,9 +116,9 @@ const Index = () => {
             icon={Calendar}
           />
           <StatsCard
-            title={t("stats.avgWeight")}
-            value={`${Math.round(stats.avgWeight)}g`}
-            icon={Scale}
+            title={t("stats.health")}
+            value={stats.healthIssues.toString()}
+            icon={Activity}
           />
           <StatsCard
             title={t("stats.activeBreeding")}

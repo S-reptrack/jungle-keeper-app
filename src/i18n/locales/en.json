@@ -2,7 +2,7 @@
   "stats": {
     "totalReptiles": "Total Reptiles",
     "feedingsDue": "Feedings Due",
-    "avgWeight": "Avg Weight",
+    "health": "Health",
     "activeBreeding": "Active Breeding"
   },
   "reptile": {
