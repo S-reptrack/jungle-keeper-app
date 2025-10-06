@@ -126,11 +126,12 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
     (s) => s.id === form.watch("species")
   );
   
-  const availableMorphs = selectedSpeciesData?.morphs || [];
+  const availableMorphs = selectedSpeciesData?.morphs?.slice().sort((a, b) => a.localeCompare(b)) || [];
   const [selectedMorphs, setSelectedMorphs] = useState<string[]>([]);
   const [birthDateInput, setBirthDateInput] = useState("");
   const [purchaseDateInput, setPurchaseDateInput] = useState("");
   const [newMorph, setNewMorph] = useState("");
+  const [morphSearch, setMorphSearch] = useState("");
 
   const formatDateToInput = (date?: Date) => (date ? format(date, "dd/MM/yyyy") : "");
   const parseInputToDate = (value: string) => {
@@ -141,9 +142,29 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
     return isNaN(date.getTime()) ? null : date;
   };
 
+  const handleDateInput = (value: string, setter: (val: string) => void) => {
+    // Remove all non-digit characters
+    const digitsOnly = value.replace(/\D/g, '');
+    
+    // Format with slashes: DD/MM/YYYY
+    let formatted = digitsOnly;
+    if (digitsOnly.length >= 2) {
+      formatted = digitsOnly.slice(0, 2);
+      if (digitsOnly.length >= 3) {
+        formatted += '/' + digitsOnly.slice(2, 4);
+        if (digitsOnly.length >= 5) {
+          formatted += '/' + digitsOnly.slice(4, 8);
+        }
+      }
+    }
+    
+    setter(formatted);
+  };
+
   const speciesValue = form.watch("species");
   useEffect(() => {
     setSelectedMorphs([]);
+    setMorphSearch("");
     form.setValue("morphs", []);
   }, [speciesValue]);
 
@@ -315,50 +336,64 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                         </FormControl>
                       </PopoverTrigger>
                       <PopoverContent className="w-full p-0 z-50 bg-card border-border" align="start">
-                        <div className="max-h-[200px] overflow-y-auto p-4 space-y-2">
-                          {availableMorphs.map((morph) => (
-                            <label
-                              key={morph}
-                              className="flex items-center space-x-2 cursor-pointer hover:bg-accent rounded p-2"
-                            >
-                              <input
-                                type="checkbox"
-                                checked={selectedMorphs.includes(morph)}
-                                onChange={(e) => {
-                                  const newMorphs = e.target.checked
-                                    ? [...selectedMorphs, morph]
-                                    : selectedMorphs.filter((m) => m !== morph);
-                                  setSelectedMorphs(newMorphs);
-                                  field.onChange(newMorphs);
-                                }}
-                                className="w-4 h-4"
-                              />
-                              <span className="text-sm">{morph}</span>
-                            </label>
-                          ))}
-                        </div>
-                        <div className="p-3 border-t border-border flex gap-2">
-                          <Input
-                            placeholder={t("reptile.morphs")}
-                            value={newMorph}
-                            onChange={(e) => setNewMorph(e.target.value)}
+                        <Command>
+                          <CommandInput 
+                            placeholder={t("reptile.selectMorphs") as string}
+                            value={morphSearch}
+                            onValueChange={setMorphSearch}
                           />
-                          <Button
-                            type="button"
-                            onClick={() => {
-                              const v = newMorph.trim();
-                              if (!v) return;
-                              if (!selectedMorphs.includes(v)) {
-                                const updated = [...selectedMorphs, v];
-                                setSelectedMorphs(updated);
-                                field.onChange(updated);
-                              }
-                              setNewMorph("");
-                            }}
-                          >
-                            +
-                          </Button>
-                        </div>
+                          <CommandEmpty>Aucune mutation trouvée</CommandEmpty>
+                          <CommandGroup className="max-h-[200px] overflow-y-auto">
+                            {availableMorphs
+                              .filter(morph => 
+                                morph.toLowerCase().includes(morphSearch.toLowerCase())
+                              )
+                              .map((morph) => (
+                                <CommandItem
+                                  key={morph}
+                                  value={morph}
+                                  onSelect={() => {
+                                    const newMorphs = selectedMorphs.includes(morph)
+                                      ? selectedMorphs.filter((m) => m !== morph)
+                                      : [...selectedMorphs, morph];
+                                    setSelectedMorphs(newMorphs);
+                                    field.onChange(newMorphs);
+                                  }}
+                                  className="flex items-center space-x-2"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedMorphs.includes(morph)}
+                                    onChange={() => {}}
+                                    className="w-4 h-4"
+                                  />
+                                  <span>{morph}</span>
+                                </CommandItem>
+                              ))}
+                          </CommandGroup>
+                          <div className="p-3 border-t border-border flex gap-2">
+                            <Input
+                              placeholder={t("reptile.morphs")}
+                              value={newMorph}
+                              onChange={(e) => setNewMorph(e.target.value)}
+                            />
+                            <Button
+                              type="button"
+                              onClick={() => {
+                                const v = newMorph.trim();
+                                if (!v) return;
+                                if (!selectedMorphs.includes(v)) {
+                                  const updated = [...selectedMorphs, v];
+                                  setSelectedMorphs(updated);
+                                  field.onChange(updated);
+                                }
+                                setNewMorph("");
+                              }}
+                            >
+                              +
+                            </Button>
+                          </div>
+                        </Command>
                       </PopoverContent>
                     </Popover>
                     <FormMessage />
@@ -378,7 +413,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                       type="text"
                       placeholder="JJ/MM/AAAA"
                       value={birthDateInput}
-                      onChange={(e) => setBirthDateInput(e.target.value)}
+                      onChange={(e) => handleDateInput(e.target.value, setBirthDateInput)}
                       onBlur={() => {
                         const parsed = parseInputToDate(birthDateInput);
                         if (parsed) field.onChange(parsed);
@@ -390,6 +425,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                         }
                       }}
                       className="flex-1"
+                      maxLength={10}
                     />
                     <Popover>
                       <PopoverTrigger asChild>
@@ -450,7 +486,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                       type="text"
                       placeholder="JJ/MM/AAAA"
                       value={purchaseDateInput}
-                      onChange={(e) => setPurchaseDateInput(e.target.value)}
+                      onChange={(e) => handleDateInput(e.target.value, setPurchaseDateInput)}
                       onBlur={() => {
                         const parsed = parseInputToDate(purchaseDateInput);
                         if (parsed) field.onChange(parsed);
@@ -462,6 +498,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                         }
                       }}
                       className="flex-1"
+                      maxLength={10}
                     />
                     <Popover>
                       <PopoverTrigger asChild>
