@@ -67,8 +67,18 @@ const ReptileDetail = () => {
     fetchReptile();
   }, [id, navigate]);
 
+  const parseDate = (dateString: string) => {
+    // Parse YYYY-MM-DD as local date to avoid timezone issues
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
+  const formatDate = (dateString: string) => {
+    return parseDate(dateString).toLocaleDateString('fr-FR');
+  };
+
   const calculateAge = (birthDate: string) => {
-    const birth = new Date(birthDate);
+    const birth = parseDate(birthDate);
     const now = new Date();
     const years = differenceInYears(now, birth);
     const months = differenceInMonths(now, birth) % 12;
@@ -191,11 +201,11 @@ const ReptileDetail = () => {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <p className="text-sm text-muted-foreground">{t("reptile.birthDate")}</p>
-                        <p className="font-medium">{new Date(reptile.birth_date).toLocaleDateString('fr-FR')}</p>
+                        <p className="font-medium">{formatDate(reptile.birth_date)}</p>
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">{t("reptile.purchaseDate")}</p>
-                        <p className="font-medium">{new Date(reptile.purchase_date).toLocaleDateString('fr-FR')}</p>
+                        <p className="font-medium">{formatDate(reptile.purchase_date)}</p>
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">{t("reptile.category")}</p>
