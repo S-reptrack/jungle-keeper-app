@@ -224,13 +224,13 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
   return (
     <div className="space-y-4">
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
+        <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <CardTitle>{t("reptile.reproduction.title")}</CardTitle>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button disabled={potentialPartners.length === 0}>
+              <Button disabled={potentialPartners.length === 0} className="w-full sm:w-auto">
                 <Plus className="w-4 h-4 mr-2" />
-                {t("reptile.reproduction.addObservation")}
+                <span className="truncate">{t("reptile.reproduction.addObservation")}</span>
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
