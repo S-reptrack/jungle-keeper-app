@@ -20,7 +20,7 @@ const StatsCard = ({ title, value, icon: Icon, trend }: StatsCardProps) => {
               <p className="text-xs text-accent mt-1">{trend}</p>
             )}
           </div>
-          <div className="p-4 bg-gradient-jungle rounded-xl">
+          <div className="w-16 h-16 flex items-center justify-center bg-gradient-jungle rounded-xl shrink-0">
             <Icon className="w-6 h-6 text-primary-foreground" />
           </div>
         </div>
