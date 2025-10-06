@@ -9,29 +9,7 @@ import jungleHero from "@/assets/jungle-hero.jpg";
 const Index = () => {
   const { t } = useTranslation();
   
-  const mockReptiles = [
-    {
-      name: "Kaa",
-      species: "Python royal",
-      age: "3 ans",
-      weight: "1.5 kg",
-      lastFed: "Il y a 5 jours",
-    },
-    {
-      name: "Rex",
-      species: "Iguane vert",
-      age: "2 ans",
-      weight: "2.3 kg",
-      lastFed: "Aujourd'hui",
-    },
-    {
-      name: "Shelby",
-      species: "Tortue d'Hermann",
-      age: "5 ans",
-      weight: "1.2 kg",
-      lastFed: "Hier",
-    },
-  ];
+  const mockReptiles: any[] = [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -61,25 +39,23 @@ const Index = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
           <StatsCard
             title={t("stats.totalReptiles")}
-            value="12"
+            value="0"
             icon={Users}
-            trend="+2 ce mois"
           />
           <StatsCard
             title={t("stats.feedingsDue")}
-            value="24"
+            value="0"
             icon={Calendar}
           />
           <StatsCard
             title={t("stats.avgWeight")}
-            value="1.8kg"
+            value="0kg"
             icon={Scale}
           />
           <StatsCard
             title={t("stats.activeBreeding")}
-            value="+12%"
+            value="0"
             icon={TrendingUp}
-            trend="Ce trimestre"
           />
         </div>
 

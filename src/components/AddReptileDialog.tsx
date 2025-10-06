@@ -48,7 +48,7 @@ const formSchema = z.object({
   sex: z.enum(["male", "female", "unknown"], {
     required_error: "validation.sexRequired",
   }),
-  morph: z.string().optional(),
+  morphs: z.array(z.string()).optional(),
   birthDate: z.date({
     required_error: "validation.dateRequired",
   }),
@@ -70,6 +70,7 @@ const AddReptileDialog = () => {
     defaultValues: {
       name: "",
       weight: 0,
+      morphs: [],
     },
   });
 
@@ -92,6 +93,7 @@ const AddReptileDialog = () => {
   );
   
   const availableMorphs = selectedSpeciesData?.morphs || [];
+  const [selectedMorphs, setSelectedMorphs] = useState<string[]>([]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -211,24 +213,48 @@ const AddReptileDialog = () => {
             {availableMorphs.length > 0 && (
               <FormField
                 control={form.control}
-                name="morph"
+                name="morphs"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("reptile.morph")} ({t("reptile.optional")})</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder={t("reptile.selectMorph")} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="bg-card border-border max-h-[200px]">
-                        {availableMorphs.map((morph) => (
-                          <SelectItem key={morph} value={morph}>
-                            {morph}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <FormLabel>{t("reptile.morphs")} ({t("reptile.optional")})</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            className="w-full justify-start text-left font-normal"
+                          >
+                            {selectedMorphs.length > 0
+                              ? selectedMorphs.join(", ")
+                              : t("reptile.selectMorphs")}
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-full p-0" align="start">
+                        <div className="max-h-[200px] overflow-y-auto p-4 space-y-2">
+                          {availableMorphs.map((morph) => (
+                            <label
+                              key={morph}
+                              className="flex items-center space-x-2 cursor-pointer hover:bg-accent rounded p-2"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={selectedMorphs.includes(morph)}
+                                onChange={(e) => {
+                                  const newMorphs = e.target.checked
+                                    ? [...selectedMorphs, morph]
+                                    : selectedMorphs.filter((m) => m !== morph);
+                                  setSelectedMorphs(newMorphs);
+                                  field.onChange(newMorphs);
+                                }}
+                                className="w-4 h-4"
+                              />
+                              <span className="text-sm">{morph}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </PopoverContent>
+                    </Popover>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -241,38 +267,50 @@ const AddReptileDialog = () => {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>{t("reptile.birthDate")}</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
+                  <div className="flex gap-2">
+                    <Input
+                      type="text"
+                      placeholder="JJ/MM/AAAA"
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        const match = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+                        if (match) {
+                          const [_, day, month, year] = match;
+                          const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+                          if (!isNaN(date.getTime())) {
+                            field.onChange(date);
+                          }
+                        }
+                      }}
+                      value={field.value ? format(field.value, "dd/MM/yyyy") : ""}
+                      className="flex-1"
+                    />
+                    <Popover>
+                      <PopoverTrigger asChild>
                         <Button
                           variant="outline"
                           className={cn(
-                            "w-full pl-3 text-left font-normal",
+                            "w-10 p-0",
                             !field.value && "text-muted-foreground"
                           )}
                         >
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>{t("reptile.birthDate")}</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          <CalendarIcon className="h-4 w-4" />
                         </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
-                        className="pointer-events-auto"
-                      />
-                    </PopoverContent>
-                  </Popover>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          disabled={(date) =>
+                            date > new Date() || date < new Date("1900-01-01")
+                          }
+                          initialFocus
+                          className="pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -298,38 +336,50 @@ const AddReptileDialog = () => {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>{t("reptile.purchaseDate")}</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
+                  <div className="flex gap-2">
+                    <Input
+                      type="text"
+                      placeholder="JJ/MM/AAAA"
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        const match = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+                        if (match) {
+                          const [_, day, month, year] = match;
+                          const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+                          if (!isNaN(date.getTime())) {
+                            field.onChange(date);
+                          }
+                        }
+                      }}
+                      value={field.value ? format(field.value, "dd/MM/yyyy") : ""}
+                      className="flex-1"
+                    />
+                    <Popover>
+                      <PopoverTrigger asChild>
                         <Button
                           variant="outline"
                           className={cn(
-                            "w-full pl-3 text-left font-normal",
+                            "w-10 p-0",
                             !field.value && "text-muted-foreground"
                           )}
                         >
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>{t("reptile.purchaseDate")}</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          <CalendarIcon className="h-4 w-4" />
                         </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
-                        className="pointer-events-auto"
-                      />
-                    </PopoverContent>
-                  </Popover>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          disabled={(date) =>
+                            date > new Date() || date < new Date("1900-01-01")
+                          }
+                          initialFocus
+                          className="pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
