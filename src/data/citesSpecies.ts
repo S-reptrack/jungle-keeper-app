@@ -128,13 +128,81 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
 // CITES Annexe C - Espèces listées par un pays demandeur (équivalent CITES Annexe III)
 // Notification requise pour le commerce
 export const citesAnnexCSpecies: ReptileSpecies[] = [
-  // À compléter selon les besoins
+  {
+    id: 'elaphe-climacophora',
+    scientificName: 'Elaphe climacophora',
+    commonName: 'Couleuvre du Japon / Japanese Rat Snake',
+    category: 'snake',
+    citesAnnex: 'C',
+    morphs: ['Normal', 'Albino T-', 'Blizzard'],
+  },
+  {
+    id: 'nerodia-sipedon',
+    scientificName: 'Nerodia sipedon',
+    commonName: 'Couleuvre d\'eau / Northern Water Snake',
+    category: 'snake',
+    citesAnnex: 'C',
+  },
+  {
+    id: 'thamnophis-sirtalis',
+    scientificName: 'Thamnophis sirtalis',
+    commonName: 'Couleuvre rayée / Common Garter Snake',
+    category: 'snake',
+    citesAnnex: 'C',
+    morphs: ['Normal', 'Albino T-', 'Erythristic', 'Melanistic', 'Blue', 'Flame'],
+  },
+  {
+    id: 'heterodon-nasicus',
+    scientificName: 'Heterodon nasicus',
+    commonName: 'Couleuvre à nez retroussé / Western Hognose Snake',
+    category: 'snake',
+    citesAnnex: 'C',
+    morphs: ['Normal', 'Albino T-', 'Anaconda', 'Arctic', 'Axanthic', 'Conda', 'Lavender', 'Snow', 'Toffee', 'Toxic'],
+  },
 ];
 
 // CITES Annexe D - Espèces non CITES mais sous surveillance
 // Déclaration requise pour les importations
 export const citesAnnexDSpecies: ReptileSpecies[] = [
-  // À compléter selon les besoins
+  {
+    id: 'lampropeltis-getula',
+    scientificName: 'Lampropeltis getula',
+    commonName: 'Serpent roi de Californie / California Kingsnake',
+    category: 'snake',
+    citesAnnex: 'D',
+    morphs: ['Normal', 'Albino T-', 'Albino T+', 'Banana', 'Striped', 'Aberrant', 'Lavender', 'High White', 'Chocolate'],
+  },
+  {
+    id: 'elaphe-obsoleta',
+    scientificName: 'Pantherophis obsoletus',
+    commonName: 'Couleuvre obscure / Black Rat Snake',
+    category: 'snake',
+    citesAnnex: 'D',
+    morphs: ['Normal', 'Leucistic', 'Albino T-', 'Hypomelanistic'],
+  },
+  {
+    id: 'lampropeltis-californiae',
+    scientificName: 'Lampropeltis californiae',
+    commonName: 'Faux-corail / California Mountain Kingsnake',
+    category: 'snake',
+    citesAnnex: 'D',
+  },
+  {
+    id: 'thamnopis-proximus',
+    scientificName: 'Thamnophis proximus',
+    commonName: 'Couleuvre des marais / Western Ribbon Snake',
+    category: 'snake',
+    citesAnnex: 'D',
+    morphs: ['Normal', 'Albino T-', 'Anerythristic', 'Flame'],
+  },
+  {
+    id: 'lampropeltis-alterna',
+    scientificName: 'Lampropeltis alterna',
+    commonName: 'Faux-corail gris / Gray-banded Kingsnake',
+    category: 'snake',
+    citesAnnex: 'D',
+    morphs: ['Normal', 'Albino T-', 'Blair\'s', 'Alterna'],
+  },
 ];
 
 export const getAllSpecies = () => {
