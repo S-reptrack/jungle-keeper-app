@@ -38,6 +38,57 @@ export type Database = {
         }
         Relationships: []
       }
+      reproduction_observations: {
+        Row: {
+          action: string
+          created_at: string
+          id: string
+          notes: string | null
+          observation_date: string
+          partner_id: string
+          reptile_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          observation_date: string
+          partner_id: string
+          reptile_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          observation_date?: string
+          partner_id?: string
+          reptile_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reproduction_observations_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "reptiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reproduction_observations_reptile_id_fkey"
+            columns: ["reptile_id"]
+            isOneToOne: false
+            referencedRelation: "reptiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reptiles: {
         Row: {
           birth_date: string | null

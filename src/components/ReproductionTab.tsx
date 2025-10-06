@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Plus, Calendar, Eye } from "lucide-react";
+import { Plus, Calendar, Eye, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import {
   Popover,
@@ -36,9 +37,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ReproductionTabProps {
   reptileId: string;
@@ -46,14 +49,33 @@ interface ReproductionTabProps {
   reptileSpecies: string;
 }
 
+interface Partner {
+  id: string;
+  name: string;
+  sex: string;
+  species: string;
+}
+
+interface Observation {
+  id: string;
+  observation_date: string;
+  partner_id: string;
+  action: string;
+  notes: string;
+  partner?: {
+    name: string;
+    sex: string;
+  };
+}
+
 const observationSchema = z.object({
-  partnerId: z.string().min(1, "validation.partnerRequired"),
+  partnerId: z.string().min(1, "Partenaire requis"),
   date: z.date({
-    required_error: "validation.dateRequired",
+    required_error: "Date requise",
   }),
-  observation: z.string().min(10, "validation.observationMin"),
+  observation: z.string().min(10, "L'observation doit contenir au moins 10 caractères"),
   action: z.enum(["introduction", "mating", "separation", "laying", "other"], {
-    required_error: "validation.actionRequired",
+    required_error: "Action requise",
   }),
 });
 
@@ -62,25 +84,10 @@ type ObservationValues = z.infer<typeof observationSchema>;
 const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: ReproductionTabProps) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-
-  // TODO: Récupérer les partenaires potentiels depuis la base de données
-  // Filtrer par espèce et sexe opposé
-  const oppositeSex = reptileSex === "male" ? "female" : "male";
-  const potentialPartners = [
-    { id: "2", name: "Luna", sex: oppositeSex, species: reptileSpecies },
-    { id: "3", name: "Storm", sex: oppositeSex, species: reptileSpecies },
-  ];
-
-  // TODO: Récupérer les observations depuis la base de données
-  const observations = [
-    {
-      id: "1",
-      date: "2024-01-15",
-      partner: "Luna",
-      action: "introduction",
-      observation: "Première mise en présence. Les deux individus se sont approchés avec curiosité.",
-    },
-  ];
+  const [potentialPartners, setPotentialPartners] = useState<Partner[]>([]);
+  const [observations, setObservations] = useState<Observation[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [dateInput, setDateInput] = useState("");
 
   const form = useForm<ObservationValues>({
     resolver: zodResolver(observationSchema),
@@ -89,12 +96,130 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
     },
   });
 
-  const onSubmit = (data: ObservationValues) => {
-    console.log("Observation data:", data);
-    toast.success(t("reptile.reproduction.observationAdded"));
-    form.reset();
-    setOpen(false);
+  const formatDateToInput = (date?: Date) => (date ? format(date, "dd/MM/yyyy") : "");
+  
+  const parseInputToDate = (value: string) => {
+    const match = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (!match) return null;
+    const [, d, m, y] = match;
+    const date = new Date(parseInt(y), parseInt(m) - 1, parseInt(d));
+    return isNaN(date.getTime()) ? null : date;
   };
+
+  const handleDateInput = (value: string) => {
+    const digitsOnly = value.replace(/\D/g, '');
+    let formatted = digitsOnly;
+    if (digitsOnly.length >= 2) {
+      formatted = digitsOnly.slice(0, 2);
+      if (digitsOnly.length >= 3) {
+        formatted += '/' + digitsOnly.slice(2, 4);
+        if (digitsOnly.length >= 5) {
+          formatted += '/' + digitsOnly.slice(4, 8);
+        }
+      }
+    }
+    setDateInput(formatted);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [reptileId]);
+
+  const fetchData = async () => {
+    try {
+      // Fetch potential partners (opposite sex, same species)
+      const oppositeSex = reptileSex === "male" ? "female" : "male";
+      const { data: partners, error: partnersError } = await supabase
+        .from("reptiles")
+        .select("id, name, sex, species")
+        .eq("species", reptileSpecies)
+        .eq("sex", oppositeSex)
+        .neq("id", reptileId);
+
+      if (partnersError) throw partnersError;
+      setPotentialPartners(partners || []);
+
+      // Fetch observations
+      const { data: obs, error: obsError } = await supabase
+        .from("reproduction_observations")
+        .select(`
+          id,
+          observation_date,
+          partner_id,
+          action,
+          notes,
+          partner:reptiles!partner_id(name, sex)
+        `)
+        .eq("reptile_id", reptileId)
+        .order("observation_date", { ascending: false });
+
+      if (obsError) throw obsError;
+      setObservations(obs || []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      toast.error("Erreur lors du chargement des données");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onSubmit = async (data: ObservationValues) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast.error("Vous devez être connecté");
+        return;
+      }
+
+      const { error } = await supabase.from("reproduction_observations").insert({
+        reptile_id: reptileId,
+        partner_id: data.partnerId,
+        user_id: user.id,
+        action: data.action,
+        observation_date: data.date.toISOString().split('T')[0],
+        notes: data.observation,
+      });
+
+      if (error) throw error;
+
+      toast.success(t("reptile.reproduction.observationAdded"));
+      form.reset();
+      setDateInput("");
+      setOpen(false);
+      fetchData();
+    } catch (error) {
+      console.error("Error adding observation:", error);
+      toast.error("Erreur lors de l'ajout de l'observation");
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from("reproduction_observations")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+
+      toast.success("Observation supprimée");
+      fetchData();
+    } catch (error) {
+      console.error("Error deleting observation:", error);
+      toast.error("Erreur lors de la suppression");
+    }
+  };
+
+  if (loading) {
+    return (
+      <Card>
+        <CardContent className="py-8">
+          <p className="text-muted-foreground text-center">Chargement...</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -103,7 +228,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
           <CardTitle>{t("reptile.reproduction.title")}</CardTitle>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button>
+              <Button disabled={potentialPartners.length === 0}>
                 <Plus className="w-4 h-4 mr-2" />
                 {t("reptile.reproduction.addObservation")}
               </Button>
@@ -170,38 +295,54 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
                         <FormLabel>{t("reptile.reproduction.date")}</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
+                        <div className="flex gap-2">
+                          <Input
+                            type="text"
+                            placeholder="JJ/MM/AAAA"
+                            value={dateInput}
+                            onChange={(e) => handleDateInput(e.target.value)}
+                            onBlur={() => {
+                              const parsed = parseInputToDate(dateInput);
+                              if (parsed) field.onChange(parsed);
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                const parsed = parseInputToDate(dateInput);
+                                if (parsed) field.onChange(parsed);
+                              }
+                            }}
+                            className="flex-1"
+                            maxLength={10}
+                          />
+                          <Popover>
+                            <PopoverTrigger asChild>
                               <Button
                                 variant="outline"
                                 className={cn(
-                                  "w-full pl-3 text-left font-normal",
+                                  "w-10 p-0",
                                   !field.value && "text-muted-foreground"
                                 )}
                               >
-                                {field.value ? (
-                                  format(field.value, "PPP")
-                                ) : (
-                                  <span>{t("reptile.reproduction.selectDate")}</span>
-                                )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                <CalendarIcon className="h-4 w-4" />
                               </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <CalendarComponent
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              disabled={(date) =>
-                                date > new Date() || date < new Date("2000-01-01")
-                              }
-                              initialFocus
-                              className="pointer-events-auto"
-                            />
-                          </PopoverContent>
-                        </Popover>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0 z-50" align="start">
+                              <CalendarComponent
+                                mode="single"
+                                selected={field.value}
+                                onSelect={(date) => {
+                                  field.onChange(date);
+                                  setDateInput(formatDateToInput(date));
+                                }}
+                                disabled={(date) =>
+                                  date > new Date() || date < new Date("2000-01-01")
+                                }
+                                initialFocus
+                                className="pointer-events-auto"
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        </div>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -245,7 +386,11 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
           </Dialog>
         </CardHeader>
         <CardContent>
-          {observations.length === 0 ? (
+          {potentialPartners.length === 0 ? (
+            <p className="text-muted-foreground text-center py-8">
+              Aucun partenaire potentiel trouvé. Ajoutez un reptile de sexe opposé et de même espèce.
+            </p>
+          ) : observations.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">
               {t("reptile.reproduction.noObservations")}
             </p>
@@ -257,17 +402,29 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <Eye className="w-4 h-4 text-muted-foreground" />
-                        <span className="font-medium">{obs.partner}</span>
+                        <span className="font-medium">
+                          {obs.partner?.name} ({obs.partner?.sex === "male" ? "♂" : "♀"})
+                        </span>
                       </div>
-                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Calendar className="w-3 h-3" />
-                        {obs.date}
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                          <Calendar className="w-3 h-3" />
+                          {format(new Date(obs.observation_date), "dd MMM yyyy", { locale: fr })}
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDelete(obs.id)}
+                          className="text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
                     </div>
                     <p className="text-sm text-muted-foreground mb-1">
                       {t(`reptile.reproduction.actions.${obs.action}`)}
                     </p>
-                    <p className="text-sm">{obs.observation}</p>
+                    <p className="text-sm">{obs.notes}</p>
                   </CardContent>
                 </Card>
               ))}
