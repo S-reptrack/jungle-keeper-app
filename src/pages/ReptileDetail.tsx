@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import ReproductionTab from "@/components/ReproductionTab";
 import FeedingTab from "@/components/FeedingTab";
+import EditReptileDialog from "@/components/EditReptileDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { differenceInYears, differenceInMonths } from "date-fns";
@@ -33,35 +34,36 @@ const ReptileDetail = () => {
   const [reptile, setReptile] = useState<Reptile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchReptile = async () => {
     if (!id) return;
 
-    const fetchReptile = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("reptiles")
-          .select("*")
-          .eq("id", id)
-          .maybeSingle();
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("reptiles")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
 
-        if (error) throw error;
+      if (error) throw error;
 
-        if (!data) {
-          toast.error("Reptile introuvable");
-          navigate("/");
-          return;
-        }
-
-        setReptile(data);
-      } catch (error) {
-        console.error("Error fetching reptile:", error);
-        toast.error("Erreur lors du chargement du reptile");
+      if (!data) {
+        toast.error("Reptile introuvable");
         navigate("/");
-      } finally {
-        setLoading(false);
+        return;
       }
-    };
 
+      setReptile(data);
+    } catch (error) {
+      console.error("Error fetching reptile:", error);
+      toast.error("Erreur lors du chargement du reptile");
+      navigate("/");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchReptile();
   }, [id, navigate]);
 
@@ -175,8 +177,15 @@ const ReptileDetail = () => {
               
               <TabsContent value="overview" className="space-y-4">
                 <Card>
-                  <CardHeader>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
                     <CardTitle>{t("reptile.generalInfo")}</CardTitle>
+                    <EditReptileDialog
+                      reptileId={reptile.id}
+                      currentBirthDate={reptile.birth_date}
+                      currentPurchaseDate={reptile.purchase_date}
+                      currentWeight={reptile.weight}
+                      onUpdate={fetchReptile}
+                    />
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="grid grid-cols-2 gap-4">
