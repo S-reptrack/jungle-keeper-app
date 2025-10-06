@@ -11,6 +11,7 @@ import ReproductionTab from "@/components/ReproductionTab";
 import FeedingTab from "@/components/FeedingTab";
 import HealthTab from "@/components/HealthTab";
 import EditReptileDialog from "@/components/EditReptileDialog";
+import WeightChart from "@/components/WeightChart";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { differenceInYears, differenceInMonths } from "date-fns";
@@ -219,6 +220,8 @@ const ReptileDetail = () => {
                     </div>
                   </CardContent>
                 </Card>
+                
+                <WeightChart reptileId={reptile.id} />
               </TabsContent>
               
               <TabsContent value="feeding">
