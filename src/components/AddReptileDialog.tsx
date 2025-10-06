@@ -42,7 +42,7 @@ import { toast } from "sonner";
 
 const formSchema = z.object({
   name: z.string().min(2, "validation.nameMin"),
-  category: z.enum(["snake", "lizard", "turtle"], {
+  category: z.enum(["snake"], {
     required_error: "validation.categoryRequired",
   }),
   species: z.string().min(1, "validation.speciesRequired"),
@@ -68,12 +68,13 @@ interface AddReptileDialogProps {
 const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<"snake" | "lizard" | "turtle" | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<"snake" | "lizard" | "turtle" | null>("snake");
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      category: "snake",
       weight: 0,
       morphs: [],
     },
@@ -217,17 +218,16 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                       setSelectedCategory(value as "snake" | "lizard" | "turtle");
                       form.setValue("species", "");
                     }}
-                    defaultValue={field.value}
+                    defaultValue="snake"
+                    value="snake"
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder={t("reptile.selectCategory")} />
+                        <SelectValue placeholder={t("reptile.snake")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="bg-card border-border">
                       <SelectItem value="snake">{t("reptile.snake")}</SelectItem>
-                      <SelectItem value="lizard">{t("reptile.lizard")}</SelectItem>
-                      <SelectItem value="turtle">{t("reptile.turtle")}</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
