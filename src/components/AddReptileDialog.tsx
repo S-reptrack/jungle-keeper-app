@@ -37,7 +37,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { citesAnnexIASpecies, citesAnnexIIBSpecies, getAllSpecies, getSpeciesByAnnex } from "@/data/citesSpecies";
+import { getAllSpecies, getSpeciesByAnnex } from "@/data/citesSpecies";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 
@@ -70,7 +70,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<"snake" | "lizard" | "turtle" | null>("snake");
-  const [selectedAnnex, setSelectedAnnex] = useState<'IA' | 'IIB'>('IIB');
+  const [selectedAnnex, setSelectedAnnex] = useState<'A' | 'B' | 'C' | 'D'>('B');
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -243,12 +243,14 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                   <FormLabel>Espèce CITES</FormLabel>
                   
                   <Tabs value={selectedAnnex} onValueChange={(value) => {
-                    setSelectedAnnex(value as 'IA' | 'IIB');
+                    setSelectedAnnex(value as 'A' | 'B' | 'C' | 'D');
                     form.setValue("species", "");
                   }}>
-                    <TabsList className="grid w-full grid-cols-2 mb-4">
-                      <TabsTrigger value="IIB">Annexe II B</TabsTrigger>
-                      <TabsTrigger value="IA">Annexe I A</TabsTrigger>
+                    <TabsList className="grid w-full grid-cols-4 mb-4">
+                      <TabsTrigger value="A">Annexe A</TabsTrigger>
+                      <TabsTrigger value="B">Annexe B</TabsTrigger>
+                      <TabsTrigger value="C">Annexe C</TabsTrigger>
+                      <TabsTrigger value="D">Annexe D</TabsTrigger>
                     </TabsList>
                     
                     <TabsContent value={selectedAnnex} className="mt-0">
