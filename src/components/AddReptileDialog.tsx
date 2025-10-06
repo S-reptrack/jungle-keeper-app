@@ -250,19 +250,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                           className="w-full justify-between"
                           disabled={!selectedCategory}
                         >
-                          {field.value
-                            ? (
-                              <div className="flex flex-col text-left">
-                                <span className="font-medium">
-                                  {citesAnnexIISpecies.find(s => s.id === field.value)?.commonName}
-                                </span>
-                                <span className="text-xs text-muted-foreground italic">
-                                  {citesAnnexIISpecies.find(s => s.id === field.value)?.scientificName}
-                                </span>
-                              </div>
-                            ) : (
-                              <span>{t("reptile.selectSpecies")}</span>
-                            )}
+                          <span>{t("reptile.selectSpecies")}</span>
                         </Button>
                       </FormControl>
                     </PopoverTrigger>

@@ -37,7 +37,7 @@
     "noHealthRecords": "Aucun enregistrement de santé pour le moment",
     "tabs": {
       "overview": "Aperçu",
-      "feeding": "Alimentation",
+      "feeding": "Repas",
       "reproduction": "Reproduction",
       "health": "Santé"
     },
@@ -118,7 +118,7 @@
     "tagline": "Suivi professionnel de vos reptiles",
     "home": "Accueil",
     "reptiles": "Reptiles",
-    "feeding": "Alimentation",
+    "feeding": "Repas",
     "settings": "Paramètres",
     "add": "Ajouter",
     "cancel": "Annuler",
