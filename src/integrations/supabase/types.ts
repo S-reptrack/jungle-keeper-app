@@ -86,6 +86,45 @@ export type Database = {
         }
         Relationships: []
       }
+      rodents: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          purchase_date: string | null
+          quantity: number
+          stage: string
+          type: string
+          updated_at: string
+          user_id: string
+          weight: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          purchase_date?: string | null
+          quantity?: number
+          stage: string
+          type: string
+          updated_at?: string
+          user_id: string
+          weight?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          purchase_date?: string | null
+          quantity?: number
+          stage?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+          weight?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

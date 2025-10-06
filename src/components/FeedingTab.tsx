@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
 import {
@@ -8,9 +9,76 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
+import AddRodentDialog from "./AddRodentDialog";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+
+interface Rodent {
+  id: string;
+  type: string;
+  stage: string;
+  weight?: number;
+  quantity: number;
+  purchase_date?: string;
+  notes?: string;
+}
 
 const FeedingTab = () => {
   const { t } = useTranslation();
+  const [rodents, setRodents] = useState<Rodent[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchRodents = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from("rodents")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setRodents(data || []);
+    } catch (error) {
+      console.error("Error fetching rodents:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRodents();
+  }, []);
+
+  const handleDelete = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from("rodents")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+
+      toast.success("Rongeur supprimé");
+      fetchRodents();
+    } catch (error) {
+      console.error("Error deleting rodent:", error);
+      toast.error("Erreur lors de la suppression");
+    }
+  };
+
+  const getRodentTypeName = (type: string) => {
+    const types: Record<string, string> = {
+      rat: "Rat",
+      mouse: "Souris",
+      rabbit: "Lapin"
+    };
+    return types[type] || type;
+  };
 
   const rats = [
     { stage: t("feeding.rats.pinky"), weight: "2-5g" },
@@ -45,6 +113,57 @@ const FeedingTab = () => {
 
   return (
     <div className="space-y-6">
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Inventaire de rongeurs</CardTitle>
+          <AddRodentDialog onRodentAdded={fetchRodents} />
+        </CardHeader>
+        <CardContent>
+          {loading ? (
+            <p className="text-muted-foreground text-center py-4">Chargement...</p>
+          ) : rodents.length === 0 ? (
+            <p className="text-muted-foreground text-center py-4">
+              Aucun rongeur dans l'inventaire. Ajoutez-en un pour commencer.
+            </p>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Stade</TableHead>
+                  <TableHead className="text-right">Poids</TableHead>
+                  <TableHead className="text-right">Quantité</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {rodents.map((rodent) => (
+                  <TableRow key={rodent.id}>
+                    <TableCell className="font-medium">
+                      {getRodentTypeName(rodent.type)}
+                    </TableCell>
+                    <TableCell>{rodent.stage}</TableCell>
+                    <TableCell className="text-right">
+                      {rodent.weight ? `${rodent.weight}g` : "-"}
+                    </TableCell>
+                    <TableCell className="text-right">{rodent.quantity}</TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDelete(rodent.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle>{t("feeding.rats.title")}</CardTitle>
