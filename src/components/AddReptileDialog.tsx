@@ -275,7 +275,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                           <Command>
                             <CommandInput placeholder={t("reptile.selectSpecies") as string} />
                             <CommandEmpty>Aucune espèce trouvée</CommandEmpty>
-                            <CommandGroup>
+                            <CommandGroup className="max-h-[300px] overflow-y-auto">
                               {filteredSpecies.map((species) => (
                                 <CommandItem
                                   key={species.id}
