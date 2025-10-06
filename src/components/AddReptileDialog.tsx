@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,6 +29,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -94,6 +95,33 @@ const AddReptileDialog = () => {
   
   const availableMorphs = selectedSpeciesData?.morphs || [];
   const [selectedMorphs, setSelectedMorphs] = useState<string[]>([]);
+  const [birthDateInput, setBirthDateInput] = useState("");
+  const [purchaseDateInput, setPurchaseDateInput] = useState("");
+  const [newMorph, setNewMorph] = useState("");
+
+  const formatDateToInput = (date?: Date) => (date ? format(date, "dd/MM/yyyy") : "");
+  const parseInputToDate = (value: string) => {
+    const match = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (!match) return null;
+    const [, d, m, y] = match;
+    const date = new Date(parseInt(y), parseInt(m) - 1, parseInt(d));
+    return isNaN(date.getTime()) ? null : date;
+  };
+
+  const speciesValue = form.watch("species");
+  useEffect(() => {
+    setSelectedMorphs([]);
+    form.setValue("morphs", []);
+  }, [speciesValue]);
+
+  useEffect(() => {
+    if (open) {
+      const bd = form.getValues("birthDate");
+      const pd = form.getValues("purchaseDate");
+      setBirthDateInput(formatDateToInput(bd as Date | undefined));
+      setPurchaseDateInput(formatDateToInput(pd as Date | undefined));
+    }
+  }, [open]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -159,29 +187,52 @@ const AddReptileDialog = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("reptile.species")} (CITES Annexe II)</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    disabled={!selectedCategory}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder={t("reptile.selectSpecies")} />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="bg-card border-border max-h-[200px]">
-                      {filteredSpecies.map((species) => (
-                        <SelectItem key={species.id} value={species.id}>
-                          <div className="flex flex-col">
-                            <span className="font-medium">{species.commonName}</span>
-                            <span className="text-xs text-muted-foreground italic">
-                              {species.scientificName}
-                            </span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className="w-full justify-between"
+                          disabled={!selectedCategory}
+                        >
+                          {field.value
+                            ? (
+                              <div className="flex flex-col text-left">
+                                <span className="font-medium">
+                                  {citesAnnexIISpecies.find(s => s.id === field.value)?.commonName}
+                                </span>
+                                <span className="text-xs text-muted-foreground italic">
+                                  {citesAnnexIISpecies.find(s => s.id === field.value)?.scientificName}
+                                </span>
+                              </div>
+                            ) : (
+                              <span>{t("reptile.selectSpecies")}</span>
+                            )}
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[--radix-popover-trigger-width] p-0 z-50 bg-card border-border" align="start">
+                      <Command>
+                        <CommandInput placeholder={t("reptile.selectSpecies") as string} />
+                        <CommandEmpty>Aucune espèce trouvée</CommandEmpty>
+                        <CommandGroup>
+                          {filteredSpecies.map((species) => (
+                            <CommandItem
+                              key={species.id}
+                              value={`${species.commonName} ${species.scientificName}`}
+                              onSelect={() => field.onChange(species.id)}
+                            >
+                              <div className="flex flex-col">
+                                <span className="font-medium">{species.commonName}</span>
+                                <span className="text-xs text-muted-foreground italic">{species.scientificName}</span>
+                              </div>
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   <FormMessage />
                 </FormItem>
               )}
@@ -230,7 +281,7 @@ const AddReptileDialog = () => {
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent className="w-full p-0" align="start">
+                      <PopoverContent className="w-full p-0 z-50 bg-card border-border" align="start">
                         <div className="max-h-[200px] overflow-y-auto p-4 space-y-2">
                           {availableMorphs.map((morph) => (
                             <label
@@ -253,6 +304,28 @@ const AddReptileDialog = () => {
                             </label>
                           ))}
                         </div>
+                        <div className="p-3 border-t border-border flex gap-2">
+                          <Input
+                            placeholder={t("reptile.morphs")}
+                            value={newMorph}
+                            onChange={(e) => setNewMorph(e.target.value)}
+                          />
+                          <Button
+                            type="button"
+                            onClick={() => {
+                              const v = newMorph.trim();
+                              if (!v) return;
+                              if (!selectedMorphs.includes(v)) {
+                                const updated = [...selectedMorphs, v];
+                                setSelectedMorphs(updated);
+                                field.onChange(updated);
+                              }
+                              setNewMorph("");
+                            }}
+                          >
+                            +
+                          </Button>
+                        </div>
                       </PopoverContent>
                     </Popover>
                     <FormMessage />
@@ -271,18 +344,18 @@ const AddReptileDialog = () => {
                     <Input
                       type="text"
                       placeholder="JJ/MM/AAAA"
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        const match = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-                        if (match) {
-                          const [_, day, month, year] = match;
-                          const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-                          if (!isNaN(date.getTime())) {
-                            field.onChange(date);
-                          }
+                      value={birthDateInput}
+                      onChange={(e) => setBirthDateInput(e.target.value)}
+                      onBlur={() => {
+                        const parsed = parseInputToDate(birthDateInput);
+                        if (parsed) field.onChange(parsed);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          const parsed = parseInputToDate(birthDateInput);
+                          if (parsed) field.onChange(parsed);
                         }
                       }}
-                      value={field.value ? format(field.value, "dd/MM/yyyy") : ""}
                       className="flex-1"
                     />
                     <Popover>
@@ -297,11 +370,14 @@ const AddReptileDialog = () => {
                           <CalendarIcon className="h-4 w-4" />
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
+                      <PopoverContent className="w-auto p-0 z-50" align="start">
                         <Calendar
                           mode="single"
                           selected={field.value}
-                          onSelect={field.onChange}
+                          onSelect={(date) => {
+                            field.onChange(date);
+                            setBirthDateInput(formatDateToInput(date));
+                          }}
                           disabled={(date) =>
                             date > new Date() || date < new Date("1900-01-01")
                           }
@@ -340,18 +416,18 @@ const AddReptileDialog = () => {
                     <Input
                       type="text"
                       placeholder="JJ/MM/AAAA"
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        const match = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-                        if (match) {
-                          const [_, day, month, year] = match;
-                          const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-                          if (!isNaN(date.getTime())) {
-                            field.onChange(date);
-                          }
+                      value={purchaseDateInput}
+                      onChange={(e) => setPurchaseDateInput(e.target.value)}
+                      onBlur={() => {
+                        const parsed = parseInputToDate(purchaseDateInput);
+                        if (parsed) field.onChange(parsed);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          const parsed = parseInputToDate(purchaseDateInput);
+                          if (parsed) field.onChange(parsed);
                         }
                       }}
-                      value={field.value ? format(field.value, "dd/MM/yyyy") : ""}
                       className="flex-1"
                     />
                     <Popover>
@@ -366,11 +442,14 @@ const AddReptileDialog = () => {
                           <CalendarIcon className="h-4 w-4" />
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
+                      <PopoverContent className="w-auto p-0 z-50" align="start">
                         <Calendar
                           mode="single"
                           selected={field.value}
-                          onSelect={field.onChange}
+                          onSelect={(date) => {
+                            field.onChange(date);
+                            setPurchaseDateInput(formatDateToInput(date));
+                          }}
                           disabled={(date) =>
                             date > new Date() || date < new Date("1900-01-01")
                           }
