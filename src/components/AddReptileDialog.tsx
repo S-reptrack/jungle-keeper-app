@@ -61,7 +61,11 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const AddReptileDialog = () => {
+interface AddReptileDialogProps {
+  onReptileAdded?: () => void;
+}
+
+const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<"snake" | "lizard" | "turtle" | null>(null);

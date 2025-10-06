@@ -1,31 +1,29 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Users, Calendar, Scale, TrendingUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import StatsCard from "@/components/StatsCard";
 import ReptileCard from "@/components/ReptileCard";
 import AddReptileDialog from "@/components/AddReptileDialog";
 import jungleHero from "@/assets/jungle-hero.jpg";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { AuthForm } from "@/components/AuthForm";
 
 const Index = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const [reptiles, setReptiles] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    total: 0,
+    avgWeight: 0,
+  });
 
   useEffect(() => {
-    checkAuth();
-    fetchReptiles();
-  }, []);
-
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      navigate("/auth");
+    if (user) {
+      fetchReptiles();
     }
-  };
+  }, [user]);
 
   const fetchReptiles = async () => {
     try {
@@ -36,26 +34,45 @@ const Index = () => {
         .limit(6);
 
       if (error) throw error;
-      setReptiles(data || []);
+      
+      const reptileData = data || [];
+      setReptiles(reptileData);
+      
+      // Calculate stats
+      const { count } = await supabase
+        .from("reptiles")
+        .select("*", { count: "exact", head: true });
+      
+      const total = count || 0;
+      const avgWeight = reptileData.length > 0
+        ? reptileData.reduce((sum: number, r: any) => sum + (r.weight || 0), 0) / reptileData.length
+        : 0;
+      
+      setStats({ total, avgWeight });
     } catch (error) {
       console.error("Error fetching reptiles:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
   const calculateAge = (birthDate: string) => {
     const birth = new Date(birthDate);
     const today = new Date();
-    const months = (today.getFullYear() - birth.getFullYear()) * 12 + today.getMonth() - birth.getMonth();
-    const years = Math.floor(months / 12);
-    const remainingMonths = months % 12;
+    const years = today.getFullYear() - birth.getFullYear();
+    const months = today.getMonth() - birth.getMonth();
     
     if (years > 0) {
-      return `${years} an${years > 1 ? 's' : ''}${remainingMonths > 0 ? ` ${remainingMonths} mois` : ''}`;
+      return `${years} an${years > 1 ? 's' : ''}`;
     }
-    return `${remainingMonths} mois`;
+    return `${months} mois`;
   };
+
+  if (authLoading) {
+    return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
+  }
+
+  if (!user) {
+    return <AuthForm />;
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -85,7 +102,7 @@ const Index = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
           <StatsCard
             title={t("stats.totalReptiles")}
-            value={reptiles.length.toString()}
+            value={stats.total.toString()}
             icon={Users}
           />
           <StatsCard
@@ -95,7 +112,7 @@ const Index = () => {
           />
           <StatsCard
             title={t("stats.avgWeight")}
-            value={reptiles.length > 0 ? `${Math.round(reptiles.reduce((sum, r) => sum + (r.weight || 0), 0) / reptiles.length)}g` : "0g"}
+            value={`${Math.round(stats.avgWeight)}g`}
             icon={Scale}
           />
           <StatsCard
@@ -109,18 +126,13 @@ const Index = () => {
         <div>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-foreground">{t("reptile.recentReptiles")}</h2>
-            <AddReptileDialog />
+            <AddReptileDialog onReptileAdded={fetchReptiles} />
           </div>
           
-          {loading ? (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">Chargement...</p>
-            </div>
-          ) : reptiles.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">
-                Aucun reptile ajouté pour le moment. Cliquez sur "Ajouter un reptile" pour commencer!
-              </p>
+          {reptiles.length === 0 ? (
+            <div className="text-center py-12 border border-dashed border-border rounded-lg">
+              <p className="text-muted-foreground mb-4">Aucun reptile pour le moment</p>
+              <AddReptileDialog onReptileAdded={fetchReptiles} />
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -130,8 +142,8 @@ const Index = () => {
                   id={reptile.id}
                   name={reptile.name}
                   species={reptile.species}
-                  age={calculateAge(reptile.birth_date)}
-                  weight={`${reptile.weight}g`}
+                  age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                  weight={`${reptile.weight || 0}g`}
                   lastFed="Il y a 3 jours"
                   image={reptile.image_url}
                 />

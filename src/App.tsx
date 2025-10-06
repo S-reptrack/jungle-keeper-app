@@ -9,7 +9,6 @@ import Index from "./pages/Index";
 import ReptileDetail from "./pages/ReptileDetail";
 import Reptiles from "./pages/Reptiles";
 import Feeding from "./pages/Feeding";
-import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,7 +25,6 @@ const App = () => (
             <Route path="/reptile/:id" element={<ReptileDetail />} />
             <Route path="/reptiles" element={<Reptiles />} />
             <Route path="/feeding" element={<Feeding />} />
-            <Route path="/auth" element={<Auth />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
