@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      feedings: {
+        Row: {
+          created_at: string
+          feeding_date: string
+          id: string
+          notes: string | null
+          quantity: number
+          reptile_id: string
+          rodent_stage: string
+          rodent_type: string
+          rodent_weight: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          feeding_date: string
+          id?: string
+          notes?: string | null
+          quantity?: number
+          reptile_id: string
+          rodent_stage: string
+          rodent_type: string
+          rodent_weight?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          feeding_date?: string
+          id?: string
+          notes?: string | null
+          quantity?: number
+          reptile_id?: string
+          rodent_stage?: string
+          rodent_type?: string
+          rodent_weight?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string

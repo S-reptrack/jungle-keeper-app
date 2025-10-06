@@ -221,7 +221,7 @@ const ReptileDetail = () => {
               </TabsContent>
               
               <TabsContent value="feeding">
-                <FeedingTab />
+                <FeedingTab reptileId={reptile.id} />
               </TabsContent>
               
               <TabsContent value="reproduction">

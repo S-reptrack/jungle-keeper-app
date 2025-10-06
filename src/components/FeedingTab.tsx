@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import { supabase } from "@/integrations/supabase/client";
 import AddRodentDialog from "./AddRodentDialog";
+import AddFeedingDialog from "./AddFeedingDialog";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Trash2 } from "lucide-react";
@@ -27,9 +28,23 @@ interface Rodent {
   notes: string | null;
 }
 
-const FeedingTab = () => {
+interface Feeding {
+  id: string;
+  rodent_type: string;
+  rodent_stage: string;
+  quantity: number;
+  feeding_date: string;
+  notes: string | null;
+}
+
+interface FeedingTabProps {
+  reptileId: string;
+}
+
+const FeedingTab = ({ reptileId }: FeedingTabProps) => {
   const { t } = useTranslation();
   const [rodents, setRodents] = useState<Rodent[]>([]);
+  const [feedings, setFeedings] = useState<Feeding[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchRodents = async () => {
@@ -49,9 +64,26 @@ const FeedingTab = () => {
     }
   };
 
+  const fetchFeedings = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("feedings")
+        .select("*")
+        .eq("reptile_id", reptileId)
+        .order("feeding_date", { ascending: false });
+
+      if (error) throw error;
+      setFeedings(data || []);
+    } catch (error) {
+      console.error("Error fetching feedings:", error);
+      toast.error("Erreur lors du chargement des repas");
+    }
+  };
+
   useEffect(() => {
     fetchRodents();
-  }, []);
+    fetchFeedings();
+  }, [reptileId]);
 
   const handleDeleteRodent = async (id: string) => {
     try {
@@ -66,6 +98,23 @@ const FeedingTab = () => {
       fetchRodents();
     } catch (error) {
       console.error("Error deleting rodent:", error);
+      toast.error("Erreur lors de la suppression");
+    }
+  };
+
+  const handleDeleteFeeding = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from("feedings")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+      
+      toast.success("Repas supprimé");
+      fetchFeedings();
+    } catch (error) {
+      console.error("Error deleting feeding:", error);
       toast.error("Erreur lors de la suppression");
     }
   };
@@ -116,6 +165,68 @@ const FeedingTab = () => {
 
   return (
     <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Historique des repas</h2>
+        <AddFeedingDialog reptileId={reptileId} onFeedingAdded={fetchFeedings} />
+      </div>
+
+      {loading ? (
+        <Card>
+          <CardContent className="py-8">
+            <p className="text-muted-foreground text-center">Chargement...</p>
+          </CardContent>
+        </Card>
+      ) : feedings.length > 0 ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>Repas donnés</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Stade</TableHead>
+                  <TableHead>Quantité</TableHead>
+                  <TableHead>Notes</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {feedings.map((feeding) => (
+                  <TableRow key={feeding.id}>
+                    <TableCell>
+                      {format(new Date(feeding.feeding_date), "dd MMM yyyy", { locale: fr })}
+                    </TableCell>
+                    <TableCell className="font-medium">{getTypeLabel(feeding.rodent_type)}</TableCell>
+                    <TableCell>{getStageLabel(feeding.rodent_type, feeding.rodent_stage)}</TableCell>
+                    <TableCell>{feeding.quantity}</TableCell>
+                    <TableCell className="max-w-[200px] truncate">{feeding.notes || "-"}</TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDeleteFeeding(feeding.id)}
+                        className="text-destructive hover:text-destructive"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card>
+          <CardContent className="py-8">
+            <p className="text-muted-foreground text-center">Aucun repas enregistré</p>
+          </CardContent>
+        </Card>
+      )}
+
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Gestion des rongeurs</h2>
         <AddRodentDialog onRodentAdded={fetchRodents} />
