@@ -37,7 +37,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { citesAnnexIISpecies, getSpeciesByCategory } from "@/data/citesSpecies";
+import { citesAnnexIASpecies, citesAnnexIIBSpecies, getAllSpecies, getSpeciesByAnnex } from "@/data/citesSpecies";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 
 const formSchema = z.object({
@@ -69,6 +70,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<"snake" | "lizard" | "turtle" | null>("snake");
+  const [selectedAnnex, setSelectedAnnex] = useState<'IA' | 'IIB'>('IIB');
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -119,11 +121,9 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
     }
   };
 
-  const filteredSpecies = selectedCategory 
-    ? getSpeciesByCategory(selectedCategory)
-    : citesAnnexIISpecies;
+  const filteredSpecies = getSpeciesByAnnex(selectedAnnex);
 
-  const selectedSpeciesData = citesAnnexIISpecies.find(
+  const selectedSpeciesData = getAllSpecies().find(
     (s) => s.id === form.watch("species")
   );
   
@@ -240,45 +240,58 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
               name="species"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("reptile.species")} (CITES Annexe II)</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className="w-full justify-between"
-                          disabled={!selectedCategory}
-                        >
-                          <span>
-                            {field.value 
-                              ? citesAnnexIISpecies.find(s => s.id === field.value)?.commonName 
-                              : t("reptile.selectSpecies")}
-                          </span>
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[--radix-popover-trigger-width] p-0 z-50 bg-card border-border" align="start">
-                      <Command>
-                        <CommandInput placeholder={t("reptile.selectSpecies") as string} />
-                        <CommandEmpty>Aucune espèce trouvée</CommandEmpty>
-                        <CommandGroup>
-                          {filteredSpecies.map((species) => (
-                            <CommandItem
-                              key={species.id}
-                              value={`${species.commonName} ${species.scientificName}`}
-                              onSelect={() => field.onChange(species.id)}
+                  <FormLabel>Espèce CITES</FormLabel>
+                  
+                  <Tabs value={selectedAnnex} onValueChange={(value) => {
+                    setSelectedAnnex(value as 'IA' | 'IIB');
+                    form.setValue("species", "");
+                  }}>
+                    <TabsList className="grid w-full grid-cols-2 mb-4">
+                      <TabsTrigger value="IIB">Annexe II B</TabsTrigger>
+                      <TabsTrigger value="IA">Annexe I A</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value={selectedAnnex} className="mt-0">
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className="w-full justify-between"
+                              disabled={!selectedCategory}
                             >
-                              <div className="flex flex-col">
-                                <span className="font-medium">{species.commonName}</span>
-                                <span className="text-xs text-muted-foreground italic">{species.scientificName}</span>
-                              </div>
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                              <span>
+                                {field.value 
+                                  ? getAllSpecies().find(s => s.id === field.value)?.commonName 
+                                  : t("reptile.selectSpecies")}
+                              </span>
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[--radix-popover-trigger-width] p-0 z-50 bg-card border-border" align="start">
+                          <Command>
+                            <CommandInput placeholder={t("reptile.selectSpecies") as string} />
+                            <CommandEmpty>Aucune espèce trouvée</CommandEmpty>
+                            <CommandGroup>
+                              {filteredSpecies.map((species) => (
+                                <CommandItem
+                                  key={species.id}
+                                  value={`${species.commonName} ${species.scientificName}`}
+                                  onSelect={() => field.onChange(species.id)}
+                                >
+                                  <div className="flex flex-col">
+                                    <span className="font-medium">{species.commonName}</span>
+                                    <span className="text-xs text-muted-foreground italic">{species.scientificName}</span>
+                                  </div>
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    </TabsContent>
+                  </Tabs>
                   <FormMessage />
                 </FormItem>
               )}
