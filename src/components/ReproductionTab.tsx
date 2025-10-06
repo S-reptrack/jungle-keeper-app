@@ -233,7 +233,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
                 {t("reptile.reproduction.addObservation")}
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>{t("reptile.reproduction.addObservation")}</DialogTitle>
               </DialogHeader>
@@ -251,7 +251,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
                               <SelectValue placeholder={t("reptile.reproduction.selectPartner")} />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent className="bg-card border-border">
+                          <SelectContent className="bg-card border-border z-[100]">
                             {potentialPartners.map((partner) => (
                               <SelectItem key={partner.id} value={partner.id}>
                                 {partner.name} ({partner.sex === "male" ? "♂" : "♀"})
@@ -276,7 +276,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
                               <SelectValue placeholder={t("reptile.reproduction.selectAction")} />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent className="bg-card border-border">
+                          <SelectContent className="bg-card border-border z-[100]">
                             <SelectItem value="introduction">{t("reptile.reproduction.actions.introduction")}</SelectItem>
                             <SelectItem value="mating">{t("reptile.reproduction.actions.mating")}</SelectItem>
                             <SelectItem value="separation">{t("reptile.reproduction.actions.separation")}</SelectItem>
@@ -326,7 +326,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
                                 <CalendarIcon className="h-4 w-4" />
                               </Button>
                             </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0 z-50" align="start">
+                            <PopoverContent className="w-auto p-0 z-[100]" align="start">
                               <CalendarComponent
                                 mode="single"
                                 selected={field.value}
