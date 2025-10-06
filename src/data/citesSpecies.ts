@@ -3,6 +3,7 @@ export interface ReptileSpecies {
   scientificName: string;
   commonName: string;
   category: 'snake' | 'lizard' | 'turtle';
+  morphs?: string[];
 }
 
 export const citesAnnexIISpecies: ReptileSpecies[] = [
@@ -12,6 +13,7 @@ export const citesAnnexIISpecies: ReptileSpecies[] = [
     scientificName: 'Python regius',
     commonName: 'Python royal / Ball Python',
     category: 'snake',
+    morphs: ['Normal', 'Albino', 'Hypo', 'Ghost (Fantôme)', 'Pastel', 'Mojave', 'Banana', 'Clown', 'Piebald', 'Enchi', 'Spider', 'Cinnamon', 'Black Pastel', 'Butter', 'Lesser', 'Pinstripe', 'Fire', 'Champagne', 'Chocolate', 'GHI', 'Orange Dream', 'Pewter', 'Woma', 'Yellowbelly'],
   },
   {
     id: 'python-molurus',
@@ -24,12 +26,21 @@ export const citesAnnexIISpecies: ReptileSpecies[] = [
     scientificName: 'Morelia spilota',
     commonName: 'Python tapis / Carpet Python',
     category: 'snake',
+    morphs: ['Normal', 'Jungle', 'Jaguar', 'Granite', 'Zebra', 'Axanthic', 'Caramel', 'Albino', 'Hypo', 'Tiger'],
   },
   {
     id: 'boa-constrictor',
     scientificName: 'Boa constrictor',
     commonName: 'Boa constricteur / Boa Constrictor',
     category: 'snake',
+    morphs: ['Normal', 'Albino', 'Hypo', 'Ghost', 'Anery', 'Sunglow', 'Pastel', 'Jungle', 'Motley', 'IMG (Increased Melanin Gene)', 'Leopard', 'Blood', 'Sharp'],
+  },
+  {
+    id: 'boa-imperator',
+    scientificName: 'Boa imperator',
+    commonName: 'Boa imperator / Common Boa',
+    category: 'snake',
+    morphs: ['Normal', 'Albino', 'Hypo', 'Motley', 'Jungle', 'Sunglow', 'Snow', 'Salmon', 'IMG', 'Pastel', 'Leopard'],
   },
   {
     id: 'epicrates-cenchria',
@@ -48,6 +59,35 @@ export const citesAnnexIISpecies: ReptileSpecies[] = [
     scientificName: 'Pantherophis guttatus',
     commonName: 'Serpent des blés / Corn Snake',
     category: 'snake',
+    morphs: ['Normal', 'Amelanistic (Albino)', 'Anerythristic', 'Hypo', 'Ghost', 'Blizzard', 'Charcoal', 'Lavender', 'Butter', 'Caramel', 'Snow', 'Bloodred', 'Okeetee', 'Miami', 'Crimson', 'Palmetto', 'Tessera'],
+  },
+  {
+    id: 'morelia-viridis',
+    scientificName: 'Morelia viridis',
+    commonName: 'Python vert / Green Tree Python',
+    category: 'snake',
+    morphs: ['Normal', 'High Yellow', 'High Blue', 'Sorong', 'Biak', 'Aru', 'Jayapura', 'Merauke', 'Calico', 'Axanthic'],
+  },
+  {
+    id: 'pituophis-catenifer',
+    scientificName: 'Pituophis catenifer',
+    commonName: 'Couleuvre à nez mince / Gopher Snake',
+    category: 'snake',
+    morphs: ['Normal', 'Albino', 'Snow', 'Axanthic', 'Hypo', 'Patternless', 'Piebald'],
+  },
+  {
+    id: 'gonyosoma-oxycephalum',
+    scientificName: 'Gonyosoma oxycephalum',
+    commonName: 'Couleuvre à queue rouge / Red-tailed Racer',
+    category: 'snake',
+    morphs: ['Normal', 'Albino', 'Tricolor'],
+  },
+  {
+    id: 'candoia-aspera',
+    scientificName: 'Candoia aspera',
+    commonName: 'Boa de Nouvelle-Guinée / Viper Boa (Bongersmai)',
+    category: 'snake',
+    morphs: ['Normal', 'Patternless', 'Striped', 'Hypomelanistic'],
   },
   {
     id: 'lampropeltis-triangulum',

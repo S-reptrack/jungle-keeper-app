@@ -1,19 +1,4 @@
 {
-  "common": {
-    "appName": "S-reptrack",
-    "tagline": "Professional tracking for your reptiles",
-    "home": "Home",
-    "reptiles": "Reptiles",
-    "feeding": "Feeding",
-    "settings": "Settings",
-    "add": "Add",
-    "cancel": "Cancel",
-    "save": "Save",
-    "edit": "Edit",
-    "delete": "Delete",
-    "search": "Search",
-    "language": "Language"
-  },
   "stats": {
     "totalReptiles": "Total Reptiles",
     "feedingsDue": "Feedings Due",
@@ -27,6 +12,14 @@
     "name": "Name",
     "species": "Species",
     "category": "Category",
+    "sex": "Sex",
+    "selectSex": "Select a sex",
+    "male": "Male",
+    "female": "Female",
+    "unknown": "Unknown",
+    "morph": "Morph",
+    "selectMorph": "Select a morph",
+    "optional": "optional",
     "age": "Age",
     "birthDate": "Birth Date",
     "weight": "Weight",
@@ -39,17 +32,65 @@
     "turtle": "Turtle",
     "years": "years",
     "months": "months",
-    "grams": "grams"
+    "grams": "grams",
+    "generalInfo": "General Information",
+    "noHealthRecords": "No health records yet",
+    "tabs": {
+      "overview": "Overview",
+      "reproduction": "Reproduction",
+      "health": "Health"
+    },
+    "reproduction": {
+      "title": "Reproduction Tracking",
+      "addObservation": "Add Observation",
+      "partner": "Partner",
+      "selectPartner": "Select a partner",
+      "action": "Action",
+      "selectAction": "Select an action",
+      "date": "Date",
+      "selectDate": "Select a date",
+      "observation": "Observation",
+      "observationPlaceholder": "Describe what you observed...",
+      "noObservations": "No observations yet",
+      "observationAdded": "Observation added successfully",
+      "actions": {
+        "introduction": "Introduction",
+        "mating": "Mating observed",
+        "separation": "Separation",
+        "laying": "Egg laying",
+        "other": "Other"
+      }
+    }
   },
   "validation": {
     "nameRequired": "Name is required",
     "nameMin": "Name must be at least 2 characters",
     "categoryRequired": "Category is required",
     "speciesRequired": "Species is required",
+    "sexRequired": "Sex is required",
     "ageRequired": "Age is required",
     "ageMin": "Age must be positive",
     "weightRequired": "Weight is required",
     "weightMin": "Weight must be positive",
-    "dateRequired": "Date is required"
+    "dateRequired": "Date is required",
+    "partnerRequired": "Partner is required",
+    "actionRequired": "Action is required",
+    "observationMin": "Observation must be at least 10 characters"
+  },
+  "common": {
+    "appName": "S-reptrack",
+    "tagline": "Professional tracking for your reptiles",
+    "home": "Home",
+    "reptiles": "Reptiles",
+    "feeding": "Feeding",
+    "settings": "Settings",
+    "add": "Add",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search",
+    "language": "Language",
+    "back": "Back"
   }
 }

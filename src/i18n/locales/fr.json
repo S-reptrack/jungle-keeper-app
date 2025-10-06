@@ -1,19 +1,4 @@
 {
-  "common": {
-    "appName": "S-reptrack",
-    "tagline": "Suivi professionnel de vos reptiles",
-    "home": "Accueil",
-    "reptiles": "Reptiles",
-    "feeding": "Alimentation",
-    "settings": "Paramètres",
-    "add": "Ajouter",
-    "cancel": "Annuler",
-    "save": "Enregistrer",
-    "edit": "Modifier",
-    "delete": "Supprimer",
-    "search": "Rechercher",
-    "language": "Langue"
-  },
   "stats": {
     "totalReptiles": "Total Reptiles",
     "feedingsDue": "Repas à venir",
@@ -27,6 +12,14 @@
     "name": "Nom",
     "species": "Espèce",
     "category": "Catégorie",
+    "sex": "Sexe",
+    "selectSex": "Sélectionner un sexe",
+    "male": "Mâle",
+    "female": "Femelle",
+    "unknown": "Inconnu",
+    "morph": "Mutation",
+    "selectMorph": "Sélectionner une mutation",
+    "optional": "optionnel",
     "age": "Âge",
     "birthDate": "Date de naissance",
     "weight": "Poids",
@@ -39,17 +32,65 @@
     "turtle": "Tortue",
     "years": "ans",
     "months": "mois",
-    "grams": "grammes"
+    "grams": "grammes",
+    "generalInfo": "Informations générales",
+    "noHealthRecords": "Aucun enregistrement de santé pour le moment",
+    "tabs": {
+      "overview": "Aperçu",
+      "reproduction": "Reproduction",
+      "health": "Santé"
+    },
+    "reproduction": {
+      "title": "Suivi de reproduction",
+      "addObservation": "Ajouter une observation",
+      "partner": "Partenaire",
+      "selectPartner": "Sélectionner un partenaire",
+      "action": "Action",
+      "selectAction": "Sélectionner une action",
+      "date": "Date",
+      "selectDate": "Sélectionner une date",
+      "observation": "Observation",
+      "observationPlaceholder": "Décrivez ce que vous avez observé...",
+      "noObservations": "Aucune observation pour le moment",
+      "observationAdded": "Observation ajoutée avec succès",
+      "actions": {
+        "introduction": "Mise en présence",
+        "mating": "Accouplement observé",
+        "separation": "Séparation",
+        "laying": "Ponte",
+        "other": "Autre"
+      }
+    }
   },
   "validation": {
     "nameRequired": "Le nom est requis",
     "nameMin": "Le nom doit contenir au moins 2 caractères",
     "categoryRequired": "La catégorie est requise",
     "speciesRequired": "L'espèce est requise",
+    "sexRequired": "Le sexe est requis",
     "ageRequired": "L'âge est requis",
     "ageMin": "L'âge doit être positif",
     "weightRequired": "Le poids est requis",
     "weightMin": "Le poids doit être positif",
-    "dateRequired": "La date est requise"
+    "dateRequired": "La date est requise",
+    "partnerRequired": "Le partenaire est requis",
+    "actionRequired": "L'action est requise",
+    "observationMin": "L'observation doit contenir au moins 10 caractères"
+  },
+  "common": {
+    "appName": "S-reptrack",
+    "tagline": "Suivi professionnel de vos reptiles",
+    "home": "Accueil",
+    "reptiles": "Reptiles",
+    "feeding": "Alimentation",
+    "settings": "Paramètres",
+    "add": "Ajouter",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "search": "Rechercher",
+    "language": "Langue",
+    "back": "Retour"
   }
 }

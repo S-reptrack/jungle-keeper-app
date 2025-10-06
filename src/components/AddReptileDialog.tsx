@@ -45,6 +45,10 @@ const formSchema = z.object({
     required_error: "validation.categoryRequired",
   }),
   species: z.string().min(1, "validation.speciesRequired"),
+  sex: z.enum(["male", "female", "unknown"], {
+    required_error: "validation.sexRequired",
+  }),
+  morph: z.string().optional(),
   birthDate: z.date({
     required_error: "validation.dateRequired",
   }),
@@ -82,6 +86,12 @@ const AddReptileDialog = () => {
   const filteredSpecies = selectedCategory 
     ? getSpeciesByCategory(selectedCategory)
     : citesAnnexIISpecies;
+
+  const selectedSpeciesData = citesAnnexIISpecies.find(
+    (s) => s.id === form.watch("species")
+  );
+  
+  const availableMorphs = selectedSpeciesData?.morphs || [];
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -174,6 +184,56 @@ const AddReptileDialog = () => {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="sex"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("reptile.sex")}</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t("reptile.selectSex")} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="bg-card border-border">
+                      <SelectItem value="male">{t("reptile.male")}</SelectItem>
+                      <SelectItem value="female">{t("reptile.female")}</SelectItem>
+                      <SelectItem value="unknown">{t("reptile.unknown")}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {availableMorphs.length > 0 && (
+              <FormField
+                control={form.control}
+                name="morph"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("reptile.morph")} ({t("reptile.optional")})</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t("reptile.selectMorph")} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="bg-card border-border max-h-[200px]">
+                        {availableMorphs.map((morph) => (
+                          <SelectItem key={morph} value={morph}>
+                            {morph}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <FormField
               control={form.control}

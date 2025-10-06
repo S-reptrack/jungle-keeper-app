@@ -12,7 +12,8 @@
     "edit": "Editar",
     "delete": "Eliminar",
     "search": "Buscar",
-    "language": "Idioma"
+    "language": "Idioma",
+    "back": "Volver"
   },
   "stats": {
     "totalReptiles": "Total Reptiles",
@@ -27,6 +28,14 @@
     "name": "Nombre",
     "species": "Especie",
     "category": "Categoría",
+    "sex": "Sexo",
+    "selectSex": "Seleccionar sexo",
+    "male": "Macho",
+    "female": "Hembra",
+    "unknown": "Desconocido",
+    "morph": "Mutación",
+    "selectMorph": "Seleccionar mutación",
+    "optional": "opcional",
     "age": "Edad",
     "birthDate": "Fecha de Nacimiento",
     "weight": "Peso",
@@ -39,17 +48,49 @@
     "turtle": "Tortuga",
     "years": "años",
     "months": "meses",
-    "grams": "gramos"
+    "grams": "gramos",
+    "generalInfo": "Información general",
+    "noHealthRecords": "Aún no hay registros de salud",
+    "tabs": {
+      "overview": "Resumen",
+      "reproduction": "Reproducción",
+      "health": "Salud"
+    },
+    "reproduction": {
+      "title": "Seguimiento de reproducción",
+      "addObservation": "Añadir observación",
+      "partner": "Pareja",
+      "selectPartner": "Seleccionar pareja",
+      "action": "Acción",
+      "selectAction": "Seleccionar acción",
+      "date": "Fecha",
+      "selectDate": "Seleccionar fecha",
+      "observation": "Observación",
+      "observationPlaceholder": "Describe lo que observaste...",
+      "noObservations": "Aún no hay observaciones",
+      "observationAdded": "Observación añadida correctamente",
+      "actions": {
+        "introduction": "Presentación",
+        "mating": "Apareamiento observado",
+        "separation": "Separación",
+        "laying": "Puesta de huevos",
+        "other": "Otro"
+      }
+    }
   },
   "validation": {
     "nameRequired": "El nombre es obligatorio",
     "nameMin": "El nombre debe tener al menos 2 caracteres",
     "categoryRequired": "La categoría es obligatoria",
     "speciesRequired": "La especie es obligatoria",
+    "sexRequired": "El sexo es obligatorio",
     "ageRequired": "La edad es obligatoria",
     "ageMin": "La edad debe ser positiva",
     "weightRequired": "El peso es obligatorio",
     "weightMin": "El peso debe ser positivo",
-    "dateRequired": "La fecha es obligatoria"
+    "dateRequired": "La fecha es obligatoria",
+    "partnerRequired": "La pareja es obligatoria",
+    "actionRequired": "La acción es obligatoria",
+    "observationMin": "La observación debe tener al menos 10 caracteres"
   }
 }

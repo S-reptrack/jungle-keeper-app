@@ -12,7 +12,8 @@
     "edit": "Bearbeiten",
     "delete": "Löschen",
     "search": "Suchen",
-    "language": "Sprache"
+    "language": "Sprache",
+    "back": "Zurück"
   },
   "stats": {
     "totalReptiles": "Gesamt Reptilien",
@@ -27,6 +28,14 @@
     "name": "Name",
     "species": "Art",
     "category": "Kategorie",
+    "sex": "Geschlecht",
+    "selectSex": "Geschlecht auswählen",
+    "male": "Männlich",
+    "female": "Weiblich",
+    "unknown": "Unbekannt",
+    "morph": "Mutation",
+    "selectMorph": "Mutation auswählen",
+    "optional": "optional",
     "age": "Alter",
     "birthDate": "Geburtsdatum",
     "weight": "Gewicht",
@@ -39,17 +48,49 @@
     "turtle": "Schildkröte",
     "years": "Jahre",
     "months": "Monate",
-    "grams": "Gramm"
+    "grams": "Gramm",
+    "generalInfo": "Allgemeine Informationen",
+    "noHealthRecords": "Noch keine Gesundheitsunterlagen",
+    "tabs": {
+      "overview": "Übersicht",
+      "reproduction": "Zucht",
+      "health": "Gesundheit"
+    },
+    "reproduction": {
+      "title": "Zuchtverfolgung",
+      "addObservation": "Beobachtung hinzufügen",
+      "partner": "Partner",
+      "selectPartner": "Partner auswählen",
+      "action": "Aktion",
+      "selectAction": "Aktion auswählen",
+      "date": "Datum",
+      "selectDate": "Datum auswählen",
+      "observation": "Beobachtung",
+      "observationPlaceholder": "Beschreiben Sie, was Sie beobachtet haben...",
+      "noObservations": "Noch keine Beobachtungen",
+      "observationAdded": "Beobachtung erfolgreich hinzugefügt",
+      "actions": {
+        "introduction": "Vorstellung",
+        "mating": "Paarung beobachtet",
+        "separation": "Trennung",
+        "laying": "Eiablage",
+        "other": "Andere"
+      }
+    }
   },
   "validation": {
     "nameRequired": "Name ist erforderlich",
     "nameMin": "Name muss mindestens 2 Zeichen lang sein",
     "categoryRequired": "Kategorie ist erforderlich",
     "speciesRequired": "Art ist erforderlich",
+    "sexRequired": "Geschlecht ist erforderlich",
     "ageRequired": "Alter ist erforderlich",
     "ageMin": "Alter muss positiv sein",
     "weightRequired": "Gewicht ist erforderlich",
     "weightMin": "Gewicht muss positiv sein",
-    "dateRequired": "Datum ist erforderlich"
+    "dateRequired": "Datum ist erforderlich",
+    "partnerRequired": "Partner ist erforderlich",
+    "actionRequired": "Aktion ist erforderlich",
+    "observationMin": "Beobachtung muss mindestens 10 Zeichen lang sein"
   }
 }
