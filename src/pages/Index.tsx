@@ -18,6 +18,7 @@ const Index = () => {
     total: 0,
     healthIssues: 0,
   });
+  const [lastFeedings, setLastFeedings] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (user) {
@@ -38,6 +39,26 @@ const Index = () => {
       const reptileData = data || [];
       setReptiles(reptileData);
       
+      // Fetch last feeding for each reptile
+      const feedingsMap: Record<string, string> = {};
+      for (const reptile of reptileData) {
+        const { data: feedingData } = await supabase
+          .from("feedings")
+          .select("feeding_date")
+          .eq("reptile_id", reptile.id)
+          .order("feeding_date", { ascending: false })
+          .limit(1)
+          .single();
+        
+        if (feedingData) {
+          const daysSince = calculateDaysSince(feedingData.feeding_date);
+          feedingsMap[reptile.id] = daysSince;
+        } else {
+          feedingsMap[reptile.id] = "Jamais";
+        }
+      }
+      setLastFeedings(feedingsMap);
+      
       // Calculate stats
       const { count } = await supabase
         .from("reptiles")
@@ -57,6 +78,20 @@ const Index = () => {
     } catch (error) {
       console.error("Error fetching reptiles:", error);
     }
+  };
+
+  const calculateDaysSince = (dateString: string) => {
+    const feedDate = new Date(dateString);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    feedDate.setHours(0, 0, 0, 0);
+    
+    const diffTime = today.getTime() - feedDate.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return "Aujourd'hui";
+    if (diffDays === 1) return "Il y a 1 jour";
+    return `Il y a ${diffDays} jours`;
   };
 
   const calculateAge = (birthDate: string) => {
@@ -149,7 +184,7 @@ const Index = () => {
                   species={reptile.species}
                   age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
                   weight={`${reptile.weight || 0}g`}
-                  lastFed="Il y a 3 jours"
+                  lastFed={lastFeedings[reptile.id] || "Jamais"}
                   image={reptile.image_url}
                 />
               ))}
