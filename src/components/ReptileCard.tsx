@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { QrCode } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import QRCodeDialog from "./QRCodeDialog";
 
 interface ReptileCardProps {
   id: string;
@@ -15,6 +17,7 @@ interface ReptileCardProps {
 
 const ReptileCard = ({ id, name, species, age, weight, lastFed, image }: ReptileCardProps) => {
   const navigate = useNavigate();
+  const [qrDialogOpen, setQrDialogOpen] = useState(false);
 
   const handleCardClick = () => {
     navigate(`/reptile/${id}`);
@@ -38,7 +41,7 @@ const ReptileCard = ({ id, name, species, age, weight, lastFed, image }: Reptile
             className="p-2 bg-card/90 backdrop-blur-sm rounded-lg hover:bg-accent transition-colors"
             onClick={(e) => {
               e.stopPropagation();
-              // TODO: Ouvrir la modale QR code
+              setQrDialogOpen(true);
             }}
           >
             <QrCode className="w-5 h-5 text-foreground" />
@@ -66,6 +69,13 @@ const ReptileCard = ({ id, name, species, age, weight, lastFed, image }: Reptile
           <span className="font-medium text-foreground">{lastFed}</span>
         </div>
       </CardContent>
+
+      <QRCodeDialog
+        open={qrDialogOpen}
+        onOpenChange={setQrDialogOpen}
+        reptileId={id}
+        reptileName={name}
+      />
     </Card>
   );
 };

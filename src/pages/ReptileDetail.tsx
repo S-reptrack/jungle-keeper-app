@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity } from "lucide-react";
+import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,8 @@ import FeedingTab from "@/components/FeedingTab";
 import HealthTab from "@/components/HealthTab";
 import EditReptileDialog from "@/components/EditReptileDialog";
 import WeightChart from "@/components/WeightChart";
+import QRCodeDialog from "@/components/QRCodeDialog";
+import ImageUploadDialog from "@/components/ImageUploadDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { differenceInYears, differenceInMonths } from "date-fns";
@@ -35,6 +37,8 @@ const ReptileDetail = () => {
   const { t } = useTranslation();
   const [reptile, setReptile] = useState<Reptile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [qrDialogOpen, setQrDialogOpen] = useState(false);
+  const [imageUploadOpen, setImageUploadOpen] = useState(false);
 
   const fetchReptile = async () => {
     if (!id) return;
@@ -91,6 +95,13 @@ const ReptileDetail = () => {
     return `${months} ${t("reptile.months")}`;
   };
 
+  const handleImageUploadSuccess = (url: string) => {
+    if (reptile) {
+      setReptile({ ...reptile, image_url: url });
+    }
+    fetchReptile();
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
@@ -126,7 +137,7 @@ const ReptileDetail = () => {
           {/* Sidebar avec infos principales */}
           <div className="lg:col-span-1 space-y-4">
             <Card>
-              <div className="h-64 bg-gradient-to-br from-jungle-mid to-jungle-light relative overflow-hidden">
+              <div className="h-64 bg-gradient-to-br from-jungle-mid to-jungle-light relative overflow-hidden group">
                 {reptile.image_url && (
                   <img 
                     src={reptile.image_url} 
@@ -134,11 +145,32 @@ const ReptileDetail = () => {
                     className="w-full h-full object-cover"
                   />
                 )}
-                <div className="absolute top-3 right-3">
-                  <button className="p-2 bg-card/90 backdrop-blur-sm rounded-lg hover:bg-accent transition-colors">
+                <div className="absolute top-3 right-3 flex gap-2">
+                  <button 
+                    className="p-2 bg-card/90 backdrop-blur-sm rounded-lg hover:bg-accent transition-colors"
+                    onClick={() => setImageUploadOpen(true)}
+                  >
+                    <Camera className="w-5 h-5 text-foreground" />
+                  </button>
+                  <button 
+                    className="p-2 bg-card/90 backdrop-blur-sm rounded-lg hover:bg-accent transition-colors"
+                    onClick={() => setQrDialogOpen(true)}
+                  >
                     <QrCode className="w-5 h-5 text-foreground" />
                   </button>
                 </div>
+                {!reptile.image_url && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Button
+                      variant="secondary"
+                      onClick={() => setImageUploadOpen(true)}
+                      className="gap-2"
+                    >
+                      <Camera className="w-4 h-4" />
+                      Ajouter une photo
+                    </Button>
+                  </div>
+                )}
               </div>
               <CardHeader>
                 <div className="flex items-start justify-between">
@@ -250,6 +282,21 @@ const ReptileDetail = () => {
             </Tabs>
           </div>
         </div>
+
+        <QRCodeDialog
+          open={qrDialogOpen}
+          onOpenChange={setQrDialogOpen}
+          reptileId={reptile.id}
+          reptileName={reptile.name}
+        />
+        
+        <ImageUploadDialog
+          open={imageUploadOpen}
+          onOpenChange={setImageUploadOpen}
+          reptileId={reptile.id}
+          reptileName={reptile.name}
+          onUploadSuccess={handleImageUploadSuccess}
+        />
       </main>
     </div>
   );
