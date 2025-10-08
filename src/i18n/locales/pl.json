@@ -1,0 +1,122 @@
+{
+  "stats": {
+    "totalReptiles": "Wszystkie gady",
+    "feedingsDue": "Nadchodzące karmienia",
+    "health": "Zdrowie",
+    "activeBreeding": "Aktywne rozmnażanie"
+  },
+  "reptile": {
+    "addReptile": "Dodaj gada",
+    "editReptile": "Edytuj gada",
+    "generalInfo": "Informacje ogólne",
+    "name": "Imię",
+    "species": "Gatunek",
+    "category": "Kategoria",
+    "sex": "Płeć",
+    "male": "Samiec",
+    "female": "Samica",
+    "unknown": "Nieznana",
+    "morphs": "Morfy",
+    "age": "Wiek",
+    "birthDate": "Data urodzenia",
+    "acquisitionDate": "Data nabycia",
+    "weight": "Waga",
+    "lastWeight": "Ostatnia waga",
+    "healthRecords": "Zapisy zdrowotne",
+    "addHealthRecord": "Dodaj zapis zdrowotny",
+    "date": "Data",
+    "observations": "Obserwacje",
+    "weightRecords": "Zapisy wagi",
+    "addWeightRecord": "Dodaj zapis wagi",
+    "image": "Zdjęcie",
+    "uploadImage": "Prześlij zdjęcie",
+    "changeImage": "Zmień zdjęcie",
+    "deleteConfirm": "Czy na pewno chcesz usunąć tego gada?",
+    "categories": {
+      "snake": "Wąż",
+      "lizard": "Jaszczurka",
+      "turtle": "Żółw"
+    },
+    "units": {
+      "years": "lata",
+      "months": "miesiące",
+      "grams": "g"
+    },
+    "reproduction": {
+      "title": "Rozmnażanie",
+      "addRecord": "Dodaj zapis rozmnażania",
+      "partner": "Partner",
+      "action": "Akcja",
+      "actions": {
+        "introduction": "Wprowadzenie",
+        "mating": "Krycie",
+        "separation": "Rozdzielenie",
+        "laying": "Znoszenie",
+        "incubation": "Inkubacja",
+        "hatching": "Wykluwanie"
+      }
+    }
+  },
+  "feeding": {
+    "title": "Karmienie",
+    "addFeeding": "Dodaj karmienie",
+    "feedingDate": "Data karmienia",
+    "preyType": "Typ zdobyczy",
+    "preyStage": "Etap zdobyczy",
+    "preyWeight": "Waga zdobyczy",
+    "stages": {
+      "rats": "Szczury",
+      "mice": "Myszy",
+      "rabbits": "Króliki"
+    },
+    "rats": {
+      "pinky": "Pinky (nowo narodzony)",
+      "fuzzy": "Fuzzy (z futrem)",
+      "hopper": "Hopper (skaczący)",
+      "weaner": "Weaner (odsadzony)",
+      "small_adult": "Mały dorosły",
+      "medium_adult": "Średni dorosły",
+      "large_adult": "Duży dorosły",
+      "jumbo": "Jumbo"
+    },
+    "mice": {
+      "pinky": "Pinky (nowo narodzony)",
+      "fuzzy": "Fuzzy (z futrem)",
+      "hopper": "Hopper (skaczący)",
+      "weaner": "Weaner (odsadzony)",
+      "adult": "Dorosły"
+    },
+    "rabbits": {
+      "small": "Mały",
+      "medium": "Średni",
+      "large": "Duży"
+    }
+  },
+  "validation": {
+    "nameRequired": "Imię jest wymagane",
+    "nameMin": "Imię musi mieć co najmniej 2 znaki",
+    "categoryRequired": "Kategoria jest wymagana",
+    "ageMin": "Wiek musi być dodatni",
+    "weightMin": "Waga musi być dodatnia",
+    "dateRequired": "Data jest wymagana",
+    "partnerRequired": "Partner jest wymagany",
+    "actionRequired": "Akcja jest wymagana",
+    "observationMin": "Obserwacja musi mieć co najmniej 3 znaki"
+  },
+  "common": {
+    "appName": "S-reptrack",
+    "tagline": "Zarządzaj swoimi gadami z łatwością",
+    "home": "Strona główna",
+    "reptiles": "Gady",
+    "feeding": "Karmienie",
+    "settings": "Ustawienia",
+    "add": "Dodaj",
+    "cancel": "Anuluj",
+    "save": "Zapisz",
+    "edit": "Edytuj",
+    "delete": "Usuń",
+    "search": "Szukaj",
+    "language": "Język",
+    "back": "Powrót"
+  }
+}

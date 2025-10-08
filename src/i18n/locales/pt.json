@@ -1,0 +1,122 @@
+{
+  "stats": {
+    "totalReptiles": "Total de répteis",
+    "feedingsDue": "Alimentações pendentes",
+    "health": "Saúde",
+    "activeBreeding": "Reprodução ativa"
+  },
+  "reptile": {
+    "addReptile": "Adicionar réptil",
+    "editReptile": "Editar réptil",
+    "generalInfo": "Informações gerais",
+    "name": "Nome",
+    "species": "Espécie",
+    "category": "Categoria",
+    "sex": "Sexo",
+    "male": "Macho",
+    "female": "Fêmea",
+    "unknown": "Desconhecido",
+    "morphs": "Morfos",
+    "age": "Idade",
+    "birthDate": "Data de nascimento",
+    "acquisitionDate": "Data de aquisição",
+    "weight": "Peso",
+    "lastWeight": "Último peso",
+    "healthRecords": "Registos de saúde",
+    "addHealthRecord": "Adicionar registo de saúde",
+    "date": "Data",
+    "observations": "Observações",
+    "weightRecords": "Registos de peso",
+    "addWeightRecord": "Adicionar registo de peso",
+    "image": "Imagem",
+    "uploadImage": "Carregar imagem",
+    "changeImage": "Alterar imagem",
+    "deleteConfirm": "Tem certeza de que deseja excluir este réptil?",
+    "categories": {
+      "snake": "Serpente",
+      "lizard": "Lagarto",
+      "turtle": "Tartaruga"
+    },
+    "units": {
+      "years": "anos",
+      "months": "meses",
+      "grams": "g"
+    },
+    "reproduction": {
+      "title": "Reprodução",
+      "addRecord": "Adicionar registo de reprodução",
+      "partner": "Parceiro",
+      "action": "Ação",
+      "actions": {
+        "introduction": "Introdução",
+        "mating": "Acasalamento",
+        "separation": "Separação",
+        "laying": "Postura",
+        "incubation": "Incubação",
+        "hatching": "Eclosão"
+      }
+    }
+  },
+  "feeding": {
+    "title": "Alimentação",
+    "addFeeding": "Adicionar alimentação",
+    "feedingDate": "Data de alimentação",
+    "preyType": "Tipo de presa",
+    "preyStage": "Estágio da presa",
+    "preyWeight": "Peso da presa",
+    "stages": {
+      "rats": "Ratos",
+      "mice": "Camundongos",
+      "rabbits": "Coelhos"
+    },
+    "rats": {
+      "pinky": "Pinky (recém-nascido)",
+      "fuzzy": "Fuzzy (com pelo)",
+      "hopper": "Hopper (saltador)",
+      "weaner": "Weaner (desmamado)",
+      "small_adult": "Adulto pequeno",
+      "medium_adult": "Adulto médio",
+      "large_adult": "Adulto grande",
+      "jumbo": "Jumbo"
+    },
+    "mice": {
+      "pinky": "Pinky (recém-nascido)",
+      "fuzzy": "Fuzzy (com pelo)",
+      "hopper": "Hopper (saltador)",
+      "weaner": "Weaner (desmamado)",
+      "adult": "Adulto"
+    },
+    "rabbits": {
+      "small": "Pequeno",
+      "medium": "Médio",
+      "large": "Grande"
+    }
+  },
+  "validation": {
+    "nameRequired": "O nome é obrigatório",
+    "nameMin": "O nome deve ter pelo menos 2 caracteres",
+    "categoryRequired": "A categoria é obrigatória",
+    "ageMin": "A idade deve ser positiva",
+    "weightMin": "O peso deve ser positivo",
+    "dateRequired": "A data é obrigatória",
+    "partnerRequired": "O parceiro é obrigatório",
+    "actionRequired": "A ação é obrigatória",
+    "observationMin": "A observação deve ter pelo menos 3 caracteres"
+  },
+  "common": {
+    "appName": "S-reptrack",
+    "tagline": "Gerencie seus répteis com facilidade",
+    "home": "Início",
+    "reptiles": "Répteis",
+    "feeding": "Alimentação",
+    "settings": "Configurações",
+    "add": "Adicionar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "search": "Pesquisar",
+    "language": "Idioma",
+    "back": "Voltar"
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "stats": {
+    "totalReptiles": "Totaal reptielen",
+    "feedingsDue": "Te voeren",
+    "health": "Gezondheid",
+    "activeBreeding": "Actieve kweek"
+  },
+  "reptile": {
+    "addReptile": "Reptiel toevoegen",
+    "editReptile": "Reptiel bewerken",
+    "generalInfo": "Algemene informatie",
+    "name": "Naam",
+    "species": "Soort",
+    "category": "Categorie",
+    "sex": "Geslacht",
+    "male": "Man",
+    "female": "Vrouw",
+    "unknown": "Onbekend",
+    "morphs": "Morfen",
+    "age": "Leeftijd",
+    "birthDate": "Geboortedatum",
+    "acquisitionDate": "Aankoopdatum",
+    "weight": "Gewicht",
+    "lastWeight": "Laatste gewicht",
+    "healthRecords": "Gezondheidsgegevens",
+    "addHealthRecord": "Gezondheidsgegeven toevoegen",
+    "date": "Datum",
+    "observations": "Observaties",
+    "weightRecords": "Gewichtsgegevens",
+    "addWeightRecord": "Gewichtsgegeven toevoegen",
+    "image": "Afbeelding",
+    "uploadImage": "Afbeelding uploaden",
+    "changeImage": "Afbeelding wijzigen",
+    "deleteConfirm": "Weet je zeker dat je dit reptiel wilt verwijderen?",
+    "categories": {
+      "snake": "Slang",
+      "lizard": "Hagedis",
+      "turtle": "Schildpad"
+    },
+    "units": {
+      "years": "jaar",
+      "months": "maanden",
+      "grams": "g"
+    },
+    "reproduction": {
+      "title": "Voortplanting",
+      "addRecord": "Voortplantingsgegeven toevoegen",
+      "partner": "Partner",
+      "action": "Actie",
+      "actions": {
+        "introduction": "Introductie",
+        "mating": "Paring",
+        "separation": "Scheiding",
+        "laying": "Leggen",
+        "incubation": "Incubatie",
+        "hatching": "Uitkomen"
+      }
+    }
+  },
+  "feeding": {
+    "title": "Voeding",
+    "addFeeding": "Voeding toevoegen",
+    "feedingDate": "Voedingsdatum",
+    "preyType": "Prooisoort",
+    "preyStage": "Prooistadium",
+    "preyWeight": "Prooigewicht",
+    "stages": {
+      "rats": "Ratten",
+      "mice": "Muizen",
+      "rabbits": "Konijnen"
+    },
+    "rats": {
+      "pinky": "Pinky (pasgeboren)",
+      "fuzzy": "Fuzzy (met vacht)",
+      "hopper": "Hopper (springend)",
+      "weaner": "Weaner (gespeend)",
+      "small_adult": "Kleine volwassene",
+      "medium_adult": "Middelgrote volwassene",
+      "large_adult": "Grote volwassene",
+      "jumbo": "Jumbo"
+    },
+    "mice": {
+      "pinky": "Pinky (pasgeboren)",
+      "fuzzy": "Fuzzy (met vacht)",
+      "hopper": "Hopper (springend)",
+      "weaner": "Weaner (gespeend)",
+      "adult": "Volwassen"
+    },
+    "rabbits": {
+      "small": "Klein",
+      "medium": "Middel",
+      "large": "Groot"
+    }
+  },
+  "validation": {
+    "nameRequired": "Naam is verplicht",
+    "nameMin": "Naam moet minimaal 2 tekens bevatten",
+    "categoryRequired": "Categorie is verplicht",
+    "ageMin": "Leeftijd moet positief zijn",
+    "weightMin": "Gewicht moet positief zijn",
+    "dateRequired": "Datum is verplicht",
+    "partnerRequired": "Partner is verplicht",
+    "actionRequired": "Actie is verplicht",
+    "observationMin": "Observatie moet minimaal 3 tekens bevatten"
+  },
+  "common": {
+    "appName": "S-reptrack",
+    "tagline": "Beheer je reptielen met gemak",
+    "home": "Home",
+    "reptiles": "Reptielen",
+    "feeding": "Voeding",
+    "settings": "Instellingen",
+    "add": "Toevoegen",
+    "cancel": "Annuleren",
+    "save": "Opslaan",
+    "edit": "Bewerken",
+    "delete": "Verwijderen",
+    "search": "Zoeken",
+    "language": "Taal",
+    "back": "Terug"
+  }
+}

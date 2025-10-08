@@ -5,6 +5,9 @@ import en from './locales/en.json';
 import es from './locales/es.json';
 import de from './locales/de.json';
 import it from './locales/it.json';
+import pt from './locales/pt.json';
+import nl from './locales/nl.json';
+import pl from './locales/pl.json';
 
 export const languages = [
   { code: 'fr', name: 'Français', flag: '🇫🇷' },
@@ -29,6 +32,9 @@ i18n
       es: { translation: es },
       de: { translation: de },
       it: { translation: it },
+      pt: { translation: pt },
+      nl: { translation: nl },
+      pl: { translation: pl },
     },
     lng: savedLanguage,
     fallbackLng: 'en',
