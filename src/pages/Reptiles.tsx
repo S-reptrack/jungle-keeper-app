@@ -16,6 +16,26 @@ const Reptiles = () => {
   useEffect(() => {
     if (user) {
       fetchReptiles();
+      
+      // Subscribe to real-time updates for reptiles
+      const channel = supabase
+        .channel('reptiles-changes')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'reptiles',
+          },
+          () => {
+            fetchReptiles();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
     }
   }, [user]);
 

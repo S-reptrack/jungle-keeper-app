@@ -24,9 +24,9 @@ const Index = () => {
     if (user) {
       fetchReptiles();
       
-      // Subscribe to real-time updates for feedings
+      // Subscribe to real-time updates for feedings and reptiles
       const channel = supabase
-        .channel('feedings-changes')
+        .channel('data-changes')
         .on(
           'postgres_changes',
           {
@@ -35,7 +35,17 @@ const Index = () => {
             table: 'feedings',
           },
           () => {
-            // Refresh reptiles data when feedings change
+            fetchReptiles();
+          }
+        )
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'reptiles',
+          },
+          () => {
             fetchReptiles();
           }
         )

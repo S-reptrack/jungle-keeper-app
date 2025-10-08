@@ -113,8 +113,10 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
       setSelectedMorphs([]);
       setOpen(false);
       
-      // Refresh the page to show the new reptile
-      window.location.reload();
+      // Call the callback to refresh the list
+      if (onReptileAdded) {
+        onReptileAdded();
+      }
     } catch (error: any) {
       console.error("Error adding reptile:", error);
       toast.error("Erreur lors de l'ajout du reptile");
