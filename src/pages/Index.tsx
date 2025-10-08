@@ -23,6 +23,27 @@ const Index = () => {
   useEffect(() => {
     if (user) {
       fetchReptiles();
+      
+      // Subscribe to real-time updates for feedings
+      const channel = supabase
+        .channel('feedings-changes')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'feedings',
+          },
+          () => {
+            // Refresh reptiles data when feedings change
+            fetchReptiles();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
     }
   }, [user]);
 
