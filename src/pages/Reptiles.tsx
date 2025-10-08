@@ -12,6 +12,7 @@ const Reptiles = () => {
   const { user, loading: authLoading } = useAuth();
   const [reptiles, setReptiles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [lastFeedings, setLastFeedings] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (user) {
@@ -19,13 +20,24 @@ const Reptiles = () => {
       
       // Subscribe to real-time updates for reptiles
       const channel = supabase
-        .channel('reptiles-changes')
+        .channel('data-changes')
         .on(
           'postgres_changes',
           {
             event: '*',
             schema: 'public',
             table: 'reptiles',
+          },
+          () => {
+            fetchReptiles();
+          }
+        )
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'feedings',
           },
           () => {
             fetchReptiles();
@@ -47,7 +59,41 @@ const Reptiles = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setReptiles(data || []);
+
+      const reptileData = data || [];
+      setReptiles(reptileData);
+
+      // Calculate last feeding per reptile
+      const calculateDaysSince = (dateString: string) => {
+        const feedDate = new Date(dateString);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        feedDate.setHours(0, 0, 0, 0);
+        const diffTime = today.getTime() - feedDate.getTime();
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        if (diffDays === 0) return "Aujourd'hui";
+        if (diffDays === 1) return "Il y a 1 jour";
+        return `Il y a ${diffDays} jours`;
+      };
+
+      const feedingsMap: Record<string, string> = {};
+      for (const reptile of reptileData) {
+        const { data: feedingData } = await supabase
+          .from("feedings")
+          .select("feeding_date")
+          .eq("reptile_id", reptile.id)
+          .order("feeding_date", { ascending: false })
+          .limit(1)
+          .single();
+
+        if (feedingData) {
+          feedingsMap[reptile.id] = calculateDaysSince(feedingData.feeding_date);
+        } else {
+          feedingsMap[reptile.id] = "Jamais";
+        }
+      }
+
+      setLastFeedings(feedingsMap);
     } catch (error) {
       console.error("Error fetching reptiles:", error);
     } finally {
@@ -102,7 +148,7 @@ const Reptiles = () => {
                 species={reptile.species}
                 age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
                 weight={`${reptile.weight || 0}g`}
-                lastFed="Il y a 3 jours"
+                lastFed={lastFeedings[reptile.id] || "Jamais"}
                 image={reptile.image_url}
               />
             ))}
