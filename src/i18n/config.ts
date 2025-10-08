@@ -17,6 +17,9 @@ export const languages = [
   { code: 'pl', name: 'Polski', flag: '🇵🇱' },
 ];
 
+// Get saved language from localStorage or default to 'fr'
+const savedLanguage = localStorage.getItem('language') || 'fr';
+
 i18n
   .use(initReactI18next)
   .init({
@@ -27,11 +30,16 @@ i18n
       de: { translation: de },
       it: { translation: it },
     },
-    lng: 'fr',
+    lng: savedLanguage,
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false,
     },
   });
+
+// Save language to localStorage whenever it changes
+i18n.on('languageChanged', (lng) => {
+  localStorage.setItem('language', lng);
+});
 
 export default i18n;
