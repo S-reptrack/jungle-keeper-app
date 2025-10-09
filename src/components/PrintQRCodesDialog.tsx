@@ -133,7 +133,7 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
             }
             
             .card {
-              width: 85mm;
+              width: 86mm;
               height: 55mm;
               border: 1px solid #ddd;
               border-radius: 8px;
