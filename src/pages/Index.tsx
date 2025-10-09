@@ -62,6 +62,7 @@ const Index = () => {
       const { data, error } = await supabase
         .from("reptiles")
         .select("*")
+        .eq("status", "active")
         .order("created_at", { ascending: false })
         .limit(6);
 
@@ -93,7 +94,8 @@ const Index = () => {
       // Calculate stats
       const { count } = await supabase
         .from("reptiles")
-        .select("*", { count: "exact", head: true });
+        .select("*", { count: "exact", head: true })
+        .eq("status", "active");
       
       const total = count || 0;
       

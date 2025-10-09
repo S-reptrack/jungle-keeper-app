@@ -17,6 +17,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import AddHealthRecordDialog from "./AddHealthRecordDialog";
+import ArchiveReptileDialog from "./ArchiveReptileDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -32,9 +33,10 @@ interface HealthRecord {
 
 interface HealthTabProps {
   reptileId: string;
+  reptileStatus?: string;
 }
 
-const HealthTab = ({ reptileId }: HealthTabProps) => {
+const HealthTab = ({ reptileId, reptileStatus = "active" }: HealthTabProps) => {
   const { t } = useTranslation();
   const [records, setRecords] = useState<HealthRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -95,12 +97,27 @@ const HealthTab = ({ reptileId }: HealthTabProps) => {
   }
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-        <CardTitle>Historique de santé</CardTitle>
-        <AddHealthRecordDialog reptileId={reptileId} onRecordAdded={fetchHealthRecords} />
-      </CardHeader>
-      <CardContent>
+    <div className="space-y-4">
+      {reptileStatus === "active" && (
+        <Card className="bg-muted/50 border-dashed">
+          <CardHeader>
+            <CardTitle className="text-base">Archivage</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground mb-4">
+              Si le reptile est décédé ou a été vendu, vous pouvez archiver sa fiche. Elle restera accessible dans les archives pour la traçabilité.
+            </p>
+            <ArchiveReptileDialog reptileId={reptileId} onArchived={fetchHealthRecords} />
+          </CardContent>
+        </Card>
+      )}
+
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+          <CardTitle>Historique de santé</CardTitle>
+          <AddHealthRecordDialog reptileId={reptileId} onRecordAdded={fetchHealthRecords} />
+        </CardHeader>
+        <CardContent>
         {records.length === 0 ? (
           <p className="text-muted-foreground text-center py-8">
             Aucun problème de santé enregistré
@@ -173,7 +190,8 @@ const HealthTab = ({ reptileId }: HealthTabProps) => {
           </ScrollArea>
         )}
       </CardContent>
-    </Card>
+      </Card>
+    </div>
   );
 };
 

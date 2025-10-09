@@ -182,6 +182,8 @@ export type Database = {
           purchase_date: string | null
           sex: string | null
           species: string
+          status: string
+          status_date: string | null
           updated_at: string
           user_id: string
           weight: number | null
@@ -197,6 +199,8 @@ export type Database = {
           purchase_date?: string | null
           sex?: string | null
           species: string
+          status?: string
+          status_date?: string | null
           updated_at?: string
           user_id: string
           weight?: number | null
@@ -212,6 +216,8 @@ export type Database = {
           purchase_date?: string | null
           sex?: string | null
           species?: string
+          status?: string
+          status_date?: string | null
           updated_at?: string
           user_id?: string
           weight?: number | null

@@ -29,6 +29,8 @@ interface Reptile {
   weight: number;
   purchase_date: string;
   image_url: string | null;
+  status: string;
+  status_date: string | null;
 }
 
 const ReptileDetail = () => {
@@ -174,13 +176,21 @@ const ReptileDetail = () => {
               </div>
               <CardHeader>
                 <div className="flex items-start justify-between">
-                  <div>
+                  <div className="flex-1">
                     <CardTitle className="text-2xl">{reptile.name}</CardTitle>
                     <p className="text-sm text-muted-foreground">{reptile.species}</p>
                   </div>
-                  <Badge variant="secondary" className="bg-accent/20 text-accent-foreground border-accent/30">
-                    {calculateAge(reptile.birth_date)}
-                  </Badge>
+                  <div className="flex flex-col items-end gap-2">
+                    {reptile.status !== "active" && (
+                      <Badge variant="destructive">
+                        {reptile.status === "deceased" ? "Décédé" : "Vendu"}
+                        {reptile.status_date && ` - ${formatDate(reptile.status_date)}`}
+                      </Badge>
+                    )}
+                    <Badge variant="secondary" className="bg-accent/20 text-accent-foreground border-accent/30">
+                      {calculateAge(reptile.birth_date)}
+                    </Badge>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -280,7 +290,7 @@ const ReptileDetail = () => {
               </TabsContent>
               
               <TabsContent value="health" className="space-y-4">
-                <HealthTab reptileId={reptile.id} />
+                <HealthTab reptileId={reptile.id} reptileStatus={reptile.status} />
               </TabsContent>
             </Tabs>
           </div>

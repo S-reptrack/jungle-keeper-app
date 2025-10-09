@@ -6,11 +6,14 @@ import ReptileCard from "@/components/ReptileCard";
 import AddReptileDialog from "@/components/AddReptileDialog";
 import { useAuth } from "@/hooks/useAuth";
 import { AuthForm } from "@/components/AuthForm";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 
 const Reptiles = () => {
   const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const [reptiles, setReptiles] = useState<any[]>([]);
+  const [archivedReptiles, setArchivedReptiles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastFeedings, setLastFeedings] = useState<Record<string, string>>({});
 
@@ -53,15 +56,28 @@ const Reptiles = () => {
 
   const fetchReptiles = async () => {
     try {
+      // Fetch active reptiles
       const { data, error } = await supabase
         .from("reptiles")
         .select("*")
+        .eq("status", "active")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
 
       const reptileData = data || [];
       setReptiles(reptileData);
+
+      // Fetch archived reptiles
+      const { data: archivedData, error: archivedError } = await supabase
+        .from("reptiles")
+        .select("*")
+        .in("status", ["deceased", "sold"])
+        .order("status_date", { ascending: false });
+
+      if (archivedError) throw archivedError;
+
+      setArchivedReptiles(archivedData || []);
 
       // Calculate last feeding per reptile
       const calculateDaysSince = (dateString: string) => {
@@ -77,7 +93,8 @@ const Reptiles = () => {
       };
 
       const feedingsMap: Record<string, string> = {};
-      for (const reptile of reptileData) {
+      const allReptiles = [...reptileData, ...(archivedData || [])];
+      for (const reptile of allReptiles) {
         const { data: feedingData } = await supabase
           .from("feedings")
           .select("feeding_date")
@@ -133,26 +150,74 @@ const Reptiles = () => {
         
         {loading ? (
           <div className="text-center py-12">Chargement...</div>
-        ) : reptiles.length === 0 ? (
-          <div className="text-center py-12 border border-dashed border-border rounded-lg">
-            <p className="text-muted-foreground mb-4">Aucun reptile pour le moment</p>
-            <AddReptileDialog onReptileAdded={fetchReptiles} />
-          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {reptiles.map((reptile) => (
-              <ReptileCard
-                key={reptile.id}
-                id={reptile.id}
-                name={reptile.name}
-                species={reptile.species}
-                age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
-                weight={`${reptile.weight || 0}g`}
-                lastFed={lastFeedings[reptile.id] || "Jamais"}
-                image={reptile.image_url}
-              />
-            ))}
-          </div>
+          <Tabs defaultValue="active" className="w-full">
+            <TabsList className="mb-6">
+              <TabsTrigger value="active" className="gap-2">
+                Actifs
+                <Badge variant="secondary">{reptiles.length}</Badge>
+              </TabsTrigger>
+              <TabsTrigger value="archived" className="gap-2">
+                Archivés
+                <Badge variant="secondary">{archivedReptiles.length}</Badge>
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="active">
+              {reptiles.length === 0 ? (
+                <div className="text-center py-12 border border-dashed border-border rounded-lg">
+                  <p className="text-muted-foreground mb-4">Aucun reptile actif</p>
+                  <AddReptileDialog onReptileAdded={fetchReptiles} />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {reptiles.map((reptile) => (
+                    <ReptileCard
+                      key={reptile.id}
+                      id={reptile.id}
+                      name={reptile.name}
+                      species={reptile.species}
+                      age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                      weight={`${reptile.weight || 0}g`}
+                      lastFed={lastFeedings[reptile.id] || "Jamais"}
+                      image={reptile.image_url}
+                    />
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+
+            <TabsContent value="archived">
+              {archivedReptiles.length === 0 ? (
+                <div className="text-center py-12 border border-dashed border-border rounded-lg">
+                  <p className="text-muted-foreground">Aucun reptile archivé</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {archivedReptiles.map((reptile) => (
+                    <div key={reptile.id} className="relative">
+                      <ReptileCard
+                        id={reptile.id}
+                        name={reptile.name}
+                        species={reptile.species}
+                        age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                        weight={`${reptile.weight || 0}g`}
+                        lastFed={lastFeedings[reptile.id] || "Jamais"}
+                        image={reptile.image_url}
+                      />
+                      <Badge 
+                        variant="secondary" 
+                        className="absolute top-4 right-4 z-10"
+                      >
+                        {reptile.status === "deceased" ? "Décédé" : "Vendu"}
+                        {reptile.status_date && ` - ${new Date(reptile.status_date).toLocaleDateString("fr-FR")}`}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
         )}
       </main>
     </div>
