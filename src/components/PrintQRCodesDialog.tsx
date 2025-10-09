@@ -86,12 +86,13 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
         const globalIdx = i + idx;
         return `
           <div class="card">
-            <div class="card-header">
-              <div class="card-name">${reptile.name}</div>
-              <div class="card-species">${reptile.species}</div>
-            </div>
             <div class="qr-container">
               ${qrSvgs[globalIdx] || ''}
+            </div>
+            <div class="card-info">
+              <div class="card-name">${reptile.name}</div>
+              <div class="card-species">${reptile.species}</div>
+              <div class="card-id">ID: ${reptile.id.substring(0, 8)}</div>
             </div>
           </div>
         `;
@@ -142,42 +143,57 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
               height: 54mm;
               border: 1px solid #e0e0e0;
               border-radius: 0;
-              padding: 4mm;
+              padding: 5mm;
               display: flex;
-              flex-direction: column;
+              flex-direction: row;
               align-items: center;
-              justify-content: center;
+              justify-content: flex-start;
+              gap: 4mm;
               background: white;
               box-shadow: 0 1px 3px rgba(0,0,0,0.1);
               page-break-inside: avoid;
             }
             
-            .card-header {
-              text-align: center;
-              margin-bottom: 2mm;
-            }
-            
-            .card-name {
-              font-size: 12pt;
-              font-weight: bold;
-              color: #1a1a1a;
-              margin-bottom: 1mm;
-            }
-            
-            .card-species {
-              font-size: 9pt;
-              color: #666;
-            }
-            
             .qr-container {
+              flex-shrink: 0;
               background: white;
-              padding: 2mm;
-              border-radius: 4px;
+              padding: 1mm;
+              border: 1px solid #e0e0e0;
             }
 
             .qr-container svg {
-              width: 90px;
-              height: 90px;
+              width: 80px;
+              height: 80px;
+              display: block;
+            }
+            
+            .card-info {
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              gap: 2mm;
+              flex: 1;
+              min-width: 0;
+            }
+            
+            .card-name {
+              font-size: 11pt;
+              font-weight: bold;
+              color: #1a1a1a;
+              line-height: 1.2;
+              word-wrap: break-word;
+            }
+            
+            .card-species {
+              font-size: 8pt;
+              color: #666;
+              line-height: 1.2;
+            }
+            
+            .card-id {
+              font-size: 7pt;
+              color: #999;
+              font-family: monospace;
             }
             
             @media print {
@@ -221,7 +237,7 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
             </div>
           </div>
 
-          <ScrollArea className="h-[400px] border rounded-md p-4">
+          <ScrollArea className="h-[300px] border rounded-md p-4">
             <div className="space-y-3">
               {reptiles.map((reptile) => (
                 <div
