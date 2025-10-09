@@ -125,10 +125,10 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
             .page {
               width: 210mm;
               min-height: 297mm;
-              padding: 10mm;
+              padding: 8mm;
               display: grid;
               grid-template-columns: repeat(2, 1fr);
-              gap: 8mm;
+              gap: 5mm;
               page-break-after: always;
             }
             
@@ -137,7 +137,7 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
               height: 55mm;
               border: 1px solid #ddd;
               border-radius: 3mm;
-              padding: 8mm;
+              padding: 5mm;
               display: flex;
               flex-direction: column;
               align-items: center;
@@ -149,30 +149,30 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
             
             .card-header {
               text-align: center;
-              margin-bottom: 4mm;
-            }
-            
-            .card-name {
-              font-size: 14pt;
-              font-weight: bold;
-              color: #1a1a1a;
               margin-bottom: 2mm;
             }
             
+            .card-name {
+              font-size: 12pt;
+              font-weight: bold;
+              color: #1a1a1a;
+              margin-bottom: 1mm;
+            }
+            
             .card-species {
-              font-size: 10pt;
+              font-size: 9pt;
               color: #666;
             }
             
             .qr-container {
               background: white;
-              padding: 3mm;
+              padding: 2mm;
               border-radius: 4px;
             }
 
             .qr-container svg {
-              width: 120px;
-              height: 120px;
+              width: 90px;
+              height: 90px;
             }
             
             @media print {
@@ -257,7 +257,7 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
             <div key={reptile.id} className="qr-code-item">
               <QRCodeSVG
                 value={`${window.location.origin}/reptile/${reptile.id}`}
-                size={120}
+                size={90}
                 level="H"
                 includeMargin={false}
               />
