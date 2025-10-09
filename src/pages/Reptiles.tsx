@@ -4,10 +4,13 @@ import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import ReptileCard from "@/components/ReptileCard";
 import AddReptileDialog from "@/components/AddReptileDialog";
+import PrintQRCodesDialog from "@/components/PrintQRCodesDialog";
 import { useAuth } from "@/hooks/useAuth";
 import { AuthForm } from "@/components/AuthForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Printer } from "lucide-react";
 
 const Reptiles = () => {
   const { t } = useTranslation();
@@ -16,6 +19,7 @@ const Reptiles = () => {
   const [archivedReptiles, setArchivedReptiles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastFeedings, setLastFeedings] = useState<Record<string, string>>({});
+  const [showPrintDialog, setShowPrintDialog] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -145,7 +149,17 @@ const Reptiles = () => {
       <main className="max-w-7xl mx-auto px-4 py-8 pb-24 md:pb-8 md:pt-24">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold text-foreground">{t("common.reptiles")}</h1>
-          <AddReptileDialog onReptileAdded={fetchReptiles} />
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setShowPrintDialog(true)}
+              disabled={reptiles.length === 0}
+            >
+              <Printer className="mr-2 h-4 w-4" />
+              Imprimer QR codes
+            </Button>
+            <AddReptileDialog onReptileAdded={fetchReptiles} />
+          </div>
         </div>
         
         {loading ? (
@@ -219,6 +233,12 @@ const Reptiles = () => {
             </TabsContent>
           </Tabs>
         )}
+
+        <PrintQRCodesDialog
+          open={showPrintDialog}
+          onOpenChange={setShowPrintDialog}
+          reptiles={reptiles}
+        />
       </main>
     </div>
   );
