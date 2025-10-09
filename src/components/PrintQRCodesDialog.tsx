@@ -108,7 +108,7 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
           <style>
             @page {
               size: A4;
-              margin: 10mm;
+              margin: 0;
             }
             
             * {
@@ -124,21 +124,22 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
             
             .page {
               width: 210mm;
-              min-height: 297mm;
-              padding: 5mm;
+              height: 297mm;
+              padding: 13.5mm 12.5mm;
               display: grid;
-              grid-template-columns: repeat(2, 1fr);
-              grid-template-rows: repeat(5, 1fr);
-              gap: 3mm;
+              grid-template-columns: repeat(2, 85mm);
+              grid-template-rows: repeat(5, 54mm);
+              column-gap: 5mm;
+              row-gap: 5mm;
               page-break-after: always;
             }
             
             .card {
               width: 85mm;
               height: 54mm;
-              border: 1px solid #ddd;
-              border-radius: 3mm;
-              padding: 5mm;
+              border: 1px solid #e0e0e0;
+              border-radius: 0;
+              padding: 4mm;
               display: flex;
               flex-direction: column;
               align-items: center;
