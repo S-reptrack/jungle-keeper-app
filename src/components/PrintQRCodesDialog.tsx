@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -19,6 +19,7 @@ interface PrintQRCodesDialogProps {
 
 const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialogProps) => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const qrContainerRef = useRef<HTMLDivElement>(null);
 
   const toggleSelection = (id: string) => {
     const newSelection = new Set(selectedIds);
@@ -39,16 +40,67 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
   };
 
   const handlePrint = () => {
-    // Create a new window for printing
-    const printContent = document.getElementById('print-preview');
-    if (!printContent) return;
-
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) return;
+    if (!qrContainerRef.current) return;
 
     const selectedReptiles = reptiles.filter(r => selectedIds.has(r.id));
+    if (selectedReptiles.length === 0) return;
+
+    // Wait for QR codes to render
+    setTimeout(() => {
+      const qrElements = qrContainerRef.current?.querySelectorAll('.qr-code-item');
+      if (!qrElements || qrElements.length === 0) return;
+
+      // Extract SVG strings from rendered QR codes
+      const qrSvgs: string[] = [];
+      qrElements.forEach(element => {
+        const svg = element.querySelector('svg');
+        if (svg) {
+          qrSvgs.push(svg.outerHTML);
+        }
+      });
+
+      // Generate print HTML with actual SVG content
+      const html = generatePrintHTML(selectedReptiles, qrSvgs);
+
+      // Open print window
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) return;
+
+      printWindow.document.write(html);
+      printWindow.document.close();
+
+      // Print after content loads
+      setTimeout(() => {
+        printWindow.print();
+      }, 500);
+    }, 300);
+  };
+
+  const generatePrintHTML = (selectedReptiles: typeof reptiles, qrSvgs: string[]) => {
+    const cardsPerPage = 10;
+    let pagesHTML = '';
     
-    const html = `
+    for (let i = 0; i < selectedReptiles.length; i += cardsPerPage) {
+      const pageReptiles = selectedReptiles.slice(i, i + cardsPerPage);
+      const pageCards = pageReptiles.map((reptile, idx) => {
+        const globalIdx = i + idx;
+        return `
+          <div class="card">
+            <div class="card-header">
+              <div class="card-name">${reptile.name}</div>
+              <div class="card-species">${reptile.species}</div>
+            </div>
+            <div class="qr-container">
+              ${qrSvgs[globalIdx] || ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      pagesHTML += `<div class="page">${pageCards}</div>`;
+    }
+
+    return `
       <!DOCTYPE html>
       <html>
         <head>
@@ -117,6 +169,11 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
               padding: 3mm;
               border-radius: 4px;
             }
+
+            .qr-container svg {
+              width: 120px;
+              height: 120px;
+            }
             
             @media print {
               body {
@@ -131,68 +188,9 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
           </style>
         </head>
         <body>
-          ${generatePages(selectedReptiles)}
+          ${pagesHTML}
         </body>
       </html>
-    `;
-
-    printWindow.document.write(html);
-    printWindow.document.close();
-    
-    // Generate QR codes after the document is ready
-    setTimeout(() => {
-      selectedReptiles.forEach((reptile, index) => {
-        const qrUrl = `${window.location.origin}/reptile/${reptile.id}`;
-        const qrElement = printWindow.document.getElementById(`qr-${index}`);
-        if (qrElement) {
-          const tempDiv = document.createElement('div');
-          import('react-dom/client').then(({ createRoot }) => {
-            const root = createRoot(tempDiv);
-            root.render(<QRCodeSVG value={qrUrl} size={120} level="H" includeMargin={false} />);
-            setTimeout(() => {
-              const svg = tempDiv.querySelector('svg');
-              if (svg && qrElement) {
-                qrElement.innerHTML = svg.outerHTML;
-              }
-            }, 100);
-          });
-        }
-      });
-
-      // Print after QR codes are rendered
-      setTimeout(() => {
-        printWindow.print();
-      }, 1000);
-    }, 500);
-  };
-
-  const generatePages = (selectedReptiles: typeof reptiles) => {
-    const cardsPerPage = 10;
-    let pages = '';
-    
-    for (let i = 0; i < selectedReptiles.length; i += cardsPerPage) {
-      const pageReptiles = selectedReptiles.slice(i, i + cardsPerPage);
-      pages += `
-        <div class="page">
-          ${pageReptiles.map((reptile, idx) => generateCard(reptile, i + idx)).join('')}
-        </div>
-      `;
-    }
-    
-    return pages;
-  };
-
-  const generateCard = (reptile: typeof reptiles[0], index: number) => {
-    return `
-      <div class="card">
-        <div class="card-header">
-          <div class="card-name">${reptile.name}</div>
-          <div class="card-species">${reptile.species}</div>
-        </div>
-        <div class="qr-container" id="qr-${index}">
-          <!-- QR code will be inserted here -->
-        </div>
-      </div>
     `;
   };
 
@@ -251,6 +249,20 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
               Imprimer ({selectedIds.size})
             </Button>
           </div>
+        </div>
+
+        {/* Hidden container for QR code generation */}
+        <div ref={qrContainerRef} className="hidden">
+          {reptiles.filter(r => selectedIds.has(r.id)).map((reptile) => (
+            <div key={reptile.id} className="qr-code-item">
+              <QRCodeSVG
+                value={`${window.location.origin}/reptile/${reptile.id}`}
+                size={120}
+                level="H"
+                includeMargin={false}
+              />
+            </div>
+          ))}
         </div>
       </DialogContent>
     </Dialog>
