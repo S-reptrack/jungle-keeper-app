@@ -125,12 +125,15 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
             .page {
               width: 210mm;
               height: 297mm;
-              padding: 13.5mm 12.5mm;
+              padding-top: 21.5mm;
+              padding-bottom: 21.5mm;
+              padding-left: 12.7mm;
+              padding-right: 12.7mm;
               display: grid;
               grid-template-columns: repeat(2, 85mm);
               grid-template-rows: repeat(5, 54mm);
-              column-gap: 5mm;
-              row-gap: 5mm;
+              column-gap: 2.5mm;
+              row-gap: 0mm;
               page-break-after: always;
             }
             
