@@ -125,16 +125,17 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
             .page {
               width: 210mm;
               min-height: 297mm;
-              padding: 8mm;
+              padding: 5mm;
               display: grid;
               grid-template-columns: repeat(2, 1fr);
-              gap: 5mm;
+              grid-template-rows: repeat(5, 1fr);
+              gap: 3mm;
               page-break-after: always;
             }
             
             .card {
               width: 85mm;
-              height: 55mm;
+              height: 54mm;
               border: 1px solid #ddd;
               border-radius: 3mm;
               padding: 5mm;
