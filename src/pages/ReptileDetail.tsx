@@ -186,11 +186,11 @@ const ReptileDetail = () => {
               <CardContent className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">{t("reptile.sex")}</span>
-                  <Badge variant="outline" className="inline-grid grid-cols-[16px_auto] items-center gap-1.5 whitespace-nowrap leading-none">
-                    <span className="col-start-1 row-start-1 flex h-4 items-center justify-center">
+                  <Badge variant="outline" className="inline-flex items-center gap-1.5 whitespace-nowrap font-sans">
+                    <span className="flex h-4 w-4 items-center justify-center leading-none text-sm">
                       {reptile.sex === "male" ? "♂" : reptile.sex === "female" ? "♀" : "?"}
                     </span>
-                    <span className="col-start-2 row-start-1 text-sm">
+                    <span className="text-sm leading-4">
                       {reptile.sex === "male" ? t("reptile.male") : reptile.sex === "female" ? t("reptile.female") : t("reptile.unknown")}
                     </span>
                   </Badge>
