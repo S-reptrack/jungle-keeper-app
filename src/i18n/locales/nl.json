@@ -143,5 +143,54 @@
     "search": "Zoeken",
     "language": "Taal",
     "back": "Terug"
+  },
+  "privacy": {
+    "title": "Privacybeleid",
+    "lastUpdated": "Laatste update",
+    "intro": {
+      "title": "Introductie",
+      "content": "S-reptrack respecteert uw privacy en zet zich in om uw persoonlijke gegevens te beschermen. Dit privacybeleid legt uit hoe we uw informatie verzamelen, gebruiken en beschermen."
+    },
+    "dataCollection": {
+      "title": "Gegevensverzameling",
+      "intro": "We verzamelen de volgende informatie:",
+      "items": {
+        "email": "Uw e-mailadres voor authenticatie",
+        "reptileData": "Informatie over uw reptielen (naam, soort, leeftijd, enz.)",
+        "feedingRecords": "Voedingsregistraties",
+        "healthRecords": "Gezondheids- en gewichtsregistraties",
+        "images": "Foto's die u uploadt"
+      }
+    },
+    "dataUsage": {
+      "title": "Gegevensgebruik",
+      "intro": "Uw gegevens worden gebruikt om:",
+      "items": {
+        "service": "Onze diensten te leveren en te verbeteren",
+        "management": "U uw reptielen te laten beheren",
+        "improvements": "De gebruikerservaring te verbeteren"
+      }
+    },
+    "dataSecurity": {
+      "title": "Gegevensbeveiliging",
+      "content": "We gebruiken industriestandaard beveiligingsmaatregelen om uw gegevens te beschermen. Alle gegevens zijn versleuteld tijdens verzending en in rust. We hanteren ook strikte wachtwoordbeleid om uw account te beschermen."
+    },
+    "userRights": {
+      "title": "Uw Rechten",
+      "items": {
+        "access": "Toegang tot uw persoonlijke gegevens",
+        "correction": "Correctie of update van uw informatie",
+        "deletion": "Verzoek tot verwijdering van uw account en gegevens",
+        "export": "Export van uw gegevens"
+      }
+    },
+    "dataSharing": {
+      "title": "Gegevensdeling",
+      "content": "We verkopen of delen uw persoonlijke gegevens niet met derden. Uw gegevens blijven privé en zijn alleen toegankelijk voor u."
+    },
+    "contact": {
+      "title": "Contact",
+      "content": "Voor vragen over dit privacybeleid of uw persoonlijke gegevens, neem contact met ons op via de app-instellingen."
+    }
   }
 }

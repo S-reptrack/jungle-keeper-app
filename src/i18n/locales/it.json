@@ -153,5 +153,54 @@
     "partnerRequired": "Il partner è obbligatorio",
     "actionRequired": "L'azione è obbligatoria",
     "observationMin": "L'osservazione deve contenere almeno 10 caratteri"
+  },
+  "privacy": {
+    "title": "Informativa sulla Privacy",
+    "lastUpdated": "Ultimo aggiornamento",
+    "intro": {
+      "title": "Introduzione",
+      "content": "S-reptrack rispetta la tua privacy ed è impegnata a proteggere i tuoi dati personali. Questa informativa sulla privacy spiega come raccogliamo, utilizziamo e proteggiamo le tue informazioni."
+    },
+    "dataCollection": {
+      "title": "Raccolta Dati",
+      "intro": "Raccogliamo le seguenti informazioni:",
+      "items": {
+        "email": "Il tuo indirizzo email per l'autenticazione",
+        "reptileData": "Informazioni sui tuoi rettili (nome, specie, età, ecc.)",
+        "feedingRecords": "Registrazioni di alimentazione",
+        "healthRecords": "Registrazioni di salute e peso",
+        "images": "Foto che carichi"
+      }
+    },
+    "dataUsage": {
+      "title": "Utilizzo dei Dati",
+      "intro": "I tuoi dati vengono utilizzati per:",
+      "items": {
+        "service": "Fornire e migliorare i nostri servizi",
+        "management": "Permetterti di gestire i tuoi rettili",
+        "improvements": "Migliorare l'esperienza utente"
+      }
+    },
+    "dataSecurity": {
+      "title": "Sicurezza dei Dati",
+      "content": "Utilizziamo misure di sicurezza standard del settore per proteggere i tuoi dati. Tutti i dati sono crittografati in transito e a riposo. Applichiamo anche politiche di password rigorose per proteggere il tuo account."
+    },
+    "userRights": {
+      "title": "I Tuoi Diritti",
+      "items": {
+        "access": "Accedere ai tuoi dati personali",
+        "correction": "Correggere o aggiornare le tue informazioni",
+        "deletion": "Richiedere la cancellazione del tuo account e dei tuoi dati",
+        "export": "Esportare i tuoi dati"
+      }
+    },
+    "dataSharing": {
+      "title": "Condivisione dei Dati",
+      "content": "Non vendiamo né condividiamo i tuoi dati personali con terze parti. I tuoi dati rimangono privati e sono accessibili solo a te."
+    },
+    "contact": {
+      "title": "Contatto",
+      "content": "Per qualsiasi domanda riguardante questa informativa sulla privacy o i tuoi dati personali, contattaci tramite le impostazioni dell'app."
+    }
   }
 }

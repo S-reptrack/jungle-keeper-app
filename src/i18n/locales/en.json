@@ -155,5 +155,54 @@
     "search": "Search",
     "language": "Language",
     "back": "Back"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated",
+    "intro": {
+      "title": "Introduction",
+      "content": "S-reptrack respects your privacy and is committed to protecting your personal data. This privacy policy explains how we collect, use, and protect your information."
+    },
+    "dataCollection": {
+      "title": "Data Collection",
+      "intro": "We collect the following information:",
+      "items": {
+        "email": "Your email address for authentication",
+        "reptileData": "Information about your reptiles (name, species, age, etc.)",
+        "feedingRecords": "Feeding records",
+        "healthRecords": "Health and weight records",
+        "images": "Photos you upload"
+      }
+    },
+    "dataUsage": {
+      "title": "Data Usage",
+      "intro": "Your data is used to:",
+      "items": {
+        "service": "Provide and improve our services",
+        "management": "Allow you to manage your reptiles",
+        "improvements": "Improve user experience"
+      }
+    },
+    "dataSecurity": {
+      "title": "Data Security",
+      "content": "We use industry-standard security measures to protect your data. All data is encrypted in transit and at rest. We also enforce strict password policies to protect your account."
+    },
+    "userRights": {
+      "title": "Your Rights",
+      "items": {
+        "access": "Access your personal data",
+        "correction": "Correct or update your information",
+        "deletion": "Request deletion of your account and data",
+        "export": "Export your data"
+      }
+    },
+    "dataSharing": {
+      "title": "Data Sharing",
+      "content": "We do not sell or share your personal data with third parties. Your data remains private and is only accessible by you."
+    },
+    "contact": {
+      "title": "Contact",
+      "content": "For any questions regarding this privacy policy or your personal data, please contact us through the app settings."
+    }
   }
 }

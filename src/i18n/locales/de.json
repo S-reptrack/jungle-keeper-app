@@ -155,5 +155,54 @@
     "partnerRequired": "Partner ist erforderlich",
     "actionRequired": "Aktion ist erforderlich",
     "observationMin": "Beobachtung muss mindestens 10 Zeichen lang sein"
+  },
+  "privacy": {
+    "title": "Datenschutzerklärung",
+    "lastUpdated": "Zuletzt aktualisiert",
+    "intro": {
+      "title": "Einführung",
+      "content": "S-reptrack respektiert Ihre Privatsphäre und verpflichtet sich, Ihre persönlichen Daten zu schützen. Diese Datenschutzerklärung erklärt, wie wir Ihre Informationen sammeln, verwenden und schützen."
+    },
+    "dataCollection": {
+      "title": "Datenerfassung",
+      "intro": "Wir erfassen folgende Informationen:",
+      "items": {
+        "email": "Ihre E-Mail-Adresse zur Authentifizierung",
+        "reptileData": "Informationen über Ihre Reptilien (Name, Art, Alter usw.)",
+        "feedingRecords": "Fütterungsaufzeichnungen",
+        "healthRecords": "Gesundheits- und Gewichtsaufzeichnungen",
+        "images": "Fotos, die Sie hochladen"
+      }
+    },
+    "dataUsage": {
+      "title": "Datennutzung",
+      "intro": "Ihre Daten werden verwendet, um:",
+      "items": {
+        "service": "Unsere Dienste bereitzustellen und zu verbessern",
+        "management": "Ihnen die Verwaltung Ihrer Reptilien zu ermöglichen",
+        "improvements": "Die Benutzererfahrung zu verbessern"
+      }
+    },
+    "dataSecurity": {
+      "title": "Datensicherheit",
+      "content": "Wir verwenden branchenübliche Sicherheitsmaßnahmen zum Schutz Ihrer Daten. Alle Daten werden während der Übertragung und im Ruhezustand verschlüsselt. Wir setzen auch strenge Passwortrichtlinien zum Schutz Ihres Kontos durch."
+    },
+    "userRights": {
+      "title": "Ihre Rechte",
+      "items": {
+        "access": "Zugriff auf Ihre persönlichen Daten",
+        "correction": "Korrektur oder Aktualisierung Ihrer Informationen",
+        "deletion": "Beantragung der Löschung Ihres Kontos und Ihrer Daten",
+        "export": "Export Ihrer Daten"
+      }
+    },
+    "dataSharing": {
+      "title": "Datenweitergabe",
+      "content": "Wir verkaufen oder teilen Ihre persönlichen Daten nicht mit Dritten. Ihre Daten bleiben privat und sind nur für Sie zugänglich."
+    },
+    "contact": {
+      "title": "Kontakt",
+      "content": "Bei Fragen zu dieser Datenschutzerklärung oder Ihren persönlichen Daten kontaktieren Sie uns bitte über die App-Einstellungen."
+    }
   }
 }

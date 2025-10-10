@@ -143,5 +143,54 @@
     "search": "Szukaj",
     "language": "Język",
     "back": "Powrót"
+  },
+  "privacy": {
+    "title": "Polityka Prywatności",
+    "lastUpdated": "Ostatnia aktualizacja",
+    "intro": {
+      "title": "Wprowadzenie",
+      "content": "S-reptrack szanuje Twoją prywatność i zobowiązuje się chronić Twoje dane osobowe. Ta polityka prywatności wyjaśnia, jak zbieramy, używamy i chronimy Twoje informacje."
+    },
+    "dataCollection": {
+      "title": "Zbieranie Danych",
+      "intro": "Zbieramy następujące informacje:",
+      "items": {
+        "email": "Twój adres e-mail do uwierzytelnienia",
+        "reptileData": "Informacje o Twoich gadach (nazwa, gatunek, wiek itp.)",
+        "feedingRecords": "Zapisy karmienia",
+        "healthRecords": "Zapisy zdrowia i wagi",
+        "images": "Zdjęcia, które przesyłasz"
+      }
+    },
+    "dataUsage": {
+      "title": "Wykorzystanie Danych",
+      "intro": "Twoje dane są wykorzystywane do:",
+      "items": {
+        "service": "Świadczenia i ulepszania naszych usług",
+        "management": "Umożliwienia zarządzania Twoimi gadami",
+        "improvements": "Poprawy doświadczenia użytkownika"
+      }
+    },
+    "dataSecurity": {
+      "title": "Bezpieczeństwo Danych",
+      "content": "Używamy standardowych środków bezpieczeństwa branżowego do ochrony Twoich danych. Wszystkie dane są szyfrowane podczas przesyłania i w spoczynku. Stosujemy również rygorystyczne zasady haseł, aby chronić Twoje konto."
+    },
+    "userRights": {
+      "title": "Twoje Prawa",
+      "items": {
+        "access": "Dostęp do swoich danych osobowych",
+        "correction": "Poprawianie lub aktualizowanie swoich informacji",
+        "deletion": "Żądanie usunięcia konta i danych",
+        "export": "Eksport swoich danych"
+      }
+    },
+    "dataSharing": {
+      "title": "Udostępnianie Danych",
+      "content": "Nie sprzedajemy ani nie udostępniamy Twoich danych osobowych stronom trzecim. Twoje dane pozostają prywatne i są dostępne tylko dla Ciebie."
+    },
+    "contact": {
+      "title": "Kontakt",
+      "content": "W przypadku pytań dotyczących tej polityki prywatności lub Twoich danych osobowych, skontaktuj się z nami przez ustawienia aplikacji."
+    }
   }
 }

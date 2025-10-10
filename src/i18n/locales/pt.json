@@ -143,5 +143,54 @@
     "search": "Pesquisar",
     "language": "Idioma",
     "back": "Voltar"
+  },
+  "privacy": {
+    "title": "Política de Privacidade",
+    "lastUpdated": "Última atualização",
+    "intro": {
+      "title": "Introdução",
+      "content": "S-reptrack respeita sua privacidade e está comprometido em proteger seus dados pessoais. Esta política de privacidade explica como coletamos, usamos e protegemos suas informações."
+    },
+    "dataCollection": {
+      "title": "Dados Coletados",
+      "intro": "Coletamos as seguintes informações:",
+      "items": {
+        "email": "Seu endereço de email para autenticação",
+        "reptileData": "Informações sobre seus répteis (nome, espécie, idade, etc.)",
+        "feedingRecords": "Registros de alimentação",
+        "healthRecords": "Registros de saúde e peso",
+        "images": "Fotos que você envia"
+      }
+    },
+    "dataUsage": {
+      "title": "Uso de Dados",
+      "intro": "Seus dados são usados para:",
+      "items": {
+        "service": "Fornecer e melhorar nossos serviços",
+        "management": "Permitir que você gerencie seus répteis",
+        "improvements": "Melhorar a experiência do usuário"
+      }
+    },
+    "dataSecurity": {
+      "title": "Segurança de Dados",
+      "content": "Usamos medidas de segurança padrão da indústria para proteger seus dados. Todos os dados são criptografados em trânsito e em repouso. Também aplicamos políticas de senha rigorosas para proteger sua conta."
+    },
+    "userRights": {
+      "title": "Seus Direitos",
+      "items": {
+        "access": "Acessar seus dados pessoais",
+        "correction": "Corrigir ou atualizar suas informações",
+        "deletion": "Solicitar a exclusão de sua conta e dados",
+        "export": "Exportar seus dados"
+      }
+    },
+    "dataSharing": {
+      "title": "Compartilhamento de Dados",
+      "content": "Não vendemos nem compartilhamos seus dados pessoais com terceiros. Seus dados permanecem privados e são acessíveis apenas por você."
+    },
+    "contact": {
+      "title": "Contato",
+      "content": "Para qualquer pergunta sobre esta política de privacidade ou seus dados pessoais, entre em contato conosco através das configurações do aplicativo."
+    }
   }
 }

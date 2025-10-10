@@ -153,5 +153,54 @@
     "search": "Rechercher",
     "language": "Langue",
     "back": "Retour"
+  },
+  "privacy": {
+    "title": "Politique de confidentialité",
+    "lastUpdated": "Dernière mise à jour",
+    "intro": {
+      "title": "Introduction",
+      "content": "S-reptrack respecte votre vie privée et s'engage à protéger vos données personnelles. Cette politique de confidentialité explique comment nous collectons, utilisons et protégeons vos informations."
+    },
+    "dataCollection": {
+      "title": "Données collectées",
+      "intro": "Nous collectons les informations suivantes :",
+      "items": {
+        "email": "Votre adresse email pour l'authentification",
+        "reptileData": "Les informations sur vos reptiles (nom, espèce, âge, etc.)",
+        "feedingRecords": "Les enregistrements de nourrissage",
+        "healthRecords": "Les enregistrements de santé et de poids",
+        "images": "Les photos que vous téléchargez"
+      }
+    },
+    "dataUsage": {
+      "title": "Utilisation des données",
+      "intro": "Vos données sont utilisées pour :",
+      "items": {
+        "service": "Fournir et améliorer nos services",
+        "management": "Vous permettre de gérer vos reptiles",
+        "improvements": "Améliorer l'expérience utilisateur"
+      }
+    },
+    "dataSecurity": {
+      "title": "Sécurité des données",
+      "content": "Nous utilisons des mesures de sécurité conformes aux normes de l'industrie pour protéger vos données. Toutes les données sont chiffrées en transit et au repos. Nous appliquons également des politiques de mot de passe strictes pour protéger votre compte."
+    },
+    "userRights": {
+      "title": "Vos droits",
+      "items": {
+        "access": "Accéder à vos données personnelles",
+        "correction": "Corriger ou mettre à jour vos informations",
+        "deletion": "Demander la suppression de votre compte et de vos données",
+        "export": "Exporter vos données"
+      }
+    },
+    "dataSharing": {
+      "title": "Partage des données",
+      "content": "Nous ne vendons ni ne partageons vos données personnelles avec des tiers. Vos données restent privées et ne sont accessibles que par vous."
+    },
+    "contact": {
+      "title": "Contact",
+      "content": "Pour toute question concernant cette politique de confidentialité ou vos données personnelles, veuillez nous contacter via les paramètres de l'application."
+    }
   }
 }

@@ -153,5 +153,54 @@
     "partnerRequired": "La pareja es obligatoria",
     "actionRequired": "La acción es obligatoria",
     "observationMin": "La observación debe tener al menos 10 caracteres"
+  },
+  "privacy": {
+    "title": "Política de Privacidad",
+    "lastUpdated": "Última actualización",
+    "intro": {
+      "title": "Introducción",
+      "content": "S-reptrack respeta tu privacidad y se compromete a proteger tus datos personales. Esta política de privacidad explica cómo recopilamos, usamos y protegemos tu información."
+    },
+    "dataCollection": {
+      "title": "Datos Recopilados",
+      "intro": "Recopilamos la siguiente información:",
+      "items": {
+        "email": "Tu dirección de correo electrónico para autenticación",
+        "reptileData": "Información sobre tus reptiles (nombre, especie, edad, etc.)",
+        "feedingRecords": "Registros de alimentación",
+        "healthRecords": "Registros de salud y peso",
+        "images": "Fotos que subes"
+      }
+    },
+    "dataUsage": {
+      "title": "Uso de Datos",
+      "intro": "Tus datos se utilizan para:",
+      "items": {
+        "service": "Proporcionar y mejorar nuestros servicios",
+        "management": "Permitirte gestionar tus reptiles",
+        "improvements": "Mejorar la experiencia del usuario"
+      }
+    },
+    "dataSecurity": {
+      "title": "Seguridad de Datos",
+      "content": "Utilizamos medidas de seguridad estándar de la industria para proteger tus datos. Todos los datos están cifrados en tránsito y en reposo. También aplicamos políticas estrictas de contraseñas para proteger tu cuenta."
+    },
+    "userRights": {
+      "title": "Tus Derechos",
+      "items": {
+        "access": "Acceder a tus datos personales",
+        "correction": "Corregir o actualizar tu información",
+        "deletion": "Solicitar la eliminación de tu cuenta y datos",
+        "export": "Exportar tus datos"
+      }
+    },
+    "dataSharing": {
+      "title": "Compartir Datos",
+      "content": "No vendemos ni compartimos tus datos personales con terceros. Tus datos permanecen privados y solo tú puedes acceder a ellos."
+    },
+    "contact": {
+      "title": "Contacto",
+      "content": "Para cualquier pregunta sobre esta política de privacidad o tus datos personales, contáctanos a través de la configuración de la aplicación."
+    }
   }
 }

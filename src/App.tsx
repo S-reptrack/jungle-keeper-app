@@ -10,6 +10,7 @@ import ReptileDetail from "./pages/ReptileDetail";
 import Reptiles from "./pages/Reptiles";
 import Feeding from "./pages/Feeding";
 import Settings from "./pages/Settings";
+import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/reptiles" element={<Reptiles />} />
             <Route path="/feeding" element={<Feeding />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/privacy" element={<Privacy />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

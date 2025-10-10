@@ -219,7 +219,7 @@ const Auth = () => {
                 {loading || checkingBreach ? "Chargement..." : (isLogin ? "Se connecter" : "S'inscrire")}
               </Button>
             </form>
-            <div className="mt-4 text-center">
+            <div className="mt-4 text-center space-y-2">
               <button
                 type="button"
                 onClick={() => setIsLogin(!isLogin)}
@@ -229,6 +229,14 @@ const Auth = () => {
                   ? "Pas encore de compte ? S'inscrire" 
                   : "Déjà un compte ? Se connecter"}
               </button>
+              <div>
+                <a 
+                  href="/privacy" 
+                  className="text-xs text-muted-foreground hover:text-foreground transition-colors underline"
+                >
+                  Politique de confidentialité
+                </a>
+              </div>
             </div>
           </CardContent>
         </Card>
