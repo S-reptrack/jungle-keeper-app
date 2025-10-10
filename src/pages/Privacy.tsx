@@ -74,6 +74,17 @@ const Privacy = () => {
               <p className="text-muted-foreground">{t("privacy.contact.content")}</p>
             </section>
 
+            <section>
+              <h2 className="text-xl font-semibold mb-3">{t("privacy.copyright.title")}</h2>
+              <p className="text-muted-foreground mb-2">{t("privacy.copyright.content")}</p>
+              <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4">
+                <li>{t("privacy.copyright.items.code")}</li>
+                <li>{t("privacy.copyright.items.design")}</li>
+                <li>{t("privacy.copyright.items.content")}</li>
+                <li>{t("privacy.copyright.items.prohibited")}</li>
+              </ul>
+            </section>
+
             <section className="pt-4 border-t">
               <p className="text-sm text-muted-foreground">
                 {t("privacy.lastUpdated")}: {new Date().toLocaleDateString()}

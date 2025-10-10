@@ -191,6 +191,16 @@
     "contact": {
       "title": "Contact",
       "content": "Voor vragen over dit privacybeleid of uw persoonlijke gegevens, neem contact met ons op via de app-instellingen."
+    },
+    "copyright": {
+      "title": "Copyright en Intellectueel Eigendom",
+      "content": "Alle inhoud, ontwerpen, code en functies van S-reptrack zijn beschermd door copyright- en intellectuele eigendomswetten:",
+      "items": {
+        "code": "De broncode en applicatiearchitectuur zijn beschermd",
+        "design": "Ontwerpen, interfaces en visuele elementen zijn ons exclusieve eigendom",
+        "content": "Alle teksten, afbeeldingen en inhoud zijn beschermd door copyright",
+        "prohibited": "Ongeautoriseerd kopiëren, reproduceren, wijzigen of verspreiden van geheel of gedeeltelijk van de applicatie is strikt verboden en kan leiden tot juridische stappen"
+      }
     }
   }
 }

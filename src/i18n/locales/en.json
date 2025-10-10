@@ -203,6 +203,16 @@
     "contact": {
       "title": "Contact",
       "content": "For any questions regarding this privacy policy or your personal data, please contact us through the app settings."
+    },
+    "copyright": {
+      "title": "Copyright and Intellectual Property",
+      "content": "All content, designs, code and features of S-reptrack are protected by copyright and intellectual property laws:",
+      "items": {
+        "code": "The source code and application architecture are protected",
+        "design": "Designs, interfaces and visual elements are our exclusive property",
+        "content": "All texts, images and content are protected by copyright",
+        "prohibited": "Unauthorized copying, reproduction, modification or distribution of all or part of the application is strictly prohibited and subject to legal action"
+      }
     }
   }
 }

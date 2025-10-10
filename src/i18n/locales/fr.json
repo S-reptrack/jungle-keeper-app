@@ -201,6 +201,16 @@
     "contact": {
       "title": "Contact",
       "content": "Pour toute question concernant cette politique de confidentialité ou vos données personnelles, veuillez nous contacter via les paramètres de l'application."
+    },
+    "copyright": {
+      "title": "Droits d'Auteur et Propriété Intellectuelle",
+      "content": "Tous les contenus, designs, codes et fonctionnalités de S-reptrack sont protégés par les lois sur les droits d'auteur et la propriété intellectuelle :",
+      "items": {
+        "code": "Le code source et l'architecture de l'application sont protégés",
+        "design": "Les designs, interfaces et éléments visuels sont notre propriété exclusive",
+        "content": "Tous les textes, images et contenus sont protégés par le droit d'auteur",
+        "prohibited": "La copie, reproduction, modification ou distribution non autorisée de tout ou partie de l'application est strictement interdite et passible de poursuites judiciaires"
+      }
     }
   }
 }
