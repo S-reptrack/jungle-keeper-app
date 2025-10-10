@@ -17,6 +17,7 @@ import ImageUploadDialog from "@/components/ImageUploadDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { differenceInYears, differenceInMonths } from "date-fns";
+import { useSignedImageUrl } from "@/lib/storageUtils";
 
 interface Reptile {
   id: string;
@@ -41,6 +42,7 @@ const ReptileDetail = () => {
   const [loading, setLoading] = useState(true);
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
   const [imageUploadOpen, setImageUploadOpen] = useState(false);
+  const { signedUrl: imageSignedUrl, loading: imageLoading } = useSignedImageUrl(reptile?.image_url);
 
   const fetchReptile = async () => {
     if (!id) return;
@@ -140,9 +142,9 @@ const ReptileDetail = () => {
           <div className="lg:col-span-1 space-y-4">
             <Card>
               <div className="h-64 bg-gradient-to-br from-jungle-mid to-jungle-light relative overflow-hidden group">
-                {reptile.image_url && (
+                {!imageLoading && imageSignedUrl && (
                   <img 
-                    src={reptile.image_url} 
+                    src={imageSignedUrl} 
                     alt={reptile.name}
                     className="w-full h-full object-cover"
                   />

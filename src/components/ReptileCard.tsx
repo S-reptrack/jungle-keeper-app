@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { QrCode } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import QRCodeDialog from "./QRCodeDialog";
+import { useSignedImageUrl } from "@/lib/storageUtils";
 
 interface ReptileCardProps {
   id: string;
@@ -12,12 +13,13 @@ interface ReptileCardProps {
   age: string;
   weight: string;
   lastFed: string;
-  image?: string;
+  image?: string | null;
 }
 
 const ReptileCard = ({ id, name, species, age, weight, lastFed, image }: ReptileCardProps) => {
   const navigate = useNavigate();
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
+  const { signedUrl, loading } = useSignedImageUrl(image);
 
   const handleCardClick = () => {
     navigate(`/reptile/${id}`);
@@ -29,9 +31,9 @@ const ReptileCard = ({ id, name, species, age, weight, lastFed, image }: Reptile
       onClick={handleCardClick}
     >
       <div className="h-48 bg-gradient-to-br from-jungle-mid to-jungle-light relative overflow-hidden">
-        {image && (
+        {!loading && signedUrl && (
           <img 
-            src={image} 
+            src={signedUrl} 
             alt={name}
             className="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-500"
           />

@@ -50,12 +50,12 @@ const ImageUploadDialog = ({ open, onOpenChange, reptileId, reptileName, onUploa
         throw new Error(error.message || "Erreur lors du téléchargement");
       }
 
-      if (!data.success || !data.publicUrl) {
+      if (!data.success || !data.path) {
         throw new Error("Erreur lors du téléchargement de l'image");
       }
 
       toast.success("Image uploadée avec succès");
-      onUploadSuccess(data.publicUrl);
+      onUploadSuccess(data.path);
       onOpenChange(false);
     } catch (error: any) {
       console.error('Error uploading image:', error);

@@ -132,17 +132,27 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Obtenir l'URL publique
-    const { data: { publicUrl } } = supabaseClient.storage
-      .from('reptile-images')
-      .getPublicUrl(fileName);
+    // Mettre à jour la base de données avec le chemin de l'image
+    const { error: updateError } = await supabaseClient
+      .from('reptiles')
+      .update({ image_url: fileName })
+      .eq('id', reptileId);
+
+    if (updateError) {
+      console.error('Database update error:', updateError);
+      // Supprimer le fichier uploadé en cas d'erreur
+      await supabaseClient.storage.from('reptile-images').remove([fileName]);
+      return new Response(
+        JSON.stringify({ error: 'Erreur lors de la mise à jour de la base de données' }), 
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     console.log('Image uploaded successfully:', fileName);
 
     return new Response(
       JSON.stringify({ 
         success: true,
-        publicUrl,
         path: fileName 
       }), 
       { 
