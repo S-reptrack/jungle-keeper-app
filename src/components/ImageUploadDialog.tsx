@@ -20,10 +20,10 @@ const ImageUploadDialog = ({ open, onOpenChange, reptileId, reptileName, onUploa
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Validate file type
-    const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'image/heic'];
+    // Client-side validation for immediate feedback
+    const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
     if (!validTypes.includes(file.type)) {
-      toast.error("Format d'image non supporté. Utilisez PNG, JPEG, JPG, WEBP ou HEIC");
+      toast.error("Format d'image non supporté. Utilisez PNG, JPEG, JPG ou WEBP");
       return;
     }
 
@@ -36,36 +36,30 @@ const ImageUploadDialog = ({ open, onOpenChange, reptileId, reptileName, onUploa
     setUploading(true);
 
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${reptileId}-${Date.now()}.${fileExt}`;
-      const filePath = `${fileName}`;
+      // Créer un FormData pour l'upload via edge function
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('reptileId', reptileId);
 
-      // Upload to Supabase Storage
-      const { error: uploadError } = await supabase.storage
-        .from('reptile-images')
-        .upload(filePath, file);
+      // Appeler l'edge function pour une validation côté serveur sécurisée
+      const { data, error } = await supabase.functions.invoke('upload-image', {
+        body: formData,
+      });
 
-      if (uploadError) throw uploadError;
+      if (error) {
+        throw new Error(error.message || "Erreur lors du téléchargement");
+      }
 
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('reptile-images')
-        .getPublicUrl(filePath);
-
-      // Update reptile record
-      const { error: updateError } = await supabase
-        .from('reptiles')
-        .update({ image_url: publicUrl })
-        .eq('id', reptileId);
-
-      if (updateError) throw updateError;
+      if (!data.success || !data.publicUrl) {
+        throw new Error("Erreur lors du téléchargement de l'image");
+      }
 
       toast.success("Image uploadée avec succès");
-      onUploadSuccess(publicUrl);
+      onUploadSuccess(data.publicUrl);
       onOpenChange(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading image:', error);
-      toast.error("Erreur lors de l'upload de l'image");
+      toast.error(error.message || "Erreur lors de l'upload de l'image");
     } finally {
       setUploading(false);
     }
@@ -98,7 +92,7 @@ const ImageUploadDialog = ({ open, onOpenChange, reptileId, reptileName, onUploa
             <input
               id="file-upload"
               type="file"
-              accept="image/png,image/jpeg,image/jpg,image/webp,image/heic"
+              accept="image/png,image/jpeg,image/jpg,image/webp"
               onChange={handleFileSelect}
               className="hidden"
             />
@@ -126,7 +120,7 @@ const ImageUploadDialog = ({ open, onOpenChange, reptileId, reptileName, onUploa
           </div>
 
           <p className="text-xs text-muted-foreground">
-            Formats acceptés: PNG, JPEG, JPG, WEBP, HEIC (max 5MB)
+            Formats acceptés: PNG, JPEG, JPG, WEBP (max 5MB)
           </p>
         </div>
       </DialogContent>
