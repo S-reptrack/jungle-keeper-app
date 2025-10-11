@@ -172,6 +172,7 @@ export type Database = {
       }
       reptiles: {
         Row: {
+          archive_notes: string | null
           birth_date: string | null
           category: string
           created_at: string
@@ -189,6 +190,7 @@ export type Database = {
           weight: number | null
         }
         Insert: {
+          archive_notes?: string | null
           birth_date?: string | null
           category: string
           created_at?: string
@@ -206,6 +208,7 @@ export type Database = {
           weight?: number | null
         }
         Update: {
+          archive_notes?: string | null
           birth_date?: string | null
           category?: string
           created_at?: string

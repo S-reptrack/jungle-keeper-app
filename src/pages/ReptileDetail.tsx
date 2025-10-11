@@ -32,6 +32,7 @@ interface Reptile {
   image_url: string | null;
   status: string;
   status_date: string | null;
+  archive_notes: string | null;
 }
 
 const ReptileDetail = () => {
@@ -194,6 +195,12 @@ const ReptileDetail = () => {
                     </Badge>
                   </div>
                 </div>
+                {reptile.status !== "active" && reptile.archive_notes && (
+                  <div className="mt-4 p-3 bg-muted rounded-md">
+                    <p className="text-xs font-medium text-muted-foreground mb-1">Notes d'archivage:</p>
+                    <p className="text-sm">{reptile.archive_notes}</p>
+                  </div>
+                )}
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex justify-between items-center">

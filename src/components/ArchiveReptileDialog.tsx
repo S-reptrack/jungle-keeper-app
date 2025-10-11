@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
@@ -32,6 +33,7 @@ const ArchiveReptileDialog = ({ reptileId, onArchived }: ArchiveReptileDialogPro
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<"deceased" | "sold">("deceased");
   const [date, setDate] = useState<Date>();
+  const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
@@ -47,6 +49,7 @@ const ArchiveReptileDialog = ({ reptileId, onArchived }: ArchiveReptileDialogPro
         .update({
           status,
           status_date: format(date, "yyyy-MM-dd"),
+          archive_notes: notes || null,
         })
         .eq("id", reptileId);
 
@@ -122,6 +125,16 @@ const ArchiveReptileDialog = ({ reptileId, onArchived }: ArchiveReptileDialogPro
                 />
               </PopoverContent>
             </Popover>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Notes (optionnel)</Label>
+            <Textarea
+              placeholder="Ex: Vendu à M. Dupont, élevage Python Passion..."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              rows={3}
+            />
           </div>
         </div>
         <DialogFooter>
