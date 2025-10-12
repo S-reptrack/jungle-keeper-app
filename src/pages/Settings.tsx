@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Globe, LogOut, User } from "lucide-react";
+import { Moon, Sun, Globe, LogOut, User, Shield } from "lucide-react";
 import { useTheme } from "next-themes";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,10 +10,12 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "sonner";
 import { languages } from "@/i18n/config";
 import { useState, useEffect } from "react";
+import ExportDataDialog from "@/components/ExportDataDialog";
+import DeleteAccountDialog from "@/components/DeleteAccountDialog";
 
 const Settings = () => {
   const { t, i18n } = useTranslation();
@@ -198,6 +200,38 @@ const Settings = () => {
                 <LogOut className="w-4 h-4 mr-2" />
                 {t("settings.signOut")}
               </Button>
+            </CardContent>
+          </Card>
+
+          {/* Confidentialité et données RGPD */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Shield className="w-5 h-5" />
+                {t("gdpr.dataPrivacy")}
+              </CardTitle>
+              <CardDescription>{t("gdpr.dataPrivacyDescription")}</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Link to="/privacy">
+                  <Button variant="outline" className="w-full">
+                    {t("gdpr.viewPrivacyPolicy")}
+                  </Button>
+                </Link>
+              </div>
+
+              <Separator />
+
+              <div className="space-y-2">
+                <ExportDataDialog />
+              </div>
+
+              <Separator />
+
+              <div className="space-y-2">
+                <DeleteAccountDialog />
+              </div>
             </CardContent>
           </Card>
         </div>

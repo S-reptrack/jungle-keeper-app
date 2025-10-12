@@ -12,6 +12,7 @@ import Feeding from "./pages/Feeding";
 import Settings from "./pages/Settings";
 import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
+import GDPRConsentDialog from "./components/GDPRConsentDialog";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <GDPRConsentDialog />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
