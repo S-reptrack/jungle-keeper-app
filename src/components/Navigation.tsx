@@ -53,10 +53,10 @@ const Navigation = () => {
                   </Link>
                 );
               })}
+              <LanguageSelector />
             </div>
             <div className="flex gap-2">
               <ThemeToggle />
-              <LanguageSelector />
             </div>
           </div>
         </div>
