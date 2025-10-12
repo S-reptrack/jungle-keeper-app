@@ -157,6 +157,22 @@
     "back": "Back",
     "loading": "Loading..."
   },
+  "admin": {
+    "dashboard": "Administration",
+    "dashboardDescription": "Application overview",
+    "totalUsers": "Total Users",
+    "registeredUsers": "Registered users",
+    "activeUsers": "Active Users",
+    "usersWithReptiles": "With at least one reptile",
+    "totalReptiles": "Total Reptiles",
+    "reptilesInDatabase": "In database",
+    "totalFeedings": "Total Feedings",
+    "feedingsRecorded": "Recorded",
+    "managementTools": "Management Tools",
+    "managementToolsDescription": "User and subscription management",
+    "comingSoon": "Coming soon: user management, Stripe subscriptions, detailed statistics...",
+    "errorFetchingStats": "Error fetching statistics"
+  },
   "gdpr": {
     "title": "Consent and Privacy",
     "intro": "To use S-reptrack, we need your consent to collect and process your personal data in accordance with GDPR.",

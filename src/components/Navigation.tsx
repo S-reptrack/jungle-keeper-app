@@ -1,12 +1,14 @@
-import { Home, List, Utensils, Settings } from "lucide-react";
+import { Home, List, Utensils, Settings, Shield } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LanguageSelector from "./LanguageSelector";
 import ThemeToggle from "./ThemeToggle";
+import { useUserRole } from "@/hooks/useUserRole";
 
 const Navigation = () => {
   const location = useLocation();
   const { t } = useTranslation();
+  const { isAdmin } = useUserRole();
   
   const navItems = [
     { icon: Home, label: t("common.home"), path: "/" },
@@ -14,6 +16,11 @@ const Navigation = () => {
     { icon: Utensils, label: t("common.feeding"), path: "/feeding" },
     { icon: Settings, label: t("common.settings"), path: "/settings" },
   ];
+
+  // Ajouter le lien admin si l'utilisateur est admin
+  if (isAdmin) {
+    navItems.push({ icon: Shield, label: t("admin.dashboard"), path: "/admin" });
+  }
 
   return (
     <nav className="bg-card/80 backdrop-blur-lg border-t border-border/50 fixed bottom-0 left-0 right-0 z-50 md:top-0 md:bottom-auto">

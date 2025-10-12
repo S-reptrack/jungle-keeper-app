@@ -145,6 +145,22 @@
     "back": "Powrót",
     "loading": "Ładowanie..."
   },
+  "admin": {
+    "dashboard": "Administracja",
+    "dashboardDescription": "Przegląd aplikacji",
+    "totalUsers": "Łączna liczba użytkowników",
+    "registeredUsers": "Zarejestrowani użytkownicy",
+    "activeUsers": "Aktywni użytkownicy",
+    "usersWithReptiles": "Z co najmniej jednym gadem",
+    "totalReptiles": "Łączna liczba gadów",
+    "reptilesInDatabase": "W bazie danych",
+    "totalFeedings": "Łączna liczba karmień",
+    "feedingsRecorded": "Zarejestrowane",
+    "managementTools": "Narzędzia zarządzania",
+    "managementToolsDescription": "Zarządzanie użytkownikami i subskrypcjami",
+    "comingSoon": "Wkrótce: zarządzanie użytkownikami, subskrypcje Stripe, szczegółowe statystyki...",
+    "errorFetchingStats": "Błąd podczas pobierania statystyk"
+  },
   "gdpr": {
     "title": "Zgoda i Prywatność",
     "intro": "Aby korzystać z S-reptrack, potrzebujemy Twojej zgody na zbieranie i przetwarzanie Twoich danych osobowych zgodnie z RODO.",

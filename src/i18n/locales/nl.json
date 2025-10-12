@@ -145,6 +145,22 @@
     "back": "Terug",
     "loading": "Laden..."
   },
+  "admin": {
+    "dashboard": "Beheer",
+    "dashboardDescription": "Applicatieoverzicht",
+    "totalUsers": "Totaal gebruikers",
+    "registeredUsers": "Geregistreerde gebruikers",
+    "activeUsers": "Actieve gebruikers",
+    "usersWithReptiles": "Met minstens één reptiel",
+    "totalReptiles": "Totaal reptielen",
+    "reptilesInDatabase": "In de database",
+    "totalFeedings": "Totaal voedingen",
+    "feedingsRecorded": "Geregistreerd",
+    "managementTools": "Beheertools",
+    "managementToolsDescription": "Gebruikers- en abonnementenbeheer",
+    "comingSoon": "Binnenkort: gebruikersbeheer, Stripe-abonnementen, gedetailleerde statistieken...",
+    "errorFetchingStats": "Fout bij ophalen van statistieken"
+  },
   "gdpr": {
     "title": "Toestemming en Privacy",
     "intro": "Om S-reptrack te gebruiken, hebben we uw toestemming nodig om uw persoonlijke gegevens te verzamelen en verwerken volgens de AVG.",
