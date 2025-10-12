@@ -170,7 +170,7 @@ const Index = () => {
       </div>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-8 pb-24 md:pb-8">
+      <main className="max-w-7xl mx-auto px-4 py-8 md:pb-8" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
           <StatsCard

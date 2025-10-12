@@ -30,7 +30,7 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className="bg-card/80 backdrop-blur-lg border-t border-border/50 fixed bottom-0 left-0 right-0 z-50 md:top-0 md:bottom-auto">
+      <nav className="bg-card/80 backdrop-blur-lg border-t border-border/50 fixed bottom-0 left-0 right-0 z-50 md:top-0 md:bottom-auto pb-[env(safe-area-inset-bottom)]">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center justify-around md:justify-start md:gap-8 flex-1">
@@ -67,7 +67,8 @@ const Navigation = () => {
           <Button
             onClick={() => setScannerOpen(true)}
             size="icon"
-            className="fixed bottom-20 right-4 z-40 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all"
+            style={{ bottom: `calc(5rem + env(safe-area-inset-bottom))` }}
+            className="fixed right-4 z-40 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all"
             aria-label="Scanner un QR code"
           >
             <QrCode className="h-6 w-6" />

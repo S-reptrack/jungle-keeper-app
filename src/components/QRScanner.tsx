@@ -30,6 +30,28 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   const startScanning = async () => {
     try {
       setError(null);
+      
+      // Request camera permission explicitly
+      try {
+        await navigator.mediaDevices.getUserMedia({ 
+          video: { facingMode: "environment" } 
+        }).then(stream => {
+          // Stop the stream immediately, we just needed permission
+          stream.getTracks().forEach(track => track.stop());
+        });
+      } catch (permError: any) {
+        console.error("Permission error:", permError);
+        let errorMessage = "Accès à la caméra refusé";
+        if (permError.name === 'NotAllowedError') {
+          errorMessage = "Veuillez autoriser l'accès à la caméra dans les paramètres de votre navigateur";
+        } else if (permError.name === 'NotFoundError') {
+          errorMessage = "Aucune caméra trouvée sur cet appareil";
+        }
+        setError(errorMessage);
+        toast.error(errorMessage);
+        return;
+      }
+
       const scanner = new Html5Qrcode("qr-reader");
       scannerRef.current = scanner;
 
@@ -38,17 +60,23 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
       
       if (!cameras || cameras.length === 0) {
         setError("Aucune caméra trouvée sur cet appareil");
+        toast.error("Aucune caméra trouvée");
         return;
       }
 
-      // Use the back camera (usually the last one on mobile)
-      const cameraId = cameras[cameras.length - 1].id;
+      // Find back camera or use last camera
+      const backCamera = cameras.find(cam => 
+        cam.label.toLowerCase().includes('back') || 
+        cam.label.toLowerCase().includes('arrière') ||
+        cam.label.toLowerCase().includes('rear')
+      ) || cameras[cameras.length - 1];
 
       await scanner.start(
-        cameraId,
+        backCamera.id,
         {
           fps: 10,
-          qrbox: { width: 250, height: 250 }
+          qrbox: { width: 250, height: 250 },
+          aspectRatio: 1.0
         },
         (decodedText) => {
           handleScanSuccess(decodedText);
