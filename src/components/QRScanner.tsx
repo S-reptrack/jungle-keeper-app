@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Capacitor } from "@capacitor/core";
 import { Camera } from "@capacitor/camera";
-
+import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
 interface QRScannerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -32,21 +32,56 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   const startScanning = async () => {
     try {
       setError(null);
-      
+
+      // Native (Capacitor) fallback using BarcodeScanner
+      if (Capacitor.isNativePlatform()) {
+        try {
+          const perm = await (BarcodeScanner as any).checkPermission({ force: true });
+          if (!perm?.granted) {
+            const msg = "Accès à la caméra refusé. Autorisez-la dans les paramètres de l'appareil.";
+            setError(msg);
+            toast.error(msg);
+            return;
+          }
+
+          await (BarcodeScanner as any).hideBackground();
+
+          const result = await (BarcodeScanner as any).startScan(); // { hasContent, content }
+          if (result?.hasContent && result.content) {
+            await handleScanSuccess(result.content as string);
+          } else {
+            toast.error("Aucun QR code détecté");
+          }
+        } catch (nativeErr: any) {
+          console.error("Erreur scan natif:", nativeErr);
+          const msg = "Impossible de démarrer la caméra (natif)";
+          setError(msg);
+          toast.error(msg);
+        } finally {
+          try {
+            await (BarcodeScanner as any).showBackground();
+            await (BarcodeScanner as any).stopScan();
+          } catch {}
+        }
+        return; // stop here for native path
+      }
+
+      // Web path with html5-qrcode
       // Request camera permission explicitly
       try {
-        await navigator.mediaDevices.getUserMedia({ 
-          video: { facingMode: "environment" } 
-        }).then(stream => {
-          // Stop the stream immediately, we just needed permission
-          stream.getTracks().forEach(track => track.stop());
-        });
+        await navigator.mediaDevices
+          .getUserMedia({ video: { facingMode: "environment" } })
+          .then((stream) => {
+            // Stop the stream immediately, we just needed permission
+            stream.getTracks().forEach((track) => track.stop());
+          });
       } catch (permError: any) {
         console.error("Permission error:", permError);
         let errorMessage = "Accès à la caméra refusé";
-        if (permError.name === 'NotAllowedError') {
-          errorMessage = "Veuillez autoriser l'accès à la caméra dans les paramètres de votre navigateur";
-        } else if (permError.name === 'NotFoundError') {
+        if (permError.name === "NotAllowedError") {
+          errorMessage =
+            "Veuillez autoriser l'accès à la caméra dans les paramètres de votre navigateur";
+        } else if (permError.name === "NotFoundError") {
           errorMessage = "Aucune caméra trouvée sur cet appareil";
         }
         setError(errorMessage);
@@ -59,7 +94,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
 
       // Get available cameras
       const cameras = await Html5Qrcode.getCameras();
-      
+
       if (!cameras || cameras.length === 0) {
         setError("Aucune caméra trouvée sur cet appareil");
         toast.error("Aucune caméra trouvée");
@@ -67,23 +102,25 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
       }
 
       // Find back camera or use last camera
-      const backCamera = cameras.find(cam => 
-        cam.label.toLowerCase().includes('back') || 
-        cam.label.toLowerCase().includes('arrière') ||
-        cam.label.toLowerCase().includes('rear')
-      ) || cameras[cameras.length - 1];
+      const backCamera =
+        cameras.find(
+          (cam) =>
+            cam.label.toLowerCase().includes("back") ||
+            cam.label.toLowerCase().includes("arrière") ||
+            cam.label.toLowerCase().includes("rear")
+        ) || cameras[cameras.length - 1];
 
       await scanner.start(
         backCamera.id,
         {
           fps: 10,
           qrbox: { width: 250, height: 250 },
-          aspectRatio: 1.0
+          aspectRatio: 1.0,
         },
         (decodedText) => {
           handleScanSuccess(decodedText);
         },
-        (errorMessage) => {
+        (_errorMessage) => {
           // Ignore scan errors, they happen continuously while scanning
         }
       );
@@ -91,24 +128,35 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
       setScanning(true);
     } catch (err: any) {
       console.error("Erreur lors du démarrage du scan:", err);
-      
+
       let errorMessage = "Impossible de démarrer la caméra";
-      if (err.name === 'NotAllowedError') {
-        errorMessage = "Accès à la caméra refusé. Veuillez autoriser l'accès dans les paramètres.";
-      } else if (err.name === 'NotFoundError') {
+      if (err.name === "NotAllowedError") {
+        errorMessage =
+          "Accès à la caméra refusé. Veuillez autoriser l'accès dans les paramètres.";
+      } else if (err.name === "NotFoundError") {
         errorMessage = "Aucune caméra trouvée sur cet appareil";
-      } else if (err.name === 'NotSupportedError') {
+      } else if (err.name === "NotSupportedError") {
         errorMessage = "La caméra n'est pas supportée sur ce navigateur";
-      } else if (err.name === 'NotReadableError') {
-        errorMessage = "La caméra est peut-être déjà utilisée par une autre application";
+      } else if (err.name === "NotReadableError") {
+        errorMessage =
+          "La caméra est peut-être déjà utilisée par une autre application";
       }
-      
+
       setError(errorMessage);
       toast.error(errorMessage);
     }
   };
 
   const stopScanning = async () => {
+    try {
+      if (Capacitor.isNativePlatform()) {
+        await (BarcodeScanner as any).showBackground();
+        await (BarcodeScanner as any).stopScan();
+      }
+    } catch (e) {
+      console.warn("Arrêt du scan natif: ", e);
+    }
+
     if (scannerRef.current && scanning) {
       try {
         await scannerRef.current.stop();
