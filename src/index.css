@@ -126,8 +126,8 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
-    /* Support for mobile safe areas (notches, home indicators) */
-    padding-bottom: env(safe-area-inset-bottom);
+    /* Reserve space for bottom navigation + device safe area */
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom));
   }
   
   /* Ensure proper spacing for mobile navigation */
