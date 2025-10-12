@@ -22,8 +22,8 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <GDPRConsentDialog />
         <BrowserRouter>
+          <GDPRConsentDialog />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/reptile/:id" element={<ReptileDetail />} />
