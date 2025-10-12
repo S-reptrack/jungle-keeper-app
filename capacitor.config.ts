@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.6bcbc9d457cb49d8b8214dcda0936c9c',
+  appId: 'app.lovable.junglekeeperapp',
   appName: 'jungle-keeper-app',
   webDir: 'dist',
   server: {
