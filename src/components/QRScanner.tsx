@@ -2,9 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { X, Camera } from "lucide-react";
+import { X, Camera as CameraIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { Capacitor } from "@capacitor/core";
+import { Camera } from "@capacitor/camera";
 
 interface QRScannerProps {
   open: boolean;
@@ -149,7 +151,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <span className="flex items-center gap-2">
-              <Camera className="h-5 w-5" />
+              <CameraIcon className="h-5 w-5" />
               Scanner un QR Code
             </span>
             <Button
