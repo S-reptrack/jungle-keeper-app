@@ -13,13 +13,13 @@ interface QRScannerProps {
 
 export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   const [scanning, setScanning] = useState(false);
-  const [permissionGranted, setPermissionGranted] = useState<boolean | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (open && permissionGranted === null) {
-      requestCameraPermission();
+    if (open) {
+      startScanning();
     }
 
     return () => {
@@ -27,26 +27,25 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     };
   }, [open]);
 
-  const requestCameraPermission = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      stream.getTracks().forEach(track => track.stop());
-      setPermissionGranted(true);
-      startScanning();
-    } catch (error) {
-      console.error("Permission caméra refusée:", error);
-      setPermissionGranted(false);
-      toast.error("Accès à la caméra refusé. Veuillez autoriser l'accès dans les paramètres.");
-    }
-  };
-
   const startScanning = async () => {
     try {
+      setError(null);
       const scanner = new Html5Qrcode("qr-reader");
       scannerRef.current = scanner;
 
+      // Get available cameras
+      const cameras = await Html5Qrcode.getCameras();
+      
+      if (!cameras || cameras.length === 0) {
+        setError("Aucune caméra trouvée sur cet appareil");
+        return;
+      }
+
+      // Use the back camera (usually the last one on mobile)
+      const cameraId = cameras[cameras.length - 1].id;
+
       await scanner.start(
-        { facingMode: "environment" },
+        cameraId,
         {
           fps: 10,
           qrbox: { width: 250, height: 250 }
@@ -60,10 +59,22 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
       );
 
       setScanning(true);
-    } catch (error) {
-      console.error("Erreur lors du démarrage du scan:", error);
-      toast.error("Impossible de démarrer la caméra");
-      setPermissionGranted(false);
+    } catch (err: any) {
+      console.error("Erreur lors du démarrage du scan:", err);
+      
+      let errorMessage = "Impossible de démarrer la caméra";
+      if (err.name === 'NotAllowedError') {
+        errorMessage = "Accès à la caméra refusé. Veuillez autoriser l'accès dans les paramètres.";
+      } else if (err.name === 'NotFoundError') {
+        errorMessage = "Aucune caméra trouvée sur cet appareil";
+      } else if (err.name === 'NotSupportedError') {
+        errorMessage = "La caméra n'est pas supportée sur ce navigateur";
+      } else if (err.name === 'NotReadableError') {
+        errorMessage = "La caméra est peut-être déjà utilisée par une autre application";
+      }
+      
+      setError(errorMessage);
+      toast.error(errorMessage);
     }
   };
 
@@ -94,14 +105,13 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
       navigate(`/reptile/${reptileId}`);
     } else {
       toast.error("QR code invalide. Veuillez scanner un QR code d'animal.");
-      setPermissionGranted(null);
-      onOpenChange(false);
+      setError("QR code invalide");
     }
   };
 
   const handleClose = async () => {
     await stopScanning();
-    setPermissionGranted(null);
+    setError(null);
     onOpenChange(false);
   };
 
@@ -126,18 +136,16 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
         </DialogHeader>
 
         <div className="space-y-4">
-          {permissionGranted === false && (
+          {error ? (
             <div className="text-center space-y-4">
-              <p className="text-sm text-muted-foreground">
-                L'accès à la caméra est nécessaire pour scanner les QR codes.
+              <p className="text-sm text-destructive">
+                {error}
               </p>
-              <Button onClick={requestCameraPermission} className="w-full">
-                Autoriser l'accès à la caméra
+              <Button onClick={startScanning} className="w-full">
+                Réessayer
               </Button>
             </div>
-          )}
-
-          {permissionGranted === true && (
+          ) : (
             <div className="space-y-4">
               <div 
                 id="qr-reader" 
@@ -145,14 +153,6 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
               />
               <p className="text-xs text-center text-muted-foreground">
                 Positionnez le QR code dans le cadre pour le scanner
-              </p>
-            </div>
-          )}
-
-          {permissionGranted === null && (
-            <div className="text-center py-8">
-              <p className="text-sm text-muted-foreground">
-                Demande d'autorisation...
               </p>
             </div>
           )}
