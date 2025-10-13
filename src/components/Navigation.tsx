@@ -16,6 +16,15 @@ const Navigation = () => {
   const isMobile = useIsMobile();
   const [scannerOpen, setScannerOpen] = useState(false);
   
+  // Sur l'environnement Lovable (prévisualisation mobile), force la barre en haut pour éviter le chevauchement
+  const forceTopOnMobile = typeof window !== "undefined" && window.location.hostname.includes("lovableproject.com");
+  const mobilePositionClass = isMobile && forceTopOnMobile
+    ? "top-0 bottom-auto border-b"
+    : "pb-[env(safe-area-inset-bottom)] bottom-[calc(env(safe-area-inset-bottom)+20px)] border-t";
+  const qrButtonBottom = isMobile && forceTopOnMobile
+    ? 'calc(1.25rem + env(safe-area-inset-bottom))'
+    : 'calc(5rem + env(safe-area-inset-bottom))';
+  
   const navItems = [
     { icon: Home, label: t("common.home"), path: "/" },
     { icon: List, label: t("common.reptiles"), path: "/reptiles" },
@@ -30,7 +39,7 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className="bg-card/80 backdrop-blur-lg border-t border-border/50 fixed left-0 right-0 z-50 md:top-0 md:bottom-auto pb-[env(safe-area-inset-bottom)] bottom-[calc(env(safe-area-inset-bottom)+12px)]">
+      <nav className={`bg-card/80 backdrop-blur-lg border-border/50 fixed left-0 right-0 z-50 md:top-0 md:bottom-auto ${mobilePositionClass}`}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center justify-around md:justify-start md:gap-8 flex-1">
@@ -67,7 +76,7 @@ const Navigation = () => {
           <Button
             onClick={() => setScannerOpen(true)}
             size="icon"
-            style={{ bottom: `calc(5rem + env(safe-area-inset-bottom))` }}
+            style={{ bottom: qrButtonBottom }}
             className="fixed right-4 z-40 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all"
             aria-label="Scanner un QR code"
           >
