@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Capacitor } from "@capacitor/core";
 import { Camera } from "@capacitor/camera";
-import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
+import { BarcodeScanner } from "@capacitor-mlkit/barcode-scanning";
 interface QRScannerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -33,22 +33,31 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     try {
       setError(null);
 
-      // Native (Capacitor) fallback using BarcodeScanner
+      // Native (Capacitor) fallback using MLKit BarcodeScanner
       if (Capacitor.isNativePlatform()) {
         try {
-          const perm = await (BarcodeScanner as any).checkPermission({ force: true });
-          if (!perm?.granted) {
-            const msg = "Accès à la caméra refusé. Autorisez-la dans les paramètres de l'appareil.";
-            setError(msg);
-            toast.error(msg);
-            return;
+          // Check and request permissions
+          const permissions = await BarcodeScanner.checkPermissions();
+          if (permissions.camera !== 'granted') {
+            const requested = await BarcodeScanner.requestPermissions();
+            if (requested.camera !== 'granted') {
+              const msg = "Accès à la caméra refusé. Autorisez-la dans les paramètres de l'appareil.";
+              setError(msg);
+              toast.error(msg);
+              return;
+            }
           }
 
-          await (BarcodeScanner as any).hideBackground();
-
-          const result = await (BarcodeScanner as any).startScan(); // { hasContent, content }
-          if (result?.hasContent && result.content) {
-            await handleScanSuccess(result.content as string);
+          // Start scanning
+          const result = await BarcodeScanner.scan();
+          
+          if (result.barcodes && result.barcodes.length > 0) {
+            const barcodeValue = result.barcodes[0].displayValue || result.barcodes[0].rawValue;
+            if (barcodeValue) {
+              await handleScanSuccess(barcodeValue);
+            } else {
+              toast.error("Aucun QR code détecté");
+            }
           } else {
             toast.error("Aucun QR code détecté");
           }
@@ -57,11 +66,6 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
           const msg = "Impossible de démarrer la caméra (natif)";
           setError(msg);
           toast.error(msg);
-        } finally {
-          try {
-            await (BarcodeScanner as any).showBackground();
-            await (BarcodeScanner as any).stopScan();
-          } catch {}
         }
         return; // stop here for native path
       }
@@ -150,8 +154,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   const stopScanning = async () => {
     try {
       if (Capacitor.isNativePlatform()) {
-        await (BarcodeScanner as any).showBackground();
-        await (BarcodeScanner as any).stopScan();
+        await BarcodeScanner.stopScan();
       }
     } catch (e) {
       console.warn("Arrêt du scan natif: ", e);
