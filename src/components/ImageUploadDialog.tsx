@@ -36,19 +36,37 @@ const ImageUploadDialog = ({ open, onOpenChange, reptileId, reptileName, onUploa
     setUploading(true);
 
     try {
+      // Récupérer la session pour l'authentification
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        throw new Error("Vous devez être connecté pour uploader une image");
+      }
+
       // Créer un FormData pour l'upload via edge function
       const formData = new FormData();
       formData.append('file', file);
       formData.append('reptileId', reptileId);
 
-      // Appeler l'edge function pour une validation côté serveur sécurisée
-      const { data, error } = await supabase.functions.invoke('upload-image', {
-        body: formData,
-      });
+      // Utiliser fetch directement pour mieux contrôler les headers sur Android
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/upload-image`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          },
+          body: formData,
+        }
+      );
 
-      if (error) {
-        throw new Error(error.message || "Erreur lors du téléchargement");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Erreur HTTP: ${response.status}`);
       }
+
+      const data = await response.json();
 
       if (!data.success || !data.path) {
         throw new Error("Erreur lors du téléchargement de l'image");
