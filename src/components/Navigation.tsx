@@ -6,6 +6,7 @@ import LanguageSelector from "./LanguageSelector";
 import ThemeToggle from "./ThemeToggle";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useBottomInset } from "@/hooks/useBottomInset";
 import { QRScanner } from "./QRScanner";
 import { Button } from "./ui/button";
 
@@ -16,8 +17,10 @@ const Navigation = () => {
   const isMobile = useIsMobile();
   const [scannerOpen, setScannerOpen] = useState(false);
   
+  const bottomInset = useBottomInset();
   const isAndroid = typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
-  const androidNavExtra = isAndroid ? 48 : 0; // px supplémentaires pour Android
+  // Use visual viewport bottom inset (minus a few px) to avoid overlap but keep bar low
+  const androidNavExtra = isAndroid ? Math.min(40, Math.max(0, bottomInset - 4)) : 0;
   
   const navStyle = isMobile 
     ? { bottom: `calc(env(safe-area-inset-bottom) + ${20 + androidNavExtra}px)` }

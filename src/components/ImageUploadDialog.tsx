@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Upload, Camera } from "lucide-react";
+import { Upload, Camera as CameraIcon } from "lucide-react";
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
+import { Capacitor } from "@capacitor/core";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -16,6 +18,71 @@ interface ImageUploadDialogProps {
 const ImageUploadDialog = ({ open, onOpenChange, reptileId, reptileName, onUploadSuccess }: ImageUploadDialogProps) => {
   const [uploading, setUploading] = useState(false);
 
+  const uploadFile = async (file: File) => {
+    setUploading(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("Vous devez être connecté pour uploader une image");
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('reptileId', reptileId);
+
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/upload-image`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          },
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Erreur HTTP: ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (!data.success || !data.path) throw new Error("Erreur lors du téléchargement de l'image");
+
+      toast.success("Image uploadée avec succès");
+      onUploadSuccess(data.path);
+      onOpenChange(false);
+    } catch (error: any) {
+      console.error('Error uploading image:', error);
+      toast.error(error.message || "Erreur lors de l'upload de l'image");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleTakePhoto = async () => {
+    try {
+      // Prefer native camera when available
+      if (Capacitor.isNativePlatform()) {
+        const photo = await Camera.getPhoto({
+          source: CameraSource.Camera,
+          resultType: CameraResultType.Uri,
+          quality: 80,
+          correctOrientation: true,
+          saveToGallery: false,
+        });
+        if (!photo.webPath) throw new Error('Impossible de capturer la photo');
+        const blob = await fetch(photo.webPath).then(r => r.blob());
+        const file = new File([blob], `${reptileId}-${Date.now()}.jpg`, { type: blob.type || 'image/jpeg' });
+        return uploadFile(file);
+      }
+
+      // Fallback to input capture on web
+      document.getElementById('camera-upload')?.dispatchEvent(new MouseEvent('click'));
+    } catch (e: any) {
+      console.error('Camera error:', e);
+      toast.error("Accès à la caméra refusé ou indisponible");
+    }
+  };
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -115,18 +182,16 @@ const ImageUploadDialog = ({ open, onOpenChange, reptileId, reptileName, onUploa
               className="hidden"
             />
 
-            <label htmlFor="camera-upload" className="cursor-pointer">
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full"
-                disabled={uploading}
-                onClick={() => document.getElementById('camera-upload')?.click()}
-              >
-                <Camera className="mr-2 h-4 w-4" />
-                Prendre une photo
-              </Button>
-            </label>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              disabled={uploading}
+              onClick={handleTakePhoto}
+            >
+              <CameraIcon className="mr-2 h-4 w-4" />
+              Prendre une photo
+            </Button>
             <input
               id="camera-upload"
               type="file"
