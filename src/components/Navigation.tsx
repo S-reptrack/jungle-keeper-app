@@ -16,22 +16,14 @@ const Navigation = () => {
   const isMobile = useIsMobile();
   const [scannerOpen, setScannerOpen] = useState(false);
   
-  // Sur l'environnement Lovable (prévisualisation mobile), force la barre en haut pour éviter le chevauchement
-  const forceTopOnMobile = typeof window !== "undefined" && window.location.hostname.includes("lovableproject.com");
   const isAndroid = typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
-  const androidNavExtra = isAndroid ? 32 : 0; // px to raise above Android system bar
-
-  const mobilePositionClass = isMobile && forceTopOnMobile
-    ? "top-0 bottom-auto border-b"
-    : "pb-[env(safe-area-inset-bottom)] border-t";
-  // navStyle only when bottom bar is used (non-Lovable environment)
-  const navStyle = isMobile && !forceTopOnMobile
+  const androidNavExtra = isAndroid ? 48 : 0; // px supplémentaires pour Android
+  
+  const navStyle = isMobile 
     ? { bottom: `calc(env(safe-area-inset-bottom) + ${20 + androidNavExtra}px)` }
     : undefined;
-
-  const qrButtonBottom = isMobile && forceTopOnMobile
-    ? 'calc(1.25rem + env(safe-area-inset-bottom))'
-    : `calc(5rem + env(safe-area-inset-bottom) + ${androidNavExtra}px)`;
+    
+  const qrButtonBottom = `calc(5rem + env(safe-area-inset-bottom) + ${androidNavExtra}px)`;
   
   const navItems = [
     { icon: Home, label: t("common.home"), path: "/" },
@@ -47,7 +39,7 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className={`bg-card/80 backdrop-blur-lg border-border/50 fixed left-0 right-0 z-50 md:top-0 md:bottom-auto ${mobilePositionClass}`} style={navStyle}>
+      <nav className="bg-card/80 backdrop-blur-lg border-t border-border/50 fixed left-0 right-0 z-50 md:top-0 md:bottom-auto pb-[env(safe-area-inset-bottom)]" style={navStyle}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center justify-around md:justify-start md:gap-8 flex-1">
