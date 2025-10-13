@@ -100,11 +100,10 @@ const ReptileDetail = () => {
     return `${months} ${t("reptile.months")}`;
   };
 
-  const handleImageUploadSuccess = (url: string) => {
-    if (reptile) {
-      setReptile({ ...reptile, image_url: url });
-    }
-    fetchReptile();
+  const handleImageUploadSuccess = async (url: string) => {
+    // Recharger les données du reptile depuis la base de données
+    await fetchReptile();
+    toast.success("Photo mise à jour avec succès");
   };
 
   if (loading) {

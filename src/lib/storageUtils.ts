@@ -40,6 +40,7 @@ export function useSignedImageUrl(imagePath: string | null, expiresIn: number = 
 
   useEffect(() => {
     let isMounted = true;
+    let refreshInterval: NodeJS.Timeout | null = null;
 
     async function loadSignedUrl() {
       if (!imagePath) {
@@ -60,14 +61,17 @@ export function useSignedImageUrl(imagePath: string | null, expiresIn: number = 
     loadSignedUrl();
 
     // Rafraîchir l'URL avant expiration (90% de la durée)
-    const refreshInterval = setInterval(
+    // expiresIn est en secondes, donc * 1000 pour millisecondes, puis * 0.9 pour 90%
+    refreshInterval = setInterval(
       loadSignedUrl, 
-      expiresIn * 900 // 90% de expiresIn en millisecondes
+      expiresIn * 1000 * 0.9
     );
 
     return () => {
       isMounted = false;
-      clearInterval(refreshInterval);
+      if (refreshInterval) {
+        clearInterval(refreshInterval);
+      }
     };
   }, [imagePath, expiresIn]);
 
