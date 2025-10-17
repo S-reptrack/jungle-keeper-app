@@ -259,5 +259,19 @@
         "prohibited": "Das unbefugte Kopieren, Reproduzieren, Modifizieren oder Verteilen der gesamten oder eines Teils der Anwendung ist strengstens verboten und kann rechtliche Schritte nach sich ziehen"
       }
     }
+  },
+  "install": {
+    "title": "App installieren",
+    "description": "Fügen Sie S-reptrack zu Ihrem Startbildschirm hinzu für eine Vollbild-Erfahrung und Offline-Zugriff.",
+    "android": {
+      "title": "Android (Chrome)",
+      "instruction": "Verwenden Sie das ⋮-Menü und dann 'Zum Startbildschirm hinzufügen'.",
+      "installNow": "Jetzt installieren",
+      "installNotReady": "Schaltfläche wird aktiviert, wenn Installation möglich ist"
+    },
+    "ios": {
+      "title": "iPhone (Safari)",
+      "instruction": "Tippen Sie auf die Schaltfläche 'Teilen' und dann auf 'Zum Home-Bildschirm'. Die obige Schaltfläche ist auf iOS nicht verfügbar."
+    }
   }
 }

@@ -257,5 +257,19 @@
         "prohibited": "La copia, reproducción, modificación o distribución no autorizada de toda o parte de la aplicación está estrictamente prohibida y sujeta a acciones legales"
       }
     }
+  },
+  "install": {
+    "title": "Instalar la aplicación",
+    "description": "Agregue S-reptrack a su pantalla de inicio para una experiencia de pantalla completa y acceso sin conexión.",
+    "android": {
+      "title": "Android (Chrome)",
+      "instruction": "Use el menú ⋮ y luego 'Añadir a pantalla de inicio'.",
+      "installNow": "Instalar ahora",
+      "installNotReady": "Botón habilitado cuando la instalación sea posible"
+    },
+    "ios": {
+      "title": "iPhone (Safari)",
+      "instruction": "Toque el botón 'Compartir' y luego 'Añadir a pantalla de inicio'. El botón anterior no está disponible en iOS."
+    }
   }
 }

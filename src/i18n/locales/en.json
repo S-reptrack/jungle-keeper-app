@@ -256,8 +256,22 @@
         "code": "The source code and application architecture are protected",
         "design": "Designs, interfaces and visual elements are our exclusive property",
         "content": "All texts, images and content are protected by copyright",
-        "prohibited": "Unauthorized copying, reproduction, modification or distribution of all or part of the application is strictly prohibited and subject to legal action"
+      "prohibited": "Unauthorized copying, reproduction, modification or distribution of all or part of the application is strictly prohibited and subject to legal action"
       }
+    }
+  },
+  "install": {
+    "title": "Install the App",
+    "description": "Add S-reptrack to your home screen for a full-screen experience and offline access.",
+    "android": {
+      "title": "Android (Chrome)",
+      "instruction": "Use the ⋮ menu then 'Add to Home screen'.",
+      "installNow": "Install now",
+      "installNotReady": "Button enabled when installation is possible"
+    },
+    "ios": {
+      "title": "iPhone (Safari)",
+      "instruction": "Tap the 'Share' button then 'Add to Home Screen'. The button above is not available on iOS."
     }
   }
 }

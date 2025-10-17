@@ -247,5 +247,19 @@
         "prohibited": "Nieautoryzowane kopiowanie, reprodukcja, modyfikacja lub dystrybucja całości lub części aplikacji jest surowo zabroniona i podlega działaniom prawnym"
       }
     }
+  },
+  "install": {
+    "title": "Zainstaluj aplikację",
+    "description": "Dodaj S-reptrack do ekranu głównego, aby uzyskać pełnoekranowe doświadczenie i dostęp offline.",
+    "android": {
+      "title": "Android (Chrome)",
+      "instruction": "Użyj menu ⋮, a następnie 'Dodaj do ekranu głównego'.",
+      "installNow": "Zainstaluj teraz",
+      "installNotReady": "Przycisk włączony, gdy instalacja będzie możliwa"
+    },
+    "ios": {
+      "title": "iPhone (Safari)",
+      "instruction": "Dotknij przycisku 'Udostępnij', a następnie 'Dodaj do ekranu początkowego'. Powyższy przycisk nie jest dostępny na iOS."
+    }
   }
 }

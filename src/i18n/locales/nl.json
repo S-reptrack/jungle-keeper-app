@@ -247,5 +247,19 @@
         "prohibited": "Ongeautoriseerd kopiëren, reproduceren, wijzigen of verspreiden van geheel of gedeeltelijk van de applicatie is strikt verboden en kan leiden tot juridische stappen"
       }
     }
+  },
+  "install": {
+    "title": "App installeren",
+    "description": "Voeg S-reptrack toe aan uw startscherm voor een volledig scherm ervaring en offline toegang.",
+    "android": {
+      "title": "Android (Chrome)",
+      "instruction": "Gebruik het ⋮-menu en vervolgens 'Toevoegen aan startscherm'.",
+      "installNow": "Nu installeren",
+      "installNotReady": "Knop ingeschakeld wanneer installatie mogelijk is"
+    },
+    "ios": {
+      "title": "iPhone (Safari)",
+      "instruction": "Tik op de knop 'Delen' en vervolgens op 'Zet op beginscherm'. De bovenstaande knop is niet beschikbaar op iOS."
+    }
   }
 }
