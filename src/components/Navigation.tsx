@@ -74,30 +74,28 @@ const Navigation = () => {
               <LanguageSelector />
             </div>
             <div className="flex gap-2">
+              <Button
+                asChild
+                size="icon"
+                variant="ghost"
+                className="h-9 w-9"
+                aria-label="Debug"
+              >
+                <Link to="/debug">
+                  <Bug className="h-4 w-4" />
+                </Link>
+              </Button>
               {isMobile && (
-                <>
-                  <Button
-                    asChild
-                    size="icon"
-                    variant="ghost"
-                    className="h-9 w-9"
-                    aria-label="Debug"
-                  >
-                    <Link to="/debug">
-                      <Bug className="h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button
-                    onClick={handleRefresh}
-                    size="icon"
-                    variant="ghost"
-                    className="h-9 w-9"
-                    disabled={isRefreshing}
-                    aria-label="Rafraîchir l'application"
-                  >
-                    <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-                  </Button>
-                </>
+                <Button
+                  onClick={handleRefresh}
+                  size="icon"
+                  variant="ghost"
+                  className="h-9 w-9"
+                  disabled={isRefreshing}
+                  aria-label="Rafraîchir l'application"
+                >
+                  <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                </Button>
               )}
               <ThemeToggle />
             </div>
