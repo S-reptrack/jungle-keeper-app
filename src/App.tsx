@@ -12,6 +12,7 @@ import Feeding from "./pages/Feeding";
 import Settings from "./pages/Settings";
 import Privacy from "./pages/Privacy";
 import AdminDashboard from "./pages/AdminDashboard";
+import Debug from "./pages/Debug";
 import NotFound from "./pages/NotFound";
 import GDPRConsentDialog from "./components/GDPRConsentDialog";
 import AdminRoute from "./components/AdminRoute";
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/settings" element={<Settings />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+            <Route path="/debug" element={<Debug />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
