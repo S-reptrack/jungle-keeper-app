@@ -23,16 +23,7 @@ const Navigation = () => {
     window.location.reload();
   };
   
-  const bottomInset = useBottomInset();
-  const isAndroid = typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
-  // Use visual viewport bottom inset (minus a few px) to avoid overlap but keep bar low
-  const androidNavExtra = isAndroid ? Math.min(40, Math.max(0, bottomInset - 4)) : 0;
-  
-  const navStyle = isMobile 
-    ? { bottom: `calc(env(safe-area-inset-bottom) + ${androidNavExtra}px)` }
-    : undefined;
-    
-  const qrButtonBottom = `calc(5rem + env(safe-area-inset-bottom) + ${androidNavExtra}px)`;
+  const qrButtonBottom = `calc(5rem + env(safe-area-inset-bottom))`;
   
   const navItems = [
     { icon: Home, label: t("common.home"), path: "/" },
@@ -48,7 +39,7 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className="bg-card/80 backdrop-blur-lg border-t border-border/50 fixed left-0 right-0 z-50 md:top-0 md:bottom-auto pb-[env(safe-area-inset-bottom)]" style={navStyle}>
+      <nav className="bg-card/80 backdrop-blur-lg border-t border-border/50 fixed left-0 right-0 bottom-0 z-50 md:top-0 md:bottom-auto pb-[env(safe-area-inset-bottom)]">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center justify-around md:justify-start md:gap-8 flex-1">
