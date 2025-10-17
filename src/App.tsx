@@ -28,7 +28,6 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <GDPRConsentDialog />
-          <GlobalDebugButton />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/reptile/:id" element={<ReptileDetail />} />
