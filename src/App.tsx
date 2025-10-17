@@ -16,6 +16,7 @@ import Debug from "./pages/Debug";
 import NotFound from "./pages/NotFound";
 import GDPRConsentDialog from "./components/GDPRConsentDialog";
 import AdminRoute from "./components/AdminRoute";
+import GlobalDebugButton from "./components/GlobalDebugButton";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <GDPRConsentDialog />
+          <GlobalDebugButton />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/reptile/:id" element={<ReptileDetail />} />

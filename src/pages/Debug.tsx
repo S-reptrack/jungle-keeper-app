@@ -79,7 +79,7 @@ const Debug = () => {
           <CardHeader>
             <CardTitle>Actions</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-2">
             <Button 
               onClick={handleHardReload} 
               className="w-full"
@@ -87,6 +87,15 @@ const Debug = () => {
             >
               <RefreshCw className="mr-2 h-4 w-4" />
               Hard Reload
+            </Button>
+            <Button
+              onClick={() => {
+                window.location.href = 'https://6bcbc9d4-57cb-49d8-b821-4dcda0936c9c.lovableproject.com?forceHideBadge=true';
+              }}
+              className="w-full"
+              variant="secondary"
+            >
+              Ouvrir l’URL distante
             </Button>
           </CardContent>
         </Card>
