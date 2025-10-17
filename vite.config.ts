@@ -15,7 +15,9 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     VitePWA({
       registerType: "autoUpdate",
+      injectRegister: 'auto',
       includeAssets: ["favicon.ico", "robots.txt"],
+      devOptions: { enabled: true },
       manifest: {
         name: "S-reptrack - Suivi de reptiles",
         short_name: "S-reptrack",
