@@ -1,10 +1,9 @@
-import { Home, List, Utensils, Settings, Shield, QrCode, RefreshCw, Bug } from "lucide-react";
+import { Home, List, Utensils, Settings, QrCode, RefreshCw, Bug } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import LanguageSelector from "./LanguageSelector";
 import ThemeToggle from "./ThemeToggle";
-import { useUserRole } from "@/hooks/useUserRole";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useBottomInset } from "@/hooks/useBottomInset";
 import { QRScanner } from "./QRScanner";
@@ -13,7 +12,6 @@ import { Button } from "./ui/button";
 const Navigation = () => {
   const location = useLocation();
   const { t } = useTranslation();
-  const { isAdmin } = useUserRole();
   const isMobile = useIsMobile();
   const [scannerOpen, setScannerOpen] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -31,11 +29,6 @@ const Navigation = () => {
     { icon: Utensils, label: t("common.feeding"), path: "/feeding" },
     { icon: Settings, label: t("common.settings"), path: "/settings" },
   ];
-
-  // Ajouter le lien admin si l'utilisateur est admin
-  if (isAdmin) {
-    navItems.push({ icon: Shield, label: t("admin.dashboard"), path: "/admin" });
-  }
 
   return (
     <>
