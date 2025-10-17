@@ -1,4 +1,4 @@
-import { Home, List, Utensils, Settings, Shield, QrCode, RefreshCw } from "lucide-react";
+import { Home, List, Utensils, Settings, Shield, QrCode, RefreshCw, Bug } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -75,16 +75,29 @@ const Navigation = () => {
             </div>
             <div className="flex gap-2">
               {isMobile && (
-                <Button
-                  onClick={handleRefresh}
-                  size="icon"
-                  variant="ghost"
-                  className="h-9 w-9"
-                  disabled={isRefreshing}
-                  aria-label="Rafraîchir l'application"
-                >
-                  <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-                </Button>
+                <>
+                  <Button
+                    asChild
+                    size="icon"
+                    variant="ghost"
+                    className="h-9 w-9"
+                    aria-label="Debug"
+                  >
+                    <Link to="/debug">
+                      <Bug className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button
+                    onClick={handleRefresh}
+                    size="icon"
+                    variant="ghost"
+                    className="h-9 w-9"
+                    disabled={isRefreshing}
+                    aria-label="Rafraîchir l'application"
+                  >
+                    <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                  </Button>
+                </>
               )}
               <ThemeToggle />
             </div>
