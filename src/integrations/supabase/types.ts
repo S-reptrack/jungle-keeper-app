@@ -123,8 +123,11 @@ export type Database = {
         Row: {
           action: string
           created_at: string
+          expected_hatch_date: string | null
           id: string
+          incubation_days: number | null
           notes: string | null
+          notification_days_before: number | null
           observation_date: string
           partner_id: string
           reptile_id: string
@@ -134,8 +137,11 @@ export type Database = {
         Insert: {
           action: string
           created_at?: string
+          expected_hatch_date?: string | null
           id?: string
+          incubation_days?: number | null
           notes?: string | null
+          notification_days_before?: number | null
           observation_date: string
           partner_id: string
           reptile_id: string
@@ -145,8 +151,11 @@ export type Database = {
         Update: {
           action?: string
           created_at?: string
+          expected_hatch_date?: string | null
           id?: string
+          incubation_days?: number | null
           notes?: string | null
+          notification_days_before?: number | null
           observation_date?: string
           partner_id?: string
           reptile_id?: string

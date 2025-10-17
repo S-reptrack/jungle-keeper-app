@@ -62,6 +62,9 @@ interface Observation {
   partner_id: string;
   action: string;
   notes: string;
+  incubation_days?: number;
+  expected_hatch_date?: string;
+  notification_days_before?: number;
   partner?: {
     name: string;
     sex: string;
@@ -77,6 +80,8 @@ const observationSchema = z.object({
   action: z.enum(["introduction", "mating", "separation", "laying", "other"], {
     required_error: "Action requise",
   }),
+  incubationDays: z.number().optional(),
+  notificationDaysBefore: z.number().optional(),
 });
 
 type ObservationValues = z.infer<typeof observationSchema>;
@@ -88,6 +93,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
   const [observations, setObservations] = useState<Observation[]>([]);
   const [loading, setLoading] = useState(true);
   const [dateInput, setDateInput] = useState("");
+  const [selectedAction, setSelectedAction] = useState<string>("");
 
   const form = useForm<ObservationValues>({
     resolver: zodResolver(observationSchema),
@@ -148,6 +154,9 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
           partner_id,
           action,
           notes,
+          incubation_days,
+          expected_hatch_date,
+          notification_days_before,
           partner:reptiles!partner_id(name, sex)
         `)
         .eq("reptile_id", reptileId)
@@ -172,6 +181,13 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
         return;
       }
 
+      let expectedHatchDate = null;
+      if (data.action === "laying" && data.incubationDays) {
+        const layingDate = new Date(data.date);
+        expectedHatchDate = new Date(layingDate);
+        expectedHatchDate.setDate(layingDate.getDate() + data.incubationDays);
+      }
+
       const { error } = await supabase.from("reproduction_observations").insert({
         reptile_id: reptileId,
         partner_id: data.partnerId,
@@ -179,6 +195,9 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
         action: data.action,
         observation_date: data.date.toISOString().split('T')[0],
         notes: data.observation,
+        incubation_days: data.action === "laying" ? data.incubationDays : null,
+        expected_hatch_date: expectedHatchDate ? expectedHatchDate.toISOString().split('T')[0] : null,
+        notification_days_before: data.action === "laying" ? data.notificationDaysBefore : null,
       });
 
       if (error) throw error;
@@ -186,6 +205,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
       toast.success(t("reptile.reproduction.observationAdded"));
       form.reset();
       setDateInput("");
+      setSelectedAction("");
       setOpen(false);
       fetchData();
     } catch (error) {
@@ -270,7 +290,10 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>{t("reptile.reproduction.action")}</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedAction(value);
+                        }} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder={t("reptile.reproduction.selectAction")} />
@@ -348,6 +371,51 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
                     )}
                   />
 
+                  {selectedAction === "laying" && (
+                    <>
+                      <FormField
+                        control={form.control}
+                        name="incubationDays"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Durée d'incubation (jours)</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                min="1"
+                                placeholder="Ex: 60"
+                                {...field}
+                                onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="notificationDaysBefore"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Notification avant éclosion (jours)</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                min="1"
+                                placeholder="Ex: 7"
+                                {...field}
+                                onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                                value={field.value ?? 7}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </>
+                  )}
+
                   <FormField
                     control={form.control}
                     name="observation"
@@ -396,38 +464,76 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
             </p>
           ) : (
             <div className="space-y-4">
-              {observations.map((obs) => (
-                <Card key={obs.id} className="border-border/50">
-                  <CardContent className="pt-6">
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <Eye className="w-4 h-4 text-muted-foreground" />
-                        <span className="font-medium">
-                          {obs.partner?.name} ({obs.partner?.sex === "male" ? "♂" : "♀"})
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <Calendar className="w-3 h-3" />
-                          {format(new Date(obs.observation_date), "dd MMM yyyy", { locale: fr })}
+              {observations.map((obs) => {
+                const daysRemaining = obs.expected_hatch_date 
+                  ? Math.ceil((new Date(obs.expected_hatch_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+                  : null;
+                const isNotificationTime = daysRemaining !== null && obs.notification_days_before 
+                  ? daysRemaining <= obs.notification_days_before && daysRemaining > 0
+                  : false;
+
+                return (
+                  <Card key={obs.id} className={cn(
+                    "border-border/50",
+                    isNotificationTime && "border-amber-500/50 bg-amber-500/5"
+                  )}>
+                    <CardContent className="pt-6">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <Eye className="w-4 h-4 text-muted-foreground" />
+                          <span className="font-medium">
+                            {obs.partner?.name} ({obs.partner?.sex === "male" ? "♂" : "♀"})
+                          </span>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDelete(obs.id)}
-                          className="text-destructive hover:text-destructive"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                        <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                            <Calendar className="w-3 h-3" />
+                            {format(new Date(obs.observation_date), "dd MMM yyyy", { locale: fr })}
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDelete(obs.id)}
+                            className="text-destructive hover:text-destructive"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                    <p className="text-sm text-muted-foreground mb-1">
-                      {t(`reptile.reproduction.actions.${obs.action}`)}
-                    </p>
-                    <p className="text-sm">{obs.notes}</p>
-                  </CardContent>
-                </Card>
-              ))}
+                      <p className="text-sm text-muted-foreground mb-1">
+                        {t(`reptile.reproduction.actions.${obs.action}`)}
+                      </p>
+                      <p className="text-sm">{obs.notes}</p>
+                      
+                      {obs.action === "laying" && obs.expected_hatch_date && (
+                        <div className="mt-3 pt-3 border-t border-border/50">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm font-medium">
+                                Éclosion prévue : {format(new Date(obs.expected_hatch_date), "dd MMM yyyy", { locale: fr })}
+                              </p>
+                              {daysRemaining !== null && (
+                                <p className={cn(
+                                  "text-sm mt-1",
+                                  isNotificationTime && "text-amber-600 font-medium",
+                                  daysRemaining <= 0 && "text-green-600 font-medium"
+                                )}>
+                                  {daysRemaining > 0 
+                                    ? `${daysRemaining} jour${daysRemaining > 1 ? 's' : ''} restant${daysRemaining > 1 ? 's' : ''}`
+                                    : daysRemaining === 0
+                                    ? "Éclosion aujourd'hui !"
+                                    : "Éclosion passée"
+                                  }
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           )}
         </CardContent>
