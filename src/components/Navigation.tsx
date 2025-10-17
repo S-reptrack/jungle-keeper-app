@@ -23,10 +23,10 @@ const Navigation = () => {
   const androidNavExtra = isAndroid ? Math.min(40, Math.max(0, bottomInset - 4)) : 0;
   
   const navStyle = isMobile 
-    ? { bottom: `calc(env(safe-area-inset-bottom) + ${74 + androidNavExtra}px)` }
+    ? { bottom: `calc(env(safe-area-inset-bottom) + ${8 + androidNavExtra}px)` }
     : undefined;
     
-  const qrButtonBottom = `calc(5rem + 54px + env(safe-area-inset-bottom) + ${androidNavExtra}px)`;
+  const qrButtonBottom = `calc(5rem + env(safe-area-inset-bottom) + ${8 + androidNavExtra}px)`;
   
   const navItems = [
     { icon: Home, label: t("common.home"), path: "/" },
