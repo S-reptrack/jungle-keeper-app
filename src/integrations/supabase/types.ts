@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      animal_transfers: {
+        Row: {
+          created_at: string
+          from_user_id: string
+          id: string
+          message: string | null
+          reptile_id: string
+          status: Database["public"]["Enums"]["transfer_status"]
+          to_user_email: string
+          to_user_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          from_user_id: string
+          id?: string
+          message?: string | null
+          reptile_id: string
+          status?: Database["public"]["Enums"]["transfer_status"]
+          to_user_email: string
+          to_user_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          from_user_id?: string
+          id?: string
+          message?: string | null
+          reptile_id?: string
+          status?: Database["public"]["Enums"]["transfer_status"]
+          to_user_email?: string
+          to_user_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "animal_transfers_reptile_id_fkey"
+            columns: ["reptile_id"]
+            isOneToOne: false
+            referencedRelation: "reptiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       feedings: {
         Row: {
           created_at: string
@@ -348,6 +392,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      transfer_status: "pending" | "accepted" | "rejected" | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -476,6 +521,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      transfer_status: ["pending", "accepted", "rejected", "cancelled"],
     },
   },
 } as const

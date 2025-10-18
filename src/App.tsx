@@ -16,6 +16,7 @@ import NotFound from "./pages/NotFound";
 import GDPRConsentDialog from "./components/GDPRConsentDialog";
 import GlobalDebugButton from "./components/GlobalDebugButton";
 import Install from "./pages/Install";
+import Transfers from "./pages/Transfers";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/debug" element={<Debug />} />
             <Route path="/install" element={<Install />} />
+            <Route path="/transfers" element={<Transfers />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

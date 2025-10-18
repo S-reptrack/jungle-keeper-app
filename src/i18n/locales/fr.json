@@ -271,5 +271,38 @@
       "title": "iPhone (Safari)",
       "instruction": "Appuyez sur le bouton « Partager » puis « Sur l'écran d'accueil ». Le bouton ci-dessus n'est pas disponible sur iOS."
     }
+  },
+  "transfer": {
+    "title": "Transférer l'animal",
+    "description": "Transférer {{name}} à un autre utilisateur de S-repTrack",
+    "recipientEmail": "Email du destinataire",
+    "message": "Message (optionnel)",
+    "messagePlaceholder": "Ajouter une note pour le destinataire...",
+    "send": "Envoyer la demande",
+    "emailRequired": "L'email du destinataire est requis",
+    "requestSent": "Demande de transfert envoyée",
+    "error": "Erreur lors de l'envoi de la demande",
+    "pageTitle": "Transferts d'animaux",
+    "received": "Reçus",
+    "sent": "Envoyés",
+    "from": "De",
+    "to": "À",
+    "accept": "Accepter",
+    "reject": "Refuser",
+    "cancel": "Annuler",
+    "accepted": "Transfert accepté",
+    "rejected": "Transfert refusé",
+    "cancelled": "Transfert annulé",
+    "acceptError": "Erreur lors de l'acceptation",
+    "rejectError": "Erreur lors du refus",
+    "cancelError": "Erreur lors de l'annulation",
+    "fetchError": "Erreur lors du chargement des transferts",
+    "noReceived": "Aucun transfert reçu",
+    "noSent": "Aucun transfert envoyé",
+    "statusPending": "En attente",
+    "statusAccepted": "Accepté",
+    "statusRejected": "Refusé",
+    "statusCancelled": "Annulé",
+    "transferAnimal": "Transférer"
   }
 }

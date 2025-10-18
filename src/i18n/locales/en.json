@@ -273,5 +273,38 @@
       "title": "iPhone (Safari)",
       "instruction": "Tap the 'Share' button then 'Add to Home Screen'. The button above is not available on iOS."
     }
+  },
+  "transfer": {
+    "title": "Transfer Animal",
+    "description": "Transfer {{name}} to another S-repTrack user",
+    "recipientEmail": "Recipient's email",
+    "message": "Message (optional)",
+    "messagePlaceholder": "Add a note for the recipient...",
+    "send": "Send request",
+    "emailRequired": "Recipient's email is required",
+    "requestSent": "Transfer request sent",
+    "error": "Error sending request",
+    "pageTitle": "Animal Transfers",
+    "received": "Received",
+    "sent": "Sent",
+    "from": "From",
+    "to": "To",
+    "accept": "Accept",
+    "reject": "Reject",
+    "cancel": "Cancel",
+    "accepted": "Transfer accepted",
+    "rejected": "Transfer rejected",
+    "cancelled": "Transfer cancelled",
+    "acceptError": "Error accepting transfer",
+    "rejectError": "Error rejecting transfer",
+    "cancelError": "Error cancelling transfer",
+    "fetchError": "Error loading transfers",
+    "noReceived": "No transfers received",
+    "noSent": "No transfers sent",
+    "statusPending": "Pending",
+    "statusAccepted": "Accepted",
+    "statusRejected": "Rejected",
+    "statusCancelled": "Cancelled",
+    "transferAnimal": "Transfer"
   }
 }

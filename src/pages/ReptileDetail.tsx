@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera } from "lucide-react";
+import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import EditReptileDialog from "@/components/EditReptileDialog";
 import WeightChart from "@/components/WeightChart";
 import QRCodeDialog from "@/components/QRCodeDialog";
 import ImageUploadDialog from "@/components/ImageUploadDialog";
+import { TransferAnimalDialog } from "@/components/TransferAnimalDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { differenceInYears, differenceInMonths } from "date-fns";
@@ -43,6 +44,7 @@ const ReptileDetail = () => {
   const [loading, setLoading] = useState(true);
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
   const [imageUploadOpen, setImageUploadOpen] = useState(false);
+  const [transferDialogOpen, setTransferDialogOpen] = useState(false);
   const { signedUrl: imageSignedUrl, loading: imageLoading } = useSignedImageUrl(reptile?.image_url);
 
   const fetchReptile = async () => {
@@ -226,6 +228,23 @@ const ReptileDetail = () => {
                   </span>
                   <span className="font-medium text-foreground">{reptile.weight}g</span>
                 </div>
+                <div className="mt-4 flex gap-2">
+                  <EditReptileDialog
+                    reptileId={reptile.id}
+                    currentBirthDate={reptile.birth_date}
+                    currentPurchaseDate={reptile.purchase_date}
+                    currentWeight={reptile.weight}
+                    onUpdate={fetchReptile}
+                  />
+                  <Button 
+                    variant="outline" 
+                    className="flex-1"
+                    onClick={() => setTransferDialogOpen(true)}
+                  >
+                    <Send className="w-4 h-4 mr-2" />
+                    {t("transfer.transferAnimal")}
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -317,6 +336,13 @@ const ReptileDetail = () => {
           reptileId={reptile.id}
           reptileName={reptile.name}
           onUploadSuccess={handleImageUploadSuccess}
+        />
+        
+        <TransferAnimalDialog
+          open={transferDialogOpen}
+          onOpenChange={setTransferDialogOpen}
+          reptileId={reptile.id}
+          reptileName={reptile.name}
         />
       </main>
     </div>
