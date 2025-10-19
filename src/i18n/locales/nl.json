@@ -261,5 +261,33 @@
       "title": "iPhone (Safari)",
       "instruction": "Tik op de knop 'Delen' en vervolgens op 'Zet op beginscherm'. De bovenstaande knop is niet beschikbaar op iOS."
     }
+  },
+  "transfer": {
+    "title": "Dier overdragen",
+    "description": "{{name}} overdragen aan een andere S-reptrack-gebruiker",
+    "recipientEmail": "E-mail van ontvanger",
+    "message": "Bericht (optioneel)",
+    "messagePlaceholder": "Voeg een notitie toe voor de ontvanger...",
+    "send": "Verzoek verzenden",
+    "emailRequired": "E-mail is verplicht",
+    "requestSent": "Overdrachtsverzoek verzonden",
+    "error": "Fout bij verzenden van verzoek",
+    "received": "Ontvangen",
+    "sent": "Verzonden",
+    "noReceived": "Geen ontvangen verzoeken",
+    "noSent": "Geen verzonden verzoeken",
+    "from": "Van",
+    "to": "Aan",
+    "status": "Status",
+    "pending": "In afwachting",
+    "accepted": "Geaccepteerd",
+    "rejected": "Afgewezen",
+    "cancelled": "Geannuleerd",
+    "accept": "Accepteren",
+    "reject": "Afwijzen",
+    "cancel": "Annuleren",
+    "acceptSuccess": "Overdracht geaccepteerd",
+    "rejectSuccess": "Overdracht afgewezen",
+    "cancelSuccess": "Overdracht geannuleerd"
   }
 }

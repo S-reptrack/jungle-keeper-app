@@ -261,5 +261,33 @@
       "title": "iPhone (Safari)",
       "instruction": "Dotknij przycisku 'Udostępnij', a następnie 'Dodaj do ekranu początkowego'. Powyższy przycisk nie jest dostępny na iOS."
     }
+  },
+  "transfer": {
+    "title": "Przenieś zwierzę",
+    "description": "Przenieś {{name}} do innego użytkownika S-reptrack",
+    "recipientEmail": "E-mail odbiorcy",
+    "message": "Wiadomość (opcjonalna)",
+    "messagePlaceholder": "Dodaj notatkę dla odbiorcy...",
+    "send": "Wyślij prośbę",
+    "emailRequired": "E-mail jest wymagany",
+    "requestSent": "Prośba o przeniesienie wysłana",
+    "error": "Błąd podczas wysyłania prośby",
+    "received": "Otrzymane",
+    "sent": "Wysłane",
+    "noReceived": "Brak otrzymanych próśb",
+    "noSent": "Brak wysłanych próśb",
+    "from": "Od",
+    "to": "Do",
+    "status": "Status",
+    "pending": "Oczekujące",
+    "accepted": "Zaakceptowane",
+    "rejected": "Odrzucone",
+    "cancelled": "Anulowane",
+    "accept": "Akceptuj",
+    "reject": "Odrzuć",
+    "cancel": "Anuluj",
+    "acceptSuccess": "Przeniesienie zaakceptowane",
+    "rejectSuccess": "Przeniesienie odrzucone",
+    "cancelSuccess": "Przeniesienie anulowane"
   }
 }

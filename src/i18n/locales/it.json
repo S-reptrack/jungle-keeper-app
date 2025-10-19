@@ -271,5 +271,33 @@
       "title": "iPhone (Safari)",
       "instruction": "Tocca il pulsante 'Condividi' e poi 'Aggiungi a schermata Home'. Il pulsante sopra non è disponibile su iOS."
     }
+  },
+  "transfer": {
+    "title": "Trasferisci animale",
+    "description": "Trasferisci {{name}} ad un altro utente di S-reptrack",
+    "recipientEmail": "Email del destinatario",
+    "message": "Messaggio (opzionale)",
+    "messagePlaceholder": "Aggiungi una nota per il destinatario...",
+    "send": "Invia richiesta",
+    "emailRequired": "L'email è obbligatoria",
+    "requestSent": "Richiesta di trasferimento inviata",
+    "error": "Errore nell'invio della richiesta",
+    "received": "Ricevute",
+    "sent": "Inviate",
+    "noReceived": "Nessuna richiesta ricevuta",
+    "noSent": "Nessuna richiesta inviata",
+    "from": "Da",
+    "to": "A",
+    "status": "Stato",
+    "pending": "In attesa",
+    "accepted": "Accettata",
+    "rejected": "Rifiutata",
+    "cancelled": "Annullata",
+    "accept": "Accetta",
+    "reject": "Rifiuta",
+    "cancel": "Annulla",
+    "acceptSuccess": "Trasferimento accettato",
+    "rejectSuccess": "Trasferimento rifiutato",
+    "cancelSuccess": "Trasferimento annullato"
   }
 }

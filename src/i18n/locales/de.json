@@ -273,5 +273,33 @@
       "title": "iPhone (Safari)",
       "instruction": "Tippen Sie auf die Schaltfläche 'Teilen' und dann auf 'Zum Home-Bildschirm'. Die obige Schaltfläche ist auf iOS nicht verfügbar."
     }
+  },
+  "transfer": {
+    "title": "Tier übertragen",
+    "description": "{{name}} an einen anderen S-reptrack-Benutzer übertragen",
+    "recipientEmail": "E-Mail des Empfängers",
+    "message": "Nachricht (optional)",
+    "messagePlaceholder": "Eine Notiz für den Empfänger hinzufügen...",
+    "send": "Anfrage senden",
+    "emailRequired": "E-Mail ist erforderlich",
+    "requestSent": "Übertragungsanfrage gesendet",
+    "error": "Fehler beim Senden der Anfrage",
+    "received": "Empfangen",
+    "sent": "Gesendet",
+    "noReceived": "Keine empfangenen Anfragen",
+    "noSent": "Keine gesendeten Anfragen",
+    "from": "Von",
+    "to": "An",
+    "status": "Status",
+    "pending": "Ausstehend",
+    "accepted": "Akzeptiert",
+    "rejected": "Abgelehnt",
+    "cancelled": "Abgebrochen",
+    "accept": "Akzeptieren",
+    "reject": "Ablehnen",
+    "cancel": "Abbrechen",
+    "acceptSuccess": "Übertragung akzeptiert",
+    "rejectSuccess": "Übertragung abgelehnt",
+    "cancelSuccess": "Übertragung abgebrochen"
   }
 }
