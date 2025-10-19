@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Globe, LogOut, User, Shield, Bug } from "lucide-react";
+import { Moon, Sun, Globe, LogOut, User, Shield } from "lucide-react";
 import { useTheme } from "next-themes";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -66,22 +66,6 @@ const Settings = () => {
         </div>
 
         <div className="space-y-6">
-          {/* Diagnostic */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Bug className="w-5 h-5" />
-                Debug
-              </CardTitle>
-              <CardDescription>Ouvrir la page de diagnostic</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link to="/debug">
-                <Button variant="secondary" className="w-full">Ouvrir la page Debug</Button>
-              </Link>
-            </CardContent>
-          </Card>
-
           {/* Apparence */}
           <Card>
             <CardHeader>

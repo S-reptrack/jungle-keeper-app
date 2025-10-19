@@ -11,10 +11,8 @@ import Reptiles from "./pages/Reptiles";
 import Feeding from "./pages/Feeding";
 import Settings from "./pages/Settings";
 import Privacy from "./pages/Privacy";
-import Debug from "./pages/Debug";
 import NotFound from "./pages/NotFound";
 import GDPRConsentDialog from "./components/GDPRConsentDialog";
-import GlobalDebugButton from "./components/GlobalDebugButton";
 import Install from "./pages/Install";
 import Transfers from "./pages/Transfers";
 
@@ -35,7 +33,6 @@ const App = () => (
             <Route path="/feeding" element={<Feeding />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/privacy" element={<Privacy />} />
-            <Route path="/debug" element={<Debug />} />
             <Route path="/install" element={<Install />} />
             <Route path="/transfers" element={<Transfers />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
