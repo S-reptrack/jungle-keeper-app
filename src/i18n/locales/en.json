@@ -305,6 +305,8 @@
     "statusAccepted": "Accepted",
     "statusRejected": "Rejected",
     "statusCancelled": "Cancelled",
-    "transferAnimal": "Transfer"
+    "transferAnimal": "Transfer",
+    "transferred": "Transferred",
+    "readOnlyAccess": "You are viewing an animal you have transferred. You can only view information, not modify it."
   }
 }

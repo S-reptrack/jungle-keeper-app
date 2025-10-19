@@ -233,11 +233,13 @@ export type Database = {
           image_url: string | null
           morphs: string[] | null
           name: string
+          previous_owner_id: string | null
           purchase_date: string | null
           sex: string | null
           species: string
           status: string
           status_date: string | null
+          transferred_at: string | null
           updated_at: string
           user_id: string
           weight: number | null
@@ -251,11 +253,13 @@ export type Database = {
           image_url?: string | null
           morphs?: string[] | null
           name: string
+          previous_owner_id?: string | null
           purchase_date?: string | null
           sex?: string | null
           species: string
           status?: string
           status_date?: string | null
+          transferred_at?: string | null
           updated_at?: string
           user_id: string
           weight?: number | null
@@ -269,11 +273,13 @@ export type Database = {
           image_url?: string | null
           morphs?: string[] | null
           name?: string
+          previous_owner_id?: string | null
           purchase_date?: string | null
           sex?: string | null
           species?: string
           status?: string
           status_date?: string | null
+          transferred_at?: string | null
           updated_at?: string
           user_id?: string
           weight?: number | null

@@ -34,9 +34,10 @@ interface HealthRecord {
 interface HealthTabProps {
   reptileId: string;
   reptileStatus?: string;
+  readOnly?: boolean;
 }
 
-const HealthTab = ({ reptileId, reptileStatus = "active" }: HealthTabProps) => {
+const HealthTab = ({ reptileId, reptileStatus = "active", readOnly = false }: HealthTabProps) => {
   const { t } = useTranslation();
   const [records, setRecords] = useState<HealthRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -115,7 +116,7 @@ const HealthTab = ({ reptileId, reptileStatus = "active" }: HealthTabProps) => {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <CardTitle>Historique de santé</CardTitle>
-          <AddHealthRecordDialog reptileId={reptileId} onRecordAdded={fetchHealthRecords} />
+          {!readOnly && <AddHealthRecordDialog reptileId={reptileId} onRecordAdded={fetchHealthRecords} />}
         </CardHeader>
         <CardContent>
         {records.length === 0 ? (
@@ -137,9 +138,9 @@ const HealthTab = ({ reptileId, reptileStatus = "active" }: HealthTabProps) => {
                         )}
                         <h3 className="font-semibold text-lg">{record.condition}</h3>
                       </div>
-                      <AlertDialog>
+                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <Button variant="ghost" size="sm">
+                          <Button variant="ghost" size="sm" disabled={readOnly}>
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </AlertDialogTrigger>

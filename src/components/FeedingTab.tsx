@@ -39,9 +39,10 @@ interface Feeding {
 
 interface FeedingTabProps {
   reptileId: string;
+  readOnly?: boolean;
 }
 
-const FeedingTab = ({ reptileId }: FeedingTabProps) => {
+const FeedingTab = ({ reptileId, readOnly = false }: FeedingTabProps) => {
   const { t } = useTranslation();
   const [rodents, setRodents] = useState<Rodent[]>([]);
   const [feedings, setFeedings] = useState<Feeding[]>([]);
@@ -167,7 +168,7 @@ const FeedingTab = ({ reptileId }: FeedingTabProps) => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Historique des repas</h2>
-        <AddFeedingDialog reptileId={reptileId} onFeedingAdded={fetchFeedings} />
+        {!readOnly && <AddFeedingDialog reptileId={reptileId} onFeedingAdded={fetchFeedings} />}
       </div>
 
       {loading ? (
@@ -204,14 +205,16 @@ const FeedingTab = ({ reptileId }: FeedingTabProps) => {
                     <TableCell>{feeding.quantity}</TableCell>
                     <TableCell className="max-w-[200px] truncate">{feeding.notes || "-"}</TableCell>
                     <TableCell className="text-right">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDeleteFeeding(feeding.id)}
-                        className="text-destructive hover:text-destructive"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+                      {!readOnly && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteFeeding(feeding.id)}
+                          className="text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -229,7 +232,7 @@ const FeedingTab = ({ reptileId }: FeedingTabProps) => {
 
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Gestion des rongeurs</h2>
-        <AddRodentDialog onRodentAdded={fetchRodents} />
+        {!readOnly && <AddRodentDialog onRodentAdded={fetchRodents} />}
       </div>
 
       {loading ? (

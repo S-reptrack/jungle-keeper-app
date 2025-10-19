@@ -47,6 +47,7 @@ interface ReproductionTabProps {
   reptileId: string;
   reptileSex: string;
   reptileSpecies: string;
+  readOnly?: boolean;
 }
 
 interface Partner {
@@ -86,7 +87,7 @@ const observationSchema = z.object({
 
 type ObservationValues = z.infer<typeof observationSchema>;
 
-const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: ReproductionTabProps) => {
+const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = false }: ReproductionTabProps) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [potentialPartners, setPotentialPartners] = useState<Partner[]>([]);
@@ -246,13 +247,14 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
       <Card>
         <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <CardTitle>{t("reptile.reproduction.title")}</CardTitle>
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button disabled={potentialPartners.length === 0} className="w-full sm:w-auto">
-                <Plus className="w-4 h-4 mr-2" />
-                <span className="truncate">{t("reptile.reproduction.addObservation")}</span>
-              </Button>
-            </DialogTrigger>
+          {!readOnly && (
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button disabled={potentialPartners.length === 0} className="w-full sm:w-auto">
+                  <Plus className="w-4 h-4 mr-2" />
+                  <span className="truncate">{t("reptile.reproduction.addObservation")}</span>
+                </Button>
+              </DialogTrigger>
             <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>{t("reptile.reproduction.addObservation")}</DialogTitle>
@@ -452,6 +454,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
               </Form>
             </DialogContent>
           </Dialog>
+          )}
         </CardHeader>
         <CardContent>
           {potentialPartners.length === 0 ? (
@@ -495,6 +498,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies }: Reproduction
                             size="sm"
                             onClick={() => handleDelete(obs.id)}
                             className="text-destructive hover:text-destructive"
+                            disabled={readOnly}
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>

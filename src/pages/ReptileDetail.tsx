@@ -34,6 +34,9 @@ interface Reptile {
   status: string;
   status_date: string | null;
   archive_notes: string | null;
+  user_id: string;
+  previous_owner_id: string | null;
+  transferred_at: string | null;
 }
 
 const ReptileDetail = () => {
@@ -45,7 +48,22 @@ const ReptileDetail = () => {
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
   const [imageUploadOpen, setImageUploadOpen] = useState(false);
   const [transferDialogOpen, setTransferDialogOpen] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const { signedUrl: imageSignedUrl, loading: imageLoading } = useSignedImageUrl(reptile?.image_url);
+
+  // Check if current user is the previous owner (read-only access)
+  const isPreviousOwner = reptile && currentUserId && reptile.previous_owner_id === currentUserId;
+  const isCurrentOwner = reptile && currentUserId && reptile.user_id === currentUserId;
+
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setCurrentUserId(user.id);
+      }
+    };
+    getCurrentUser();
+  }, []);
 
   const fetchReptile = async () => {
     if (!id) return;
@@ -184,7 +202,13 @@ const ReptileDetail = () => {
                     <CardTitle className="text-2xl">{reptile.name}</CardTitle>
                     <p className="text-sm text-muted-foreground">{reptile.species}</p>
                   </div>
-                  <div className="flex flex-col items-end gap-2">
+                   <div className="flex flex-col items-end gap-2">
+                    {isPreviousOwner && (
+                      <Badge variant="outline" className="border-yellow-500 text-yellow-700 dark:text-yellow-400">
+                        {t("transfer.transferred")}
+                        {reptile.transferred_at && ` - ${formatDate(reptile.transferred_at.split('T')[0])}`}
+                      </Badge>
+                    )}
                     {reptile.status !== "active" && (
                       <Badge variant="destructive">
                         {reptile.status === "deceased" ? "Décédé" : "Vendu"}
@@ -196,6 +220,13 @@ const ReptileDetail = () => {
                     </Badge>
                   </div>
                 </div>
+                {isPreviousOwner && (
+                  <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
+                    <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                      {t("transfer.readOnlyAccess")}
+                    </p>
+                  </div>
+                )}
                 {reptile.status !== "active" && reptile.archive_notes && (
                   <div className="mt-4 p-3 bg-muted rounded-md">
                     <p className="text-xs font-medium text-muted-foreground mb-1">Notes d'archivage:</p>
@@ -228,23 +259,25 @@ const ReptileDetail = () => {
                   </span>
                   <span className="font-medium text-foreground">{reptile.weight}g</span>
                 </div>
-                <div className="mt-4 flex gap-2">
-                  <EditReptileDialog
-                    reptileId={reptile.id}
-                    currentBirthDate={reptile.birth_date}
-                    currentPurchaseDate={reptile.purchase_date}
-                    currentWeight={reptile.weight}
-                    onUpdate={fetchReptile}
-                  />
-                  <Button 
-                    variant="outline" 
-                    className="flex-1"
-                    onClick={() => setTransferDialogOpen(true)}
-                  >
-                    <Send className="w-4 h-4 mr-2" />
-                    {t("transfer.transferAnimal")}
-                  </Button>
-                </div>
+                {isCurrentOwner && (
+                  <div className="mt-4 flex gap-2">
+                    <EditReptileDialog
+                      reptileId={reptile.id}
+                      currentBirthDate={reptile.birth_date}
+                      currentPurchaseDate={reptile.purchase_date}
+                      currentWeight={reptile.weight}
+                      onUpdate={fetchReptile}
+                    />
+                    <Button 
+                      variant="outline" 
+                      className="flex-1"
+                      onClick={() => setTransferDialogOpen(true)}
+                    >
+                      <Send className="w-4 h-4 mr-2" />
+                      {t("transfer.transferAnimal")}
+                    </Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -275,13 +308,15 @@ const ReptileDetail = () => {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
                     <CardTitle>{t("reptile.generalInfo")}</CardTitle>
-                    <EditReptileDialog
-                      reptileId={reptile.id}
-                      currentBirthDate={reptile.birth_date}
-                      currentPurchaseDate={reptile.purchase_date}
-                      currentWeight={reptile.weight}
-                      onUpdate={fetchReptile}
-                    />
+                    {isCurrentOwner && (
+                      <EditReptileDialog
+                        reptileId={reptile.id}
+                        currentBirthDate={reptile.birth_date}
+                        currentPurchaseDate={reptile.purchase_date}
+                        currentWeight={reptile.weight}
+                        onUpdate={fetchReptile}
+                      />
+                    )}
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="grid grid-cols-2 gap-4">
@@ -309,15 +344,15 @@ const ReptileDetail = () => {
               </TabsContent>
               
               <TabsContent value="feeding">
-                <FeedingTab reptileId={reptile.id} />
+                <FeedingTab reptileId={reptile.id} readOnly={isPreviousOwner || false} />
               </TabsContent>
               
               <TabsContent value="reproduction">
-                <ReproductionTab reptileId={reptile.id} reptileSex={reptile.sex} reptileSpecies={reptile.species} />
+                <ReproductionTab reptileId={reptile.id} reptileSex={reptile.sex} reptileSpecies={reptile.species} readOnly={isPreviousOwner || false} />
               </TabsContent>
               
               <TabsContent value="health" className="space-y-4">
-                <HealthTab reptileId={reptile.id} reptileStatus={reptile.status} />
+                <HealthTab reptileId={reptile.id} reptileStatus={reptile.status} readOnly={isPreviousOwner || false} />
               </TabsContent>
             </Tabs>
           </div>
