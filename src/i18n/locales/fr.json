@@ -274,7 +274,7 @@
   },
   "transfer": {
     "title": "Transférer l'animal",
-    "description": "Transférer {{name}} à un autre utilisateur de S-repTrack",
+    "description": "Transférer {{name}} à un autre utilisateur de S-reptrack",
     "recipientEmail": "Email du destinataire",
     "message": "Message (optionnel)",
     "messagePlaceholder": "Ajouter une note pour le destinataire...",
