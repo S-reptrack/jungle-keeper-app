@@ -1,7 +1,7 @@
 export interface ReptileSpecies {
   id: string;
   scientificName: string;
-  commonName: string;
+  commonNameKey: string; // Changed to translation key
   category: 'snake' | 'lizard' | 'turtle';
   morphs?: string[];
   citesAnnex?: 'A' | 'B' | 'C' | 'D';
@@ -13,49 +13,49 @@ export const citesAnnexASpecies: ReptileSpecies[] = [
   {
     id: 'python-molurus-bivittatus',
     scientificName: 'Python molurus bivittatus',
-    commonName: 'Python birman / Burmese Python',
+    commonNameKey: 'species.python-molurus-bivittatus',
     category: 'snake',
     citesAnnex: 'A',
   },
   {
     id: 'boa-constrictor-occidentalis',
     scientificName: 'Boa constrictor occidentalis',
-    commonName: 'Boa constricteur d\'Argentine / Argentine Boa',
+    commonNameKey: 'species.boa-constrictor-occidentalis',
     category: 'snake',
     citesAnnex: 'A',
   },
   {
     id: 'acrantophis',
     scientificName: 'Acrantophis spp.',
-    commonName: 'Boa de Madagascar / Madagascar Ground Boa',
+    commonNameKey: 'species.acrantophis',
     category: 'snake',
     citesAnnex: 'A',
   },
   {
     id: 'sanzinia-madagascariensis',
     scientificName: 'Sanzinia madagascariensis',
-    commonName: 'Boa arboricole de Madagascar / Madagascar Tree Boa',
+    commonNameKey: 'species.sanzinia-madagascariensis',
     category: 'snake',
     citesAnnex: 'A',
   },
   {
     id: 'epicrates-inornatus',
     scientificName: 'Epicrates inornatus',
-    commonName: 'Boa de Porto Rico / Puerto Rican Boa',
+    commonNameKey: 'species.epicrates-inornatus',
     category: 'snake',
     citesAnnex: 'A',
   },
   {
     id: 'epicrates-monensis',
     scientificName: 'Epicrates monensis',
-    commonName: 'Boa de Mona / Mona Boa',
+    commonNameKey: 'species.epicrates-monensis',
     category: 'snake',
     citesAnnex: 'A',
   },
   {
     id: 'epicrates-subflavus',
     scientificName: 'Epicrates subflavus',
-    commonName: 'Boa de Jamaïque / Jamaican Boa',
+    commonNameKey: 'species.epicrates-subflavus',
     category: 'snake',
     citesAnnex: 'A',
   },
@@ -68,7 +68,7 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
   {
     id: 'python-regius',
     scientificName: 'Python regius',
-    commonName: 'Python royal / Ball Python',
+    commonNameKey: 'species.python-regius',
     category: 'snake',
     citesAnnex: 'B',
     morphs: ['Normal', 'Albino T-', 'Albino T+', 'Candy', 'Lavender Albino', 'Toffee Belly', 'Ultramel', 'Hypo', 'Ghost (Fantôme)', 'Pastel', 'Mojave', 'Banana', 'Clown', 'Piebald', 'Enchi', 'Spider', 'Cinnamon', 'Black Pastel', 'Butter', 'Lesser', 'Pinstripe', 'Fire', 'Champagne', 'Chocolate', 'GHI', 'Orange Dream', 'Pewter', 'Woma', 'Yellowbelly', 'Axanthic', 'Caramel'],
@@ -76,14 +76,14 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
   {
     id: 'python-molurus',
     scientificName: 'Python molurus',
-    commonName: 'Python molure / Burmese Python',
+    commonNameKey: 'species.python-molurus',
     category: 'snake',
     citesAnnex: 'B',
   },
   {
     id: 'morelia-spilota',
     scientificName: 'Morelia spilota',
-    commonName: 'Python tapis / Carpet Python',
+    commonNameKey: 'species.morelia-spilota',
     category: 'snake',
     citesAnnex: 'B',
     morphs: ['Normal', 'Jungle', 'Jaguar', 'Granite', 'Zebra', 'Axanthic', 'Caramel', 'Albino T-', 'Albino T+', 'Hypo', 'Tiger'],
@@ -91,7 +91,7 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
   {
     id: 'boa-constrictor',
     scientificName: 'Boa constrictor',
-    commonName: 'Boa constricteur / Boa Constrictor (sauf sous-espèce occidentalis)',
+    commonNameKey: 'species.boa-constrictor',
     category: 'snake',
     citesAnnex: 'B',
     morphs: ['Normal', 'Fire', 'Super Fire', 'Blood', 'Aztec', 'Leopard', 'Motley', 'Eclipse', 'Jungle', 'Anery (Anerythristic)', 'Albino T-', 'Albino T+', 'Kahl Albino', 'Hypo (Hypomelanistic)', 'Ghost', 'Jungle Boa', 'Caramel', 'Paradigm', 'Snow', 'Snowglow', 'Sunglow', 'Arabesque', 'IMG (Increased Melanism Gene)', 'Pastel', 'VPI (VPI T+)', 'Key West', 'Sharp', 'Axanthic', 'Black Stripe'],
@@ -99,7 +99,7 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
   {
     id: 'boa-imperator',
     scientificName: 'Boa imperator',
-    commonName: 'Boa imperator / Common Boa',
+    commonNameKey: 'species.boa-imperator',
     category: 'snake',
     citesAnnex: 'B',
     morphs: ['Normal', 'Fire', 'Super Fire', 'Blood', 'Aztec', 'Leopard', 'Motley', 'Eclipse', 'Jungle', 'Anery (Anerythristic)', 'Albino T-', 'Albino T+', 'Kahl Albino', 'Hypo (Hypomelanistic)', 'Ghost', 'Jungle Boa', 'Caramel', 'Paradigm', 'Snow', 'Snowglow', 'Sunglow', 'Salmon', 'Arabesque', 'IMG (Increased Melanism Gene)', 'Pastel', 'VPI (VPI T+)', 'Key West', 'Axanthic', 'Black Stripe'],
@@ -107,14 +107,14 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
   {
     id: 'epicrates-cenchria',
     scientificName: 'Epicrates cenchria',
-    commonName: 'Boa arc-en-ciel / Rainbow Boa',
+    commonNameKey: 'species.epicrates-cenchria',
     category: 'snake',
     citesAnnex: 'B',
   },
   {
     id: 'corallus-caninus',
     scientificName: 'Corallus caninus',
-    commonName: 'Boa émeraude / Emerald Tree Boa',
+    commonNameKey: 'species.corallus-caninus',
     category: 'snake',
     citesAnnex: 'B',
     morphs: ['Normal', 'High Yellow', 'Yellow', 'Red', 'Orange'],
@@ -122,7 +122,7 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
   {
     id: 'corallus-hortulanus',
     scientificName: 'Corallus hortulanus',
-    commonName: 'Boa arboricole d\'Amazonie / Amazon Tree Boa',
+    commonNameKey: 'species.corallus-hortulanus',
     category: 'snake',
     citesAnnex: 'B',
     morphs: ['Normal', 'Garden Phase', 'Colored Phase'],
@@ -130,21 +130,21 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
   {
     id: 'corallus-batesii',
     scientificName: 'Corallus batesii',
-    commonName: 'Boa arboricole de Bates / Bates Tree Boa',
+    commonNameKey: 'species.corallus-batesii',
     category: 'snake',
     citesAnnex: 'B',
   },
   {
     id: 'eunectes-notaeus',
     scientificName: 'Eunectes notaeus',
-    commonName: 'Anaconda jaune / Yellow Anaconda',
+    commonNameKey: 'species.eunectes-notaeus',
     category: 'snake',
     citesAnnex: 'B',
   },
   {
     id: 'pantherophis-guttatus',
     scientificName: 'Pantherophis guttatus',
-    commonName: 'Serpent des blés / Corn Snake',
+    commonNameKey: 'species.pantherophis-guttatus',
     category: 'snake',
     citesAnnex: 'B',
     morphs: ['Normal', 'Amelanistic (Albino)', 'Anerythristic Type A', 'Anerythristic Type B', 'Hypo', 'Ghost', 'Blizzard', 'Charcoal', 'Lavender', 'Butter', 'Caramel', 'Snow', 'Bloodred', 'Okeetee', 'Miami', 'Crimson', 'Palmetto', 'Tessera', 'Sunkissed', 'Diffused'],
@@ -152,7 +152,7 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
   {
     id: 'morelia-viridis',
     scientificName: 'Morelia viridis',
-    commonName: 'Python vert / Green Tree Python',
+    commonNameKey: 'species.morelia-viridis',
     category: 'snake',
     citesAnnex: 'B',
     morphs: ['Normal', 'High Yellow', 'High Blue', 'Sorong', 'Biak', 'Aru', 'Jayapura', 'Merauke', 'Calico', 'Axanthic', 'Albino T+', 'Piebald'],
@@ -160,7 +160,7 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
   {
     id: 'pituophis-catenifer',
     scientificName: 'Pituophis catenifer',
-    commonName: 'Couleuvre à nez mince / Gopher Snake',
+    commonNameKey: 'species.pituophis-catenifer',
     category: 'snake',
     citesAnnex: 'B',
     morphs: ['Normal', 'Albino T-', 'Albino T+', 'Snow', 'Axanthic', 'Hypo', 'Patternless', 'Piebald'],
@@ -168,7 +168,7 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
   {
     id: 'gonyosoma-oxycephalum',
     scientificName: 'Gonyosoma oxycephalum',
-    commonName: 'Couleuvre à queue rouge / Red-tailed Racer',
+    commonNameKey: 'species.gonyosoma-oxycephalum',
     category: 'snake',
     citesAnnex: 'B',
     morphs: ['Normal', 'Albino T-', 'Albino T+', 'Tricolor', 'Axanthic'],
@@ -176,7 +176,7 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
   {
     id: 'candoia-aspera',
     scientificName: 'Candoia aspera',
-    commonName: 'Boa de Nouvelle-Guinée / Viper Boa (Bongersmai)',
+    commonNameKey: 'species.candoia-aspera',
     category: 'snake',
     citesAnnex: 'B',
     morphs: ['Normal', 'Patternless', 'Striped', 'Hypomelanistic'],
@@ -184,7 +184,7 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
   {
     id: 'lampropeltis-triangulum',
     scientificName: 'Lampropeltis triangulum',
-    commonName: 'Serpent-roi écarlate / Milk Snake',
+    commonNameKey: 'species.lampropeltis-triangulum',
     category: 'snake',
     citesAnnex: 'B',
   },
@@ -196,7 +196,7 @@ export const citesAnnexCSpecies: ReptileSpecies[] = [
   {
     id: 'elaphe-climacophora',
     scientificName: 'Elaphe climacophora',
-    commonName: 'Couleuvre du Japon / Japanese Rat Snake',
+    commonNameKey: 'species.elaphe-climacophora',
     category: 'snake',
     citesAnnex: 'C',
     morphs: ['Normal', 'Albino T-', 'Blizzard'],
@@ -204,14 +204,14 @@ export const citesAnnexCSpecies: ReptileSpecies[] = [
   {
     id: 'nerodia-sipedon',
     scientificName: 'Nerodia sipedon',
-    commonName: 'Couleuvre d\'eau / Northern Water Snake',
+    commonNameKey: 'species.nerodia-sipedon',
     category: 'snake',
     citesAnnex: 'C',
   },
   {
     id: 'thamnophis-sirtalis',
     scientificName: 'Thamnophis sirtalis',
-    commonName: 'Couleuvre rayée / Common Garter Snake',
+    commonNameKey: 'species.thamnophis-sirtalis',
     category: 'snake',
     citesAnnex: 'C',
     morphs: ['Normal', 'Albino T-', 'Erythristic', 'Melanistic', 'Blue', 'Flame'],
@@ -219,7 +219,7 @@ export const citesAnnexCSpecies: ReptileSpecies[] = [
   {
     id: 'heterodon-nasicus',
     scientificName: 'Heterodon nasicus',
-    commonName: 'Couleuvre à nez retroussé / Western Hognose Snake',
+    commonNameKey: 'species.heterodon-nasicus',
     category: 'snake',
     citesAnnex: 'C',
     morphs: ['Normal', 'Albino T-', 'Anaconda', 'Arctic', 'Axanthic', 'Conda', 'Lavender', 'Snow', 'Toffee', 'Toxic'],
@@ -232,7 +232,7 @@ export const citesAnnexDSpecies: ReptileSpecies[] = [
   {
     id: 'lampropeltis-getula',
     scientificName: 'Lampropeltis getula',
-    commonName: 'Serpent roi de Californie / California Kingsnake',
+    commonNameKey: 'species.lampropeltis-getula',
     category: 'snake',
     citesAnnex: 'D',
     morphs: ['Normal', 'Albino T-', 'Albino T+', 'Banana', 'Striped', 'Aberrant', 'Lavender', 'High White', 'Chocolate'],
@@ -240,7 +240,7 @@ export const citesAnnexDSpecies: ReptileSpecies[] = [
   {
     id: 'elaphe-obsoleta',
     scientificName: 'Pantherophis obsoletus',
-    commonName: 'Couleuvre obscure / Black Rat Snake',
+    commonNameKey: 'species.elaphe-obsoleta',
     category: 'snake',
     citesAnnex: 'D',
     morphs: ['Normal', 'Leucistic', 'Albino T-', 'Hypomelanistic'],
@@ -248,14 +248,14 @@ export const citesAnnexDSpecies: ReptileSpecies[] = [
   {
     id: 'lampropeltis-californiae',
     scientificName: 'Lampropeltis californiae',
-    commonName: 'Faux-corail / California Mountain Kingsnake',
+    commonNameKey: 'species.lampropeltis-californiae',
     category: 'snake',
     citesAnnex: 'D',
   },
   {
     id: 'thamnopis-proximus',
     scientificName: 'Thamnophis proximus',
-    commonName: 'Couleuvre des marais / Western Ribbon Snake',
+    commonNameKey: 'species.thamnopis-proximus',
     category: 'snake',
     citesAnnex: 'D',
     morphs: ['Normal', 'Albino T-', 'Anerythristic', 'Flame'],
@@ -263,7 +263,7 @@ export const citesAnnexDSpecies: ReptileSpecies[] = [
   {
     id: 'lampropeltis-alterna',
     scientificName: 'Lampropeltis alterna',
-    commonName: 'Faux-corail gris / Gray-banded Kingsnake',
+    commonNameKey: 'species.lampropeltis-alterna',
     category: 'snake',
     citesAnnex: 'D',
     morphs: ['Normal', 'Albino T-', 'Blair\'s', 'Alterna'],

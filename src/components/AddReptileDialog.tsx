@@ -267,7 +267,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                             >
                               <span>
                                 {field.value 
-                                  ? getAllSpecies().find(s => s.id === field.value)?.commonName 
+                                  ? t(getAllSpecies().find(s => s.id === field.value)?.commonNameKey || '')
                                   : t("reptile.selectSpecies")}
                               </span>
                             </Button>
@@ -281,11 +281,11 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                               {filteredSpecies.map((species) => (
                                 <CommandItem
                                   key={species.id}
-                                  value={`${species.commonName} ${species.scientificName}`}
+                                  value={`${t(species.commonNameKey)} ${species.scientificName}`}
                                   onSelect={() => field.onChange(species.id)}
                                 >
                                   <div className="flex flex-col">
-                                    <span className="font-medium">{species.commonName}</span>
+                                    <span className="font-medium">{t(species.commonNameKey)}</span>
                                     <span className="text-xs text-muted-foreground italic">{species.scientificName}</span>
                                   </div>
                                 </CommandItem>
