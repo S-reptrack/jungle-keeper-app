@@ -1,10 +1,11 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
-const isLiveReload = process.env.CAP_SERVER_URL || process.env.NODE_ENV === 'development';
+// Only enable live reload if CAP_SERVER_URL is explicitly provided
+const isLiveReload = process.env.CAP_SERVER_URL;
 
-const server = typeof isLiveReload === 'string' || isLiveReload
+const server = typeof isLiveReload === 'string' && isLiveReload.length > 0
   ? {
-      url: (typeof isLiveReload === 'string' ? isLiveReload : 'https://6bcbc9d4-57cb-49d8-b821-4dcda0936c9c.lovableproject.com?forceHideBadge=true'),
+      url: isLiveReload,
       cleartext: true,
     }
   : {
