@@ -13,7 +13,7 @@ const server = typeof isLiveReload === 'string' && isLiveReload.length > 0
     };
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.junglekeeperapp',
+  appId: 'com.franckbertin.sreptrack',
   appName: 'S-reptrack',
   webDir: 'dist',
   server,
