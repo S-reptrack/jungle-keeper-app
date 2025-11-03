@@ -169,31 +169,35 @@ const ReptileDetail = () => {
                     className="w-full h-full object-cover"
                   />
                 )}
-                <div className="absolute top-3 right-3 flex gap-2">
-                  <button 
-                    className="p-2 bg-card/90 backdrop-blur-sm rounded-lg hover:bg-accent transition-colors"
-                    onClick={() => setImageUploadOpen(true)}
-                  >
-                    <Camera className="w-5 h-5 text-foreground" />
-                  </button>
-                  <button 
-                    className="p-2 bg-card/90 backdrop-blur-sm rounded-lg hover:bg-accent transition-colors"
-                    onClick={() => setQrDialogOpen(true)}
-                  >
-                    <QrCode className="w-5 h-5 text-foreground" />
-                  </button>
-                </div>
-                {!reptile.image_url && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Button
-                      variant="secondary"
-                      onClick={() => setImageUploadOpen(true)}
-                      className="gap-2"
-                    >
-                      <Camera className="w-4 h-4" />
-                      Ajouter une photo
-                    </Button>
-                  </div>
+                {reptile.status === "active" && (
+                  <>
+                    <div className="absolute top-3 right-3 flex gap-2">
+                      <button 
+                        className="p-2 bg-card/90 backdrop-blur-sm rounded-lg hover:bg-accent transition-colors"
+                        onClick={() => setImageUploadOpen(true)}
+                      >
+                        <Camera className="w-5 h-5 text-foreground" />
+                      </button>
+                      <button 
+                        className="p-2 bg-card/90 backdrop-blur-sm rounded-lg hover:bg-accent transition-colors"
+                        onClick={() => setQrDialogOpen(true)}
+                      >
+                        <QrCode className="w-5 h-5 text-foreground" />
+                      </button>
+                    </div>
+                    {!reptile.image_url && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Button
+                          variant="secondary"
+                          onClick={() => setImageUploadOpen(true)}
+                          className="gap-2"
+                        >
+                          <Camera className="w-4 h-4" />
+                          Ajouter une photo
+                        </Button>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
               <CardHeader>
@@ -259,7 +263,7 @@ const ReptileDetail = () => {
                   </span>
                   <span className="font-medium text-foreground">{reptile.weight}g</span>
                 </div>
-                {isCurrentOwner && (
+                {isCurrentOwner && reptile.status === "active" && (
                   <div className="mt-4 flex gap-2">
                     <EditReptileDialog
                       reptileId={reptile.id}
@@ -278,83 +282,137 @@ const ReptileDetail = () => {
                     </Button>
                   </div>
                 )}
+                {isCurrentOwner && reptile.status === "sold" && (
+                  <div className="mt-4">
+                    <Button 
+                      variant="outline" 
+                      className="w-full"
+                      onClick={() => setTransferDialogOpen(true)}
+                    >
+                      <Send className="w-4 h-4 mr-2" />
+                      {t("transfer.transferAnimal")}
+                    </Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
 
           {/* Contenu principal avec onglets */}
           <div className="lg:col-span-2">
-            <Tabs defaultValue="overview" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="overview" className="flex items-center justify-center gap-1.5 px-2">
-                  <Eye className="w-4 h-4 shrink-0" />
-                  <span className="truncate text-xs md:text-sm">{t("reptile.tabs.overview")}</span>
-                </TabsTrigger>
-                <TabsTrigger value="feeding" className="flex items-center justify-center gap-1.5 px-2">
-                  <Utensils className="w-4 h-4 shrink-0" />
-                  <span className="truncate text-xs md:text-sm">{t("reptile.tabs.feeding")}</span>
-                </TabsTrigger>
-                <TabsTrigger value="reproduction" className="flex items-center justify-center gap-1.5 px-2">
-                  <Heart className="w-4 h-4 shrink-0" />
-                  <span className="truncate text-xs md:text-sm">{t("reptile.tabs.reproduction")}</span>
-                </TabsTrigger>
-                <TabsTrigger value="health" className="flex items-center justify-center gap-1.5 px-2">
-                  <Activity className="w-4 h-4 shrink-0" />
-                  <span className="truncate text-xs md:text-sm">{t("reptile.tabs.health")}</span>
-                </TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="overview" className="space-y-4">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-                    <CardTitle>{t("reptile.generalInfo")}</CardTitle>
-                    {isCurrentOwner && (
-                      <EditReptileDialog
-                        reptileId={reptile.id}
-                        currentBirthDate={reptile.birth_date}
-                        currentPurchaseDate={reptile.purchase_date}
-                        currentWeight={reptile.weight}
-                        onUpdate={fetchReptile}
-                      />
-                    )}
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-sm text-muted-foreground">{t("reptile.birthDate")}</p>
-                        <p className="font-medium">{formatDate(reptile.birth_date)}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">{t("reptile.purchaseDate")}</p>
-                        <p className="font-medium">{formatDate(reptile.purchase_date)}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">{t("reptile.category")}</p>
-                        <p className="font-medium">
-                          {reptile.category === "snake" ? t("reptile.snake") : 
-                           reptile.category === "lizard" ? t("reptile.lizard") : 
-                           t("reptile.turtle")}
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+            {reptile.status === "active" ? (
+              <Tabs defaultValue="overview" className="w-full">
+                <TabsList className="grid w-full grid-cols-4">
+                  <TabsTrigger value="overview" className="flex items-center justify-center gap-1.5 px-2">
+                    <Eye className="w-4 h-4 shrink-0" />
+                    <span className="truncate text-xs md:text-sm">{t("reptile.tabs.overview")}</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="feeding" className="flex items-center justify-center gap-1.5 px-2">
+                    <Utensils className="w-4 h-4 shrink-0" />
+                    <span className="truncate text-xs md:text-sm">{t("reptile.tabs.feeding")}</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="reproduction" className="flex items-center justify-center gap-1.5 px-2">
+                    <Heart className="w-4 h-4 shrink-0" />
+                    <span className="truncate text-xs md:text-sm">{t("reptile.tabs.reproduction")}</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="health" className="flex items-center justify-center gap-1.5 px-2">
+                    <Activity className="w-4 h-4 shrink-0" />
+                    <span className="truncate text-xs md:text-sm">{t("reptile.tabs.health")}</span>
+                  </TabsTrigger>
+                </TabsList>
                 
-                <WeightChart reptileId={reptile.id} />
-              </TabsContent>
-              
-              <TabsContent value="feeding">
-                <FeedingTab reptileId={reptile.id} readOnly={isPreviousOwner || false} />
-              </TabsContent>
-              
-              <TabsContent value="reproduction">
-                <ReproductionTab reptileId={reptile.id} reptileSex={reptile.sex} reptileSpecies={reptile.species} readOnly={isPreviousOwner || false} />
-              </TabsContent>
-              
-              <TabsContent value="health" className="space-y-4">
-                <HealthTab reptileId={reptile.id} reptileStatus={reptile.status} readOnly={isPreviousOwner || false} />
-              </TabsContent>
-            </Tabs>
+                <TabsContent value="overview" className="space-y-4">
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+                      <CardTitle>{t("reptile.generalInfo")}</CardTitle>
+                      {isCurrentOwner && (
+                        <EditReptileDialog
+                          reptileId={reptile.id}
+                          currentBirthDate={reptile.birth_date}
+                          currentPurchaseDate={reptile.purchase_date}
+                          currentWeight={reptile.weight}
+                          onUpdate={fetchReptile}
+                        />
+                      )}
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-sm text-muted-foreground">{t("reptile.birthDate")}</p>
+                          <p className="font-medium">{formatDate(reptile.birth_date)}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground">{t("reptile.purchaseDate")}</p>
+                          <p className="font-medium">{formatDate(reptile.purchase_date)}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground">{t("reptile.category")}</p>
+                          <p className="font-medium">
+                            {reptile.category === "snake" ? t("reptile.snake") : 
+                             reptile.category === "lizard" ? t("reptile.lizard") : 
+                             t("reptile.turtle")}
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <WeightChart reptileId={reptile.id} />
+                </TabsContent>
+                
+                <TabsContent value="feeding">
+                  <FeedingTab reptileId={reptile.id} readOnly={isPreviousOwner || false} />
+                </TabsContent>
+                
+                <TabsContent value="reproduction">
+                  <ReproductionTab reptileId={reptile.id} reptileSex={reptile.sex} reptileSpecies={reptile.species} readOnly={isPreviousOwner || false} />
+                </TabsContent>
+                
+                <TabsContent value="health" className="space-y-4">
+                  <HealthTab reptileId={reptile.id} reptileStatus={reptile.status} readOnly={isPreviousOwner || false} />
+                </TabsContent>
+              </Tabs>
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t("reptile.generalInfo")}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-muted-foreground">{t("reptile.birthDate")}</p>
+                      <p className="font-medium">{formatDate(reptile.birth_date)}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">{t("reptile.purchaseDate")}</p>
+                      <p className="font-medium">{formatDate(reptile.purchase_date)}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">{t("reptile.category")}</p>
+                      <p className="font-medium">
+                        {reptile.category === "snake" ? t("reptile.snake") : 
+                         reptile.category === "lizard" ? t("reptile.lizard") : 
+                         t("reptile.turtle")}
+                      </p>
+                    </div>
+                  </div>
+                  {reptile.status === "sold" && (
+                    <div className="mt-6 p-4 bg-muted rounded-md">
+                      <p className="text-sm text-muted-foreground text-center">
+                        Cet animal a été vendu. Seul le transfert est possible pour transmettre l'historique au nouveau propriétaire.
+                      </p>
+                    </div>
+                  )}
+                  {reptile.status === "deceased" && (
+                    <div className="mt-6 p-4 bg-muted rounded-md">
+                      <p className="text-sm text-muted-foreground text-center">
+                        Cet animal est décédé. Aucune action n'est possible.
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
 
