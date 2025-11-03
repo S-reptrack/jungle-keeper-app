@@ -78,7 +78,7 @@ const observationSchema = z.object({
     required_error: "Date requise",
   }),
   observation: z.string().optional(),
-  action: z.enum(["introduction", "mating", "separation", "laying", "other"], {
+  action: z.enum(["introduction", "mating", "separation", "prelaying_shed", "laying", "other"], {
     required_error: "Action requise",
   }),
   incubationDays: z.number().optional(),
@@ -305,6 +305,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
                             <SelectItem value="introduction">{t("reptile.reproduction.actions.introduction")}</SelectItem>
                             <SelectItem value="mating">{t("reptile.reproduction.actions.mating")}</SelectItem>
                             <SelectItem value="separation">{t("reptile.reproduction.actions.separation")}</SelectItem>
+                            <SelectItem value="prelaying_shed">{t("reptile.reproduction.actions.prelaying_shed")}</SelectItem>
                             <SelectItem value="laying">{t("reptile.reproduction.actions.laying")}</SelectItem>
                             <SelectItem value="other">{t("reptile.reproduction.actions.other")}</SelectItem>
                           </SelectContent>
