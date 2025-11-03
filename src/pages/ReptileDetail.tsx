@@ -150,7 +150,7 @@ const ReptileDetail = () => {
       <main className="max-w-7xl mx-auto px-4 py-8 mt-16">
         <Button
           variant="ghost"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/reptiles")}
           className="mb-6"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
