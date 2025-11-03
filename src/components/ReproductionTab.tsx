@@ -77,7 +77,7 @@ const observationSchema = z.object({
   date: z.date({
     required_error: "Date requise",
   }),
-  observation: z.string().min(10, "L'observation doit contenir au moins 10 caractères"),
+  observation: z.string().optional(),
   action: z.enum(["introduction", "mating", "separation", "laying", "other"], {
     required_error: "Action requise",
   }),
@@ -195,7 +195,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
         user_id: user.id,
         action: data.action,
         observation_date: data.date.toISOString().split('T')[0],
-        notes: data.observation,
+        notes: data.observation || null,
         incubation_days: data.action === "laying" ? data.incubationDays : null,
         expected_hatch_date: expectedHatchDate ? expectedHatchDate.toISOString().split('T')[0] : null,
         notification_days_before: data.action === "laying" ? data.notificationDaysBefore : null,
