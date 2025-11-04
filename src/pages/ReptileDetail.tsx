@@ -49,6 +49,7 @@ const ReptileDetail = () => {
   const [imageUploadOpen, setImageUploadOpen] = useState(false);
   const [transferDialogOpen, setTransferDialogOpen] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [daysUntilHatch, setDaysUntilHatch] = useState<number | null>(null);
   const { signedUrl: imageSignedUrl, loading: imageLoading } = useSignedImageUrl(reptile?.image_url);
 
   // Check if current user is the previous owner (read-only access)
@@ -85,6 +86,31 @@ const ReptileDetail = () => {
       }
 
       setReptile(data);
+
+      // Fetch reproduction observations to check for expected hatch dates
+      const { data: observations } = await supabase
+        .from("reproduction_observations")
+        .select("expected_hatch_date")
+        .eq("reptile_id", id)
+        .not("expected_hatch_date", "is", null)
+        .order("expected_hatch_date", { ascending: true });
+
+      if (observations && observations.length > 0) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        for (const obs of observations) {
+          const hatchDate = new Date(obs.expected_hatch_date);
+          hatchDate.setHours(0, 0, 0, 0);
+          const diffTime = hatchDate.getTime() - today.getTime();
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          
+          if (diffDays >= 0) {
+            setDaysUntilHatch(diffDays);
+            break;
+          }
+        }
+      }
     } catch (error) {
       console.error("Error fetching reptile:", error);
       toast.error("Erreur lors du chargement du reptile");
@@ -168,6 +194,13 @@ const ReptileDetail = () => {
                     alt={reptile.name}
                     className="w-full h-full object-cover"
                   />
+                )}
+                {daysUntilHatch !== null && daysUntilHatch !== undefined && (
+                  <div className="absolute top-3 left-3">
+                    <Badge className="bg-orange-500 hover:bg-orange-600 text-white border-0 text-sm font-bold px-3 py-1.5 shadow-lg animate-pulse">
+                      🥚 Éclosion dans {daysUntilHatch}j
+                    </Badge>
+                  </div>
                 )}
                 {reptile.status === "active" && (
                   <>

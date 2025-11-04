@@ -14,9 +14,10 @@ interface ReptileCardProps {
   weight: string;
   lastFed: string;
   image?: string | null;
+  daysUntilHatch?: number | null;
 }
 
-const ReptileCard = ({ id, name, species, age, weight, lastFed, image }: ReptileCardProps) => {
+const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntilHatch }: ReptileCardProps) => {
   const navigate = useNavigate();
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
   const { signedUrl, loading } = useSignedImageUrl(image);
@@ -37,6 +38,13 @@ const ReptileCard = ({ id, name, species, age, weight, lastFed, image }: Reptile
             alt={name}
             className="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-500"
           />
+        )}
+        {daysUntilHatch !== undefined && daysUntilHatch !== null && (
+          <div className="absolute top-3 left-3">
+            <Badge className="bg-orange-500 hover:bg-orange-600 text-white border-0 text-sm font-bold px-3 py-1.5 shadow-lg animate-pulse">
+              🥚 Éclosion dans {daysUntilHatch}j
+            </Badge>
+          </div>
         )}
         <div className="absolute top-3 right-3">
           <button 

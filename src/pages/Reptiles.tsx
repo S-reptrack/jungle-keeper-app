@@ -21,6 +21,7 @@ const Reptiles = () => {
   const [loading, setLoading] = useState(true);
   const [lastFeedings, setLastFeedings] = useState<Record<string, string>>({});
   const [showPrintDialog, setShowPrintDialog] = useState(false);
+  const [daysUntilHatch, setDaysUntilHatch] = useState<Record<string, number | null>>({});
 
   useEffect(() => {
     if (user) {
@@ -113,8 +114,8 @@ const Reptiles = () => {
         return `Il y a ${diffDays} jours`;
       };
 
-      const feedingsMap: Record<string, string> = {};
       const allReptiles = [...reptileData, ...(archivedData || []), ...(transferredData || [])];
+      const feedingsMap: Record<string, string> = {};
       for (const reptile of allReptiles) {
         const { data: feedingData } = await supabase
           .from("feedings")
@@ -132,6 +133,37 @@ const Reptiles = () => {
       }
 
       setLastFeedings(feedingsMap);
+
+      // Calculate days until hatch for reproduction observations
+      const hatchMap: Record<string, number | null> = {};
+      for (const reptile of allReptiles) {
+        const { data: observations } = await supabase
+          .from("reproduction_observations")
+          .select("expected_hatch_date")
+          .eq("reptile_id", reptile.id)
+          .not("expected_hatch_date", "is", null)
+          .order("expected_hatch_date", { ascending: true });
+
+        if (observations && observations.length > 0) {
+          // Find the closest upcoming hatch date
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          
+          for (const obs of observations) {
+            const hatchDate = new Date(obs.expected_hatch_date);
+            hatchDate.setHours(0, 0, 0, 0);
+            const diffTime = hatchDate.getTime() - today.getTime();
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            // Only show if hatch date is in the future (0 or positive days)
+            if (diffDays >= 0) {
+              hatchMap[reptile.id] = diffDays;
+              break;
+            }
+          }
+        }
+      }
+      setDaysUntilHatch(hatchMap);
     } catch (error) {
       console.error("Error fetching reptiles:", error);
     } finally {
@@ -216,6 +248,7 @@ const Reptiles = () => {
                       weight={`${reptile.weight || 0}g`}
                       lastFed={lastFeedings[reptile.id] || "Jamais"}
                       image={reptile.image_url}
+                      daysUntilHatch={daysUntilHatch[reptile.id]}
                     />
                   ))}
                 </div>
@@ -239,6 +272,7 @@ const Reptiles = () => {
                         weight={`${reptile.weight || 0}g`}
                         lastFed={lastFeedings[reptile.id] || "Jamais"}
                         image={reptile.image_url}
+                        daysUntilHatch={daysUntilHatch[reptile.id]}
                       />
                       <Badge 
                         variant="secondary" 
@@ -270,6 +304,7 @@ const Reptiles = () => {
                         weight={`${reptile.weight || 0}g`}
                         lastFed={lastFeedings[reptile.id] || "Jamais"}
                         image={reptile.image_url}
+                        daysUntilHatch={daysUntilHatch[reptile.id]}
                       />
                       <Badge 
                         variant="outline" 
