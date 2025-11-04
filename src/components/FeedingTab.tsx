@@ -14,7 +14,7 @@ import AddRodentDialog from "./AddRodentDialog";
 import AddFeedingDialog from "./AddFeedingDialog";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { Trash2 } from "lucide-react";
+import { Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
@@ -47,6 +47,8 @@ const FeedingTab = ({ reptileId, readOnly = false }: FeedingTabProps) => {
   const [rodents, setRodents] = useState<Rodent[]>([]);
   const [feedings, setFeedings] = useState<Feeding[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const FEEDINGS_PER_PAGE = 6;
 
   const fetchRodents = async () => {
     try {
@@ -113,6 +115,13 @@ const FeedingTab = ({ reptileId, readOnly = false }: FeedingTabProps) => {
       if (error) throw error;
       
       toast.success("Repas supprimé");
+      
+      // Reset to first page if current page becomes empty after deletion
+      const totalPages = Math.ceil((feedings.length - 1) / FEEDINGS_PER_PAGE);
+      if (currentPage > totalPages && totalPages > 0) {
+        setCurrentPage(totalPages);
+      }
+      
       fetchFeedings();
     } catch (error) {
       console.error("Error deleting feeding:", error);
@@ -164,11 +173,31 @@ const FeedingTab = ({ reptileId, readOnly = false }: FeedingTabProps) => {
     { stage: t("feeding.rabbits.extraLarge"), weight: "1200g+" },
   ];
 
+  // Pagination calculations
+  const totalPages = Math.ceil(feedings.length / FEEDINGS_PER_PAGE);
+  const startIndex = (currentPage - 1) * FEEDINGS_PER_PAGE;
+  const endIndex = startIndex + FEEDINGS_PER_PAGE;
+  const paginatedFeedings = feedings.slice(startIndex, endIndex);
+
+  const handlePreviousPage = () => {
+    setCurrentPage((prev) => Math.max(1, prev - 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(totalPages, prev + 1));
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Historique des repas</h2>
-        {!readOnly && <AddFeedingDialog reptileId={reptileId} onFeedingAdded={fetchFeedings} />}
+        {!readOnly && <AddFeedingDialog 
+          reptileId={reptileId} 
+          onFeedingAdded={() => {
+            setCurrentPage(1);
+            fetchFeedings();
+          }} 
+        />}
       </div>
 
       {loading ? (
@@ -195,7 +224,7 @@ const FeedingTab = ({ reptileId, readOnly = false }: FeedingTabProps) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {feedings.map((feeding) => (
+                {paginatedFeedings.map((feeding) => (
                   <TableRow key={feeding.id}>
                     <TableCell>
                       {format(new Date(feeding.feeding_date), "dd MMM yyyy", { locale: fr })}
@@ -220,6 +249,33 @@ const FeedingTab = ({ reptileId, readOnly = false }: FeedingTabProps) => {
                 ))}
               </TableBody>
             </Table>
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between px-4 py-4 border-t">
+                <div className="text-sm text-muted-foreground">
+                  Page {currentPage} sur {totalPages} ({feedings.length} repas au total)
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handlePreviousPage}
+                    disabled={currentPage === 1}
+                  >
+                    <ChevronLeft className="w-4 h-4 mr-1" />
+                    Précédent
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
+                  >
+                    Suivant
+                    <ChevronRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       ) : (
