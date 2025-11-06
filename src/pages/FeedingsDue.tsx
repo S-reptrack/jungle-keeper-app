@@ -80,10 +80,13 @@ const FeedingsDue = () => {
         });
       }
 
+      // Filter only reptiles with feeding due within 10 days or overdue
+      const filteredList = feedingsDueList.filter(reptile => reptile.days_overdue <= 10);
+      
       // Sort by next feeding date (soonest first)
-      feedingsDueList.sort((a, b) => a.next_feeding_date.getTime() - b.next_feeding_date.getTime());
+      filteredList.sort((a, b) => a.next_feeding_date.getTime() - b.next_feeding_date.getTime());
 
-      setReptiles(feedingsDueList);
+      setReptiles(filteredList);
     } catch (error) {
       console.error("Error fetching feedings due:", error);
     } finally {
@@ -117,8 +120,11 @@ const FeedingsDue = () => {
           <h1 className="text-3xl font-bold text-foreground mb-2">
             Repas à venir
           </h1>
-          <p className="text-muted-foreground">
-            Tous les reptiles avec un intervalle de nourrissage défini
+          <p className="text-muted-foreground mb-2">
+            Reptiles à nourrir dans les 10 prochains jours
+          </p>
+          <p className="text-sm text-muted-foreground italic">
+            ℹ️ Ces dates sont calculées à titre indicatif selon les intervalles de nourrissage définis
           </p>
         </div>
 
@@ -128,58 +134,65 @@ const FeedingsDue = () => {
           </div>
         ) : reptiles.length === 0 ? (
           <div className="text-center py-12 border border-dashed border-border rounded-lg">
-            <p className="text-muted-foreground">Aucun reptile avec intervalle de repas défini</p>
+            <p className="text-muted-foreground">Aucun repas prévu dans les 10 prochains jours</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="space-y-3">
             {reptiles.map((reptile) => (
               <Card
                 key={reptile.id}
-                className="cursor-pointer hover:shadow-lg transition-shadow"
+                className="cursor-pointer hover:shadow-md transition-shadow"
                 onClick={() => navigate(`/reptile/${reptile.id}?tab=feeding`)}
               >
-                <CardContent className="p-6">
-                  {reptile.image_url && (
-                    <img
-                      src={reptile.image_url}
-                      alt={reptile.name}
-                      className="w-full h-48 object-cover rounded-lg mb-4"
-                    />
-                  )}
-                  
-                  <h3 className="text-xl font-semibold text-foreground mb-2">
-                    {reptile.name}
-                  </h3>
-                  
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {reptile.species}
-                  </p>
-
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Intervalle:</span>
-                      <span className="font-medium">{reptile.feeding_interval_days} jours</span>
-                    </div>
-
-                    {reptile.last_feeding_date && (
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Dernier repas:</span>
-                        <span className="font-medium">{formatDate(reptile.last_feeding_date)}</span>
-                      </div>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-4">
+                    {reptile.image_url && (
+                      <img
+                        src={reptile.image_url}
+                        alt={reptile.name}
+                        className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
+                      />
                     )}
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-lg font-semibold text-foreground truncate">
+                            {reptile.name}
+                          </h3>
+                          <p className="text-sm text-muted-foreground truncate">
+                            {reptile.species}
+                          </p>
+                        </div>
+                        
+                        <div>
+                          {reptile.days_overdue < 0 ? (
+                            <Badge variant="destructive">
+                              En retard de {Math.abs(reptile.days_overdue)}j
+                            </Badge>
+                          ) : reptile.days_overdue === 0 ? (
+                            <Badge variant="default">Aujourd'hui</Badge>
+                          ) : (
+                            <Badge variant="secondary">
+                              Dans {reptile.days_overdue}j
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
 
-                    <div className="mt-4">
-                      {reptile.days_overdue < 0 ? (
-                        <Badge variant="destructive">
-                          En retard de {Math.abs(reptile.days_overdue)} jour{Math.abs(reptile.days_overdue) > 1 ? "s" : ""}
-                        </Badge>
-                      ) : reptile.days_overdue === 0 ? (
-                        <Badge variant="default">À nourrir aujourd'hui</Badge>
-                      ) : (
-                        <Badge variant="secondary">
-                          Dans {reptile.days_overdue} jour{reptile.days_overdue > 1 ? "s" : ""}
-                        </Badge>
-                      )}
+                      <div className="flex flex-wrap gap-4 text-sm">
+                        <div className="flex items-center gap-1">
+                          <span className="text-muted-foreground">Intervalle:</span>
+                          <span className="font-medium">{reptile.feeding_interval_days} jours</span>
+                        </div>
+
+                        {reptile.last_feeding_date && (
+                          <div className="flex items-center gap-1">
+                            <span className="text-muted-foreground">Dernier repas:</span>
+                            <span className="font-medium">{formatDate(reptile.last_feeding_date)}</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </CardContent>
