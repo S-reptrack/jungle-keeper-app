@@ -180,18 +180,43 @@ const FeedingsDue = () => {
                         </div>
                       </div>
 
-                      <div className="flex flex-wrap gap-4 text-sm">
-                        <div className="flex items-center gap-1">
-                          <span className="text-muted-foreground">Intervalle:</span>
-                          <span className="font-medium">{reptile.feeding_interval_days} jours</span>
-                        </div>
-
-                        {reptile.last_feeding_date && (
+                      <div className="space-y-2">
+                        <div className="flex flex-wrap gap-4 text-sm">
                           <div className="flex items-center gap-1">
-                            <span className="text-muted-foreground">Dernier repas:</span>
-                            <span className="font-medium">{formatDate(reptile.last_feeding_date)}</span>
+                            <span className="text-muted-foreground">Intervalle:</span>
+                            <span className="font-medium">{reptile.feeding_interval_days} jours</span>
                           </div>
-                        )}
+
+                          {reptile.last_feeding_date && (
+                            <div className="flex items-center gap-1">
+                              <span className="text-muted-foreground">Dernier repas:</span>
+                              <span className="font-medium">{formatDate(reptile.last_feeding_date)}</span>
+                            </div>
+                          )}
+                        </div>
+                        
+                        {/* Debug info */}
+                        <div className="text-xs bg-muted/50 p-2 rounded space-y-1">
+                          <div className="font-mono">
+                            <span className="text-muted-foreground">Debug:</span>
+                          </div>
+                          <div className="font-mono">
+                            Prochain repas: {reptile.next_feeding_date.toLocaleDateString('fr-FR')}
+                          </div>
+                          <div className="font-mono">
+                            Jours calculés (days_overdue): {reptile.days_overdue}
+                          </div>
+                          <div className="font-mono">
+                            {reptile.last_feeding_date ? (
+                              <>
+                                Dernier repas: {new Date(reptile.last_feeding_date).toLocaleDateString('fr-FR')}
+                                {' '}+ {reptile.feeding_interval_days}j = {reptile.next_feeding_date.toLocaleDateString('fr-FR')}
+                              </>
+                            ) : (
+                              'Aucun repas enregistré (considéré comme dû aujourd\'hui)'
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
