@@ -246,7 +246,7 @@ const Index = () => {
             onClick={() => navigate("/health-reptiles")}
           />
           <StatsCard
-            title={t("stats.activeBreeding")}
+            title="Reproduction et Éclosion"
             value={stats.reproduction.toString()}
             icon={TrendingUp}
             onClick={() => navigate("/reproduction-reptiles")}
