@@ -211,6 +211,9 @@ const EditReptileDialog = ({
                             field.onChange(date);
                             setBirthDateInput(formatDateToInput(date));
                           }}
+                          disabled={(date) =>
+                            date > new Date() || date < new Date("1900-01-01")
+                          }
                           initialFocus
                           className="pointer-events-auto"
                         />
@@ -267,6 +270,9 @@ const EditReptileDialog = ({
                             field.onChange(date);
                             setPurchaseDateInput(formatDateToInput(date));
                           }}
+                          disabled={(date) =>
+                            date > new Date() || date < new Date("1900-01-01")
+                          }
                           initialFocus
                           className="pointer-events-auto"
                         />

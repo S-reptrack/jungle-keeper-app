@@ -144,6 +144,7 @@ const AddHealthRecordDialog = ({ reptileId, onRecordAdded }: AddHealthRecordDial
               type="date"
               value={diagnosisDate}
               onChange={(e) => setDiagnosisDate(e.target.value)}
+              max={new Date().toISOString().split('T')[0]}
               required
             />
           </div>
