@@ -6,6 +6,7 @@ import Navigation from "@/components/Navigation";
 import StatsCard from "@/components/StatsCard";
 import ReptileCard from "@/components/ReptileCard";
 import AddReptileDialog from "@/components/AddReptileDialog";
+import { HatchingCard } from "@/components/HatchingCard";
 import jungleHero from "@/assets/jungle-hero.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -22,6 +23,7 @@ const Index = () => {
     reproduction: 0,
   });
   const [lastFeedings, setLastFeedings] = useState<Record<string, string>>({});
+  const [upcomingHatchings, setUpcomingHatchings] = useState<any[]>([]);
 
   useEffect(() => {
     if (user) {
@@ -120,6 +122,47 @@ const Index = () => {
       const reproduction = uniqueReproductionReptiles.size;
       
       setStats({ total, healthIssues, reproduction });
+
+      // Fetch upcoming hatchings
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      const { data: hatchingData, error: hatchingError } = await supabase
+        .from("reproduction_observations")
+        .select("reptile_id, expected_hatch_date")
+        .not("expected_hatch_date", "is", null)
+        .gte("expected_hatch_date", today.toISOString())
+        .order("expected_hatch_date", { ascending: true })
+        .limit(6);
+
+      if (hatchingError) throw hatchingError;
+
+      // Get reptile details for each hatching
+      const hatchingsWithDetails = await Promise.all(
+        (hatchingData || []).map(async (hatching) => {
+          const { data: reptileData } = await supabase
+            .from("reptiles")
+            .select("id, name, species, image_url, status")
+            .eq("id", hatching.reptile_id)
+            .eq("status", "active")
+            .single();
+
+          if (!reptileData) return null;
+
+          const hatchDate = new Date(hatching.expected_hatch_date);
+          hatchDate.setHours(0, 0, 0, 0);
+          const diffTime = hatchDate.getTime() - today.getTime();
+          const daysUntilHatch = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+          return {
+            ...reptileData,
+            expectedHatchDate: hatching.expected_hatch_date,
+            daysUntilHatch,
+          };
+        })
+      );
+
+      setUpcomingHatchings(hatchingsWithDetails.filter(Boolean));
     } catch (error) {
       console.error("Error fetching reptiles:", error);
     }
@@ -209,6 +252,28 @@ const Index = () => {
             onClick={() => navigate("/reproduction-reptiles")}
           />
         </div>
+
+        {/* Upcoming Hatchings */}
+        {upcomingHatchings.length > 0 && (
+          <div className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-foreground">Éclosions en cours</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {upcomingHatchings.map((hatching) => (
+                <HatchingCard
+                  key={hatching.id}
+                  reptileId={hatching.id}
+                  reptileName={hatching.name}
+                  reptileSpecies={hatching.species}
+                  expectedHatchDate={hatching.expectedHatchDate}
+                  daysUntilHatch={hatching.daysUntilHatch}
+                  image={hatching.image_url}
+                />
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Recent Reptiles */}
         <div>
