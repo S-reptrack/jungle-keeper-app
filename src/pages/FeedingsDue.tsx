@@ -65,22 +65,23 @@ const FeedingsDue = () => {
           nextFeedingDate = today;
         }
 
-        // Include all reptiles with intervals, showing when they're due
-        if (nextFeedingDate <= today) {
-          const daysOverdue = Math.floor((today.getTime() - nextFeedingDate.getTime()) / (1000 * 60 * 60 * 24));
-          
-          feedingsDueList.push({
-            id: reptile.id,
-            name: reptile.name,
-            species: reptile.species,
-            image_url: reptile.image_url,
-            feeding_interval_days: reptile.feeding_interval_days || 0,
-            last_feeding_date: lastFeedingDate,
-            next_feeding_date: nextFeedingDate,
-            days_overdue: daysOverdue,
-          });
-        }
+        // Calculate days difference (negative = overdue, 0 = today, positive = upcoming)
+        const daysDifference = Math.floor((nextFeedingDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+        
+        feedingsDueList.push({
+          id: reptile.id,
+          name: reptile.name,
+          species: reptile.species,
+          image_url: reptile.image_url,
+          feeding_interval_days: reptile.feeding_interval_days || 0,
+          last_feeding_date: lastFeedingDate,
+          next_feeding_date: nextFeedingDate,
+          days_overdue: daysDifference,
+        });
       }
+
+      // Sort by next feeding date (soonest first)
+      feedingsDueList.sort((a, b) => a.next_feeding_date.getTime() - b.next_feeding_date.getTime());
 
       setReptiles(feedingsDueList);
     } catch (error) {
@@ -117,7 +118,7 @@ const FeedingsDue = () => {
             Repas à venir
           </h1>
           <p className="text-muted-foreground">
-            Reptiles avec un intervalle de nourrissage défini dont le repas est dû
+            Tous les reptiles avec un intervalle de nourrissage défini
           </p>
         </div>
 
@@ -127,7 +128,7 @@ const FeedingsDue = () => {
           </div>
         ) : reptiles.length === 0 ? (
           <div className="text-center py-12 border border-dashed border-border rounded-lg">
-            <p className="text-muted-foreground">Aucun repas en retard pour le moment</p>
+            <p className="text-muted-foreground">Aucun reptile avec intervalle de repas défini</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -168,11 +169,15 @@ const FeedingsDue = () => {
                     )}
 
                     <div className="mt-4">
-                      {reptile.days_overdue === 0 ? (
+                      {reptile.days_overdue < 0 ? (
+                        <Badge variant="destructive">
+                          En retard de {Math.abs(reptile.days_overdue)} jour{Math.abs(reptile.days_overdue) > 1 ? "s" : ""}
+                        </Badge>
+                      ) : reptile.days_overdue === 0 ? (
                         <Badge variant="default">À nourrir aujourd'hui</Badge>
                       ) : (
-                        <Badge variant="destructive">
-                          En retard de {reptile.days_overdue} jour{reptile.days_overdue > 1 ? "s" : ""}
+                        <Badge variant="secondary">
+                          Dans {reptile.days_overdue} jour{reptile.days_overdue > 1 ? "s" : ""}
                         </Badge>
                       )}
                     </div>
