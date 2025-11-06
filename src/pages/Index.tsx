@@ -122,14 +122,46 @@ const Index = () => {
       const uniqueReproductionReptiles = new Set(reproductionData?.map(r => r.reptile_id) || []);
       const reproduction = uniqueReproductionReptiles.size;
       
-      // Calculate feedings due - count all reptiles with feeding interval defined
-      const { count: feedingsDueCount } = await supabase
+      // Calculate feedings due - count reptiles to feed within 10 days
+      const { data: reptilesWithInterval } = await supabase
         .from("reptiles")
-        .select("*", { count: "exact", head: true })
+        .select("id, feeding_interval_days")
         .eq("status", "active")
         .not("feeding_interval_days", "is", null);
       
-      const feedingsDue = feedingsDueCount || 0;
+      let feedingsDue = 0;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      for (const reptile of reptilesWithInterval || []) {
+        const { data: lastFeeding } = await supabase
+          .from("feedings")
+          .select("feeding_date")
+          .eq("reptile_id", reptile.id)
+          .order("feeding_date", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        
+        let nextFeedingDate: Date;
+        
+        if (lastFeeding) {
+          const lastFeedDate = new Date(lastFeeding.feeding_date);
+          lastFeedDate.setHours(0, 0, 0, 0);
+          nextFeedingDate = new Date(lastFeedDate);
+          nextFeedingDate.setDate(nextFeedingDate.getDate() + (reptile.feeding_interval_days || 0));
+        } else {
+          // No feeding recorded yet, consider as due today
+          nextFeedingDate = today;
+        }
+        
+        // Calculate days difference (negative = overdue, 0 = today, positive = upcoming)
+        const daysDifference = Math.floor((nextFeedingDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+        
+        // Count only if feeding is due within 10 days or overdue
+        if (daysDifference <= 10) {
+          feedingsDue++;
+        }
+      }
       
       setStats({ total, healthIssues, reproduction, feedingsDue });
 
