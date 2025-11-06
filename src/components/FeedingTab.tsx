@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
+import FeedingIntervalCard from "./FeedingIntervalCard";
 import {
   Table,
   TableBody,
@@ -189,6 +190,8 @@ const FeedingTab = ({ reptileId, readOnly = false }: FeedingTabProps) => {
 
   return (
     <div className="space-y-6">
+      <FeedingIntervalCard reptileId={reptileId} readOnly={readOnly} />
+      
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Historique des repas</h2>
         {!readOnly && <AddFeedingDialog 
