@@ -13,6 +13,7 @@ import Settings from "./pages/Settings";
 import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 import GDPRConsentDialog from "./components/GDPRConsentDialog";
+import { HatchingNotificationDialog } from "./components/HatchingNotificationDialog";
 import Install from "./pages/Install";
 import Transfers from "./pages/Transfers";
 
@@ -26,6 +27,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <GDPRConsentDialog />
+          <HatchingNotificationDialog />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/reptile/:id" element={<ReptileDetail />} />

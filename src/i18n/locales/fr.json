@@ -35,6 +35,7 @@
     "grams": "grammes",
     "generalInfo": "Informations générales",
     "noHealthRecords": "Aucun enregistrement de santé pour le moment",
+    "viewAll": "Voir tout",
     "tabs": {
       "overview": "Aperçu",
       "feeding": "Repas",
@@ -54,6 +55,11 @@
       "observationPlaceholder": "Décrivez ce que vous avez observé...",
       "noObservations": "Aucune observation pour le moment",
       "observationAdded": "Observation ajoutée avec succès",
+      "hatchingAlerts": "Alertes d'éclosion",
+      "oneHatchingSoon": "Une éclosion est prévue bientôt !",
+      "multipleHatchingSoon": "{{count}} éclosions sont prévues bientôt !",
+      "today": "Aujourd'hui",
+      "expectedDate": "Date prévue",
       "actions": {
         "introduction": "Mise en présence",
         "mating": "Accouplement observé",
@@ -154,7 +160,8 @@
     "search": "Rechercher",
     "language": "Langue",
     "back": "Retour",
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "close": "Fermer"
   },
   "admin": {
     "dashboard": "Administration",
