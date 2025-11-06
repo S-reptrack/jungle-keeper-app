@@ -189,9 +189,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
         expectedHatchDate.setDate(layingDate.getDate() + data.incubationDays);
       }
 
-      const { error } = await supabase.from("reproduction_observations").insert({
-        reptile_id: reptileId,
-        partner_id: data.partnerId,
+      const observationData = {
         user_id: user.id,
         action: data.action,
         observation_date: data.date.toISOString().split('T')[0],
@@ -199,9 +197,25 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
         incubation_days: data.action === "laying" ? data.incubationDays : null,
         expected_hatch_date: expectedHatchDate ? expectedHatchDate.toISOString().split('T')[0] : null,
         notification_days_before: data.action === "laying" ? data.notificationDaysBefore : null,
+      };
+
+      // Create observation for current reptile
+      const { error: error1 } = await supabase.from("reproduction_observations").insert({
+        reptile_id: reptileId,
+        partner_id: data.partnerId,
+        ...observationData,
       });
 
-      if (error) throw error;
+      if (error1) throw error1;
+
+      // Create mirrored observation for partner reptile
+      const { error: error2 } = await supabase.from("reproduction_observations").insert({
+        reptile_id: data.partnerId,
+        partner_id: reptileId,
+        ...observationData,
+      });
+
+      if (error2) throw error2;
 
       toast.success(t("reptile.reproduction.observationAdded"));
       form.reset();
@@ -215,14 +229,26 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: string, observationDate: string, partnerId: string, action: string) => {
     try {
-      const { error } = await supabase
+      // Delete the current observation
+      const { error: error1 } = await supabase
         .from("reproduction_observations")
         .delete()
         .eq("id", id);
 
-      if (error) throw error;
+      if (error1) throw error1;
+
+      // Delete the mirrored observation on partner's record
+      const { error: error2 } = await supabase
+        .from("reproduction_observations")
+        .delete()
+        .eq("reptile_id", partnerId)
+        .eq("partner_id", reptileId)
+        .eq("observation_date", observationDate)
+        .eq("action", action);
+
+      if (error2) throw error2;
 
       toast.success("Observation supprimée");
       fetchData();
@@ -497,7 +523,12 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handleDelete(obs.id)}
+                            onClick={() => handleDelete(
+                              obs.id,
+                              obs.observation_date,
+                              obs.partner_id,
+                              obs.action
+                            )}
                             className="text-destructive hover:text-destructive"
                             disabled={readOnly}
                           >
