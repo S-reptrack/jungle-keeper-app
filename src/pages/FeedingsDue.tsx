@@ -136,7 +136,7 @@ const FeedingsDue = () => {
               <Card
                 key={reptile.id}
                 className="cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => navigate(`/reptiles/${reptile.id}`)}
+                onClick={() => navigate(`/reptile/${reptile.id}?tab=feeding`)}
               >
                 <CardContent className="p-6">
                   {reptile.image_url && (
