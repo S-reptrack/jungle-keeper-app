@@ -331,8 +331,12 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
                             <SelectItem value="introduction">{t("reptile.reproduction.actions.introduction")}</SelectItem>
                             <SelectItem value="mating">{t("reptile.reproduction.actions.mating")}</SelectItem>
                             <SelectItem value="separation">{t("reptile.reproduction.actions.separation")}</SelectItem>
-                            <SelectItem value="prelaying_shed">{t("reptile.reproduction.actions.prelaying_shed")}</SelectItem>
-                            <SelectItem value="laying">{t("reptile.reproduction.actions.laying")}</SelectItem>
+                            {reptileSex === "female" && (
+                              <>
+                                <SelectItem value="prelaying_shed">{t("reptile.reproduction.actions.prelaying_shed")}</SelectItem>
+                                <SelectItem value="laying">{t("reptile.reproduction.actions.laying")}</SelectItem>
+                              </>
+                            )}
                             <SelectItem value="other">{t("reptile.reproduction.actions.other")}</SelectItem>
                           </SelectContent>
                         </Select>
