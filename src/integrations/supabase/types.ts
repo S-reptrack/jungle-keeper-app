@@ -229,6 +229,7 @@ export type Database = {
           birth_date: string | null
           category: string
           created_at: string
+          feeding_interval_days: number | null
           id: string
           image_url: string | null
           morphs: string[] | null
@@ -250,6 +251,7 @@ export type Database = {
           birth_date?: string | null
           category: string
           created_at?: string
+          feeding_interval_days?: number | null
           id?: string
           image_url?: string | null
           morphs?: string[] | null
@@ -271,6 +273,7 @@ export type Database = {
           birth_date?: string | null
           category?: string
           created_at?: string
+          feeding_interval_days?: number | null
           id?: string
           image_url?: string | null
           morphs?: string[] | null
