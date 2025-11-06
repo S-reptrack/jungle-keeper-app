@@ -19,17 +19,30 @@ export function HatchingNotificationDialog() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    // Only show if user hasn't dismissed the notification before
-    const hasSeenNotification = localStorage.getItem("hatching_notification_seen");
+    if (loading || notifications.length === 0) return;
     
-    if (!loading && notifications.length > 0 && !hasSeenNotification) {
+    // Get list of already seen notification IDs
+    const seenNotificationsStr = localStorage.getItem("hatching_notifications_seen");
+    const seenNotifications: string[] = seenNotificationsStr ? JSON.parse(seenNotificationsStr) : [];
+    
+    // Check if there are any new notifications not yet seen
+    const hasNewNotifications = notifications.some(notif => !seenNotifications.includes(notif.id));
+    
+    if (hasNewNotifications) {
       setOpen(true);
     }
   }, [loading, notifications]);
 
   const handleClose = () => {
     setOpen(false);
-    localStorage.setItem("hatching_notification_seen", "true");
+    
+    // Mark all current notifications as seen
+    const seenNotificationsStr = localStorage.getItem("hatching_notifications_seen");
+    const seenNotifications: string[] = seenNotificationsStr ? JSON.parse(seenNotificationsStr) : [];
+    
+    // Add all current notification IDs to the seen list
+    const allSeenIds = [...new Set([...seenNotifications, ...notifications.map(n => n.id)])];
+    localStorage.setItem("hatching_notifications_seen", JSON.stringify(allSeenIds));
   };
 
   const handleViewReptile = (reptileId: string) => {
