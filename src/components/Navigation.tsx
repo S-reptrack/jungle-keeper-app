@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import LanguageSelector from "./LanguageSelector";
-import ThemeToggle from "./ThemeToggle";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useBottomInset } from "@/hooks/useBottomInset";
 import { QRScanner } from "./QRScanner";
@@ -81,7 +80,6 @@ const Navigation = () => {
                   <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
                 </Button>
               )}
-              <ThemeToggle />
             </div>
           </div>
         </div>
