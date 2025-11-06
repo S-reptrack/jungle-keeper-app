@@ -19,6 +19,7 @@ import Transfers from "./pages/Transfers";
 import AllReptilesList from "./pages/AllReptilesList";
 import HealthReptilesList from "./pages/HealthReptilesList";
 import ReproductionReptilesList from "./pages/ReproductionReptilesList";
+import FeedingsDue from "./pages/FeedingsDue";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/all-reptiles" element={<AllReptilesList />} />
             <Route path="/health-reptiles" element={<HealthReptilesList />} />
             <Route path="/reproduction-reptiles" element={<ReproductionReptilesList />} />
+            <Route path="/feedings-due" element={<FeedingsDue />} />
             <Route path="/feeding" element={<Feeding />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/privacy" element={<Privacy />} />

@@ -283,6 +283,7 @@ const Index = () => {
             title={t("stats.feedingsDue")}
             value={stats.feedingsDue.toString()}
             icon={Calendar}
+            onClick={() => navigate("/feedings-due")}
           />
           <StatsCard
             title={t("stats.health")}
