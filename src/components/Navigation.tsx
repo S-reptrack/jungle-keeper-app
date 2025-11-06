@@ -1,4 +1,4 @@
-import { Home, List, Utensils, Settings, QrCode, RefreshCw, Bug } from "lucide-react";
+import { Home, List, Utensils, Settings, QrCode, RefreshCw } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -58,17 +58,6 @@ const Navigation = () => {
               <LanguageSelector />
             </div>
             <div className="flex gap-2">
-              <Button
-                asChild
-                size="icon"
-                variant="ghost"
-                className="h-9 w-9"
-                aria-label="Debug"
-              >
-                <Link to="/debug">
-                  <Bug className="h-4 w-4" />
-                </Link>
-              </Button>
               {isMobile && (
                 <Button
                   onClick={handleRefresh}
