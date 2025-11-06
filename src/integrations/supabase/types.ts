@@ -235,6 +235,7 @@ export type Database = {
           name: string
           previous_owner_id: string | null
           purchase_date: string | null
+          sale_document_url: string | null
           sex: string | null
           species: string
           status: string
@@ -255,6 +256,7 @@ export type Database = {
           name: string
           previous_owner_id?: string | null
           purchase_date?: string | null
+          sale_document_url?: string | null
           sex?: string | null
           species: string
           status?: string
@@ -275,6 +277,7 @@ export type Database = {
           name?: string
           previous_owner_id?: string | null
           purchase_date?: string | null
+          sale_document_url?: string | null
           sex?: string | null
           species?: string
           status?: string
@@ -391,10 +394,7 @@ export type Database = {
         }
         Returns: boolean
       }
-      is_admin: {
-        Args: { check_user_id: string }
-        Returns: boolean
-      }
+      is_admin: { Args: { check_user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "user"
