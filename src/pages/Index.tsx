@@ -21,6 +21,7 @@ const Index = () => {
     total: 0,
     healthIssues: 0,
     reproduction: 0,
+    feedingsDue: 0,
   });
   const [lastFeedings, setLastFeedings] = useState<Record<string, string>>({});
   const [upcomingHatchings, setUpcomingHatchings] = useState<any[]>([]);
@@ -121,11 +122,46 @@ const Index = () => {
       const uniqueReproductionReptiles = new Set(reproductionData?.map(r => r.reptile_id) || []);
       const reproduction = uniqueReproductionReptiles.size;
       
-      setStats({ total, healthIssues, reproduction });
-
-      // Fetch upcoming hatchings
+      // Calculate feedings due
+      const { data: reptilesWithInterval } = await supabase
+        .from("reptiles")
+        .select("id, feeding_interval_days")
+        .eq("status", "active")
+        .not("feeding_interval_days", "is", null);
+      
+      let feedingsDue = 0;
       const today = new Date();
       today.setHours(0, 0, 0, 0);
+      
+      for (const reptile of reptilesWithInterval || []) {
+        const { data: lastFeeding } = await supabase
+          .from("feedings")
+          .select("feeding_date")
+          .eq("reptile_id", reptile.id)
+          .order("feeding_date", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        
+        if (lastFeeding) {
+          const lastFeedDate = new Date(lastFeeding.feeding_date);
+          lastFeedDate.setHours(0, 0, 0, 0);
+          const nextFeedDate = new Date(lastFeedDate);
+          nextFeedDate.setDate(nextFeedDate.getDate() + (reptile.feeding_interval_days || 0));
+          
+          if (nextFeedDate <= today) {
+            feedingsDue++;
+          }
+        } else {
+          // No feeding recorded yet, count as due
+          feedingsDue++;
+        }
+      }
+      
+      setStats({ total, healthIssues, reproduction, feedingsDue });
+
+      // Fetch upcoming hatchings
+      const hatchingToday = new Date();
+      hatchingToday.setHours(0, 0, 0, 0);
       
       const { data: hatchingData, error: hatchingError } = await supabase
         .from("reproduction_observations")
@@ -142,7 +178,7 @@ const Index = () => {
           )
         `)
         .not("expected_hatch_date", "is", null)
-        .gte("expected_hatch_date", today.toISOString())
+        .gte("expected_hatch_date", hatchingToday.toISOString())
         .eq("reptiles.status", "active")
         .eq("reptiles.sex", "female")
         .order("expected_hatch_date", { ascending: true })
@@ -157,7 +193,7 @@ const Index = () => {
           const reptileData = hatching.reptiles;
           const hatchDate = new Date(hatching.expected_hatch_date);
           hatchDate.setHours(0, 0, 0, 0);
-          const diffTime = hatchDate.getTime() - today.getTime();
+          const diffTime = hatchDate.getTime() - hatchingToday.getTime();
           const daysUntilHatch = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
           return {
@@ -245,7 +281,7 @@ const Index = () => {
           />
           <StatsCard
             title={t("stats.feedingsDue")}
-            value="0"
+            value={stats.feedingsDue.toString()}
             icon={Calendar}
           />
           <StatsCard
