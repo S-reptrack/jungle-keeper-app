@@ -70,8 +70,20 @@ export function HatchingNotificationDialog() {
                   </p>
                 </div>
                 <Badge
-                  variant={notif.daysUntilHatch === 0 ? "destructive" : "default"}
-                  className="shrink-0"
+                  variant={
+                    notif.daysUntilHatch === 0 
+                      ? "destructive" 
+                      : notif.daysUntilHatch <= 3 
+                      ? "outline"
+                      : "default"
+                  }
+                  className={
+                    notif.daysUntilHatch === 0 
+                      ? "shrink-0" 
+                      : notif.daysUntilHatch <= 3
+                      ? "shrink-0 border-orange-500 text-orange-500"
+                      : "shrink-0"
+                  }
                 >
                   {notif.daysUntilHatch === 0
                     ? t("reproduction.today")
