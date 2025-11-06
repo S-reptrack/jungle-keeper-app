@@ -159,8 +159,10 @@ const SellTab = ({ reptileId, reptileName }: SellTabProps) => {
                 mode="single"
                 selected={date}
                 onSelect={setDate}
+                disabled={(date) => date > new Date()}
                 initialFocus
                 locale={fr}
+                className="pointer-events-auto"
               />
             </PopoverContent>
           </Popover>

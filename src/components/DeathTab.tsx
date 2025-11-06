@@ -89,8 +89,10 @@ const DeathTab = ({ reptileId, reptileName }: DeathTabProps) => {
                 mode="single"
                 selected={date}
                 onSelect={setDate}
+                disabled={(date) => date > new Date()}
                 initialFocus
                 locale={fr}
+                className="pointer-events-auto"
               />
             </PopoverContent>
           </Popover>
