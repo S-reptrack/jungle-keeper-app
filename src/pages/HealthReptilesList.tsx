@@ -33,36 +33,49 @@ const HealthReptilesList = () => {
 
   const fetchHealthRecords = async () => {
     try {
-      const { data, error } = await supabase
+      // First, fetch health records
+      const { data: healthData, error: healthError } = await supabase
         .from("health_records")
-        .select(`
-          id,
-          reptile_id,
-          condition,
-          diagnosis_date,
-          resolved,
-          reptiles!inner(id, name, species, sex, status)
-        `)
+        .select("id, reptile_id, condition, diagnosis_date, resolved")
         .eq("resolved", false)
-        .eq("reptiles.status", "active")
         .order("diagnosis_date", { ascending: false });
 
-      if (error) throw error;
+      if (healthError) throw healthError;
       
-      console.log("Health records data:", data);
+      if (!healthData || healthData.length === 0) {
+        setHealthRecords([]);
+        return;
+      }
+
+      // Get unique reptile IDs
+      const reptileIds = [...new Set(healthData.map(h => h.reptile_id))];
       
-      // Group by reptile to avoid duplicates
+      // Fetch reptile details
+      const { data: reptilesData, error: reptilesError } = await supabase
+        .from("reptiles")
+        .select("id, name, species, sex, status")
+        .in("id", reptileIds)
+        .eq("status", "active");
+
+      if (reptilesError) throw reptilesError;
+      
+      // Create a map of reptiles
+      const reptilesMap = new Map(
+        (reptilesData || []).map(r => [r.id, r])
+      );
+      
+      // Combine data and group by reptile
       const uniqueReptiles = new Map<string, HealthRecord>();
-      (data || []).forEach((record: any) => {
-        if (record.reptiles && !uniqueReptiles.has(record.reptiles.id)) {
-          // Restructure the data to match the expected interface
-          uniqueReptiles.set(record.reptiles.id, {
+      healthData.forEach((record) => {
+        const reptile = reptilesMap.get(record.reptile_id);
+        if (reptile && !uniqueReptiles.has(reptile.id)) {
+          uniqueReptiles.set(reptile.id, {
             id: record.id,
             reptile_id: record.reptile_id,
             condition: record.condition,
             diagnosis_date: record.diagnosis_date,
             resolved: record.resolved,
-            reptile: record.reptiles
+            reptile: reptile
           });
         }
       });
