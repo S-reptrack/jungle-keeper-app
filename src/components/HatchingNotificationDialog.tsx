@@ -17,18 +17,23 @@ export function HatchingNotificationDialog() {
   const navigate = useNavigate();
   const { notifications, loading } = useHatchingNotifications();
   const [open, setOpen] = useState(false);
-  const [hasShownOnce, setHasShownOnce] = useState(false);
 
   useEffect(() => {
-    // Only show once per session and only if there are notifications
-    if (!loading && notifications.length > 0 && !hasShownOnce) {
+    // Only show if user hasn't dismissed the notification before
+    const hasSeenNotification = localStorage.getItem("hatching_notification_seen");
+    
+    if (!loading && notifications.length > 0 && !hasSeenNotification) {
       setOpen(true);
-      setHasShownOnce(true);
     }
-  }, [loading, notifications, hasShownOnce]);
+  }, [loading, notifications]);
+
+  const handleClose = () => {
+    setOpen(false);
+    localStorage.setItem("hatching_notification_seen", "true");
+  };
 
   const handleViewReptile = (reptileId: string) => {
-    setOpen(false);
+    handleClose();
     navigate(`/reptiles/${reptileId}`);
   };
 
@@ -37,7 +42,7 @@ export function HatchingNotificationDialog() {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -95,10 +100,10 @@ export function HatchingNotificationDialog() {
         </div>
 
         <div className="flex justify-end gap-2 mt-4">
-          <Button variant="outline" onClick={() => setOpen(false)}>
+          <Button variant="outline" onClick={handleClose}>
             {t("common.close")}
           </Button>
-          <Button onClick={() => { setOpen(false); navigate("/reptiles"); }}>
+          <Button onClick={() => { handleClose(); navigate("/reptiles"); }}>
             {t("reptiles.viewAll")}
           </Button>
         </div>
