@@ -137,28 +137,31 @@ const Reptiles = () => {
       // Calculate days until hatch for reproduction observations
       const hatchMap: Record<string, number | null> = {};
       for (const reptile of allReptiles) {
-        const { data: observations } = await supabase
-          .from("reproduction_observations")
-          .select("expected_hatch_date")
-          .eq("reptile_id", reptile.id)
-          .not("expected_hatch_date", "is", null)
-          .order("expected_hatch_date", { ascending: true });
+        // Only calculate for female reptiles
+        if (reptile.sex === "female") {
+          const { data: observations } = await supabase
+            .from("reproduction_observations")
+            .select("expected_hatch_date")
+            .eq("reptile_id", reptile.id)
+            .not("expected_hatch_date", "is", null)
+            .order("expected_hatch_date", { ascending: true });
 
-        if (observations && observations.length > 0) {
-          // Find the closest upcoming hatch date
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-          
-          for (const obs of observations) {
-            const hatchDate = new Date(obs.expected_hatch_date);
-            hatchDate.setHours(0, 0, 0, 0);
-            const diffTime = hatchDate.getTime() - today.getTime();
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          if (observations && observations.length > 0) {
+            // Find the closest upcoming hatch date
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
             
-            // Only show if hatch date is in the future (0 or positive days)
-            if (diffDays >= 0) {
-              hatchMap[reptile.id] = diffDays;
-              break;
+            for (const obs of observations) {
+              const hatchDate = new Date(obs.expected_hatch_date);
+              hatchDate.setHours(0, 0, 0, 0);
+              const diffTime = hatchDate.getTime() - today.getTime();
+              const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+              
+              // Only show if hatch date is in the future (0 or positive days)
+              if (diffDays >= 0) {
+                hatchMap[reptile.id] = diffDays;
+                break;
+              }
             }
           }
         }

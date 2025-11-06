@@ -197,7 +197,7 @@ const ReptileDetail = () => {
                     className="w-full h-full object-cover"
                   />
                 )}
-                {daysUntilHatch !== null && daysUntilHatch !== undefined && (
+                {daysUntilHatch !== null && daysUntilHatch !== undefined && reptile.sex === "female" && (
                   <div className="absolute top-3 left-3">
                     <Badge className="bg-orange-500 hover:bg-orange-600 text-white border-0 text-sm font-bold px-3 py-1.5 shadow-lg animate-pulse">
                       🥚 Éclosion dans {daysUntilHatch}j
