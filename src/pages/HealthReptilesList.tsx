@@ -41,19 +41,29 @@ const HealthReptilesList = () => {
           condition,
           diagnosis_date,
           resolved,
-          reptile:reptiles!inner(id, name, species, sex, status)
+          reptiles!inner(id, name, species, sex, status)
         `)
         .eq("resolved", false)
-        .eq("reptile.status", "active")
+        .eq("reptiles.status", "active")
         .order("diagnosis_date", { ascending: false });
 
       if (error) throw error;
       
+      console.log("Health records data:", data);
+      
       // Group by reptile to avoid duplicates
       const uniqueReptiles = new Map<string, HealthRecord>();
       (data || []).forEach((record: any) => {
-        if (record.reptile && !uniqueReptiles.has(record.reptile.id)) {
-          uniqueReptiles.set(record.reptile.id, record);
+        if (record.reptiles && !uniqueReptiles.has(record.reptiles.id)) {
+          // Restructure the data to match the expected interface
+          uniqueReptiles.set(record.reptiles.id, {
+            id: record.id,
+            reptile_id: record.reptile_id,
+            condition: record.condition,
+            diagnosis_date: record.diagnosis_date,
+            resolved: record.resolved,
+            reptile: record.reptiles
+          });
         }
       });
       
