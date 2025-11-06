@@ -21,6 +21,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -40,6 +47,9 @@ const formSchema = z.object({
     required_error: "La date d'achat est requise",
   }),
   weight: z.coerce.number().min(1, "Le poids doit être supérieur à 0"),
+  sex: z.enum(["male", "female", "unknown"], {
+    required_error: "Le sexe est requis",
+  }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -49,6 +59,7 @@ interface EditReptileDialogProps {
   currentBirthDate: string;
   currentPurchaseDate: string;
   currentWeight: number;
+  currentSex: "male" | "female" | "unknown";
   onUpdate?: () => void;
 }
 
@@ -57,6 +68,7 @@ const EditReptileDialog = ({
   currentBirthDate, 
   currentPurchaseDate,
   currentWeight,
+  currentSex,
   onUpdate 
 }: EditReptileDialogProps) => {
   const { t } = useTranslation();
@@ -70,6 +82,7 @@ const EditReptileDialog = ({
       birthDate: new Date(Number(currentBirthDate.slice(0,4)), Number(currentBirthDate.slice(5,7)) - 1, Number(currentBirthDate.slice(8,10))),
       purchaseDate: new Date(Number(currentPurchaseDate.slice(0,4)), Number(currentPurchaseDate.slice(5,7)) - 1, Number(currentPurchaseDate.slice(8,10))),
       weight: currentWeight,
+      sex: currentSex,
     },
   });
 
@@ -106,11 +119,12 @@ const EditReptileDialog = ({
         birthDate: new Date(Number(currentBirthDate.slice(0,4)), Number(currentBirthDate.slice(5,7)) - 1, Number(currentBirthDate.slice(8,10))),
         purchaseDate: new Date(Number(currentPurchaseDate.slice(0,4)), Number(currentPurchaseDate.slice(5,7)) - 1, Number(currentPurchaseDate.slice(8,10))),
         weight: currentWeight,
+        sex: currentSex,
       });
       setBirthDateInput(formatDateToInput(new Date(Number(currentBirthDate.slice(0,4)), Number(currentBirthDate.slice(5,7)) - 1, Number(currentBirthDate.slice(8,10)))));
       setPurchaseDateInput(formatDateToInput(new Date(Number(currentPurchaseDate.slice(0,4)), Number(currentPurchaseDate.slice(5,7)) - 1, Number(currentPurchaseDate.slice(8,10)))));
     }
-  }, [open, currentBirthDate, currentPurchaseDate, currentWeight]);
+  }, [open, currentBirthDate, currentPurchaseDate, currentWeight, currentSex]);
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -120,6 +134,7 @@ const EditReptileDialog = ({
           birth_date: `${data.birthDate.getFullYear()}-${String(data.birthDate.getMonth() + 1).padStart(2, '0')}-${String(data.birthDate.getDate()).padStart(2, '0')}`,
           purchase_date: `${data.purchaseDate.getFullYear()}-${String(data.purchaseDate.getMonth() + 1).padStart(2, '0')}-${String(data.purchaseDate.getDate()).padStart(2, '0')}`,
           weight: data.weight,
+          sex: data.sex,
         })
         .eq("id", reptileId);
 
@@ -272,6 +287,29 @@ const EditReptileDialog = ({
                   <FormControl>
                     <Input type="number" placeholder="Ex: 500" {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="sex"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("reptile.sex")}</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t("reptile.selectSex")} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="male">{t("reptile.male")}</SelectItem>
+                      <SelectItem value="female">{t("reptile.female")}</SelectItem>
+                      <SelectItem value="unknown">{t("reptile.unknown")}</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

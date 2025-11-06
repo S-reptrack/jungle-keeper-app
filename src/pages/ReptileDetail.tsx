@@ -305,6 +305,7 @@ const ReptileDetail = () => {
                       currentBirthDate={reptile.birth_date}
                       currentPurchaseDate={reptile.purchase_date}
                       currentWeight={reptile.weight}
+                      currentSex={reptile.sex as "male" | "female" | "unknown"}
                       onUpdate={fetchReptile}
                     />
                     <Button 
@@ -374,6 +375,7 @@ const ReptileDetail = () => {
                           currentBirthDate={reptile.birth_date}
                           currentPurchaseDate={reptile.purchase_date}
                           currentWeight={reptile.weight}
+                          currentSex={reptile.sex as "male" | "female" | "unknown"}
                           onUpdate={fetchReptile}
                         />
                       )}
