@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send } from "lucide-react";
+import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send, DollarSign, Skull } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,8 @@ import WeightChart from "@/components/WeightChart";
 import QRCodeDialog from "@/components/QRCodeDialog";
 import ImageUploadDialog from "@/components/ImageUploadDialog";
 import { TransferAnimalDialog } from "@/components/TransferAnimalDialog";
+import SellTab from "@/components/SellTab";
+import DeathTab from "@/components/DeathTab";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { differenceInYears, differenceInMonths } from "date-fns";
@@ -335,7 +337,7 @@ const ReptileDetail = () => {
           <div className="lg:col-span-2">
             {reptile.status === "active" ? (
               <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="grid w-full grid-cols-6">
                   <TabsTrigger value="overview" className="flex items-center justify-center gap-1.5 px-2">
                     <Eye className="w-4 h-4 shrink-0" />
                     <span className="truncate text-xs md:text-sm">{t("reptile.tabs.overview")}</span>
@@ -351,6 +353,14 @@ const ReptileDetail = () => {
                   <TabsTrigger value="health" className="flex items-center justify-center gap-1.5 px-2">
                     <Activity className="w-4 h-4 shrink-0" />
                     <span className="truncate text-xs md:text-sm">{t("reptile.tabs.health")}</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="sell" className="flex items-center justify-center gap-1.5 px-2">
+                    <DollarSign className="w-4 h-4 shrink-0" />
+                    <span className="truncate text-xs md:text-sm">Vendre</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="death" className="flex items-center justify-center gap-1.5 px-2">
+                    <Skull className="w-4 h-4 shrink-0" />
+                    <span className="truncate text-xs md:text-sm">Décès</span>
                   </TabsTrigger>
                 </TabsList>
                 
@@ -403,6 +413,14 @@ const ReptileDetail = () => {
                 
                 <TabsContent value="health" className="space-y-4">
                   <HealthTab reptileId={reptile.id} reptileStatus={reptile.status} readOnly={isPreviousOwner || false} />
+                </TabsContent>
+                
+                <TabsContent value="sell">
+                  <SellTab reptileId={reptile.id} reptileName={reptile.name} />
+                </TabsContent>
+                
+                <TabsContent value="death">
+                  <DeathTab reptileId={reptile.id} reptileName={reptile.name} />
                 </TabsContent>
               </Tabs>
             ) : (
