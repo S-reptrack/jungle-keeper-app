@@ -61,6 +61,19 @@ const AllReptilesList = () => {
     return "?";
   };
 
+  const groupBySpecies = (reptileList: Reptile[]) => {
+    const grouped = reptileList.reduce((acc, reptile) => {
+      const species = reptile.species || "Non spécifié";
+      if (!acc[species]) {
+        acc[species] = [];
+      }
+      acc[species].push(reptile);
+      return acc;
+    }, {} as Record<string, Reptile[]>);
+    
+    return Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b)) as [string, Reptile[]][];
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
@@ -88,40 +101,47 @@ const AllReptilesList = () => {
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-3">
-            {reptiles.map((reptile) => (
-              <Card
-                key={reptile.id}
-                className="cursor-pointer hover:shadow-md transition-all hover:border-primary/50"
-                onClick={() => navigate(`/reptile/${reptile.id}`)}
-              >
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-semibold text-lg text-foreground truncate">{reptile.name}</h3>
-                          <Badge variant="outline" className="shrink-0">
-                            {getSexIcon(reptile.sex)}
-                          </Badge>
+          <div className="space-y-8">
+            {groupBySpecies(reptiles).map(([species, speciesReptiles]) => (
+              <div key={species}>
+                <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
+                <div className="space-y-3">
+                  {speciesReptiles.map((reptile) => (
+                    <Card
+                      key={reptile.id}
+                      className="cursor-pointer hover:shadow-md transition-all hover:border-primary/50"
+                      onClick={() => navigate(`/reptile/${reptile.id}`)}
+                    >
+                      <CardContent className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4 flex-1">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-1">
+                                <h3 className="font-semibold text-lg text-foreground truncate">{reptile.name}</h3>
+                                <Badge variant="outline" className="shrink-0">
+                                  {getSexIcon(reptile.sex)}
+                                </Badge>
+                              </div>
+                              <p className="text-sm text-muted-foreground truncate">{reptile.species}</p>
+                            </div>
+                            <div className="hidden sm:flex items-center gap-6 text-sm">
+                              <div className="text-right">
+                                <p className="text-muted-foreground">Âge</p>
+                                <p className="font-medium">{calculateAge(reptile.birth_date)}</p>
+                              </div>
+                              <div className="text-right">
+                                <p className="text-muted-foreground">Poids</p>
+                                <p className="font-medium">{reptile.weight}g</p>
+                              </div>
+                            </div>
+                          </div>
+                          <ChevronRight className="w-5 h-5 text-muted-foreground ml-2 shrink-0" />
                         </div>
-                        <p className="text-sm text-muted-foreground truncate">{reptile.species}</p>
-                      </div>
-                      <div className="hidden sm:flex items-center gap-6 text-sm">
-                        <div className="text-right">
-                          <p className="text-muted-foreground">Âge</p>
-                          <p className="font-medium">{calculateAge(reptile.birth_date)}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-muted-foreground">Poids</p>
-                          <p className="font-medium">{reptile.weight}g</p>
-                        </div>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-muted-foreground ml-2 shrink-0" />
-                  </div>
-                </CardContent>
-              </Card>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         )}
