@@ -152,7 +152,7 @@ const ReproductionReptilesList = () => {
                           <span className="text-xs text-muted-foreground">
                             {formatDate(record.observation_date)}
                           </span>
-                          {record.expected_hatch_date && (
+                          {record.expected_hatch_date && record.reptile.sex === "female" && (
                             <Badge variant="default" className="text-xs">
                               🥚 Éclosion prévue: {formatDate(record.expected_hatch_date)}
                             </Badge>

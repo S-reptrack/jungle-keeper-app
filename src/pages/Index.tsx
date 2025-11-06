@@ -129,40 +129,49 @@ const Index = () => {
       
       const { data: hatchingData, error: hatchingError } = await supabase
         .from("reproduction_observations")
-        .select("reptile_id, expected_hatch_date")
+        .select(`
+          reptile_id, 
+          expected_hatch_date,
+          reptiles!reproduction_observations_reptile_id_fkey (
+            id,
+            name,
+            species,
+            image_url,
+            status,
+            sex
+          )
+        `)
         .not("expected_hatch_date", "is", null)
         .gte("expected_hatch_date", today.toISOString())
+        .eq("reptiles.status", "active")
+        .eq("reptiles.sex", "female")
         .order("expected_hatch_date", { ascending: true })
         .limit(6);
 
       if (hatchingError) throw hatchingError;
 
-      // Get reptile details for each hatching
-      const hatchingsWithDetails = await Promise.all(
-        (hatchingData || []).map(async (hatching) => {
-          const { data: reptileData } = await supabase
-            .from("reptiles")
-            .select("id, name, species, image_url, status")
-            .eq("id", hatching.reptile_id)
-            .eq("status", "active")
-            .single();
-
-          if (!reptileData) return null;
-
+      // Map reptile details for each hatching
+      const hatchingsWithDetails = (hatchingData || [])
+        .filter((hatching: any) => hatching.reptiles)
+        .map((hatching: any) => {
+          const reptileData = hatching.reptiles;
           const hatchDate = new Date(hatching.expected_hatch_date);
           hatchDate.setHours(0, 0, 0, 0);
           const diffTime = hatchDate.getTime() - today.getTime();
           const daysUntilHatch = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
           return {
-            ...reptileData,
+            id: reptileData.id,
+            name: reptileData.name,
+            species: reptileData.species,
+            image_url: reptileData.image_url,
+            status: reptileData.status,
             expectedHatchDate: hatching.expected_hatch_date,
             daysUntilHatch,
           };
-        })
-      );
+        });
 
-      setUpcomingHatchings(hatchingsWithDetails.filter(Boolean));
+      setUpcomingHatchings(hatchingsWithDetails);
     } catch (error) {
       console.error("Error fetching reptiles:", error);
     }
