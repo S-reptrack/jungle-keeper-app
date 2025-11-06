@@ -122,40 +122,14 @@ const Index = () => {
       const uniqueReproductionReptiles = new Set(reproductionData?.map(r => r.reptile_id) || []);
       const reproduction = uniqueReproductionReptiles.size;
       
-      // Calculate feedings due
-      const { data: reptilesWithInterval } = await supabase
+      // Calculate feedings due - count all reptiles with feeding interval defined
+      const { count: feedingsDueCount } = await supabase
         .from("reptiles")
-        .select("id, feeding_interval_days")
+        .select("*", { count: "exact", head: true })
         .eq("status", "active")
         .not("feeding_interval_days", "is", null);
       
-      let feedingsDue = 0;
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      
-      for (const reptile of reptilesWithInterval || []) {
-        const { data: lastFeeding } = await supabase
-          .from("feedings")
-          .select("feeding_date")
-          .eq("reptile_id", reptile.id)
-          .order("feeding_date", { ascending: false })
-          .limit(1)
-          .maybeSingle();
-        
-        if (lastFeeding) {
-          const lastFeedDate = new Date(lastFeeding.feeding_date);
-          lastFeedDate.setHours(0, 0, 0, 0);
-          const nextFeedDate = new Date(lastFeedDate);
-          nextFeedDate.setDate(nextFeedDate.getDate() + (reptile.feeding_interval_days || 0));
-          
-          if (nextFeedDate <= today) {
-            feedingsDue++;
-          }
-        } else {
-          // No feeding recorded yet, count as due
-          feedingsDue++;
-        }
-      }
+      const feedingsDue = feedingsDueCount || 0;
       
       setStats({ total, healthIssues, reproduction, feedingsDue });
 
