@@ -186,6 +186,19 @@ const Reptiles = () => {
     return `${months} mois`;
   };
 
+  const groupBySpecies = (reptileList: any[]) => {
+    const grouped = reptileList.reduce((acc, reptile) => {
+      const species = reptile.species || "Non spécifié";
+      if (!acc[species]) {
+        acc[species] = [];
+      }
+      acc[species].push(reptile);
+      return acc;
+    }, {} as Record<string, any[]>);
+    
+    return Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b)) as [string, any[]][];
+  };
+
   if (authLoading) {
     return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
   }
@@ -240,19 +253,26 @@ const Reptiles = () => {
                   <AddReptileDialog onReptileAdded={fetchReptiles} />
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {reptiles.map((reptile) => (
-                    <ReptileCard
-                      key={reptile.id}
-                      id={reptile.id}
-                      name={reptile.name}
-                      species={reptile.species}
-                      age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
-                      weight={`${reptile.weight || 0}g`}
-                      lastFed={lastFeedings[reptile.id] || "Jamais"}
-                      image={reptile.image_url}
-                      daysUntilHatch={daysUntilHatch[reptile.id]}
-                    />
+                <div className="space-y-8">
+                  {groupBySpecies(reptiles).map(([species, speciesReptiles]) => (
+                    <div key={species}>
+                      <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {speciesReptiles.map((reptile) => (
+                          <ReptileCard
+                            key={reptile.id}
+                            id={reptile.id}
+                            name={reptile.name}
+                            species={reptile.species}
+                            age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                            weight={`${reptile.weight || 0}g`}
+                            lastFed={lastFeedings[reptile.id] || "Jamais"}
+                            image={reptile.image_url}
+                            daysUntilHatch={daysUntilHatch[reptile.id]}
+                          />
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </div>
               )}
@@ -264,26 +284,33 @@ const Reptiles = () => {
                   <p className="text-muted-foreground">Aucun reptile archivé</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {archivedReptiles.map((reptile) => (
-                    <div key={reptile.id} className="relative">
-                      <ReptileCard
-                        id={reptile.id}
-                        name={reptile.name}
-                        species={reptile.species}
-                        age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
-                        weight={`${reptile.weight || 0}g`}
-                        lastFed={lastFeedings[reptile.id] || "Jamais"}
-                        image={reptile.image_url}
-                        daysUntilHatch={daysUntilHatch[reptile.id]}
-                      />
-                      <Badge 
-                        variant="secondary" 
-                        className="absolute top-4 right-4 z-10"
-                      >
-                        {reptile.status === "deceased" ? "Décédé" : "Vendu"}
-                        {reptile.status_date && ` - ${new Date(reptile.status_date).toLocaleDateString("fr-FR")}`}
-                      </Badge>
+                <div className="space-y-8">
+                  {groupBySpecies(archivedReptiles).map(([species, speciesReptiles]) => (
+                    <div key={species}>
+                      <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {speciesReptiles.map((reptile) => (
+                          <div key={reptile.id} className="relative">
+                            <ReptileCard
+                              id={reptile.id}
+                              name={reptile.name}
+                              species={reptile.species}
+                              age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                              weight={`${reptile.weight || 0}g`}
+                              lastFed={lastFeedings[reptile.id] || "Jamais"}
+                              image={reptile.image_url}
+                              daysUntilHatch={daysUntilHatch[reptile.id]}
+                            />
+                            <Badge 
+                              variant="secondary" 
+                              className="absolute top-4 right-4 z-10"
+                            >
+                              {reptile.status === "deceased" ? "Décédé" : "Vendu"}
+                              {reptile.status_date && ` - ${new Date(reptile.status_date).toLocaleDateString("fr-FR")}`}
+                            </Badge>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -296,26 +323,33 @@ const Reptiles = () => {
                   <p className="text-muted-foreground">Aucun animal transféré</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {transferredReptiles.map((reptile) => (
-                    <div key={reptile.id} className="relative">
-                      <ReptileCard
-                        id={reptile.id}
-                        name={reptile.name}
-                        species={reptile.species}
-                        age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
-                        weight={`${reptile.weight || 0}g`}
-                        lastFed={lastFeedings[reptile.id] || "Jamais"}
-                        image={reptile.image_url}
-                        daysUntilHatch={daysUntilHatch[reptile.id]}
-                      />
-                      <Badge 
-                        variant="outline" 
-                        className="absolute top-4 right-4 z-10 border-yellow-500 text-yellow-700 dark:text-yellow-400 bg-card"
-                      >
-                        Transféré
-                        {reptile.transferred_at && ` - ${new Date(reptile.transferred_at).toLocaleDateString("fr-FR")}`}
-                      </Badge>
+                <div className="space-y-8">
+                  {groupBySpecies(transferredReptiles).map(([species, speciesReptiles]) => (
+                    <div key={species}>
+                      <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {speciesReptiles.map((reptile) => (
+                          <div key={reptile.id} className="relative">
+                            <ReptileCard
+                              id={reptile.id}
+                              name={reptile.name}
+                              species={reptile.species}
+                              age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                              weight={`${reptile.weight || 0}g`}
+                              lastFed={lastFeedings[reptile.id] || "Jamais"}
+                              image={reptile.image_url}
+                              daysUntilHatch={daysUntilHatch[reptile.id]}
+                            />
+                            <Badge 
+                              variant="outline" 
+                              className="absolute top-4 right-4 z-10 border-yellow-500 text-yellow-700 dark:text-yellow-400 bg-card"
+                            >
+                              Transféré
+                              {reptile.transferred_at && ` - ${new Date(reptile.transferred_at).toLocaleDateString("fr-FR")}`}
+                            </Badge>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   ))}
                 </div>
