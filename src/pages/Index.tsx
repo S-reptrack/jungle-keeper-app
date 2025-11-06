@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Users, Calendar, Activity, TrendingUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import StatsCard from "@/components/StatsCard";
 import ReptileCard from "@/components/ReptileCard";
@@ -12,11 +13,13 @@ import { AuthForm } from "@/components/AuthForm";
 
 const Index = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const [reptiles, setReptiles] = useState<any[]>([]);
   const [stats, setStats] = useState({
     total: 0,
     healthIssues: 0,
+    reproduction: 0,
   });
   const [lastFeedings, setLastFeedings] = useState<Record<string, string>>({});
 
@@ -107,7 +110,16 @@ const Index = () => {
       
       const healthIssues = healthCount || 0;
       
-      setStats({ total, healthIssues });
+      // Count reptiles with reproduction observations
+      const { data: reproductionData } = await supabase
+        .from("reproduction_observations")
+        .select("reptile_id")
+        .eq("reptiles.status", "active");
+      
+      const uniqueReproductionReptiles = new Set(reproductionData?.map(r => r.reptile_id) || []);
+      const reproduction = uniqueReproductionReptiles.size;
+      
+      setStats({ total, healthIssues, reproduction });
     } catch (error) {
       console.error("Error fetching reptiles:", error);
     }
@@ -177,6 +189,7 @@ const Index = () => {
             title={t("stats.totalReptiles")}
             value={stats.total.toString()}
             icon={Users}
+            onClick={() => navigate("/all-reptiles")}
           />
           <StatsCard
             title={t("stats.feedingsDue")}
@@ -187,11 +200,13 @@ const Index = () => {
             title={t("stats.health")}
             value={stats.healthIssues.toString()}
             icon={Activity}
+            onClick={() => navigate("/health-reptiles")}
           />
           <StatsCard
             title={t("stats.activeBreeding")}
-            value="0"
+            value={stats.reproduction.toString()}
             icon={TrendingUp}
+            onClick={() => navigate("/reproduction-reptiles")}
           />
         </div>
 

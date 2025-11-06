@@ -16,6 +16,9 @@ import GDPRConsentDialog from "./components/GDPRConsentDialog";
 import { HatchingNotificationDialog } from "./components/HatchingNotificationDialog";
 import Install from "./pages/Install";
 import Transfers from "./pages/Transfers";
+import AllReptilesList from "./pages/AllReptilesList";
+import HealthReptilesList from "./pages/HealthReptilesList";
+import ReproductionReptilesList from "./pages/ReproductionReptilesList";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +35,9 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/reptile/:id" element={<ReptileDetail />} />
             <Route path="/reptiles" element={<Reptiles />} />
+            <Route path="/all-reptiles" element={<AllReptilesList />} />
+            <Route path="/health-reptiles" element={<HealthReptilesList />} />
+            <Route path="/reproduction-reptiles" element={<ReproductionReptilesList />} />
             <Route path="/feeding" element={<Feeding />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/privacy" element={<Privacy />} />

@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send, DollarSign, Skull } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -44,6 +44,7 @@ interface Reptile {
 const ReptileDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { t } = useTranslation();
   const [reptile, setReptile] = useState<Reptile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -53,6 +54,9 @@ const ReptileDetail = () => {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [daysUntilHatch, setDaysUntilHatch] = useState<number | null>(null);
   const { signedUrl: imageSignedUrl, loading: imageLoading } = useSignedImageUrl(reptile?.image_url);
+
+  // Get tab from URL params, default to "overview"
+  const defaultTab = searchParams.get("tab") || "overview";
 
   // Check if current user is the previous owner (read-only access)
   const isPreviousOwner = reptile && currentUserId && reptile.previous_owner_id === currentUserId;
@@ -337,7 +341,7 @@ const ReptileDetail = () => {
           {/* Contenu principal avec onglets */}
           <div className="lg:col-span-2">
             {reptile.status === "active" ? (
-              <Tabs defaultValue="overview" className="w-full">
+              <Tabs defaultValue={defaultTab} className="w-full">
                 <TabsList className="grid w-full grid-cols-6">
                   <TabsTrigger value="overview" className="flex items-center justify-center gap-1.5 px-2">
                     <Eye className="w-4 h-4 shrink-0" />
