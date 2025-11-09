@@ -36,8 +36,12 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
         try {
           // Check and request permissions
           const permissions = await BarcodeScanner.checkPermissions();
+          console.log("Permissions initiales:", permissions);
+          
           if (permissions.camera !== 'granted') {
             const requested = await BarcodeScanner.requestPermissions();
+            console.log("Permissions après demande:", requested);
+            
             if (requested.camera !== 'granted') {
               const msg = "Accès à la caméra refusé";
               setError(msg);
@@ -46,7 +50,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
             }
           }
 
-          // Start scanning
+          // Start scanning only if we have permission
           const result = await BarcodeScanner.scan();
           
           if (result.barcodes && result.barcodes.length > 0) {
@@ -61,9 +65,16 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
           }
         } catch (nativeErr: any) {
           console.error("Erreur scan natif:", nativeErr);
-          const msg = "Impossible de démarrer la caméra (natif)";
-          setError(msg);
-          toast.error(msg);
+          // Check if it's a permission error
+          if (nativeErr.message && nativeErr.message.toLowerCase().includes('permission')) {
+            const msg = "Accès à la caméra refusé";
+            setError(msg);
+            toast.error(msg);
+          } else {
+            const msg = "Impossible de démarrer la caméra. Vérifiez les autorisations dans les paramètres.";
+            setError(msg);
+            toast.error(msg);
+          }
         }
         return; // stop here for native path
       }
@@ -254,7 +265,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
                     <ol className="text-xs text-muted-foreground space-y-1.5 pl-4">
                       <li className="list-decimal">Fermez l'application complètement</li>
                       <li className="list-decimal">Ouvrez <span className="font-medium text-foreground">Paramètres</span> → <span className="font-medium text-foreground">Applications</span></li>
-                      <li className="list-decimal">Trouvez <span className="font-medium text-foreground">Jungle Keeper</span> dans la liste</li>
+                      <li className="list-decimal">Trouvez <span className="font-medium text-foreground">Escape Track</span> dans la liste</li>
                       <li className="list-decimal">Appuyez sur <span className="font-medium text-foreground">Autorisations</span></li>
                       <li className="list-decimal">Appuyez sur <span className="font-medium text-foreground">Appareil photo</span></li>
                       <li className="list-decimal">Sélectionnez <span className="font-medium text-foreground">Autoriser</span></li>
@@ -268,7 +279,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
                     <ol className="text-xs text-muted-foreground space-y-1.5 pl-4">
                       <li className="list-decimal">Fermez l'application complètement</li>
                       <li className="list-decimal">Ouvrez <span className="font-medium text-foreground">Réglages</span></li>
-                      <li className="list-decimal">Descendez et trouvez <span className="font-medium text-foreground">Jungle Keeper</span></li>
+                      <li className="list-decimal">Descendez et trouvez <span className="font-medium text-foreground">Escape Track</span></li>
                       <li className="list-decimal">Activez <span className="font-medium text-foreground">Appareil photo</span></li>
                       <li className="list-decimal">Rouvrez l'application</li>
                     </ol>
