@@ -246,17 +246,29 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
                 <p className="text-sm font-medium text-destructive">
                   {error}
                 </p>
-                <div className="bg-muted/50 rounded-lg p-4 space-y-2 text-left">
-                  <p className="text-xs font-medium">
-                    Pour autoriser l'accès à la caméra :
-                  </p>
-                  <ol className="text-xs text-muted-foreground space-y-1 list-decimal list-inside">
-                    <li>Ouvrez les <span className="font-medium">Paramètres</span> de votre appareil</li>
-                    <li>Recherchez <span className="font-medium">Jungle Keeper</span> dans la liste des applications</li>
-                    <li>Appuyez sur <span className="font-medium">Autorisations</span></li>
-                    <li>Activez l'autorisation <span className="font-medium">Appareil photo</span></li>
-                    <li>Revenez à l'application et réessayez</li>
-                  </ol>
+                <div className="bg-muted/50 rounded-lg p-4 space-y-3 text-left">
+                  <div className="space-y-2">
+                    <p className="text-xs font-medium">
+                      📱 Sur Android :
+                    </p>
+                    <ol className="text-xs text-muted-foreground space-y-1.5 list-decimal list-inside">
+                      <li>Ouvrez <span className="font-medium">Paramètres</span> → <span className="font-medium">Applications</span></li>
+                      <li>Trouvez <span className="font-medium">Jungle Keeper</span></li>
+                      <li>Appuyez sur <span className="font-medium">Autorisations</span> (ou <span className="font-medium">Permissions</span>)</li>
+                      <li>Sélectionnez <span className="font-medium">Appareil photo</span></li>
+                      <li>Choisissez <span className="font-medium">Autoriser</span></li>
+                    </ol>
+                  </div>
+                  <div className="space-y-2 pt-2 border-t border-border/50">
+                    <p className="text-xs font-medium">
+                      🍎 Sur iPhone :
+                    </p>
+                    <ol className="text-xs text-muted-foreground space-y-1.5 list-decimal list-inside">
+                      <li>Ouvrez <span className="font-medium">Réglages</span></li>
+                      <li>Descendez et trouvez <span className="font-medium">Jungle Keeper</span></li>
+                      <li>Activez <span className="font-medium">Appareil photo</span></li>
+                    </ol>
+                  </div>
                 </div>
               </div>
               <Button onClick={startScanning} className="w-full">
