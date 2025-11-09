@@ -265,7 +265,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
                     <ol className="text-xs text-muted-foreground space-y-1.5 pl-4">
                       <li className="list-decimal">Fermez l'application complètement</li>
                       <li className="list-decimal">Ouvrez <span className="font-medium text-foreground">Paramètres</span> → <span className="font-medium text-foreground">Applications</span></li>
-                      <li className="list-decimal">Trouvez <span className="font-medium text-foreground">Escape Track</span> dans la liste</li>
+                      <li className="list-decimal">Trouvez <span className="font-medium text-foreground">S-reptrack</span> dans la liste</li>
                       <li className="list-decimal">Appuyez sur <span className="font-medium text-foreground">Autorisations</span></li>
                       <li className="list-decimal">Appuyez sur <span className="font-medium text-foreground">Appareil photo</span></li>
                       <li className="list-decimal">Sélectionnez <span className="font-medium text-foreground">Autoriser</span></li>
@@ -279,7 +279,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
                     <ol className="text-xs text-muted-foreground space-y-1.5 pl-4">
                       <li className="list-decimal">Fermez l'application complètement</li>
                       <li className="list-decimal">Ouvrez <span className="font-medium text-foreground">Réglages</span></li>
-                      <li className="list-decimal">Descendez et trouvez <span className="font-medium text-foreground">Escape Track</span></li>
+                      <li className="list-decimal">Descendez et trouvez <span className="font-medium text-foreground">S-reptrack</span></li>
                       <li className="list-decimal">Activez <span className="font-medium text-foreground">Appareil photo</span></li>
                       <li className="list-decimal">Rouvrez l'application</li>
                     </ol>
