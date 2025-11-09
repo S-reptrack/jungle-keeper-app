@@ -248,31 +248,35 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
                 </p>
                 <div className="bg-muted/50 rounded-lg p-4 space-y-3 text-left">
                   <div className="space-y-2">
-                    <p className="text-xs font-medium">
+                    <p className="text-xs font-semibold text-foreground">
                       📱 Sur Android :
                     </p>
-                    <ol className="text-xs text-muted-foreground space-y-1.5 list-decimal list-inside">
-                      <li>Ouvrez <span className="font-medium">Paramètres</span> → <span className="font-medium">Applications</span></li>
-                      <li>Trouvez <span className="font-medium">Jungle Keeper</span></li>
-                      <li>Appuyez sur <span className="font-medium">Autorisations</span> (ou <span className="font-medium">Permissions</span>)</li>
-                      <li>Sélectionnez <span className="font-medium">Appareil photo</span></li>
-                      <li>Choisissez <span className="font-medium">Autoriser</span></li>
+                    <ol className="text-xs text-muted-foreground space-y-1.5 pl-4">
+                      <li className="list-decimal">Fermez l'application complètement</li>
+                      <li className="list-decimal">Ouvrez <span className="font-medium text-foreground">Paramètres</span> → <span className="font-medium text-foreground">Applications</span></li>
+                      <li className="list-decimal">Trouvez <span className="font-medium text-foreground">Jungle Keeper</span> dans la liste</li>
+                      <li className="list-decimal">Appuyez sur <span className="font-medium text-foreground">Autorisations</span></li>
+                      <li className="list-decimal">Appuyez sur <span className="font-medium text-foreground">Appareil photo</span></li>
+                      <li className="list-decimal">Sélectionnez <span className="font-medium text-foreground">Autoriser</span></li>
+                      <li className="list-decimal">Rouvrez l'application</li>
                     </ol>
                   </div>
                   <div className="space-y-2 pt-2 border-t border-border/50">
-                    <p className="text-xs font-medium">
+                    <p className="text-xs font-semibold text-foreground">
                       🍎 Sur iPhone :
                     </p>
-                    <ol className="text-xs text-muted-foreground space-y-1.5 list-decimal list-inside">
-                      <li>Ouvrez <span className="font-medium">Réglages</span></li>
-                      <li>Descendez et trouvez <span className="font-medium">Jungle Keeper</span></li>
-                      <li>Activez <span className="font-medium">Appareil photo</span></li>
+                    <ol className="text-xs text-muted-foreground space-y-1.5 pl-4">
+                      <li className="list-decimal">Fermez l'application complètement</li>
+                      <li className="list-decimal">Ouvrez <span className="font-medium text-foreground">Réglages</span></li>
+                      <li className="list-decimal">Descendez et trouvez <span className="font-medium text-foreground">Jungle Keeper</span></li>
+                      <li className="list-decimal">Activez <span className="font-medium text-foreground">Appareil photo</span></li>
+                      <li className="list-decimal">Rouvrez l'application</li>
                     </ol>
                   </div>
                 </div>
               </div>
               <Button onClick={startScanning} className="w-full">
-                Réessayer
+                Réessayer après avoir activé l'autorisation
               </Button>
             </div>
           ) : (
