@@ -16,22 +16,20 @@ interface QRScannerProps {
 export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   const [scanning, setScanning] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [permissionRequested, setPermissionRequested] = useState(false);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (open) {
-      startScanning();
-    }
-
     return () => {
       stopScanning();
     };
-  }, [open]);
+  }, []);
 
   const startScanning = async () => {
     try {
       setError(null);
+      setPermissionRequested(true);
 
       // Native (Capacitor) fallback using MLKit BarcodeScanner
       if (Capacitor.isNativePlatform()) {
@@ -193,6 +191,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   const handleClose = async () => {
     await stopScanning();
     setError(null);
+    setPermissionRequested(false);
     onOpenChange(false);
   };
 
@@ -217,7 +216,26 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
         </DialogHeader>
 
         <div className="space-y-4">
-          {error ? (
+          {!permissionRequested ? (
+            <div className="text-center space-y-4">
+              <div className="flex justify-center">
+                <div className="rounded-full bg-primary/10 p-4">
+                  <CameraIcon className="h-12 w-12 text-primary" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <p className="text-sm font-medium">
+                  Autorisation requise
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Pour scanner le QR code, l'application a besoin d'accéder à votre appareil photo.
+                </p>
+              </div>
+              <Button onClick={startScanning} className="w-full">
+                Autoriser et scanner
+              </Button>
+            </div>
+          ) : error ? (
             <div className="text-center space-y-4">
               <p className="text-sm text-destructive">
                 {error}
