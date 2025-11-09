@@ -284,6 +284,9 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
                       <li className="list-decimal">Rouvrez l'application</li>
                     </ol>
                   </div>
+                  <p className="text-xs text-muted-foreground">
+                    Astuce: si l'option <span className="font-medium text-foreground">Appareil photo</span> n'apparaît pas dans les autorisations de <span className="font-medium text-foreground">S-reptrack</span>, l'application a été installée sans la permission caméra. Dans ce cas, mettez l'application à jour puis réessayez.
+                  </p>
                 </div>
               </div>
               <Button onClick={startScanning} className="w-full">
