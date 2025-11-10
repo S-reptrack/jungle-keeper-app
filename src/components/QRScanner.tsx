@@ -26,6 +26,15 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     };
   }, []);
 
+  // Force permission prompt when the dialog opens
+  useEffect(() => {
+    if (open && !permissionRequested && !scanning) {
+      startScanning();
+    }
+    // We intentionally avoid adding startScanning as a dependency to prevent re-runs
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
   const startScanning = async () => {
     try {
       setError(null);
