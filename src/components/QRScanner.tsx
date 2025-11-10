@@ -34,7 +34,21 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
       // Native (Capacitor) fallback using MLKit BarcodeScanner
       if (Capacitor.isNativePlatform()) {
         try {
-          // Check and request permissions
+          // Preflight via Capacitor Camera to ensure runtime permission prompt exists
+          try {
+            const camPerm: any = await Camera.requestPermissions({ permissions: ['camera'] as any });
+            console.log('Camera plugin permissions:', camPerm);
+            if (camPerm?.camera && camPerm.camera !== 'granted') {
+              const msg = "Accès à la caméra refusé";
+              setError(msg);
+              toast.error(msg);
+              return;
+            }
+          } catch (e) {
+            console.warn('Camera.requestPermissions failed', e);
+          }
+
+          // Check and request MLKit permissions
           const permissions = await BarcodeScanner.checkPermissions();
           console.log("Permissions initiales:", permissions);
           
