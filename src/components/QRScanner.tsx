@@ -80,9 +80,10 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
             const barcodeValue = result.barcodes[0].displayValue || result.barcodes[0].rawValue;
             if (barcodeValue) {
               await handleScanSuccess(barcodeValue);
-            } else {
-              toast.error("Aucun QR code détecté");
-            }
+          } else {
+            toast.error("Aucun QR code détecté");
+          }
+          return;
           } else {
             toast.error("Aucun QR code détecté");
           }
@@ -99,7 +100,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
             toast.error(msg);
           }
         }
-        return; // stop here for native path
+        
       }
 
       // Web path with html5-qrcode
