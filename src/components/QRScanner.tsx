@@ -6,7 +6,7 @@ import { X, Camera as CameraIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Capacitor } from "@capacitor/core";
-import { Camera, CameraResultType } from "@capacitor/camera";
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import jsQR from "jsqr";
 interface QRScannerProps {
   open: boolean;
@@ -25,6 +25,13 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     };
   }, []);
 
+  // Démarrage auto sur mobile natif quand le dialogue s'ouvre
+  useEffect(() => {
+    if (open && Capacitor.isNativePlatform() && !scanning) {
+      startScanning();
+    }
+  }, [open]);
+
   const startScanning = async () => {
     try {
       setError(null);
@@ -33,17 +40,16 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
       if (Capacitor.isNativePlatform()) {
         try {
           // Take photo using the same API that works for ImageUploadDialog
-          const image = await Camera.getPhoto({
-            quality: 90,
-            allowEditing: false,
-            resultType: CameraResultType.DataUrl,
-            promptLabelHeader: "Scanner QR Code",
-            promptLabelPhoto: "Prendre une photo du QR code",
-            promptLabelPicture: "Choisir une image"
+          const photo = await Camera.getPhoto({
+            source: CameraSource.Camera,
+            resultType: CameraResultType.Uri,
+            quality: 85,
+            correctOrientation: true,
+            saveToGallery: false,
           });
 
-          if (!image.dataUrl) {
-            toast.error("Impossible de capturer l'image");
+          if (!photo.webPath) {
+            toast.error("Impossible de capturer la photo");
             return;
           }
 
@@ -76,7 +82,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
             toast.error("Erreur de chargement de l'image");
           };
           
-          img.src = image.dataUrl;
+          img.src = photo.webPath;
           return;
           
         } catch (nativeErr: any) {
