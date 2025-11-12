@@ -17,6 +17,7 @@ interface QRScannerProps {
 export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   const [scanning, setScanning] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [forceWeb, setForceWeb] = useState(false);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const navigate = useNavigate();
 
@@ -38,7 +39,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
       setError(null);
 
       // Native (Capacitor) - Use Camera API like ImageUploadDialog
-      if (Capacitor.isNativePlatform()) {
+      if (Capacitor.isNativePlatform() && !forceWeb) {
         try {
           // Take photo using the same API that works for ImageUploadDialog
           const photo = await Camera.getPhoto({
@@ -306,6 +307,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   const handleClose = async () => {
     await stopScanning();
     setError(null);
+    setForceWeb(false);
     onOpenChange(false);
   };
 
@@ -368,7 +370,16 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
                 <CameraIcon className="h-4 w-4 mr-2" />
                 Ouvrir la caméra
               </Button>
-              {!Capacitor.isNativePlatform() && (
+              {Capacitor.isNativePlatform() && (
+                <Button
+                  variant="outline"
+                  onClick={() => { setForceWeb(true); startScanning(); }}
+                  className="w-full"
+                >
+                  Essayer le scan en direct (mode web)
+                </Button>
+              )}
+              {(!Capacitor.isNativePlatform() || forceWeb) && (
                 <div className="space-y-4 pt-4">
                   <div className="relative">
                     <div className="absolute inset-0 flex items-center">
