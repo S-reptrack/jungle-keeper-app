@@ -6,8 +6,8 @@ import { X, Camera as CameraIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Capacitor } from "@capacitor/core";
-import { Camera } from "@capacitor/camera";
-import { BarcodeScanner } from "@capacitor-mlkit/barcode-scanning";
+import { Camera, CameraResultType } from "@capacitor/camera";
+import jsQR from "jsqr";
 interface QRScannerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -16,8 +16,6 @@ interface QRScannerProps {
 export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   const [scanning, setScanning] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [permissionRequested, setPermissionRequested] = useState(false);
-  const [showOpenSettings, setShowOpenSettings] = useState(false);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const navigate = useNavigate();
 
@@ -27,86 +25,71 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     };
   }, []);
 
-  // Force permission prompt when the dialog opens
-  useEffect(() => {
-    if (open && !permissionRequested && !scanning) {
-      startScanning();
-    }
-    // We intentionally avoid adding startScanning as a dependency to prevent re-runs
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
-
   const startScanning = async () => {
     try {
       setError(null);
-      setPermissionRequested(true);
-      setShowOpenSettings(false);
 
-      // Native (Capacitor) fallback using MLKit BarcodeScanner
+      // Native (Capacitor) - Use Camera API like ImageUploadDialog
       if (Capacitor.isNativePlatform()) {
         try {
-          // Preflight via Capacitor Camera to ensure runtime permission prompt exists
-          try {
-            const camPerm: any = await Camera.requestPermissions({ permissions: ['camera'] as any });
-            console.log('Camera plugin permissions:', camPerm);
-            if (camPerm?.camera && camPerm.camera !== 'granted') {
-              const msg = "Accès à la caméra refusé";
-              setError(msg);
-              toast.error(msg);
-              setShowOpenSettings(true);
-              return;
-            }
-          } catch (e) {
-            console.warn('Camera.requestPermissions failed', e);
+          // Take photo using the same API that works for ImageUploadDialog
+          const image = await Camera.getPhoto({
+            quality: 90,
+            allowEditing: false,
+            resultType: CameraResultType.DataUrl,
+            promptLabelHeader: "Scanner QR Code",
+            promptLabelPhoto: "Prendre une photo du QR code",
+            promptLabelPicture: "Choisir une image"
+          });
+
+          if (!image.dataUrl) {
+            toast.error("Impossible de capturer l'image");
+            return;
           }
 
-          // Check and request MLKit permissions
-          const permissions = await BarcodeScanner.checkPermissions();
-          console.log("Permissions initiales:", permissions);
-          
-          if (permissions.camera !== 'granted') {
-            const requested = await BarcodeScanner.requestPermissions();
-            console.log("Permissions après demande:", requested);
+          // Decode QR code from image using jsQR
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
             
-            if (requested.camera !== 'granted') {
-              const msg = "Accès à la caméra refusé";
-              setError(msg);
-              toast.error(msg);
-              setShowOpenSettings(true);
+            if (!ctx) {
+              toast.error("Erreur de traitement de l'image");
               return;
             }
-          }
 
-          // Start scanning only if we have permission
-          const result = await BarcodeScanner.scan();
+            ctx.drawImage(img, 0, 0);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+            if (code && code.data) {
+              handleScanSuccess(code.data);
+            } else {
+              toast.error("Aucun QR code détecté dans l'image");
+              setError("Aucun QR code détecté. Réessayez avec une image plus nette.");
+            }
+          };
           
-          if (result.barcodes && result.barcodes.length > 0) {
-            const barcodeValue = result.barcodes[0].displayValue || result.barcodes[0].rawValue;
-            if (barcodeValue) {
-              await handleScanSuccess(barcodeValue);
-          } else {
-            toast.error("Aucun QR code détecté");
-          }
+          img.onerror = () => {
+            toast.error("Erreur de chargement de l'image");
+          };
+          
+          img.src = image.dataUrl;
           return;
-          } else {
-            toast.error("Aucun QR code détecté");
-          }
+          
         } catch (nativeErr: any) {
-          console.error("Erreur scan natif:", nativeErr);
-          // Check if it's a permission error
-          if (nativeErr.message && nativeErr.message.toLowerCase().includes('permission')) {
-            const msg = "Accès à la caméra refusé";
-            setError(msg);
-            toast.error(msg);
-            setShowOpenSettings(true);
-          } else {
-            const msg = "Impossible de démarrer la caméra. Vérifiez les autorisations dans les paramètres.";
-            setError(msg);
-            toast.error(msg);
-            setShowOpenSettings(true);
+          console.error("Erreur caméra native:", nativeErr);
+          if (nativeErr.message && nativeErr.message.toLowerCase().includes('cancel')) {
+            // User cancelled, just close
+            return;
           }
+          const msg = "Impossible d'accéder à la caméra";
+          setError(msg);
+          toast.error(msg);
+          return;
         }
-        
       }
 
       // Web path with html5-qrcode
@@ -191,14 +174,6 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   };
 
   const stopScanning = async () => {
-    try {
-      if (Capacitor.isNativePlatform()) {
-        await BarcodeScanner.stopScan();
-      }
-    } catch (e) {
-      console.warn("Arrêt du scan natif: ", e);
-    }
-
     if (scannerRef.current && scanning) {
       try {
         await scannerRef.current.stop();
@@ -232,17 +207,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   const handleClose = async () => {
     await stopScanning();
     setError(null);
-    setPermissionRequested(false);
-    setShowOpenSettings(false);
     onOpenChange(false);
-  };
-
-  const handleOpenSettings = async () => {
-    try {
-      await BarcodeScanner.openSettings();
-    } catch (e) {
-      toast.info("Ouvrez les paramètres de l'application manuellement.");
-    }
   };
 
   return (
@@ -266,26 +231,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
         </DialogHeader>
 
         <div className="space-y-4">
-          {!permissionRequested ? (
-            <div className="text-center space-y-4">
-              <div className="flex justify-center">
-                <div className="rounded-full bg-primary/10 p-4">
-                  <CameraIcon className="h-12 w-12 text-primary" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm font-medium">
-                  Autorisation requise
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Pour scanner le QR code, l'application a besoin d'accéder à votre appareil photo.
-                </p>
-              </div>
-              <Button onClick={startScanning} className="w-full">
-                Autoriser et scanner
-              </Button>
-            </div>
-          ) : error ? (
+          {error ? (
             <div className="text-center space-y-4">
               <div className="flex justify-center">
                 <div className="rounded-full bg-destructive/10 p-4">
@@ -296,56 +242,54 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
                 <p className="text-sm font-medium text-destructive">
                   {error}
                 </p>
-                <div className="bg-muted/50 rounded-lg p-4 space-y-3 text-left">
-                  <div className="space-y-2">
-                    <p className="text-xs font-semibold text-foreground">
-                      📱 Sur Android :
-                    </p>
-                    <ol className="text-xs text-muted-foreground space-y-1.5 pl-4">
-                      <li className="list-decimal">Fermez l'application complètement</li>
-                      <li className="list-decimal">Ouvrez <span className="font-medium text-foreground">Paramètres</span> → <span className="font-medium text-foreground">Applications</span></li>
-                      <li className="list-decimal">Trouvez <span className="font-medium text-foreground">S-reptrack</span> dans la liste</li>
-                      <li className="list-decimal">Appuyez sur <span className="font-medium text-foreground">Autorisations</span></li>
-                      <li className="list-decimal">Appuyez sur <span className="font-medium text-foreground">Appareil photo</span></li>
-                      <li className="list-decimal">Sélectionnez <span className="font-medium text-foreground">Autoriser</span></li>
-                      <li className="list-decimal">Rouvrez l'application</li>
-                    </ol>
-                  </div>
-                  <div className="space-y-2 pt-2 border-t border-border/50">
-                    <p className="text-xs font-semibold text-foreground">
-                      🍎 Sur iPhone :
-                    </p>
-                    <ol className="text-xs text-muted-foreground space-y-1.5 pl-4">
-                      <li className="list-decimal">Fermez l'application complètement</li>
-                      <li className="list-decimal">Ouvrez <span className="font-medium text-foreground">Réglages</span></li>
-                      <li className="list-decimal">Descendez et trouvez <span className="font-medium text-foreground">S-reptrack</span></li>
-                      <li className="list-decimal">Activez <span className="font-medium text-foreground">Appareil photo</span></li>
-                      <li className="list-decimal">Rouvrez l'application</li>
-                    </ol>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Astuce: si l'option <span className="font-medium text-foreground">Appareil photo</span> n'apparaît pas dans les autorisations de <span className="font-medium text-foreground">S-reptrack</span>, l'application a été installée sans la permission caméra. Dans ce cas, mettez l'application à jour puis réessayez.
-                  </p>
-                </div>
+                <p className="text-xs text-muted-foreground">
+                  Assurez-vous que le QR code est bien visible et net dans la photo.
+                </p>
               </div>
-              {showOpenSettings && (
-                <Button variant="secondary" onClick={handleOpenSettings} className="w-full">
-                  Ouvrir les paramètres de l'app
-                </Button>
-              )}
               <Button onClick={startScanning} className="w-full">
-                Réessayer après avoir activé l'autorisation
+                Réessayer
               </Button>
             </div>
           ) : (
-            <div className="space-y-4">
-              <div 
-                id="qr-reader" 
-                className="w-full rounded-lg overflow-hidden border-2 border-primary"
-              />
-              <p className="text-xs text-center text-muted-foreground">
-                Positionnez le QR code dans le cadre pour le scanner
-              </p>
+            <div className="text-center space-y-4">
+              <div className="flex justify-center">
+                <div className="rounded-full bg-primary/10 p-4">
+                  <CameraIcon className="h-12 w-12 text-primary" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <p className="text-sm font-medium">
+                  Scanner un QR Code
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Prenez une photo du QR code pour accéder rapidement à la fiche de l'animal.
+                </p>
+              </div>
+              <Button onClick={startScanning} className="w-full">
+                <CameraIcon className="h-4 w-4 mr-2" />
+                Ouvrir la caméra
+              </Button>
+              {!Capacitor.isNativePlatform() && (
+                <div className="space-y-4 pt-4">
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <span className="w-full border-t" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-background px-2 text-muted-foreground">
+                        ou scan en direct (web)
+                      </span>
+                    </div>
+                  </div>
+                  <div 
+                    id="qr-reader" 
+                    className="w-full rounded-lg overflow-hidden border-2 border-primary"
+                  />
+                  <p className="text-xs text-center text-muted-foreground">
+                    Positionnez le QR code dans le cadre
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </div>
