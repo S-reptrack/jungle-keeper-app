@@ -19,6 +19,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   const [error, setError] = useState<string | null>(null);
   const [forceWeb, setForceWeb] = useState(false);
   const scannerRef = useRef<Html5Qrcode | null>(null);
+  const codeReaderRef = useRef<BrowserQRCodeReader | null>(null);
   const navigate = useNavigate();
   const webTimeoutRef = useRef<number | null>(null);
 
@@ -162,8 +163,8 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
           
         } catch (nativeErr: any) {
           console.error("Erreur caméra native:", nativeErr);
-          if (nativeErr.message && nativeErr.message.toLowerCase().includes('cancel')) {
-            // User cancelled, just close
+          if (nativeErr?.message && nativeErr.message.toLowerCase().includes('cancel')) {
+            toast.info("Capture annulée");
             return;
           }
           const msg = "Impossible d'accéder à la caméra";
@@ -173,8 +174,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
         }
       }
 
-      // Web path with html5-qrcode
-      // Request camera permission explicitly
+      // Web path: try ZXing continuous scan first
       try {
         await navigator.mediaDevices
           .getUserMedia({ video: { facingMode: "environment" } })
@@ -194,6 +194,42 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
         setError(errorMessage);
         toast.error(errorMessage);
         return;
+      }
+
+      // ZXing: list devices and start decodeFromVideoDevice
+      try {
+        const reader = new BrowserQRCodeReader();
+        codeReaderRef.current = reader;
+        const devices = await BrowserQRCodeReader.listVideoInputDevices();
+        if (!devices || devices.length === 0) {
+          setError("Aucune caméra trouvée");
+          toast.error("Aucune caméra trouvée");
+          return;
+        }
+        const back = devices.find((d) =>
+          (d.label || '').toLowerCase().includes('back') ||
+          (d.label || '').toLowerCase().includes('rear') ||
+          (d.label || '').toLowerCase().includes('arrière')
+        ) || devices[devices.length - 1];
+
+        await reader.decodeFromVideoDevice(back.deviceId, 'qr-video', (result, err, controls) => {
+          if (result) {
+            console.log('[QR Scanner] ZXing decode:', result.getText());
+            handleScanSuccess(result.getText());
+            controls?.stop();
+          }
+        });
+        setScanning(true);
+        // small UX tip after 10s
+        if (!Capacitor.isNativePlatform() || forceWeb) {
+          if (webTimeoutRef.current) clearTimeout(webTimeoutRef.current);
+          webTimeoutRef.current = window.setTimeout(() => {
+            toast.info("Astuce: rapprochez le QR (>50% du cadre), bonne lumière, évitez les reflets.");
+          }, 10000);
+        }
+        return; // do not start html5-qrcode if ZXing started
+      } catch (zErr) {
+        console.warn('[QR Scanner] ZXing live failed, fallback to html5-qrcode', zErr);
       }
 
       const scanner = new Html5Qrcode("qr-reader");
@@ -217,7 +253,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
             cam.label.toLowerCase().includes("rear")
         ) || cameras[cameras.length - 1];
 
-       await scanner.start(
+      await scanner.start(
         backCamera.id,
         {
           fps: 15,
@@ -233,14 +269,14 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
         }
       );
 
-       setScanning(true);
-       // Afficher un conseil si rien n'est détecté au bout de 10s (sans interrompre le scan)
-       if (!Capacitor.isNativePlatform() || forceWeb) {
-         if (webTimeoutRef.current) clearTimeout(webTimeoutRef.current);
-         webTimeoutRef.current = window.setTimeout(() => {
-           toast.info("Astuce: rapprochez le QR (>50% du cadre), bonne lumière, évitez les reflets.");
-         }, 10000);
-       }
+      setScanning(true);
+      // Afficher un conseil si rien n'est détecté au bout de 10s (sans interrompre le scan)
+      if (!Capacitor.isNativePlatform() || forceWeb) {
+        if (webTimeoutRef.current) clearTimeout(webTimeoutRef.current);
+        webTimeoutRef.current = window.setTimeout(() => {
+          toast.info("Astuce: rapprochez le QR (>50% du cadre), bonne lumière, évitez les reflets.");
+        }, 10000);
+      }
     } catch (err: any) {
       console.error("Erreur lors du démarrage du scan:", err);
 
@@ -262,11 +298,24 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     }
   };
 
-   const stopScanning = async () => {
+  const stopScanning = async () => {
     if (webTimeoutRef.current) {
       clearTimeout(webTimeoutRef.current);
       webTimeoutRef.current = null;
     }
+
+    // Stop ZXing stream if any
+    if (codeReaderRef.current) {
+      try { (codeReaderRef.current as any)?.reset?.(); } catch (e) { console.warn('ZXing reset error', e); }
+      codeReaderRef.current = null;
+    }
+    const videoEl = document.getElementById('qr-video') as HTMLVideoElement | null;
+    const stream = (videoEl?.srcObject as MediaStream) || undefined;
+    if (stream) {
+      stream.getTracks().forEach((t) => t.stop());
+      if (videoEl) videoEl.srcObject = null as any;
+    }
+
     if (scannerRef.current && scanning) {
       try {
         await scannerRef.current.stop();
@@ -410,8 +459,9 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
                   </div>
                   <div 
                     id="qr-reader" 
-                    className="w-full rounded-lg overflow-hidden border-2 border-primary"
+                    className="w-full rounded-lg overflow-hidden border-2 border-primary mb-2"
                   />
+                  <video id="qr-video" className="w-full rounded-lg overflow-hidden border-2 border-primary" muted playsInline />
                   <p className="text-xs text-center text-muted-foreground">
                     Positionnez le QR code dans le cadre
                   </p>
