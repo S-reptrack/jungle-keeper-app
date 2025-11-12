@@ -17,6 +17,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   const [scanning, setScanning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [permissionRequested, setPermissionRequested] = useState(false);
+  const [showOpenSettings, setShowOpenSettings] = useState(false);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const navigate = useNavigate();
 
@@ -39,6 +40,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     try {
       setError(null);
       setPermissionRequested(true);
+      setShowOpenSettings(false);
 
       // Native (Capacitor) fallback using MLKit BarcodeScanner
       if (Capacitor.isNativePlatform()) {
@@ -51,6 +53,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
               const msg = "Accès à la caméra refusé";
               setError(msg);
               toast.error(msg);
+              setShowOpenSettings(true);
               return;
             }
           } catch (e) {
@@ -69,6 +72,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
               const msg = "Accès à la caméra refusé";
               setError(msg);
               toast.error(msg);
+              setShowOpenSettings(true);
               return;
             }
           }
@@ -94,10 +98,12 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
             const msg = "Accès à la caméra refusé";
             setError(msg);
             toast.error(msg);
+            setShowOpenSettings(true);
           } else {
             const msg = "Impossible de démarrer la caméra. Vérifiez les autorisations dans les paramètres.";
             setError(msg);
             toast.error(msg);
+            setShowOpenSettings(true);
           }
         }
         
@@ -227,7 +233,16 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     await stopScanning();
     setError(null);
     setPermissionRequested(false);
+    setShowOpenSettings(false);
     onOpenChange(false);
+  };
+
+  const handleOpenSettings = async () => {
+    try {
+      await BarcodeScanner.openSettings();
+    } catch (e) {
+      toast.info("Ouvrez les paramètres de l'application manuellement.");
+    }
   };
 
   return (
@@ -313,6 +328,11 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
                   </p>
                 </div>
               </div>
+              {showOpenSettings && (
+                <Button variant="secondary" onClick={handleOpenSettings} className="w-full">
+                  Ouvrir les paramètres de l'app
+                </Button>
+              )}
               <Button onClick={startScanning} className="w-full">
                 Réessayer après avoir activé l'autorisation
               </Button>
