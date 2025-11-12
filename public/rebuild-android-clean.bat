@@ -40,28 +40,14 @@ echo Ajout de la plateforme Android...
 call npx cap add android
 
 echo Modification d'AndroidManifest.xml...
-powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-  "$p='android\app\src\main\AndroidManifest.xml'; ^
-   if (Test-Path $p) { ^
-     $xml = Get-Content -Raw -Path $p; ^
-     if ($xml -notmatch 'android\.permission\.CAMERA') { ^
-       $xml = $xml -replace '(<manifest[^>]*>)', '$1`n  <uses-permission android:name=""android.permission.CAMERA"" />`n  <uses-feature android:name=""android.hardware.camera"" android:required=""false"" />`n  <uses-feature android:name=""android.hardware.camera.autofocus"" android:required=""false"" />'; ^
-     }; ^
-     if ($xml -notmatch 'com\.google\.mlkit\.vision\.DEPENDENCIES') { ^
-       $xml = $xml -replace '(<application[^>]*>)', '$1`n    <meta-data android:name=""com.google.mlkit.vision.DEPENDENCIES"" android:value=""barcode"" />'; ^
-     }; ^
-     Set-Content -Path $p -Value $xml -Encoding UTF8; ^
-     Write-Host 'AndroidManifest.xml configure'; ^
-   } else { ^
-     Write-Host 'ERREUR: AndroidManifest.xml introuvable'; ^
-     exit 1; ^
-   }"
+node public\fix-android-manifest.js
 
 if errorlevel 1 (
   echo ERREUR lors de la configuration
   pause
   exit /b 1
 )
+
 
 echo Synchronisation Capacitor...
 call npx cap sync android
