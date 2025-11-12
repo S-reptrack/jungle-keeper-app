@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Capacitor } from "@capacitor/core";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import jsQR from "jsqr";
+import { BrowserQRCodeReader } from "@zxing/browser";
 interface QRScannerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -257,12 +258,32 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   const handleScanSuccess = async (decodedText: string) => {
     await stopScanning();
     
-    // Extract reptile ID from URL
+    // Extract reptile ID from various QR formats
     const urlPattern = /\/reptile\/([a-f0-9-]+)/i;
+    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+    let reptileId: string | null = null;
+
+    // 1) URL contenant /reptile/{uuid}
     const match = decodedText.match(urlPattern);
-    
     if (match && match[1]) {
-      const reptileId = match[1];
+      reptileId = match[1];
+    }
+
+    // 2) QR qui contient directement l'UUID
+    if (!reptileId && uuidPattern.test(decodedText.trim())) {
+      reptileId = decodedText.trim();
+    }
+
+    // 3) URL avec ?id={uuid}
+    if (!reptileId) {
+      const qp = decodedText.match(/[?&]id=([a-f0-9-]{36})/i);
+      if (qp && qp[1]) {
+        reptileId = qp[1];
+      }
+    }
+    
+    if (reptileId) {
       onOpenChange(false);
       toast.success("QR code scanné avec succès !");
       navigate(`/reptile/${reptileId}`);
