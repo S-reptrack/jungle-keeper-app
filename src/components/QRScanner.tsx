@@ -20,6 +20,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   const [forceWeb, setForceWeb] = useState(false);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const navigate = useNavigate();
+  const webTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     return () => {
@@ -216,14 +217,15 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
             cam.label.toLowerCase().includes("rear")
         ) || cameras[cameras.length - 1];
 
-      await scanner.start(
+       await scanner.start(
         backCamera.id,
         {
-          fps: 10,
-          qrbox: { width: 250, height: 250 },
+          fps: 15,
+          qrbox: { width: 320, height: 320 },
           aspectRatio: 1.0,
         },
         (decodedText) => {
+          console.log("[QR Scanner] Web decode:", decodedText);
           handleScanSuccess(decodedText);
         },
         (_errorMessage) => {
@@ -231,7 +233,14 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
         }
       );
 
-      setScanning(true);
+       setScanning(true);
+       // Afficher un conseil si rien n'est détecté au bout de 10s (sans interrompre le scan)
+       if (!Capacitor.isNativePlatform() || forceWeb) {
+         if (webTimeoutRef.current) clearTimeout(webTimeoutRef.current);
+         webTimeoutRef.current = window.setTimeout(() => {
+           toast.info("Astuce: rapprochez le QR (>50% du cadre), bonne lumière, évitez les reflets.");
+         }, 10000);
+       }
     } catch (err: any) {
       console.error("Erreur lors du démarrage du scan:", err);
 
@@ -253,7 +262,11 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     }
   };
 
-  const stopScanning = async () => {
+   const stopScanning = async () => {
+    if (webTimeoutRef.current) {
+      clearTimeout(webTimeoutRef.current);
+      webTimeoutRef.current = null;
+    }
     if (scannerRef.current && scanning) {
       try {
         await scannerRef.current.stop();
@@ -266,7 +279,11 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     }
   };
 
-  const handleScanSuccess = async (decodedText: string) => {
+   const handleScanSuccess = async (decodedText: string) => {
+    if (webTimeoutRef.current) {
+      clearTimeout(webTimeoutRef.current);
+      webTimeoutRef.current = null;
+    }
     await stopScanning();
     
     // Extract reptile ID from various QR formats
