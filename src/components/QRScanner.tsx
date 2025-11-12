@@ -36,6 +36,120 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     }
   }, [open]);
 
+  const scanFromGallery = async () => {
+    try {
+      setError(null);
+
+      // Open gallery to select image
+      const photo = await Camera.getPhoto({
+        source: CameraSource.Photos,
+        resultType: CameraResultType.Base64,
+        quality: 100,
+      });
+
+      if (!photo.base64String && !photo.webPath) {
+        toast.error("Impossible de charger l'image");
+        return;
+      }
+
+      // Load image
+      const loadImage = async (): Promise<HTMLImageElement> => {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.onerror = () => reject(new Error("Erreur de chargement de l'image"));
+
+          if (photo.base64String) {
+            const format = photo.format || 'jpeg';
+            img.src = `data:image/${format};base64,${photo.base64String}`;
+          } else if (photo.webPath) {
+            fetch(photo.webPath)
+              .then((res) => res.blob())
+              .then((blob) => {
+                const url = URL.createObjectURL(blob);
+                img.src = url;
+              })
+              .catch(() => reject(new Error("Erreur de chargement de l'image")));
+          }
+        });
+      };
+
+      const img = await loadImage();
+
+      // Resize if needed
+      const maxDim = 1024;
+      const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.floor(img.width * scale));
+      canvas.height = Math.max(1, Math.floor(img.height * scale));
+      const ctx = canvas.getContext('2d');
+      
+      if (!ctx) {
+        toast.error("Erreur de traitement de l'image");
+        return;
+      }
+
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      
+      console.log("[QR Scanner Gallery] Image loaded:", canvas.width, "x", canvas.height);
+      
+      // Try ZXing first
+      try {
+        console.log("[QR Scanner Gallery] Trying ZXing...");
+        const reader = new BrowserQRCodeReader();
+        const result = await reader.decodeFromImageElement(img);
+        if (result && result.getText()) {
+          console.log("[QR Scanner Gallery] ✓ ZXing decoded:", result.getText());
+          handleScanSuccess(result.getText());
+          return;
+        }
+      } catch (zxingErr) {
+        console.warn("[QR Scanner Gallery] ZXing failed:", zxingErr);
+      }
+
+      // Try jsQR
+      let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      let code = jsQR(imageData.data, imageData.width, imageData.height, {
+        inversionAttempts: "attemptBoth",
+      });
+      console.log("[QR Scanner Gallery] jsQR attempt 1:", code ? "✓ DETECTED" : "✗ failed");
+
+      // Try with preprocessing if first attempt failed
+      if (!code) {
+        const data = imageData.data;
+        for (let i = 0; i < data.length; i += 4) {
+          const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+          const contrasted = ((gray - 128) * 1.5) + 128;
+          const value = Math.max(0, Math.min(255, contrasted));
+          data[i] = data[i + 1] = data[i + 2] = value;
+        }
+        code = jsQR(imageData.data, imageData.width, imageData.height, {
+          inversionAttempts: "attemptBoth",
+        });
+        console.log("[QR Scanner Gallery] jsQR attempt 2 (preprocessed):", code ? "✓ DETECTED" : "✗ failed");
+      }
+
+      if (code && code.data) {
+        console.log("[QR Scanner Gallery] ✓ QR decoded:", code.data);
+        handleScanSuccess(code.data);
+      } else {
+        console.error("[QR Scanner Gallery] ✗ No QR code detected");
+        toast.error("Aucun QR code détecté dans cette image");
+        setError("Aucun QR code détecté dans l'image");
+      }
+
+    } catch (err: any) {
+      console.error("Error scanning from gallery:", err);
+      if (err?.message && err.message.toLowerCase().includes('cancel')) {
+        toast.info("Sélection annulée");
+        return;
+      }
+      const msg = "Impossible de scanner l'image";
+      setError(msg);
+      toast.error(msg);
+    }
+  };
+
   const startScanning = async () => {
     try {
       setError(null);
@@ -455,13 +569,19 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
                   Prenez une photo du QR code pour accéder rapidement à la fiche de l'animal.
                 </p>
               </div>
-              <Button onClick={startScanning} className="w-full">
-                <CameraIcon className="h-4 w-4 mr-2" />
-                Ouvrir la caméra
-              </Button>
+              <div className="flex flex-col gap-2">
+                <Button onClick={startScanning} className="w-full">
+                  <CameraIcon className="h-4 w-4 mr-2" />
+                  Prendre une photo
+                </Button>
+                <Button onClick={scanFromGallery} variant="outline" className="w-full">
+                  Scanner depuis une image
+                </Button>
+              </div>
               {Capacitor.isNativePlatform() && (
                 <Button
-                  variant="outline"
+                  variant="secondary"
+                  size="sm"
                   onClick={() => { setForceWeb(true); startScanning(); }}
                   className="w-full"
                 >
