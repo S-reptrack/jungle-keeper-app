@@ -93,32 +93,34 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
           }
 
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          
+          console.log("[QR Scanner] Image chargée:", canvas.width, "x", canvas.height);
+          
+          // ÉTAPE 1: Essayer jsQR sans modification
           let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          
-          // Conversion en niveaux de gris et augmentation du contraste pour meilleure détection
-          const data = imageData.data;
-          for (let i = 0; i < data.length; i += 4) {
-            const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
-            // Augmentation du contraste
-            const contrasted = ((gray - 128) * 1.5) + 128;
-            const value = Math.max(0, Math.min(255, contrasted));
-            data[i] = data[i + 1] = data[i + 2] = value;
-          }
-          
-          // Tentative 1: Image complète
           let code = jsQR(imageData.data, imageData.width, imageData.height, {
-            inversionAttempts: "dontInvert",
+            inversionAttempts: "attemptBoth",
           });
+          console.log("[QR Scanner] Tentative 1 (image brute):", code ? "✓ DÉTECTÉ" : "✗ échec");
 
-          // Tentative 2: Image complète avec inversion
+          // ÉTAPE 2: Essayer avec preprocessing (niveaux de gris + contraste)
           if (!code) {
+            const data = imageData.data;
+            for (let i = 0; i < data.length; i += 4) {
+              const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+              const contrasted = ((gray - 128) * 1.5) + 128;
+              const value = Math.max(0, Math.min(255, contrasted));
+              data[i] = data[i + 1] = data[i + 2] = value;
+            }
             code = jsQR(imageData.data, imageData.width, imageData.height, {
               inversionAttempts: "attemptBoth",
             });
+            console.log("[QR Scanner] Tentative 2 (preprocessing):", code ? "✓ DÉTECTÉ" : "✗ échec");
           }
 
-          // Tentative 3: Crop central 80%
+          // ÉTAPE 3: Crop central 80%
           if (!code) {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height); // Redessiner image originale
             const size = Math.floor(Math.min(canvas.width, canvas.height) * 0.8);
             const x = Math.floor((canvas.width - size) / 2);
             const y = Math.floor((canvas.height - size) / 2);
@@ -126,24 +128,32 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
             code = jsQR(cropped.data, size, size, {
               inversionAttempts: "attemptBoth",
             });
+            console.log("[QR Scanner] Tentative 3 (crop 80%):", code ? "✓ DÉTECTÉ" : "✗ échec");
           }
 
-          // Tentative 4: Crop central 60%
+          // ÉTAPE 4: ZXing comme fallback ultime
           if (!code) {
-            const size = Math.floor(Math.min(canvas.width, canvas.height) * 0.6);
-            const x = Math.floor((canvas.width - size) / 2);
-            const y = Math.floor((canvas.height - size) / 2);
-            const cropped = ctx.getImageData(x, y, size, size);
-            code = jsQR(cropped.data, size, size, {
-              inversionAttempts: "attemptBoth",
-            });
+            try {
+              console.log("[QR Scanner] Tentative 4: ZXing fallback...");
+              const reader = new BrowserQRCodeReader();
+              const result = await reader.decodeFromImageElement(img);
+              if (result && result.getText()) {
+                console.log("[QR Scanner] ✓ DÉTECTÉ par ZXing:", result.getText());
+                handleScanSuccess(result.getText());
+                return;
+              }
+            } catch (zxingErr) {
+              console.error("[QR Scanner] ZXing échec:", zxingErr);
+            }
           }
 
           if (code && code.data) {
+            console.log("[QR Scanner] ✓ QR décodé:", code.data);
             handleScanSuccess(code.data);
           } else {
-            toast.error("QR code non détecté");
-            setError("Assurez-vous que le QR code occupe au moins 50% de l'écran, avec un bon éclairage et sans reflets.");
+            console.error("[QR Scanner] ✗ Échec total de détection");
+            toast.error("QR code non détecté. Rapprochez-vous (QR code > 50% écran) avec bon éclairage.");
+            setError("QR code non détecté. Cadrez le QR code pour qu'il occupe au moins 50% de l'écran.");
           }
 
           return;
