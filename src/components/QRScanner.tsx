@@ -43,7 +43,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
           const photo = await Camera.getPhoto({
             source: CameraSource.Camera,
             resultType: CameraResultType.Base64,
-            quality: 85,
+            quality: 100, // Qualité maximale pour meilleure détection
             correctOrientation: true,
             saveToGallery: false,
           });
@@ -93,22 +93,56 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
 
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
           let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          let code = jsQR(imageData.data, imageData.width, imageData.height);
+          
+          // Conversion en niveaux de gris et augmentation du contraste pour meilleure détection
+          const data = imageData.data;
+          for (let i = 0; i < data.length; i += 4) {
+            const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+            // Augmentation du contraste
+            const contrasted = ((gray - 128) * 1.5) + 128;
+            const value = Math.max(0, Math.min(255, contrasted));
+            data[i] = data[i + 1] = data[i + 2] = value;
+          }
+          
+          // Tentative 1: Image complète
+          let code = jsQR(imageData.data, imageData.width, imageData.height, {
+            inversionAttempts: "dontInvert",
+          });
 
-          // Second essai: recadrage central si échec
+          // Tentative 2: Image complète avec inversion
+          if (!code) {
+            code = jsQR(imageData.data, imageData.width, imageData.height, {
+              inversionAttempts: "attemptBoth",
+            });
+          }
+
+          // Tentative 3: Crop central 80%
           if (!code) {
             const size = Math.floor(Math.min(canvas.width, canvas.height) * 0.8);
             const x = Math.floor((canvas.width - size) / 2);
             const y = Math.floor((canvas.height - size) / 2);
             const cropped = ctx.getImageData(x, y, size, size);
-            code = jsQR(cropped.data, size, size);
+            code = jsQR(cropped.data, size, size, {
+              inversionAttempts: "attemptBoth",
+            });
+          }
+
+          // Tentative 4: Crop central 60%
+          if (!code) {
+            const size = Math.floor(Math.min(canvas.width, canvas.height) * 0.6);
+            const x = Math.floor((canvas.width - size) / 2);
+            const y = Math.floor((canvas.height - size) / 2);
+            const cropped = ctx.getImageData(x, y, size, size);
+            code = jsQR(cropped.data, size, size, {
+              inversionAttempts: "attemptBoth",
+            });
           }
 
           if (code && code.data) {
             handleScanSuccess(code.data);
           } else {
-            toast.error("Aucun QR code détecté dans l'image");
-            setError("Aucun QR code détecté. Rapprochez-vous et assurez une bonne lumière.");
+            toast.error("QR code non détecté");
+            setError("Assurez-vous que le QR code occupe au moins 50% de l'écran, avec un bon éclairage et sans reflets.");
           }
 
           return;
