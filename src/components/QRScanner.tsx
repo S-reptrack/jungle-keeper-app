@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { X, Camera as CameraIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -212,10 +212,18 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
           (d.label || '').toLowerCase().includes('arrière')
         ) || devices[devices.length - 1];
 
-        await reader.decodeFromVideoDevice(back.deviceId, 'qr-video', (result, err, controls) => {
+        const videoEl = document.getElementById('qr-video') as HTMLVideoElement | null;
+        if (!videoEl) {
+          setError("Lecteur vidéo introuvable");
+          toast.error("Erreur interne du scanner");
+          return;
+        }
+
+        await reader.decodeFromVideoDevice(back.deviceId, videoEl, (result, err, controls) => {
           if (result) {
-            console.log('[QR Scanner] ZXing decode:', result.getText());
-            handleScanSuccess(result.getText());
+            const text = result.getText();
+            console.log('[QR Scanner] ZXing decode:', text);
+            handleScanSuccess(text);
             controls?.stop();
           }
         });
@@ -336,13 +344,15 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     await stopScanning();
     
     // Extract reptile ID from various QR formats
-    const urlPattern = /\/reptile\/([a-f0-9-]+)/i;
+    const urlPattern = /\/reptile\/([0-9a-f-]{36})/i;
+    const hashUrlPattern = /#\/reptile\/([0-9a-f-]{36})/i;
     const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    const anyIdParamPattern = /[?&#](?:id|reptileId|reptile_id)=([0-9a-f-]{36})/i;
 
     let reptileId: string | null = null;
 
-    // 1) URL contenant /reptile/{uuid}
-    const match = decodedText.match(urlPattern);
+    // 1) URL contenant /reptile/{uuid} (chemin ou hash)
+    let match = decodedText.match(urlPattern) || decodedText.match(hashUrlPattern);
     if (match && match[1]) {
       reptileId = match[1];
     }
@@ -352,12 +362,21 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
       reptileId = decodedText.trim();
     }
 
-    // 3) URL avec ?id={uuid}
+    // 3) URL avec paramètres (?id= / ?reptileId= / #id=)
     if (!reptileId) {
-      const qp = decodedText.match(/[?&]id=([a-f0-9-]{36})/i);
+      const qp = decodedText.match(anyIdParamPattern);
       if (qp && qp[1]) {
         reptileId = qp[1];
       }
+    }
+    
+    // 4) Si un lien HTTP est détecté mais non reconnu, informer l'utilisateur et ouvrir
+    if (!reptileId && /^https?:\/\//i.test(decodedText)) {
+      toast.info("QR détecté: ouverture du lien");
+      try {
+        window.location.href = decodedText;
+        return;
+      } catch {}
     }
     
     if (reptileId) {
@@ -365,7 +384,8 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
       toast.success("QR code scanné avec succès !");
       navigate(`/reptile/${reptileId}`);
     } else {
-      toast.error("QR code invalide. Veuillez scanner un QR code d'animal.");
+      console.warn("[QR Scanner] QR détecté mais format non reconnu:", decodedText);
+      toast.error("QR détecté, format non reconnu.");
       setError("QR code invalide");
     }
   };
@@ -395,6 +415,9 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
               <X className="h-4 w-4" />
             </Button>
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            Scannez un QR code pour ouvrir la fiche de l'animal
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
