@@ -42,47 +42,75 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
           // Take photo using the same API that works for ImageUploadDialog
           const photo = await Camera.getPhoto({
             source: CameraSource.Camera,
-            resultType: CameraResultType.Uri,
+            resultType: CameraResultType.Base64,
             quality: 85,
             correctOrientation: true,
             saveToGallery: false,
           });
 
-          if (!photo.webPath) {
+          if (!photo.base64String && !photo.webPath) {
             toast.error("Impossible de capturer la photo");
             return;
           }
 
-          // Decode QR code from image using jsQR
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext('2d');
-            
-            if (!ctx) {
-              toast.error("Erreur de traitement de l'image");
-              return;
-            }
+          // Charge l'image (base64 privilégié pour éviter le canvas "tainted")
+          const loadImage = async (): Promise<HTMLImageElement> => {
+            return new Promise((resolve, reject) => {
+              const img = new Image();
+              img.onload = () => resolve(img);
+              img.onerror = () => reject(new Error("Erreur de chargement de l'image"));
 
-            ctx.drawImage(img, 0, 0);
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const code = jsQR(imageData.data, imageData.width, imageData.height);
+              if (photo.base64String) {
+                const format = photo.format || 'jpeg';
+                img.src = `data:image/${format};base64,${photo.base64String}`;
+              } else if (photo.webPath) {
+                // Fallback: fetch pour créer un Object URL et éviter CORS/taint
+                fetch(photo.webPath)
+                  .then((res) => res.blob())
+                  .then((blob) => {
+                    const url = URL.createObjectURL(blob);
+                    img.src = url;
+                  })
+                  .catch(() => reject(new Error("Erreur de chargement de l'image")));
+              }
+            });
+          };
 
-            if (code && code.data) {
-              handleScanSuccess(code.data);
-            } else {
-              toast.error("Aucun QR code détecté dans l'image");
-              setError("Aucun QR code détecté. Réessayez avec une image plus nette.");
-            }
-          };
+          const img = await loadImage();
+
+          // Redimensionne (max 1024px) pour améliorer les chances de détection
+          const maxDim = 1024;
+          const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+          const canvas = document.createElement('canvas');
+          canvas.width = Math.max(1, Math.floor(img.width * scale));
+          canvas.height = Math.max(1, Math.floor(img.height * scale));
+          const ctx = canvas.getContext('2d');
           
-          img.onerror = () => {
-            toast.error("Erreur de chargement de l'image");
-          };
-          
-          img.src = photo.webPath;
+          if (!ctx) {
+            toast.error("Erreur de traitement de l'image");
+            return;
+          }
+
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          let code = jsQR(imageData.data, imageData.width, imageData.height);
+
+          // Second essai: recadrage central si échec
+          if (!code) {
+            const size = Math.floor(Math.min(canvas.width, canvas.height) * 0.8);
+            const x = Math.floor((canvas.width - size) / 2);
+            const y = Math.floor((canvas.height - size) / 2);
+            const cropped = ctx.getImageData(x, y, size, size);
+            code = jsQR(cropped.data, size, size);
+          }
+
+          if (code && code.data) {
+            handleScanSuccess(code.data);
+          } else {
+            toast.error("Aucun QR code détecté dans l'image");
+            setError("Aucun QR code détecté. Rapprochez-vous et assurez une bonne lumière.");
+          }
+
           return;
           
         } catch (nativeErr: any) {
