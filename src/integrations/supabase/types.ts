@@ -166,43 +166,61 @@ export type Database = {
       reproduction_observations: {
         Row: {
           action: string
+          closed: boolean
+          closed_at: string | null
           created_at: string
           expected_hatch_date: string | null
+          hatched_eggs: number | null
           id: string
           incubation_days: number | null
           notes: string | null
           notification_days_before: number | null
           observation_date: string
+          outcome_notes: string | null
           partner_id: string
           reptile_id: string
+          stillborn_juveniles: number | null
+          unhatched_eggs: number | null
           updated_at: string
           user_id: string
         }
         Insert: {
           action: string
+          closed?: boolean
+          closed_at?: string | null
           created_at?: string
           expected_hatch_date?: string | null
+          hatched_eggs?: number | null
           id?: string
           incubation_days?: number | null
           notes?: string | null
           notification_days_before?: number | null
           observation_date: string
+          outcome_notes?: string | null
           partner_id: string
           reptile_id: string
+          stillborn_juveniles?: number | null
+          unhatched_eggs?: number | null
           updated_at?: string
           user_id: string
         }
         Update: {
           action?: string
+          closed?: boolean
+          closed_at?: string | null
           created_at?: string
           expected_hatch_date?: string | null
+          hatched_eggs?: number | null
           id?: string
           incubation_days?: number | null
           notes?: string | null
           notification_days_before?: number | null
           observation_date?: string
+          outcome_notes?: string | null
           partner_id?: string
           reptile_id?: string
+          stillborn_juveniles?: number | null
+          unhatched_eggs?: number | null
           updated_at?: string
           user_id?: string
         }
