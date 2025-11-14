@@ -12,6 +12,7 @@ import { BarcodeScanner } from "@capacitor-mlkit/barcode-scanning";
 import jsQR from "jsqr";
 import { BrowserQRCodeReader } from "@zxing/browser";
 import QrScanner from "qr-scanner";
+import { supabase } from "@/integrations/supabase/client";
 // Config paths for worker & wasm (Vite-friendly URLs)
 (QrScanner as any).WORKER_PATH = new URL('qr-scanner/qr-scanner-worker.min.js', import.meta.url).toString();
 (QrScanner as any).WASM_PATH = new URL('qr-scanner/qr-scanner-worker.min.wasm', import.meta.url).toString();
@@ -493,49 +494,80 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     }
   };
 
-   const handleScanSuccess = async (decodedText: string) => {
-    if (webTimeoutRef.current) {
-      clearTimeout(webTimeoutRef.current);
-      webTimeoutRef.current = null;
-    }
-    await stopScanning();
-    
-    console.log("[QR Scanner] Texte scanné:", decodedText);
-    
-    // UUID pattern (format standard 8-4-4-4-12)
-    const uuidPattern = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
-    
-    // Chercher un UUID n'importe où dans le texte
-    const match = decodedText.match(uuidPattern);
-    
-    if (match) {
-      const reptileId = match[0];
-      console.log("[QR Scanner] UUID extrait:", reptileId);
-      onOpenChange(false);
-      toast.success("QR code scanné avec succès !");
-      navigate(`/reptile/${reptileId}`);
-    } else {
-      // Si c'est une URL complète, essayer de l'ouvrir
-      if (/^https?:\/\//i.test(decodedText)) {
-        console.log("[QR Scanner] Lien détecté:", decodedText);
-        toast.info("Ouverture du lien détecté");
-        try {
-          if (Capacitor.isNativePlatform()) {
-            await Browser.open({ url: decodedText, presentationStyle: 'fullscreen' });
-          } else {
-            window.open(decodedText, '_blank', 'noopener,noreferrer');
-          }
-          return;
-        } catch (e) {
-          console.error('[QR Scanner] Ouverture du lien a échoué:', e);
-        }
+const handleScanSuccess = async (decodedText: string) => {
+  if (webTimeoutRef.current) {
+    clearTimeout(webTimeoutRef.current);
+    webTimeoutRef.current = null;
+  }
+  await stopScanning();
+  
+  console.log("[QR Scanner] Texte scanné:", decodedText);
+  
+  // UUID pattern (format standard 8-4-4-4-12)
+  const uuidPattern = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
+  
+  // Chercher un UUID n'importe où dans le texte
+  const match = decodedText.match(uuidPattern);
+  
+  if (match) {
+    const reptileId = match[0];
+    console.log("[QR Scanner] UUID extrait:", reptileId);
+    toast.info(`ID détecté: ${reptileId.substring(0, 8)}…`, { duration: 3000 });
+
+    // Vérification rapide: connecté + l'ID existe bien
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast.error("Non connecté - connexion requise");
+        onOpenChange(false);
+        navigate("/auth");
+        return;
       }
-      
-      console.warn("[QR Scanner] Format non reconnu:", decodedText);
-      toast.error("Format de QR code non reconnu");
-      setError("QR code invalide - aucun ID trouvé");
+      const { data: found, error } = await supabase
+        .from("reptiles")
+        .select("id,user_id")
+        .eq("id", reptileId)
+        .maybeSingle();
+      if (error) {
+        console.warn("[QR Scanner] Check error:", error);
+      }
+      if (!found) {
+        toast.error("Cet ID n'existe pas dans votre base");
+        setError("Reptile introuvable");
+        return;
+      }
+      if (found.user_id !== user.id) {
+        toast.warning("Attention: cet animal n'appartient pas à votre compte");
+      }
+    } catch (e) {
+      console.warn("[QR Scanner] Pre-check failed:", e);
     }
-  };
+
+    onOpenChange(false);
+    toast.success("QR code scanné avec succès !");
+    navigate(`/reptile/${reptileId}`);
+  } else {
+    // Si c'est une URL complète, essayer de l'ouvrir
+    if (/^https?:\/\//i.test(decodedText)) {
+      console.log("[QR Scanner] Lien détecté:", decodedText);
+      toast.info("Ouverture du lien détecté");
+      try {
+        if (Capacitor.isNativePlatform()) {
+          await Browser.open({ url: decodedText, presentationStyle: 'fullscreen' });
+        } else {
+          window.open(decodedText, '_blank', 'noopener,noreferrer');
+        }
+        return;
+      } catch (e) {
+        console.error('[QR Scanner] Ouverture du lien a échoué:', e);
+      }
+    }
+    
+    console.warn("[QR Scanner] Format non reconnu:", decodedText);
+    toast.error("Format de QR code non reconnu");
+    setError("QR code invalide - aucun ID trouvé");
+  }
+};
 
   const handleClose = async () => {
     await stopScanning();
