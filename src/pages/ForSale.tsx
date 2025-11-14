@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ChevronRight, Tag } from "lucide-react";
+import { Tag, Scale, Calendar } from "lucide-react";
+import { useSignedImageUrl } from "@/lib/storageUtils";
+import { differenceInYears, differenceInMonths } from "date-fns";
 
 interface Reptile {
   id: string;
@@ -14,6 +16,9 @@ interface Reptile {
   sex: string | null;
   birth_date: string;
   weight: number;
+  morphs: string[];
+  image_url: string | null;
+  user_id: string;
 }
 
 const ForSale = () => {
@@ -28,10 +33,14 @@ const ForSale = () => {
 
   const fetchReptiles = async () => {
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
       const { data, error } = await supabase
         .from("reptiles")
-        .select("id, name, species, sex, birth_date, weight")
+        .select("*")
         .eq("status", "for_sale")
+        .eq("user_id", user.id)
         .order("name", { ascending: true });
 
       if (error) throw error;
@@ -43,14 +52,23 @@ const ForSale = () => {
     }
   };
 
+  const parseDate = (dateString: string) => {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
+  const formatDate = (dateString: string) => {
+    return parseDate(dateString).toLocaleDateString('fr-FR');
+  };
+
   const calculateAge = (birthDate: string) => {
-    const birth = new Date(birthDate);
-    const today = new Date();
-    const years = today.getFullYear() - birth.getFullYear();
-    const months = today.getMonth() - birth.getMonth();
-    
+    const birth = parseDate(birthDate);
+    const now = new Date();
+    const years = differenceInYears(now, birth);
+    const months = differenceInMonths(now, birth) % 12;
+
     if (years > 0) {
-      return `${years} an${years > 1 ? 's' : ''}`;
+      return `${years} an${years > 1 ? 's' : ''}${months > 0 ? ` ${months} mois` : ""}`;
     }
     return `${months} mois`;
   };
@@ -59,6 +77,12 @@ const ForSale = () => {
     if (sex === "male") return "♂";
     if (sex === "female") return "♀";
     return "?";
+  };
+
+  const getSexLabel = (sex: string | null) => {
+    if (sex === "male") return "Mâle";
+    if (sex === "female") return "Femelle";
+    return "Inconnu";
   };
 
   const groupBySpecies = (reptileList: Reptile[]) => {
@@ -104,44 +128,119 @@ const ForSale = () => {
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-8">
-            {groupBySpecies(reptiles).map(([species, speciesReptiles]) => (
-              <div key={species}>
-                <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
-                <div className="space-y-3">
-                  {speciesReptiles.map((reptile) => (
-                    <Card
-                      key={reptile.id}
-                      className="cursor-pointer hover:shadow-md transition-all hover:border-primary/50"
-                      onClick={() => navigate(`/reptile/${reptile.id}`)}
-                    >
-                      <CardContent className="p-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <h3 className="text-lg font-semibold text-foreground">{reptile.name}</h3>
-                              <Badge variant="secondary" className="text-xs">
-                                {getSexIcon(reptile.sex)}
-                              </Badge>
-                            </div>
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              <span>{calculateAge(reptile.birth_date)}</span>
-                              <span>•</span>
-                              <span>{reptile.weight}g</span>
-                            </div>
-                          </div>
-                          <ChevronRight className="w-5 h-5 text-muted-foreground" />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
+          <div className="space-y-6">
+            {reptiles.map((reptile) => (
+              <ReptileForSaleCard key={reptile.id} reptile={reptile} />
             ))}
           </div>
         )}
       </main>
     </div>
+  );
+};
+
+interface ReptileForSaleCardProps {
+  reptile: Reptile;
+}
+
+const ReptileForSaleCard = ({ reptile }: ReptileForSaleCardProps) => {
+  const navigate = useNavigate();
+  const { signedUrl, loading } = useSignedImageUrl(reptile.image_url);
+
+  const parseDate = (dateString: string) => {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
+  const calculateAge = (birthDate: string) => {
+    const birth = parseDate(birthDate);
+    const now = new Date();
+    const years = differenceInYears(now, birth);
+    const months = differenceInMonths(now, birth) % 12;
+
+    if (years > 0) {
+      return `${years} an${years > 1 ? 's' : ''}${months > 0 ? ` ${months} mois` : ""}`;
+    }
+    return `${months} mois`;
+  };
+
+  const getSexLabel = (sex: string | null) => {
+    if (sex === "male") return "Mâle";
+    if (sex === "female") return "Femelle";
+    return "Inconnu";
+  };
+
+  const getSexIcon = (sex: string | null) => {
+    if (sex === "male") return "♂";
+    if (sex === "female") return "♀";
+    return "?";
+  };
+
+  return (
+    <Card 
+      className="overflow-hidden cursor-pointer hover:shadow-lg transition-all hover:border-primary/50"
+      onClick={() => navigate(`/reptile/${reptile.id}`)}
+    >
+      <div className="grid md:grid-cols-[300px_1fr] gap-0">
+        {/* Image Section */}
+        <div className="relative h-64 md:h-auto bg-gradient-to-br from-jungle-mid to-jungle-light">
+          {!loading && signedUrl && (
+            <img 
+              src={signedUrl} 
+              alt={reptile.name}
+              className="w-full h-full object-cover"
+            />
+          )}
+          <div className="absolute top-3 right-3">
+            <Badge variant="outline" className="border-primary text-primary bg-background/90 backdrop-blur-sm">
+              À vendre
+            </Badge>
+          </div>
+        </div>
+
+        {/* Info Section */}
+        <div className="p-6">
+          <CardHeader className="p-0 mb-4">
+            <div className="flex items-start justify-between mb-2">
+              <div className="flex-1">
+                <CardTitle className="text-2xl mb-1">{reptile.name}</CardTitle>
+                <p className="text-sm text-muted-foreground">{reptile.species}</p>
+              </div>
+              <Badge variant="secondary" className="bg-accent/20 text-accent-foreground border-accent/30">
+                {calculateAge(reptile.birth_date)}
+              </Badge>
+            </div>
+          </CardHeader>
+          
+          <CardContent className="p-0 space-y-3">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Sexe</span>
+              <Badge variant="outline" className="inline-flex flex-col items-center justify-center gap-0 whitespace-nowrap leading-none py-1">
+                <span className="text-xs leading-none">{getSexLabel(reptile.sex)}</span>
+                <span className="h-3.5 leading-none text-xs flex items-center justify-center">
+                  {getSexIcon(reptile.sex)}
+                </span>
+              </Badge>
+            </div>
+            
+            {reptile.morphs && reptile.morphs.length > 0 && (
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">Mutations</span>
+                <span className="font-medium text-foreground">{reptile.morphs.join(", ")}</span>
+              </div>
+            )}
+            
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground flex items-center gap-2">
+                <Scale className="w-4 h-4" />
+                Poids
+              </span>
+              <span className="font-medium text-foreground">{reptile.weight}g</span>
+            </div>
+          </CardContent>
+        </div>
+      </div>
+    </Card>
   );
 };
 
