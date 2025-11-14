@@ -187,6 +187,7 @@ const Index = () => {
         .gte("expected_hatch_date", hatchingToday.toISOString())
         .eq("reptiles.status", "active")
         .eq("reptiles.sex", "female")
+        .eq("closed", false)
         .order("expected_hatch_date", { ascending: true })
         .limit(6);
 
