@@ -1,110 +1,105 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { NFC } from 'capacitor-nfc';
+import { NFC, NDEFMessagesTransformable } from '@exxili/capacitor-nfc';
 import { Capacitor } from '@capacitor/core';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Smartphone, Waves, AlertCircle } from 'lucide-react';
+import { Smartphone, Waves, AlertCircle, Info } from 'lucide-react';
 import { toast } from 'sonner';
 
 export const NFCReader = () => {
   const navigate = useNavigate();
   const [isScanning, setIsScanning] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isSupported, setIsSupported] = useState(false);
 
   useEffect(() => {
-    checkNFCSupport();
+    // Configurer l'écouteur NFC
+    NFC.onRead((data: NDEFMessagesTransformable) => {
+      handleNFCTag(data);
+    });
+
     return () => {
       stopScanning();
     };
   }, []);
-
-  const checkNFCSupport = async () => {
-    if (!Capacitor.isNativePlatform()) {
-      setError("La lecture NFC n'est disponible que sur l'application mobile");
-      return;
-    }
-
-    try {
-      const available = await NFC.isSupported();
-      setIsSupported(available.isSupported);
-      
-      if (!available.isSupported) {
-        setError("Votre appareil ne supporte pas la technologie NFC");
-      } else {
-        const enabled = await NFC.isEnabled();
-        if (!enabled.isEnabled) {
-          setError("Veuillez activer le NFC dans les paramètres de votre téléphone");
-        }
-      }
-    } catch (err) {
-      console.error('[NFC] Erreur vérification support:', err);
-      setError("Impossible de vérifier le support NFC");
-    }
-  };
 
   const startScanning = async () => {
     try {
       setError(null);
       setIsScanning(true);
 
-      // Vérifier les permissions
-      const permission = await NFC.checkPermissions();
-      if (permission.nfc !== 'granted') {
-        const request = await NFC.requestPermissions();
-        if (request.nfc !== 'granted') {
-          throw new Error("Permission NFC refusée");
-        }
+      if (!Capacitor.isNativePlatform()) {
+        throw new Error("La lecture NFC n'est disponible que sur l'application mobile");
       }
 
-      // Démarrer l'écoute NFC
-      await NFC.addListener('nfcTagScanned', (event: any) => {
-        handleNFCTag(event.nfcTag);
-      });
-
-      toast.success("Approchez un tag NFC de votre téléphone");
+      // Démarrer le scan NFC (nécessaire sur iOS, automatique sur Android)
+      await NFC.startScan();
+      
+      toast.success("✓ Lecteur NFC activé - Approchez un tag");
     } catch (err: any) {
       console.error('[NFC] Erreur démarrage scan:', err);
       setError(err.message || "Erreur lors du démarrage du scan NFC");
       setIsScanning(false);
+      toast.error("Impossible d'activer le NFC");
     }
   };
 
   const stopScanning = async () => {
     try {
-      await Nfc.removeAllListeners();
+      if (isScanning) {
+        await NFC.cancelScan();
+      }
       setIsScanning(false);
     } catch (err) {
       console.error('[NFC] Erreur arrêt scan:', err);
     }
   };
 
-  const handleNFCTag = async (tag: any) => {
+  const handleNFCTag = async (data: NDEFMessagesTransformable) => {
     try {
-      // Extraire l'ID du reptile depuis le tag NFC
-      const message = tag.message?.[0];
-      if (!message) {
-        throw new Error("Tag NFC vide");
-      }
-
-      // Le payload contient l'ID du reptile au format "reptile:UUID"
-      const payload = message.payload;
-      const text = new TextDecoder().decode(new Uint8Array(payload));
+      console.log('[NFC] Tag détecté:', data);
       
-      console.log('[NFC] Tag détecté:', text);
-
-      if (text.startsWith('reptile:')) {
-        const reptileId = text.replace('reptile:', '');
-        toast.success("Fiche trouvée !");
-        await stopScanning();
-        navigate(`/reptile/${reptileId}`);
-      } else {
-        throw new Error("Tag NFC non reconnu");
+      // Convertir en string pour lire facilement les données
+      const stringData = data.string();
+      
+      if (!stringData.messages || stringData.messages.length === 0) {
+        throw new Error("Tag NFC vide ou non compatible NDEF");
       }
+
+      // Parcourir les records NDEF
+      for (const message of stringData.messages) {
+        if (!message.records || message.records.length === 0) continue;
+
+        for (const record of message.records) {
+          const text = record.payload || '';
+          console.log('[NFC] Texte extrait:', text);
+
+          // Vérifier si c'est un ID de reptile
+          if (text.startsWith('reptile:')) {
+            const reptileId = text.replace('reptile:', '').trim();
+            toast.success("🦎 Fiche trouvée !");
+            await stopScanning();
+            navigate(`/reptile/${reptileId}`);
+            return;
+          } else if (text.includes('/reptile/')) {
+            // Format URL: https://domain.com/reptile/UUID
+            const match = text.match(/\/reptile\/([a-f0-9-]{36})/i);
+            if (match && match[1]) {
+              toast.success("🦎 Fiche trouvée !");
+              await stopScanning();
+              navigate(`/reptile/${match[1]}`);
+              return;
+            }
+          }
+        }
+      }
+
+      throw new Error("Tag NFC ne contient pas d'ID de reptile valide");
+      
     } catch (err: any) {
       console.error('[NFC] Erreur traitement tag:', err);
       toast.error(err.message || "Impossible de lire ce tag NFC");
+      await stopScanning();
     }
   };
 
@@ -117,6 +112,12 @@ export const NFCReader = () => {
           <p className="text-muted-foreground">
             La lecture NFC n'est disponible que sur l'application mobile installée sur votre téléphone.
           </p>
+          <div className="mt-6 p-4 bg-muted/50 rounded-lg">
+            <Info className="w-5 h-5 inline-block mr-2 text-muted-foreground" />
+            <span className="text-sm text-muted-foreground">
+              Installez l'app mobile pour utiliser cette fonctionnalité
+            </span>
+          </div>
         </Card>
       </div>
     );
@@ -126,10 +127,13 @@ export const NFCReader = () => {
     <div className="container max-w-2xl mx-auto p-6">
       <Card className="p-8">
         <div className="text-center mb-6">
-          <Smartphone className="w-16 h-16 mx-auto mb-4 text-primary" />
+          <div className="relative inline-block">
+            <Smartphone className="w-16 h-16 mx-auto mb-4 text-primary" />
+            <Waves className="w-8 h-8 absolute -right-2 -top-2 text-primary/60 animate-pulse" />
+          </div>
           <h1 className="text-3xl font-bold mb-2">Lecteur NFC</h1>
           <p className="text-muted-foreground">
-            Approchez un tag NFC de votre téléphone pour ouvrir la fiche du reptile
+            Approchez un tag NFC de votre téléphone pour ouvrir instantanément la fiche du reptile
           </p>
         </div>
 
@@ -147,7 +151,6 @@ export const NFCReader = () => {
           {!isScanning ? (
             <Button
               onClick={startScanning}
-              disabled={!isSupported || !!error}
               className="w-full"
               size="lg"
             >
@@ -156,10 +159,10 @@ export const NFCReader = () => {
             </Button>
           ) : (
             <>
-              <div className="bg-primary/10 border border-primary rounded-lg p-6 text-center">
-                <Waves className="w-12 h-12 mx-auto mb-3 text-primary animate-pulse" />
-                <p className="font-medium text-primary">En écoute...</p>
-                <p className="text-sm text-muted-foreground mt-2">
+              <div className="bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary/20 rounded-xl p-8 text-center">
+                <Waves className="w-16 h-16 mx-auto mb-4 text-primary animate-pulse" />
+                <p className="text-xl font-semibold text-primary mb-2">En écoute...</p>
+                <p className="text-sm text-muted-foreground">
                   Approchez un tag NFC de l'arrière de votre téléphone
                 </p>
               </div>
@@ -167,21 +170,37 @@ export const NFCReader = () => {
                 onClick={stopScanning}
                 variant="outline"
                 className="w-full"
+                size="lg"
               >
-                Arrêter
+                Arrêter le lecteur
               </Button>
             </>
           )}
         </div>
 
-        <div className="mt-8 pt-6 border-t">
-          <h3 className="font-semibold mb-3">💡 Conseils</h3>
-          <ul className="text-sm text-muted-foreground space-y-2">
-            <li>• Assurez-vous que le NFC est activé sur votre téléphone</li>
-            <li>• Approchez le tag du dos de votre téléphone</li>
-            <li>• Maintenez le téléphone immobile pendant 1-2 secondes</li>
-            <li>• Les tags NFC fonctionnent même sans connexion internet</li>
-          </ul>
+        <div className="mt-8 pt-6 border-t space-y-4">
+          <h3 className="font-semibold flex items-center gap-2">
+            <Info className="w-5 h-5 text-primary" />
+            Conseils d'utilisation
+          </h3>
+          <div className="grid gap-3 text-sm text-muted-foreground">
+            <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+              <span className="text-primary font-bold">1.</span>
+              <span>Activez le NFC dans les paramètres de votre téléphone</span>
+            </div>
+            <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+              <span className="text-primary font-bold">2.</span>
+              <span>Approchez le tag du centre arrière de votre téléphone</span>
+            </div>
+            <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+              <span className="text-primary font-bold">3.</span>
+              <span>Maintenez immobile pendant 1-2 secondes</span>
+            </div>
+            <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+              <span className="text-primary font-bold">✓</span>
+              <span>Fonctionne même sans connexion internet</span>
+            </div>
+          </div>
         </div>
       </Card>
     </div>
