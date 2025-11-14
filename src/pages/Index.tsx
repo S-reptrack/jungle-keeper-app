@@ -114,15 +114,18 @@ const Index = () => {
       const { count: healthCount } = await supabase
         .from("health_records")
         .select("*", { count: "exact", head: true })
-        .eq("resolved", false);
+        .eq("resolved", false)
+        .eq("user_id", authUser.id);
       
       const healthIssues = healthCount || 0;
       
       // Count reptiles with reproduction observations
       const { data: reproductionData, error: reproductionError } = await supabase
         .from("reproduction_observations")
-        .select("reptile_id, reptiles!inner(id, status)")
-        .eq("reptiles.status", "active");
+        .select("reptile_id, reptiles!reproduction_observations_reptile_id_fkey(id, status, user_id)")
+        .eq("user_id", authUser.id)
+        .eq("reptiles.status", "active")
+        .eq("reptiles.user_id", authUser.id);
       
       if (reproductionError) throw reproductionError;
       
