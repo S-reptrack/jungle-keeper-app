@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import ReproductionTab from "@/components/ReproductionTab";
 import FeedingTab from "@/components/FeedingTab";
 import HealthTab from "@/components/HealthTab";
@@ -158,6 +160,25 @@ const ReptileDetail = () => {
     toast.success("Photo mise à jour avec succès");
   };
 
+  const handleForSaleToggle = async (checked: boolean) => {
+    if (!reptile) return;
+    
+    try {
+      const { error } = await supabase
+        .from("reptiles")
+        .update({ status: checked ? "for_sale" : "active" })
+        .eq("id", reptile.id);
+
+      if (error) throw error;
+      
+      toast.success(checked ? "Reptile marqué à vendre" : "Reptile retiré de la vente");
+      fetchReptile();
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error("Erreur lors de la mise à jour du statut");
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
@@ -252,7 +273,12 @@ const ReptileDetail = () => {
                         {reptile.transferred_at && ` - ${formatDate(reptile.transferred_at.split('T')[0])}`}
                       </Badge>
                     )}
-                    {reptile.status !== "active" && (
+                    {reptile.status === "for_sale" && (
+                      <Badge variant="outline" className="border-primary text-primary">
+                        À vendre
+                      </Badge>
+                    )}
+                    {reptile.status !== "active" && reptile.status !== "for_sale" && (
                       <Badge variant="destructive">
                         {reptile.status === "deceased" ? "Décédé" : "Vendu"}
                         {reptile.status_date && ` - ${formatDate(reptile.status_date)}`}
@@ -302,7 +328,19 @@ const ReptileDetail = () => {
                   </span>
                   <span className="font-medium text-foreground">{reptile.weight}g</span>
                 </div>
-                {isCurrentOwner && reptile.status === "active" && (
+                {isCurrentOwner && (reptile.status === "active" || reptile.status === "for_sale") && (
+                  <div className="flex items-center justify-between py-3 border-t border-border">
+                    <Label htmlFor="for-sale-switch" className="text-sm text-muted-foreground cursor-pointer">
+                      À vendre
+                    </Label>
+                    <Switch
+                      id="for-sale-switch"
+                      checked={reptile.status === "for_sale"}
+                      onCheckedChange={handleForSaleToggle}
+                    />
+                  </div>
+                )}
+                {isCurrentOwner && (reptile.status === "active" || reptile.status === "for_sale") && (
                   <div className="mt-4 flex gap-2">
                     <EditReptileDialog
                       reptileId={reptile.id}

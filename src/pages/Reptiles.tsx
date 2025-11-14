@@ -65,11 +65,11 @@ const Reptiles = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Fetch active reptiles (current owner)
+      // Fetch active reptiles (current owner) including those for sale
       const { data, error } = await supabase
         .from("reptiles")
         .select("*")
-        .eq("status", "active")
+        .in("status", ["active", "for_sale"])
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
@@ -269,6 +269,7 @@ const Reptiles = () => {
                             lastFed={lastFeedings[reptile.id] || "Jamais"}
                             image={reptile.image_url}
                             daysUntilHatch={daysUntilHatch[reptile.id]}
+                            status={reptile.status}
                           />
                         ))}
                       </div>

@@ -15,9 +15,10 @@ interface ReptileCardProps {
   lastFed: string;
   image?: string | null;
   daysUntilHatch?: number | null;
+  status?: string;
 }
 
-const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntilHatch }: ReptileCardProps) => {
+const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntilHatch, status }: ReptileCardProps) => {
   const navigate = useNavigate();
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
   const { signedUrl, loading } = useSignedImageUrl(image);
@@ -64,9 +65,16 @@ const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntil
             <h3 className="text-xl font-bold text-foreground">{name}</h3>
             <p className="text-sm text-muted-foreground">{species}</p>
           </div>
-          <Badge variant="secondary" className="bg-accent/20 text-accent-foreground border-accent/30">
-            {age}
-          </Badge>
+          <div className="flex flex-col items-end gap-2">
+            {status === "for_sale" && (
+              <Badge variant="outline" className="border-primary text-primary">
+                À vendre
+              </Badge>
+            )}
+            <Badge variant="secondary" className="bg-accent/20 text-accent-foreground border-accent/30">
+              {age}
+            </Badge>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-2">

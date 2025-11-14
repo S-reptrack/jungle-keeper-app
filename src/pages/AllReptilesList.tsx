@@ -31,7 +31,7 @@ const AllReptilesList = () => {
       const { data, error } = await supabase
         .from("reptiles")
         .select("id, name, species, sex, birth_date, weight")
-        .eq("status", "active")
+        .in("status", ["active", "for_sale"])
         .order("name", { ascending: true });
 
       if (error) throw error;
