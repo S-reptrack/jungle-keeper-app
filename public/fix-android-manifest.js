@@ -34,6 +34,20 @@ try {
     console.log('✅ Permissions caméra ajoutées');
   }
 
+  // Vérifier si les permissions NFC sont déjà présentes
+  if (manifestContent.includes('android.permission.NFC')) {
+    console.log('✅ Les permissions NFC sont déjà configurées');
+  } else {
+    const manifestHeaderRegex = /(<manifest[^>]*>)/;
+    const nfcPermissions = `
+  <!-- Permissions NFC ajoutées automatiquement -->
+  <uses-permission android:name="android.permission.NFC" />
+  <uses-feature android:name="android.hardware.nfc" android:required="false" />`;
+
+    manifestContent = manifestContent.replace(manifestHeaderRegex, `$1${nfcPermissions}`);
+    console.log('✅ Permissions NFC ajoutées');
+  }
+
   // Vérifier si ML Kit est déjà configuré
   if (manifestContent.includes('com.google.mlkit.vision.DEPENDENCIES')) {
     console.log('✅ ML Kit est déjà configuré');
