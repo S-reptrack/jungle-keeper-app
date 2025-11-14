@@ -39,6 +39,17 @@ call npm run build
 echo Ajout de la plateforme Android...
 call npx cap add android
 
+echo Creation de local.properties...
+(
+  echo ## This file must *NOT* be checked into Version Control Systems,
+  echo # as it contains information specific to your local configuration.
+  echo #
+  echo # Location of the SDK. This is only used by Gradle.
+  echo # For customization when using a Version Control System, please read the
+  echo # header note.
+  echo sdk.dir=C:\\Users\\berti\\AppData\\Local\\Android\\Sdk
+) > android\local.properties
+
 echo Modification d'AndroidManifest.xml...
 node public\fix-android-manifest.js
 
