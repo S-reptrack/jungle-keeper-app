@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Printer } from "lucide-react";
+import { Printer, Nfc } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -86,12 +86,31 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
         const globalIdx = i + idx;
         return `
           <div class="card">
-            <div class="qr-container">
-              ${qrSvgs[globalIdx] || ''}
-            </div>
-            <div class="card-info">
+            <div class="card-header">
               <div class="card-name">${reptile.name}</div>
               <div class="card-species">${reptile.species}</div>
+            </div>
+            <div class="card-content">
+              <div class="qr-section">
+                <div class="section-label">QR Code</div>
+                <div class="qr-container">
+                  ${qrSvgs[globalIdx] || ''}
+                </div>
+              </div>
+              <div class="nfc-section">
+                <div class="section-label">Zone NFC</div>
+                <div class="nfc-zone">
+                  <svg class="nfc-icon" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 8.32a7.43 7.43 0 0 1 0 7.36"></path>
+                    <path d="M9.46 6.21a11.76 11.76 0 0 1 0 11.58"></path>
+                    <path d="M12.91 4.1a15.91 15.91 0 0 1 .01 15.8"></path>
+                    <path d="M16.37 2a20.16 20.16 0 0 1 0 20"></path>
+                  </svg>
+                  <div class="nfc-text">Collez le tag NFC ici</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
               <div class="card-id">ID: ${reptile.id.substring(0, 8)}</div>
             </div>
           </div>
@@ -105,7 +124,7 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
       <!DOCTYPE html>
       <html>
         <head>
-          <title>QR Codes - Cartes de visite</title>
+          <title>Étiquettes Hybrides - QR Code & NFC</title>
           <style>
             @page {
               size: A4;
@@ -141,57 +160,117 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
             .card {
               width: 85mm;
               height: 54mm;
-              border: 1px solid #e0e0e0;
+              border: 2px solid #333;
               border-radius: 0;
-              padding: 5mm;
+              padding: 3mm;
               display: flex;
-              flex-direction: row;
-              align-items: center;
-              justify-content: flex-start;
-              gap: 4mm;
+              flex-direction: column;
               background: white;
               box-shadow: 0 1px 3px rgba(0,0,0,0.1);
               page-break-inside: avoid;
             }
             
-            .qr-container {
-              flex-shrink: 0;
-              background: white;
-              padding: 1mm;
-              border: 1px solid #e0e0e0;
-            }
-
-            .qr-container svg {
-              width: 80px;
-              height: 80px;
-              display: block;
-            }
-            
-            .card-info {
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              gap: 2mm;
-              flex: 1;
-              min-width: 0;
+            .card-header {
+              text-align: center;
+              margin-bottom: 2mm;
+              border-bottom: 1px solid #ddd;
+              padding-bottom: 2mm;
             }
             
             .card-name {
               font-size: 11pt;
               font-weight: bold;
               color: #1a1a1a;
+              margin-bottom: 1mm;
               line-height: 1.2;
-              word-wrap: break-word;
             }
             
             .card-species {
               font-size: 8pt;
               color: #666;
-              line-height: 1.2;
+              font-style: italic;
+            }
+            
+            .card-content {
+              flex: 1;
+              display: flex;
+              gap: 2mm;
+            }
+            
+            .qr-section,
+            .nfc-section {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+            }
+            
+            .section-label {
+              font-size: 7pt;
+              font-weight: 600;
+              color: #666;
+              text-transform: uppercase;
+              letter-spacing: 0.3px;
+              margin-bottom: 1mm;
+            }
+            
+            .qr-container {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              flex: 1;
+              background: white;
+              padding: 1mm;
+              border: 1px solid #e0e0e0;
+            }
+            
+            .qr-container svg {
+              width: 60px !important;
+              height: 60px !important;
+              display: block;
+            }
+            
+            .nfc-section {
+              border-left: 1px dashed #ccc;
+              padding-left: 2mm;
+            }
+            
+            .nfc-zone {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              border: 2px dashed #999;
+              border-radius: 3px;
+              background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+              padding: 2mm;
+              width: 100%;
+            }
+            
+            .nfc-icon {
+              color: #666;
+              width: 36px;
+              height: 36px;
+              margin-bottom: 1mm;
+            }
+            
+            .nfc-text {
+              font-size: 7pt;
+              color: #666;
+              text-align: center;
+              font-weight: 500;
+            }
+            
+            .card-footer {
+              text-align: center;
+              margin-top: 2mm;
+              padding-top: 1mm;
+              border-top: 1px solid #eee;
             }
             
             .card-id {
-              font-size: 7pt;
+              font-size: 6pt;
               color: #999;
               font-family: monospace;
             }
@@ -200,6 +279,8 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
               body {
                 margin: 0;
                 padding: 0;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
               }
               
               .page:last-child {
@@ -219,13 +300,13 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Imprimer les QR codes</DialogTitle>
+          <DialogTitle>Imprimer les étiquettes hybrides (QR Code + NFC)</DialogTitle>
         </DialogHeader>
         
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-sm text-muted-foreground">
-              Sélectionnez les reptiles dont vous voulez imprimer les QR codes
+              Sélectionnez les reptiles pour générer des étiquettes avec QR code et zone NFC
             </p>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" onClick={selectAll}>
