@@ -80,18 +80,20 @@ const ReptileDetail = () => {
     try {
       setLoading(true);
       
-      // Vérifier l'authentification avant de faire la requête
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      // CRITIQUE: Forcer la récupération d'une session fraîche avant toute requête
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
-      if (authError || !user) {
-        console.error("Erreur d'authentification:", authError);
-        toast.error(`🔴 PAS CONNECTÉ - Erreur: ${authError?.message || 'Aucun utilisateur'}`);
+      if (sessionError || !session) {
+        console.error("❌ Pas de session:", sessionError);
+        toast.error("Vous devez être connecté pour voir ce reptile");
         navigate("/auth");
         return;
       }
 
-      toast.info(`🟢 Connecté: ${user.id.substring(0, 8)}... | Recherche ID: ${id.substring(0, 8)}...`);
+      console.log("✅ Session active:", session.user.id.substring(0, 8));
+      toast.info(`🟢 Session OK: ${session.user.id.substring(0, 8)}... | Recherche: ${id.substring(0, 8)}...`, { duration: 3000 });
       
+      // Requête avec le token de session explicite
       const { data, error } = await supabase
         .from("reptiles")
         .select("*")
@@ -109,7 +111,7 @@ const ReptileDetail = () => {
         const { data: myReptiles, error: listErr } = await supabase
           .from("reptiles")
           .select("id,name")
-          .eq("user_id", user.id)
+          .eq("user_id", session.user.id)
           .limit(500);
         if (listErr) console.warn("Liste perso non dispo:", listErr);
         const ids = (myReptiles || []).map(r => r.id);
