@@ -378,7 +378,7 @@ const ReptileDetail = () => {
 
           {/* Contenu principal avec onglets */}
           <div className="lg:col-span-2">
-            {reptile.status === "active" ? (
+            {(reptile.status === "active" || reptile.status === "for_sale") ? (
               <Tabs defaultValue={defaultTab} className="w-full">
                 <TabsList className="grid w-full grid-cols-6">
                   <TabsTrigger value="overview" className="flex items-center justify-center gap-1.5 px-2">
