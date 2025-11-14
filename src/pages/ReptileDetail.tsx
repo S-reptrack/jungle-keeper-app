@@ -79,19 +79,38 @@ const ReptileDetail = () => {
 
     try {
       setLoading(true);
+      
+      // Vérifier l'authentification avant de faire la requête
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      
+      if (authError || !user) {
+        console.error("Erreur d'authentification:", authError);
+        toast.error("Vous devez être connecté pour voir ce reptile");
+        navigate("/auth");
+        return;
+      }
+
+      console.log("Utilisateur connecté:", user.id, "Recherche du reptile:", id);
+      
       const { data, error } = await supabase
         .from("reptiles")
         .select("*")
         .eq("id", id)
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Erreur lors de la récupération du reptile:", error);
+        throw error;
+      }
 
       if (!data) {
-        toast.error("Reptile introuvable");
+        console.error("Aucun reptile trouvé avec l'ID:", id);
+        toast.error("Reptile introuvable - Vérifiez que ce reptile vous appartient");
         navigate("/");
         return;
       }
+      
+      console.log("Reptile trouvé:", data.name);
 
       setReptile(data);
 
