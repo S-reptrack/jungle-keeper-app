@@ -159,6 +159,36 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     }
   };
 
+  // Vérifie et demande les permissions caméra pour les plugins natifs
+  const ensureNativePermissions = async (): Promise<boolean> => {
+    try {
+      // Capacitor Camera
+      const camPerm = await (Camera as any)?.checkPermissions?.();
+      if (camPerm?.camera !== 'granted') {
+        const camReq = await (Camera as any)?.requestPermissions?.({ permissions: ['camera'] });
+        if (camReq?.camera !== 'granted') {
+          toast.error("Accès caméra refusé. Autorisez-la dans les réglages.");
+          setError("Accès caméra refusé");
+          return false;
+        }
+      }
+    } catch {}
+
+    try {
+      // ML Kit Barcode Scanner
+      const res = await (BarcodeScanner as any)?.checkPermissions?.();
+      if (res?.camera && res.camera !== 'granted') {
+        const req = await (BarcodeScanner as any)?.requestPermissions?.();
+        if (req?.camera !== 'granted') {
+          toast.error("Accès caméra refusé pour le scanner. Activez-le dans les réglages.");
+          setError("Accès caméra refusé pour le scanner");
+          return false;
+        }
+      }
+    } catch {}
+    return true;
+  };
+
   const startScanning = async () => {
     try {
       setError(null);
@@ -166,18 +196,30 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
       // Native (Capacitor) - Use Camera API like ImageUploadDialog
       if (Capacitor.isNativePlatform() && !forceWeb) {
         try {
-          // Try native ML Kit scanner first (more reliable)
-          try {
-            const mlResult: any = await (BarcodeScanner as any)?.scan?.();
-            const mlText = mlResult?.barcodes?.[0]?.rawValue || mlResult?.barcodes?.[0]?.displayValue || mlResult?.barcodes?.[0]?.content?.rawValue || mlResult?.barcodes?.[0]?.content?.displayValue;
-            if (mlText) {
-              console.log('[QR Scanner] ✓ ML Kit détecté:', mlText);
-              handleScanSuccess(mlText);
-              return;
+          // Vérifie les permissions caméra
+          const permOk = await ensureNativePermissions();
+          if (!permOk) return;
+
+          // Vérifie la disponibilité du plugin natif ML Kit
+          const hasMLKit = (Capacitor as any)?.isPluginAvailable?.('BarcodeScanner') && typeof (BarcodeScanner as any)?.scan === 'function';
+
+          // Essayer le scanner natif ML Kit en priorité (plus fiable)
+          if (hasMLKit) {
+            try {
+              const mlResult: any = await (BarcodeScanner as any).scan();
+              const mlText = mlResult?.barcodes?.[0]?.rawValue || mlResult?.barcodes?.[0]?.displayValue || mlResult?.barcodes?.[0]?.content?.rawValue || mlResult?.barcodes?.[0]?.content?.displayValue;
+              if (mlText) {
+                console.log('[QR Scanner] ✓ ML Kit détecté:', mlText);
+                handleScanSuccess(mlText);
+                return;
+              }
+              console.warn('[QR Scanner] ML Kit n\'a rien détecté, fallback sur photo');
+            } catch (e) {
+              console.warn('[QR Scanner] ML Kit échec, fallback sur photo', e);
             }
-            console.warn('[QR Scanner] ML Kit n\'a rien détecté, fallback sur photo');
-          } catch (e) {
-            console.warn('[QR Scanner] ML Kit échec, fallback sur photo', e);
+          } else {
+            console.warn('[QR Scanner] Plugin ML Kit indisponible');
+            toast.info("Mettez à jour l'app (git pull + npm i + npx cap sync) pour activer le scan natif.");
           }
 
           // Fallback: Take photo using the same API that works for ImageUploadDialog
