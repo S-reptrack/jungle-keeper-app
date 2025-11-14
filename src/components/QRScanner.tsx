@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Capacitor } from "@capacitor/core";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { Browser } from "@capacitor/browser";
+import { BarcodeScanner } from "@capacitor-mlkit/barcode-scanning";
 import jsQR from "jsqr";
 import { BrowserQRCodeReader } from "@zxing/browser";
 import QrScanner from "qr-scanner";
@@ -165,7 +166,21 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
       // Native (Capacitor) - Use Camera API like ImageUploadDialog
       if (Capacitor.isNativePlatform() && !forceWeb) {
         try {
-          // Take photo using the same API that works for ImageUploadDialog
+          // Try native ML Kit scanner first (more reliable)
+          try {
+            const mlResult: any = await (BarcodeScanner as any)?.scan?.();
+            const mlText = mlResult?.barcodes?.[0]?.rawValue || mlResult?.barcodes?.[0]?.displayValue || mlResult?.barcodes?.[0]?.content?.rawValue || mlResult?.barcodes?.[0]?.content?.displayValue;
+            if (mlText) {
+              console.log('[QR Scanner] ✓ ML Kit détecté:', mlText);
+              handleScanSuccess(mlText);
+              return;
+            }
+            console.warn('[QR Scanner] ML Kit n\'a rien détecté, fallback sur photo');
+          } catch (e) {
+            console.warn('[QR Scanner] ML Kit échec, fallback sur photo', e);
+          }
+
+          // Fallback: Take photo using the same API that works for ImageUploadDialog
           const photo = await Camera.getPhoto({
             source: CameraSource.Camera,
             resultType: CameraResultType.Base64,
