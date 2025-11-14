@@ -101,7 +101,8 @@ const Index = () => {
       const { count } = await supabase
         .from("reptiles")
         .select("*", { count: "exact", head: true })
-        .in("status", ["active", "for_sale"]);
+        .in("status", ["active", "for_sale"]) 
+        .eq("user_id", user.id);
       
       const total = count || 0;
       
