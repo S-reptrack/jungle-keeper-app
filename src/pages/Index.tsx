@@ -119,11 +119,12 @@ const Index = () => {
       
       const healthIssues = healthCount || 0;
       
-      // Count reptiles with reproduction observations
+      // Count reptiles with active (not closed) reproduction observations
       const { data: reproductionData, error: reproductionError } = await supabase
         .from("reproduction_observations")
         .select("reptile_id, reptiles!reproduction_observations_reptile_id_fkey(id, status, user_id)")
         .eq("user_id", authUser.id)
+        .eq("closed", false)
         .eq("reptiles.status", "active")
         .eq("reptiles.user_id", authUser.id);
       
