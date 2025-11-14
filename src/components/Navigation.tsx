@@ -1,4 +1,4 @@
-import { Home, List, Utensils, Settings, QrCode, Waves } from "lucide-react";
+import { Home, List, Tag, Settings, QrCode, Waves } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -20,7 +20,7 @@ const Navigation = () => {
   const navItems = [
     { icon: Home, label: t("common.home"), path: "/" },
     { icon: List, label: t("common.reptiles"), path: "/reptiles" },
-    { icon: Utensils, label: t("common.feeding"), path: "/feeding" },
+    { icon: Tag, label: t("common.forSale"), path: "/for-sale" },
     { icon: Settings, label: t("common.settings"), path: "/settings" },
   ];
 

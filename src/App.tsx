@@ -8,7 +8,7 @@ import "./i18n/config";
 import Index from "./pages/Index";
 import ReptileDetail from "./pages/ReptileDetail";
 import Reptiles from "./pages/Reptiles";
-import Feeding from "./pages/Feeding";
+import ForSale from "./pages/ForSale";
 import Settings from "./pages/Settings";
 import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
@@ -41,7 +41,7 @@ const App = () => (
             <Route path="/health-reptiles" element={<HealthReptilesList />} />
             <Route path="/reproduction-reptiles" element={<ReproductionReptilesList />} />
             <Route path="/feedings-due" element={<FeedingsDue />} />
-            <Route path="/feeding" element={<Feeding />} />
+            <Route path="/for-sale" element={<ForSale />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/install" element={<Install />} />
