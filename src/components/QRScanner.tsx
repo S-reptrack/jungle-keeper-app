@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Capacitor } from "@capacitor/core";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
+import { Browser } from "@capacitor/browser";
 import jsQR from "jsqr";
 import { BrowserQRCodeReader } from "@zxing/browser";
 import QrScanner from "qr-scanner";
@@ -459,12 +460,18 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     } else {
       // Si c'est une URL complète, essayer de l'ouvrir
       if (/^https?:\/\//i.test(decodedText)) {
-        console.log("[QR Scanner] Redirection vers:", decodedText);
+        console.log("[QR Scanner] Lien détecté:", decodedText);
         toast.info("Ouverture du lien détecté");
         try {
-          window.location.href = decodedText;
+          if (Capacitor.isNativePlatform()) {
+            await Browser.open({ url: decodedText, presentationStyle: 'fullscreen' });
+          } else {
+            window.open(decodedText, '_blank', 'noopener,noreferrer');
+          }
           return;
-        } catch {}
+        } catch (e) {
+          console.error('[QR Scanner] Ouverture du lien a échoué:', e);
+        }
       }
       
       console.warn("[QR Scanner] Format non reconnu:", decodedText);
