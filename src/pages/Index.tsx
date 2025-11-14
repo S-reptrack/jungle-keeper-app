@@ -65,10 +65,14 @@ const Index = () => {
 
   const fetchReptiles = async () => {
     try {
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (!authUser) return;
+
       const { data, error } = await supabase
         .from("reptiles")
         .select("*")
-        .eq("status", "active")
+        .in("status", ["active", "for_sale"]) 
+        .eq("user_id", authUser.id)
         .order("created_at", { ascending: false })
         .limit(6);
 
@@ -102,7 +106,7 @@ const Index = () => {
         .from("reptiles")
         .select("*", { count: "exact", head: true })
         .in("status", ["active", "for_sale"]) 
-        .eq("user_id", user.id);
+        .eq("user_id", authUser.id);
       
       const total = count || 0;
       
@@ -128,6 +132,7 @@ const Index = () => {
         .from("reptiles")
         .select("id, feeding_interval_days")
         .eq("status", "active")
+        .eq("user_id", authUser.id)
         .not("feeding_interval_days", "is", null);
       
       let feedingsDue = 0;
