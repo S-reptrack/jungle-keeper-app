@@ -119,10 +119,12 @@ const Index = () => {
       const healthIssues = healthCount || 0;
       
       // Count reptiles with reproduction observations
-      const { data: reproductionData } = await supabase
+      const { data: reproductionData, error: reproductionError } = await supabase
         .from("reproduction_observations")
-        .select("reptile_id")
+        .select("reptile_id, reptiles!inner(id, status)")
         .eq("reptiles.status", "active");
+      
+      if (reproductionError) throw reproductionError;
       
       const uniqueReproductionReptiles = new Set(reproductionData?.map(r => r.reptile_id) || []);
       const reproduction = uniqueReproductionReptiles.size;
