@@ -442,50 +442,34 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     }
     await stopScanning();
     
-    // Extract reptile ID from various QR formats
-    const urlPattern = /\/reptile\/([0-9a-f-]{36})/i;
-    const hashUrlPattern = /#\/reptile\/([0-9a-f-]{36})/i;
-    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    const anyIdParamPattern = /[?&#](?:id|reptileId|reptile_id)=([0-9a-f-]{36})/i;
-
-    let reptileId: string | null = null;
-
-    // 1) URL contenant /reptile/{uuid} (chemin ou hash)
-    let match = decodedText.match(urlPattern) || decodedText.match(hashUrlPattern);
-    if (match && match[1]) {
-      reptileId = match[1];
-    }
-
-    // 2) QR qui contient directement l'UUID
-    if (!reptileId && uuidPattern.test(decodedText.trim())) {
-      reptileId = decodedText.trim();
-    }
-
-    // 3) URL avec paramètres (?id= / ?reptileId= / #id=)
-    if (!reptileId) {
-      const qp = decodedText.match(anyIdParamPattern);
-      if (qp && qp[1]) {
-        reptileId = qp[1];
-      }
-    }
+    console.log("[QR Scanner] Texte scanné:", decodedText);
     
-    // 4) Si un lien HTTP est détecté mais non reconnu, informer l'utilisateur et ouvrir
-    if (!reptileId && /^https?:\/\//i.test(decodedText)) {
-      toast.info("QR détecté: ouverture du lien");
-      try {
-        window.location.href = decodedText;
-        return;
-      } catch {}
-    }
+    // UUID pattern (format standard 8-4-4-4-12)
+    const uuidPattern = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
     
-    if (reptileId) {
+    // Chercher un UUID n'importe où dans le texte
+    const match = decodedText.match(uuidPattern);
+    
+    if (match) {
+      const reptileId = match[0];
+      console.log("[QR Scanner] UUID extrait:", reptileId);
       onOpenChange(false);
       toast.success("QR code scanné avec succès !");
       navigate(`/reptile/${reptileId}`);
     } else {
-      console.warn("[QR Scanner] QR détecté mais format non reconnu:", decodedText);
-      toast.error("QR détecté, format non reconnu.");
-      setError("QR code invalide");
+      // Si c'est une URL complète, essayer de l'ouvrir
+      if (/^https?:\/\//i.test(decodedText)) {
+        console.log("[QR Scanner] Redirection vers:", decodedText);
+        toast.info("Ouverture du lien détecté");
+        try {
+          window.location.href = decodedText;
+          return;
+        } catch {}
+      }
+      
+      console.warn("[QR Scanner] Format non reconnu:", decodedText);
+      toast.error("Format de QR code non reconnu");
+      setError("QR code invalide - aucun ID trouvé");
     }
   };
 

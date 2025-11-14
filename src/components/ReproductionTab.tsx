@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Plus, Calendar, Eye, Trash2 } from "lucide-react";
+import { Plus, Calendar, Eye, Trash2, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -42,6 +42,7 @@ import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { CloseHatchingDialog } from "./CloseHatchingDialog";
 
 interface ReproductionTabProps {
   reptileId: string;
@@ -66,6 +67,12 @@ interface Observation {
   incubation_days?: number;
   expected_hatch_date?: string;
   notification_days_before?: number;
+  closed?: boolean;
+  closed_at?: string;
+  hatched_eggs?: number;
+  unhatched_eggs?: number;
+  stillborn_juveniles?: number;
+  outcome_notes?: string;
   partner?: {
     name: string;
     sex: string;
@@ -95,6 +102,12 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
   const [loading, setLoading] = useState(true);
   const [dateInput, setDateInput] = useState("");
   const [selectedAction, setSelectedAction] = useState<string>("");
+  const [closeHatchingDialog, setCloseHatchingDialog] = useState<{
+    open: boolean;
+    observationId: string;
+    reptileName: string;
+    expectedHatchDate: string;
+  }>({ open: false, observationId: "", reptileName: "", expectedHatchDate: "" });
 
   const form = useForm<ObservationValues>({
     resolver: zodResolver(observationSchema),
@@ -158,6 +171,12 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
           incubation_days,
           expected_hatch_date,
           notification_days_before,
+          closed,
+          closed_at,
+          hatched_eggs,
+          unhatched_eggs,
+          stillborn_juveniles,
+          outcome_notes,
           partner:reptiles!partner_id(name, sex)
         `)
         .eq("reptile_id", reptileId)
@@ -545,14 +564,14 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
                       </p>
                       <p className="text-sm">{obs.notes}</p>
                       
-                      {obs.action === "laying" && obs.expected_hatch_date && (
+                       {obs.action === "laying" && obs.expected_hatch_date && (
                         <div className="mt-3 pt-3 border-t border-border/50">
                           <div className="flex items-center justify-between">
-                            <div>
+                            <div className="flex-1">
                               <p className="text-sm font-medium">
                                 Éclosion prévue : {format(new Date(obs.expected_hatch_date), "dd MMM yyyy", { locale: fr })}
                               </p>
-                              {daysRemaining !== null && (
+                              {daysRemaining !== null && !obs.closed && (
                                 <p className={cn(
                                   "text-sm mt-1",
                                   isNotificationTime && "text-amber-600 font-medium",
@@ -566,7 +585,43 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
                                   }
                                 </p>
                               )}
+                              {obs.closed && (
+                                <div className="mt-2 space-y-1">
+                                  <p className="text-sm font-medium text-green-600">
+                                    ✓ Clôturée le {format(new Date(obs.closed_at!), "dd MMM yyyy", { locale: fr })}
+                                  </p>
+                                  <div className="text-xs text-muted-foreground space-y-0.5">
+                                    <p>🥚 Éclos : {obs.hatched_eggs || 0}</p>
+                                    <p>❌ Non éclos : {obs.unhatched_eggs || 0}</p>
+                                    {(obs.stillborn_juveniles || 0) > 0 && (
+                                      <p>⚠️ Mort-nés : {obs.stillborn_juveniles}</p>
+                                    )}
+                                    {obs.outcome_notes && (
+                                      <p className="mt-1 italic">{obs.outcome_notes}</p>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
                             </div>
+                            {!obs.closed && daysRemaining !== null && daysRemaining <= 7 && !readOnly && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => {
+                                  const partnerData = obs.partner as any;
+                                  setCloseHatchingDialog({
+                                    open: true,
+                                    observationId: obs.id,
+                                    reptileName: partnerData?.name || "Partenaire",
+                                    expectedHatchDate: obs.expected_hatch_date,
+                                  });
+                                }}
+                                className="ml-2 text-green-600 hover:text-green-700 border-green-600 hover:border-green-700"
+                              >
+                                <CheckCircle className="w-4 h-4 mr-1" />
+                                Clôturer
+                              </Button>
+                            )}
                           </div>
                         </div>
                       )}
@@ -578,6 +633,15 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
           )}
         </CardContent>
       </Card>
+
+      <CloseHatchingDialog
+        open={closeHatchingDialog.open}
+        onOpenChange={(open) => setCloseHatchingDialog(prev => ({ ...prev, open }))}
+        observationId={closeHatchingDialog.observationId}
+        reptileName={closeHatchingDialog.reptileName}
+        expectedHatchDate={closeHatchingDialog.expectedHatchDate}
+        onSuccess={fetchData}
+      />
     </div>
   );
 };
