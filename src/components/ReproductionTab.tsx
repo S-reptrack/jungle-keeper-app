@@ -183,7 +183,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
         .order("observation_date", { ascending: false });
 
       if (obsError) throw obsError;
-      setObservations(obs || []);
+      setObservations((obs as any) || []);
     } catch (error) {
       console.error("Error fetching data:", error);
       toast.error("Erreur lors du chargement des données");
@@ -591,10 +591,23 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
                                     ✓ Clôturée le {format(new Date(obs.closed_at!), "dd MMM yyyy", { locale: fr })}
                                   </p>
                                   <div className="text-xs text-muted-foreground space-y-0.5">
-                                    <p>🥚 Éclos : {obs.hatched_eggs || 0}</p>
-                                    <p>❌ Non éclos : {obs.unhatched_eggs || 0}</p>
-                                    {(obs.stillborn_juveniles || 0) > 0 && (
-                                      <p>⚠️ Mort-nés : {obs.stillborn_juveniles}</p>
+                                    {obs.unhatched_eggs === 0 ? (
+                                      // Vivipare (boa, vipère)
+                                      <>
+                                        <p>👶 Nés vivants : {obs.hatched_eggs || 0}</p>
+                                        {(obs.stillborn_juveniles || 0) > 0 && (
+                                          <p>⚠️ Mort-nés : {obs.stillborn_juveniles}</p>
+                                        )}
+                                      </>
+                                    ) : (
+                                      // Ovipare (python, lézard)
+                                      <>
+                                        <p>🥚 Éclos : {obs.hatched_eggs || 0}</p>
+                                        <p>❌ Non éclos : {obs.unhatched_eggs || 0}</p>
+                                        {(obs.stillborn_juveniles || 0) > 0 && (
+                                          <p>⚠️ Mort-nés : {obs.stillborn_juveniles}</p>
+                                        )}
+                                      </>
                                     )}
                                     {obs.outcome_notes && (
                                       <p className="mt-1 italic">{obs.outcome_notes}</p>
