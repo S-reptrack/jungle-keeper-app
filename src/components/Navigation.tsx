@@ -1,4 +1,4 @@
-import { Home, List, Utensils, Settings, QrCode } from "lucide-react";
+import { Home, List, Utensils, Settings, QrCode, Waves } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -60,6 +60,17 @@ const Navigation = () => {
 
       {isMobile && (
         <>
+          <Link to="/nfc">
+            <Button
+              size="icon"
+              style={{ bottom: qrButtonBottom }}
+              className="fixed right-20 z-40 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all bg-gradient-to-br from-primary to-primary/80"
+              aria-label="Lecteur NFC"
+            >
+              <Waves className="h-6 w-6" />
+            </Button>
+          </Link>
+
           <Button
             onClick={() => setScannerOpen(true)}
             size="icon"

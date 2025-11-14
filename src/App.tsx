@@ -17,6 +17,7 @@ import { HatchingNotificationDialog } from "./components/HatchingNotificationDia
 import Install from "./pages/Install";
 import Transfers from "./pages/Transfers";
 import AllReptilesList from "./pages/AllReptilesList";
+import NFCReader from "./pages/NFCReader";
 import HealthReptilesList from "./pages/HealthReptilesList";
 import ReproductionReptilesList from "./pages/ReproductionReptilesList";
 import FeedingsDue from "./pages/FeedingsDue";
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/install" element={<Install />} />
             <Route path="/transfers" element={<Transfers />} />
+            <Route path="/nfc" element={<NFCReader />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
