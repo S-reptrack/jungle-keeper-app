@@ -85,12 +85,12 @@ const ReptileDetail = () => {
       
       if (authError || !user) {
         console.error("Erreur d'authentification:", authError);
-        toast.error("Vous devez être connecté pour voir ce reptile");
+        toast.error(`🔴 PAS CONNECTÉ - Erreur: ${authError?.message || 'Aucun utilisateur'}`);
         navigate("/auth");
         return;
       }
 
-      console.log("Utilisateur connecté:", user.id, "Recherche du reptile:", id);
+      toast.info(`🟢 Connecté: ${user.id.substring(0, 8)}... | Recherche ID: ${id.substring(0, 8)}...`);
       
       const { data, error } = await supabase
         .from("reptiles")
@@ -105,12 +105,14 @@ const ReptileDetail = () => {
 
       if (!data) {
         console.error("Aucun reptile trouvé avec l'ID:", id);
-        toast.error("Reptile introuvable - Vérifiez que ce reptile vous appartient");
+        toast.error(`🔴 REPTILE INTROUVABLE\nVotre ID: ${user.id.substring(0, 8)}...\nReptile ID: ${id.substring(0, 8)}...`, {
+          duration: 8000,
+        });
         navigate("/");
         return;
       }
       
-      console.log("Reptile trouvé:", data.name);
+      toast.success(`🟢 Reptile trouvé: ${data.name}`);
 
       setReptile(data);
 
