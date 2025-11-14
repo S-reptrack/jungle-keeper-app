@@ -105,9 +105,25 @@ const ReptileDetail = () => {
 
       if (!data) {
         console.error("Aucun reptile trouvé avec l'ID:", id);
-        toast.error(`🔴 REPTILE INTROUVABLE\nVotre ID: ${user.id.substring(0, 8)}...\nReptile ID: ${id.substring(0, 8)}...`, {
-          duration: 8000,
-        });
+        // Vérifie si ce reptile fait partie de vos animaux (au cas où RLS filtre la première requête)
+        const { data: myReptiles, error: listErr } = await supabase
+          .from("reptiles")
+          .select("id,name")
+          .eq("user_id", user.id)
+          .limit(500);
+        if (listErr) console.warn("Liste perso non dispo:", listErr);
+        const ids = (myReptiles || []).map(r => r.id);
+        const isMine = ids.includes(id);
+
+        toast.error(
+          isMine
+            ? `🔴 REPTILE INTROUVABLE\nL'ID scanné vous appartient mais n'a pas été retourné (RLS/sync).`
+            : `🔴 REPTILE INTROUVABLE\nCet ID ne correspond à aucun de vos reptiles.`,
+          { duration: 8000 }
+        );
+        if (!isMine) {
+          toast.info(`Vous avez ${ids.length} reptiles.`, { duration: 5000 });
+        }
         navigate("/");
         return;
       }
