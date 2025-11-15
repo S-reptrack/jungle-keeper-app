@@ -135,41 +135,52 @@ export const NFCReader = () => {
   const handleNFCTag = async (event: NfcTagScannedEvent) => {
     try {
       console.log('[NFC] ===== Tag détecté =====');
-      console.log('[NFC] Event complet:', JSON.stringify(event, null, 2));
       
       const { nfcTag } = event;
-      console.log('[NFC] nfcTag:', nfcTag);
-      console.log('[NFC] nfcTag.message:', nfcTag?.message);
-      console.log('[NFC] nfcTag.message.records:', nfcTag?.message?.records);
+      
+      // Logger chaque propriété individuellement
+      console.log('[NFC] nfcTag existe?', !!nfcTag);
+      console.log('[NFC] nfcTag.message existe?', !!nfcTag?.message);
+      console.log('[NFC] nfcTag.message.records existe?', !!nfcTag?.message?.records);
+      
+      if (nfcTag?.message?.records) {
+        console.log('[NFC] Nombre de records:', nfcTag.message.records.length);
+      }
       
       // Vérifier si le tag a un message
       if (!nfcTag?.message) {
+        console.error('[NFC] ❌ Tag sans message NDEF');
         throw new Error("Tag NFC sans message NDEF - Tag vierge ou non NDEF");
       }
 
       // Vérifier si le message a des records
       if (!nfcTag.message.records || nfcTag.message.records.length === 0) {
+        console.error('[NFC] ❌ Message NDEF sans records');
         throw new Error("Tag NFC vide - Aucun enregistrement NDEF trouvé");
       }
 
-      console.log(`[NFC] ${nfcTag.message.records.length} record(s) trouvé(s)`);
+      console.log(`[NFC] ✓ ${nfcTag.message.records.length} record(s) trouvé(s)`);
 
       // Parcourir les records NDEF
       const utils = new NfcUtils();
       for (let i = 0; i < nfcTag.message.records.length; i++) {
         const record = nfcTag.message.records[i];
-        console.log(`[NFC] Record ${i}:`, record);
-        console.log(`[NFC] Record ${i} payload:`, record.payload);
+        console.log(`[NFC] ===== Record ${i} =====`);
+        console.log(`[NFC] Record ${i} - payload existe?`, !!record.payload);
+        console.log(`[NFC] Record ${i} - payload length:`, record.payload?.length || 0);
+        console.log(`[NFC] Record ${i} - type:`, record.type);
+        console.log(`[NFC] Record ${i} - tnf:`, record.tnf);
         
         if (!record.payload || record.payload.length === 0) {
-          console.log(`[NFC] Record ${i} vide, passer au suivant`);
+          console.log(`[NFC] Record ${i} ⚠ vide, passer au suivant`);
           continue;
         }
 
         try {
           // Convertir le payload en texte
           const text = utils.convertBytesToString(record.payload);
-          console.log(`[NFC] Record ${i} texte extrait:`, text);
+          console.log(`[NFC] Record ${i} ✓ Texte brut extrait:`, text);
+          console.log(`[NFC] Record ${i} ✓ Longueur texte:`, text.length);
 
           // Vérifier si c'est un ID de reptile (format: reptile:UUID)
           if (text.startsWith('reptile:')) {
