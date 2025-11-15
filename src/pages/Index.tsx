@@ -110,14 +110,18 @@ const Index = () => {
       
       const total = count || 0;
       
-      // Count unresolved health issues
-      const { count: healthCount } = await supabase
+      // Count unresolved health issues - only for active reptiles
+      const { data: healthData } = await supabase
         .from("health_records")
-        .select("*", { count: "exact", head: true })
+        .select("reptile_id, reptiles!health_records_reptile_id_fkey(id, status, user_id)")
         .eq("resolved", false)
-        .eq("user_id", authUser.id);
+        .eq("user_id", authUser.id)
+        .eq("reptiles.status", "active")
+        .eq("reptiles.user_id", authUser.id);
       
-      const healthIssues = healthCount || 0;
+      // Filter out records where reptile is null (archived/deleted)
+      const validHealthRecords = (healthData || []).filter(h => h.reptiles !== null);
+      const healthIssues = validHealthRecords.length;
       
       // Count reptiles with active (not closed) reproduction observations
       const { data: reproductionData, error: reproductionError } = await supabase
@@ -130,7 +134,9 @@ const Index = () => {
       
       if (reproductionError) throw reproductionError;
       
-      const uniqueReproductionReptiles = new Set(reproductionData?.map(r => r.reptile_id) || []);
+      // Filter out observations where reptile is null (archived/deleted)
+      const validObservations = (reproductionData || []).filter(r => r.reptiles !== null);
+      const uniqueReproductionReptiles = new Set(validObservations.map(r => r.reptile_id));
       const reproduction = uniqueReproductionReptiles.size;
       
       // Calculate feedings due - count reptiles to feed within 10 days

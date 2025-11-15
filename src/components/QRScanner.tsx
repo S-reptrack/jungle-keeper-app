@@ -531,11 +531,12 @@ const handleScanSuccess = async (decodedText: string) => {
 
     if (prefix) {
       try {
-        // Récupère les IDs de vos reptiles puis cherche ceux qui commencent par le préfixe
+        // Récupère les IDs de vos reptiles actifs puis cherche ceux qui commencent par le préfixe
         const { data: myReptiles, error: listErr } = await supabase
           .from("reptiles")
           .select("id,name")
           .eq("user_id", userId)
+          .in("status", ["active", "for_sale"])
           .limit(1000);
         if (listErr) console.warn("[QR Scanner] Liste perso non dispo:", listErr);
         const candidates = (myReptiles || []).filter((r) => r.id.toLowerCase().startsWith(prefix));
