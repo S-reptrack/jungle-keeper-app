@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { NFC, NDEFMessagesTransformable } from '@exxili/capacitor-nfc';
+import { Nfc, NfcUtils, NfcTagScannedEvent } from '@capawesome-team/capacitor-nfc';
 import { Capacitor } from '@capacitor/core';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -26,16 +26,21 @@ export const NFCReader = () => {
   const [selectedReptileId, setSelectedReptileId] = useState<string>('');
 
   useEffect(() => {
-    // Configurer l'écouteur NFC pour la lecture
-    NFC.onRead((data: NDEFMessagesTransformable) => {
-      handleNFCTag(data);
-    });
+    let listener: any;
 
-    // Charger la liste des reptiles pour le mode écriture
+    const setupNFCListener = async () => {
+      // Configurer l'écouteur NFC pour la lecture (API premium)
+      listener = await Nfc.addListener('nfcTagScanned', (event: NfcTagScannedEvent) => {
+        handleNFCTag(event);
+      });
+    };
+
+    setupNFCListener();
     loadReptiles();
 
     return () => {
       stopScanning();
+      listener?.remove();
     };
   }, []);
 
@@ -44,7 +49,7 @@ export const NFCReader = () => {
       const { data, error } = await supabase
         .from('reptiles')
         .select('id, name, species')
-        .eq('status', 'alive')
+        .eq('status', 'active')
         .order('name');
 
       if (error) throw error;
@@ -63,8 +68,8 @@ export const NFCReader = () => {
         throw new Error("La lecture NFC n'est disponible que sur l'application mobile");
       }
 
-      // Démarrer le scan NFC (nécessaire sur iOS, automatique sur Android)
-      await NFC.startScan();
+      // Démarrer une session de scan NFC (API premium)
+      await Nfc.startScanSession();
       
       toast.success("✓ Lecteur NFC activé - Approchez un tag");
     } catch (err: any) {
@@ -77,8 +82,8 @@ export const NFCReader = () => {
 
   const stopScanning = async () => {
     try {
-      if (isScanning) {
-        await NFC.cancelScan();
+      if (isScanning || isWriting) {
+        await Nfc.stopScanSession();
       }
       setIsScanning(false);
       setIsWriting(false);
@@ -88,45 +93,79 @@ export const NFCReader = () => {
   };
 
   const startWriting = async () => {
-    toast.error("L'écriture NFC nécessite le plugin premium (@capawesome-team/capacitor-nfc). Consultez le guide d'installation pour migrer vers la version premium.");
-    setError("Fonctionnalité premium requise - Voir documentation");
+    try {
+      if (!selectedReptileId) {
+        toast.error("Veuillez sélectionner un reptile");
+        return;
+      }
+
+      if (!Capacitor.isNativePlatform()) {
+        throw new Error("L'écriture NFC n'est disponible que sur l'application mobile");
+      }
+
+      setError(null);
+      setIsWriting(true);
+
+      // Préparer le message NDEF avec l'ID du reptile
+      const utils = new NfcUtils();
+      const { record } = utils.createNdefTextRecord({ 
+        text: `reptile:${selectedReptileId}` 
+      });
+
+      // Démarrer la session d'écriture
+      await Nfc.startScanSession();
+      
+      toast.info("📝 Mode écriture activé - Approchez un tag NFC vierge");
+
+      // Écrire sur le tag (l'écriture se déclenche automatiquement au scan)
+      await Nfc.write({ message: { records: [record] } });
+
+      toast.success("✓ Tag NFC programmé avec succès !");
+      setIsWriting(false);
+      await Nfc.stopScanSession();
+
+    } catch (err: any) {
+      console.error('[NFC] Erreur écriture:', err);
+      setError(err.message || "Erreur lors de l'écriture NFC");
+      setIsWriting(false);
+      toast.error("Impossible d'écrire sur le tag NFC");
+    }
   };
 
-  const handleNFCTag = async (data: NDEFMessagesTransformable) => {
+  const handleNFCTag = async (event: NfcTagScannedEvent) => {
     try {
-      console.log('[NFC] Tag détecté:', data);
+      console.log('[NFC] Tag détecté:', event);
       
-      // Convertir en string pour lire facilement les données
-      const stringData = data.string();
+      const { nfcTag } = event;
       
-      if (!stringData.messages || stringData.messages.length === 0) {
+      if (!nfcTag?.message?.records || nfcTag.message.records.length === 0) {
         throw new Error("Tag NFC vide ou non compatible NDEF");
       }
 
       // Parcourir les records NDEF
-      for (const message of stringData.messages) {
-        if (!message.records || message.records.length === 0) continue;
+      const utils = new NfcUtils();
+      for (const record of nfcTag.message.records) {
+        if (!record.payload) continue;
 
-        for (const record of message.records) {
-          const text = record.payload || '';
-          console.log('[NFC] Texte extrait:', text);
+        // Convertir le payload en texte
+        const text = utils.convertBytesToString(record.payload);
+        console.log('[NFC] Texte extrait:', text);
 
-          // Vérifier si c'est un ID de reptile
-          if (text.startsWith('reptile:')) {
-            const reptileId = text.replace('reptile:', '').trim();
+        // Vérifier si c'est un ID de reptile
+        if (text.startsWith('reptile:')) {
+          const reptileId = text.replace('reptile:', '').trim();
+          toast.success("🦎 Fiche trouvée !");
+          await stopScanning();
+          navigate(`/reptile/${reptileId}`);
+          return;
+        } else if (text.includes('/reptile/')) {
+          // Format URL: https://domain.com/reptile/UUID
+          const match = text.match(/\/reptile\/([a-f0-9-]{36})/i);
+          if (match && match[1]) {
             toast.success("🦎 Fiche trouvée !");
             await stopScanning();
-            navigate(`/reptile/${reptileId}`);
+            navigate(`/reptile/${match[1]}`);
             return;
-          } else if (text.includes('/reptile/')) {
-            // Format URL: https://domain.com/reptile/UUID
-            const match = text.match(/\/reptile\/([a-f0-9-]{36})/i);
-            if (match && match[1]) {
-              toast.success("🦎 Fiche trouvée !");
-              await stopScanning();
-              navigate(`/reptile/${match[1]}`);
-              return;
-            }
           }
         }
       }
