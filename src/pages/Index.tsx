@@ -123,12 +123,13 @@ const Index = () => {
       const validHealthRecords = (healthData || []).filter(h => h.reptiles !== null);
       const healthIssues = validHealthRecords.length;
       
-      // Count reptiles with active (not closed) reproduction observations
+      // Count reptiles with active hatching observations (only those with expected_hatch_date)
       const { data: reproductionData, error: reproductionError } = await supabase
         .from("reproduction_observations")
         .select("reptile_id, reptiles!reproduction_observations_reptile_id_fkey(id, status, user_id)")
         .eq("user_id", authUser.id)
         .eq("closed", false)
+        .not("expected_hatch_date", "is", null)
         .eq("reptiles.status", "active")
         .eq("reptiles.user_id", authUser.id);
       
