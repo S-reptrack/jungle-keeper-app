@@ -152,19 +152,40 @@ export const NFCReader = () => {
       setError(null);
       setIsWriting(true);
 
-      // Préparer le message NDEF avec l'ID du reptile
-      const utils = new NfcUtils();
-      const { record } = utils.createNdefTextRecord({ 
-        text: `reptile:${selectedReptileId}` 
-      });
+      const textToWrite = `reptile:${selectedReptileId}`;
+
+      // Préparer plusieurs formats d'enregistrement selon le plugin
+      const candidates: any[] = [
+        // Web NFC-like
+        { message: { records: [{ recordType: 'text', data: textToWrite }] } },
+        // URL record (utile si le plugin ne gère pas 'text')
+        { message: { records: [{ recordType: 'url', data: `${location.origin}/reptile/${selectedReptileId}` }] } },
+        // Capawesome-like
+        { message: { records: [{ type: 'well-known', rtd: 'text', payload: { text: textToWrite, lang: 'en' } }] } },
+      ];
 
       // Démarrer la session d'écriture
       await getNfc().startScanSession();
-      
-      toast.info("📝 Mode écriture activé - Approchez un tag NFC vierge");
+      toast.info("📝 Approchez un tag NFC vierge");
 
-      // Écrire sur le tag
-      await getNfc().write({ message: { records: [record] } });
+      let success = false;
+      let lastErr: any = null;
+      for (const opt of candidates) {
+        try {
+          console.log('[NFC] Tentative écriture avec format:', JSON.stringify(opt));
+          await getNfc().write(opt);
+          success = true;
+          break;
+        } catch (e) {
+          console.warn('[NFC] Échec écriture avec ce format:', e);
+          lastErr = e;
+          continue;
+        }
+      }
+
+      if (!success) {
+        throw lastErr || new Error('Impossible d\'écrire sur ce tag');
+      }
 
       toast.success("✓ Tag NFC programmé avec succès !");
       setIsWriting(false);
