@@ -5,15 +5,19 @@ import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  server: {
-    host: "::",
-    port: 8080,
-  },
-  plugins: [
-    react(),
-    mode === "development" && componentTagger(),
-    VitePWA({
+export default defineConfig(({ mode }) => {
+  // Désactiver PWA pour les builds natifs (cause des crashes Android)
+  const isNativeBuild = process.env.CAPACITOR_PLATFORM === 'android' || process.env.CAPACITOR_PLATFORM === 'ios';
+  
+  return {
+    server: {
+      host: "::",
+      port: 8080,
+    },
+    plugins: [
+      react(),
+      mode === "development" && componentTagger(),
+      !isNativeBuild && VitePWA({
       registerType: "autoUpdate",
       injectRegister: 'auto',
       includeAssets: ["favicon.ico", "robots.txt"],
@@ -56,9 +60,10 @@ export default defineConfig(({ mode }) => ({
       },
     }),
   ].filter(Boolean),
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
     },
-  },
-}));
+  };
+});

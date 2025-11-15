@@ -56,21 +56,12 @@ export const NFCReader = () => {
   const [selectedReptileId, setSelectedReptileId] = useState<string>('');
 
   useEffect(() => {
-    let listener: any;
-
-    const setupNFCListener = async () => {
-      // Configurer l'écouteur NFC
-      listener = await Nfc.addListener('nfcTagScanned', (event: NfcTagScannedEvent) => {
-        handleNFCTag(event);
-      });
-    };
-
-    setupNFCListener();
+    // Ne rien initialiser au montage pour éviter les crashes
+    // L'écouteur NFC sera ajouté au clic sur "Activer"
     loadReptiles();
 
     return () => {
-      stopScanning();
-      listener?.remove();
+      stopScanning().catch(() => {});
     };
   }, []);
 
@@ -98,6 +89,16 @@ export const NFCReader = () => {
         throw new Error("La lecture NFC n'est disponible que sur l'application mobile");
       }
 
+      // Vérifier que le plugin NFC est disponible
+      if (!(Capacitor as any).isPluginAvailable?.('Nfc')) {
+        throw new Error("Plugin NFC non disponible sur cet appareil");
+      }
+
+      // Configurer l'écouteur NFC
+      await Nfc.addListener('nfcTagScanned', (event: NfcTagScannedEvent) => {
+        handleNFCTag(event);
+      });
+
       // Démarrer une session de scan NFC
       await Nfc.startScanSession();
       
@@ -112,7 +113,7 @@ export const NFCReader = () => {
 
   const stopScanning = async () => {
     try {
-      if (isScanning || isWriting) {
+      if ((Capacitor as any).isPluginAvailable?.('Nfc') && (isScanning || isWriting)) {
         await Nfc.stopScanSession();
       }
       setIsScanning(false);
@@ -131,6 +132,11 @@ export const NFCReader = () => {
 
       if (!Capacitor.isNativePlatform()) {
         throw new Error("L'écriture NFC n'est disponible que sur l'application mobile");
+      }
+
+      // Vérifier que le plugin NFC est disponible
+      if (!(Capacitor as any).isPluginAvailable?.('Nfc')) {
+        throw new Error("Plugin NFC non disponible sur cet appareil");
       }
 
       setError(null);
