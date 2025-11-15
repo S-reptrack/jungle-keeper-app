@@ -134,45 +134,78 @@ export const NFCReader = () => {
 
   const handleNFCTag = async (event: NfcTagScannedEvent) => {
     try {
-      console.log('[NFC] Tag détecté:', event);
+      console.log('[NFC] ===== Tag détecté =====');
+      console.log('[NFC] Event complet:', JSON.stringify(event, null, 2));
       
       const { nfcTag } = event;
+      console.log('[NFC] nfcTag:', nfcTag);
+      console.log('[NFC] nfcTag.message:', nfcTag?.message);
+      console.log('[NFC] nfcTag.message.records:', nfcTag?.message?.records);
       
-      if (!nfcTag?.message?.records || nfcTag.message.records.length === 0) {
-        throw new Error("Tag NFC vide ou non compatible NDEF");
+      // Vérifier si le tag a un message
+      if (!nfcTag?.message) {
+        throw new Error("Tag NFC sans message NDEF - Tag vierge ou non NDEF");
       }
+
+      // Vérifier si le message a des records
+      if (!nfcTag.message.records || nfcTag.message.records.length === 0) {
+        throw new Error("Tag NFC vide - Aucun enregistrement NDEF trouvé");
+      }
+
+      console.log(`[NFC] ${nfcTag.message.records.length} record(s) trouvé(s)`);
 
       // Parcourir les records NDEF
       const utils = new NfcUtils();
-      for (const record of nfcTag.message.records) {
-        if (!record.payload) continue;
+      for (let i = 0; i < nfcTag.message.records.length; i++) {
+        const record = nfcTag.message.records[i];
+        console.log(`[NFC] Record ${i}:`, record);
+        console.log(`[NFC] Record ${i} payload:`, record.payload);
+        
+        if (!record.payload || record.payload.length === 0) {
+          console.log(`[NFC] Record ${i} vide, passer au suivant`);
+          continue;
+        }
 
-        // Convertir le payload en texte
-        const text = utils.convertBytesToString(record.payload);
-        console.log('[NFC] Texte extrait:', text);
+        try {
+          // Convertir le payload en texte
+          const text = utils.convertBytesToString(record.payload);
+          console.log(`[NFC] Record ${i} texte extrait:`, text);
 
-        // Vérifier si c'est un ID de reptile
-        if (text.startsWith('reptile:')) {
-          const reptileId = text.replace('reptile:', '').trim();
-          toast.success("🦎 Fiche trouvée !");
-          await stopScanning();
-          navigate(`/reptile/${reptileId}`);
-          return;
-        } else if (text.includes('/reptile/')) {
-          // Format URL: https://domain.com/reptile/UUID
-          const match = text.match(/\/reptile\/([a-f0-9-]{36})/i);
-          if (match && match[1]) {
-            toast.success("🦎 Fiche trouvée !");
+          // Vérifier si c'est un ID de reptile (format: reptile:UUID)
+          if (text.startsWith('reptile:')) {
+            const reptileId = text.replace('reptile:', '').trim();
+            console.log('[NFC] ✓ ID reptile trouvé:', reptileId);
+            toast.success("🦎 Fiche reptile trouvée !");
             await stopScanning();
-            navigate(`/reptile/${match[1]}`);
+            navigate(`/reptile/${reptileId}`);
             return;
+          } 
+          
+          // Vérifier si c'est une URL contenant /reptile/UUID
+          if (text.includes('/reptile/')) {
+            const match = text.match(/\/reptile\/([a-f0-9-]{36})/i);
+            if (match && match[1]) {
+              console.log('[NFC] ✓ URL reptile trouvée:', match[1]);
+              toast.success("🦎 Fiche reptile trouvée !");
+              await stopScanning();
+              navigate(`/reptile/${match[1]}`);
+              return;
+            }
           }
+
+          // Afficher le contenu pour diagnostic
+          console.log('[NFC] ⚠ Contenu non reconnu:', text);
+          toast.info(`Tag lu: ${text.substring(0, 50)}...`);
+          
+        } catch (parseErr) {
+          console.error(`[NFC] Erreur conversion record ${i}:`, parseErr);
         }
       }
 
       throw new Error("Tag NFC ne contient pas d'ID de reptile valide");
       
     } catch (err: any) {
+      console.error('[NFC] ===== ERREUR =====');
       console.error('[NFC] Erreur traitement tag:', err);
       toast.error(err.message || "Impossible de lire ce tag NFC");
       await stopScanning();
