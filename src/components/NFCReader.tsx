@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Nfc, NfcTag, NfcUtils } from '@capawesome-team/capacitor-nfc';
+import { NFC, NDEFMessagesTransformable } from '@exxili/capacitor-nfc';
 import { Capacitor } from '@capacitor/core';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -26,15 +26,15 @@ export const NFCReader = () => {
   const [selectedReptileId, setSelectedReptileId] = useState<string>('');
 
   useEffect(() => {
-    loadReptiles();
-
-    // Configurer l'écouteur NFC
-    const listener = Nfc.addListener('nfcTagScanned', (event: { nfcTag: NfcTag }) => {
-      handleNFCTag(event.nfcTag);
+    // Configurer l'écouteur NFC pour la lecture
+    NFC.onRead((data: NDEFMessagesTransformable) => {
+      handleNFCTag(data);
     });
 
+    // Charger la liste des reptiles pour le mode écriture
+    loadReptiles();
+
     return () => {
-      listener.then(l => l.remove());
       stopScanning();
     };
   }, []);
@@ -63,19 +63,8 @@ export const NFCReader = () => {
         throw new Error("La lecture NFC n'est disponible que sur l'application mobile");
       }
 
-      // Vérifier si NFC est disponible
-      const { isSupported } = await Nfc.isSupported();
-      if (!isSupported) {
-        throw new Error("NFC n'est pas supporté sur cet appareil");
-      }
-
-      const { isEnabled } = await Nfc.isEnabled();
-      if (!isEnabled) {
-        throw new Error("NFC est désactivé. Veuillez l'activer dans les paramètres");
-      }
-
-      // Démarrer la session de scan
-      await Nfc.startScanSession();
+      // Démarrer le scan NFC (nécessaire sur iOS, automatique sur Android)
+      await NFC.startScan();
       
       toast.success("✓ Lecteur NFC activé - Approchez un tag");
     } catch (err: any) {
@@ -89,7 +78,7 @@ export const NFCReader = () => {
   const stopScanning = async () => {
     try {
       if (isScanning) {
-        await Nfc.stopScanSession();
+        await NFC.cancelScan();
       }
       setIsScanning(false);
       setIsWriting(false);
@@ -99,48 +88,8 @@ export const NFCReader = () => {
   };
 
   const startWriting = async () => {
-    try {
-      if (!selectedReptileId) {
-        toast.error("Veuillez sélectionner un reptile");
-        return;
-      }
-
-      setError(null);
-      setIsWriting(true);
-
-      if (!Capacitor.isNativePlatform()) {
-        throw new Error("L'écriture NFC n'est disponible que sur l'application mobile");
-      }
-
-      const reptile = reptiles.find(r => r.id === selectedReptileId);
-      if (!reptile) {
-        throw new Error("Reptile non trouvé");
-      }
-
-      // Préparer le message NDEF
-      const message = {
-        records: [
-          {
-            typeNameFormat: 1, // NFC Well Known
-            type: NfcUtils.convertStringToBytes('T'),
-            payload: NfcUtils.convertStringToBytes(`reptile:${selectedReptileId}`)
-          }
-        ]
-      };
-
-      // Écrire sur le tag NFC
-      await Nfc.write({ message });
-      
-      toast.success(`✓ Tag NFC programmé pour ${reptile.name}!`);
-      setIsWriting(false);
-      setSelectedReptileId('');
-      
-    } catch (err: any) {
-      console.error('[NFC] Erreur écriture tag:', err);
-      setError(err.message || "Erreur lors de l'écriture du tag NFC");
-      setIsWriting(false);
-      toast.error("Impossible d'activer le mode écriture NFC");
-    }
+    toast.error("L'écriture NFC nécessite le plugin premium (@capawesome-team/capacitor-nfc). Consultez le guide d'installation pour migrer vers la version premium.");
+    setError("Fonctionnalité premium requise - Voir documentation");
   };
 
   const handleNFCTag = async (data: NDEFMessagesTransformable) => {
