@@ -21,6 +21,7 @@ import NFCReader from "./pages/NFCReader";
 import HealthReptilesList from "./pages/HealthReptilesList";
 import ReproductionReptilesList from "./pages/ReproductionReptilesList";
 import FeedingsDue from "./pages/FeedingsDue";
+import CostBreakdown from "./pages/CostBreakdown";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
             <Route path="/install" element={<Install />} />
             <Route path="/transfers" element={<Transfers />} />
             <Route path="/nfc" element={<NFCReader />} />
+            <Route path="/cost-breakdown" element={<CostBreakdown />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
