@@ -1,6 +1,36 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Nfc, NfcUtils, NfcTagScannedEvent } from '@capawesome-team/capacitor-nfc';
+// import { Nfc, NfcUtils, NfcTagScannedEvent } from '@capawesome-team/capacitor-nfc';
+
+// Types temporaires pour le développement
+interface NfcTagScannedEvent {
+  nfcTag?: {
+    message?: {
+      records?: Array<{
+        payload?: number[];
+        type?: string;
+        tnf?: number;
+      }>;
+    };
+  };
+}
+
+// Stub temporaire pour l'environnement Lovable
+const Nfc = {
+  addListener: (_event: string, _callback: any) => Promise.resolve({ remove: () => {} }),
+  startScanSession: () => Promise.resolve(),
+  stopScanSession: () => Promise.resolve(),
+  write: (_options: any) => Promise.resolve(),
+};
+
+class NfcUtils {
+  createNdefTextRecord(options: { text: string }) {
+    return { record: { payload: [], type: '', tnf: 0 } };
+  }
+  convertBytesToString(payload: number[]): string {
+    return new TextDecoder().decode(new Uint8Array(payload));
+  }
+}
 import { Capacitor } from '@capacitor/core';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -29,7 +59,7 @@ export const NFCReader = () => {
     let listener: any;
 
     const setupNFCListener = async () => {
-      // Configurer l'écouteur NFC pour la lecture (API premium)
+      // Configurer l'écouteur NFC
       listener = await Nfc.addListener('nfcTagScanned', (event: NfcTagScannedEvent) => {
         handleNFCTag(event);
       });
@@ -68,7 +98,7 @@ export const NFCReader = () => {
         throw new Error("La lecture NFC n'est disponible que sur l'application mobile");
       }
 
-      // Démarrer une session de scan NFC (API premium)
+      // Démarrer une session de scan NFC
       await Nfc.startScanSession();
       
       toast.success("✓ Lecteur NFC activé - Approchez un tag");
@@ -117,7 +147,7 @@ export const NFCReader = () => {
       
       toast.info("📝 Mode écriture activé - Approchez un tag NFC vierge");
 
-      // Écrire sur le tag (l'écriture se déclenche automatiquement au scan)
+      // Écrire sur le tag
       await Nfc.write({ message: { records: [record] } });
 
       toast.success("✓ Tag NFC programmé avec succès !");
@@ -150,13 +180,17 @@ export const NFCReader = () => {
       // Vérifier si le tag a un message
       if (!nfcTag?.message) {
         console.error('[NFC] ❌ Tag sans message NDEF');
-        throw new Error("Tag NFC sans message NDEF - Tag vierge ou non NDEF");
+        toast.error("Tag NFC vierge - Utilisez le mode 'Écrire' pour le programmer");
+        await stopScanning();
+        return;
       }
 
       // Vérifier si le message a des records
       if (!nfcTag.message.records || nfcTag.message.records.length === 0) {
         console.error('[NFC] ❌ Message NDEF sans records');
-        throw new Error("Tag NFC vide - Aucun enregistrement NDEF trouvé");
+        toast.error("Tag NFC vide - Aucun enregistrement NDEF trouvé");
+        await stopScanning();
+        return;
       }
 
       console.log(`[NFC] ✓ ${nfcTag.message.records.length} record(s) trouvé(s)`);
@@ -168,8 +202,6 @@ export const NFCReader = () => {
         console.log(`[NFC] ===== Record ${i} =====`);
         console.log(`[NFC] Record ${i} - payload existe?`, !!record.payload);
         console.log(`[NFC] Record ${i} - payload length:`, record.payload?.length || 0);
-        console.log(`[NFC] Record ${i} - type:`, record.type);
-        console.log(`[NFC] Record ${i} - tnf:`, record.tnf);
         
         if (!record.payload || record.payload.length === 0) {
           console.log(`[NFC] Record ${i} ⚠ vide, passer au suivant`);
@@ -179,8 +211,7 @@ export const NFCReader = () => {
         try {
           // Convertir le payload en texte
           const text = utils.convertBytesToString(record.payload);
-          console.log(`[NFC] Record ${i} ✓ Texte brut extrait:`, text);
-          console.log(`[NFC] Record ${i} ✓ Longueur texte:`, text.length);
+          console.log(`[NFC] Record ${i} ✓ Texte extrait:`, text);
 
           // Vérifier si c'est un ID de reptile (format: reptile:UUID)
           if (text.startsWith('reptile:')) {
@@ -213,7 +244,8 @@ export const NFCReader = () => {
         }
       }
 
-      throw new Error("Tag NFC ne contient pas d'ID de reptile valide");
+      toast.error("Tag NFC ne contient pas d'ID de reptile valide");
+      await stopScanning();
       
     } catch (err: any) {
       console.error('[NFC] ===== ERREUR =====');
