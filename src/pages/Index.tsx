@@ -202,6 +202,7 @@ const Index = () => {
             sex
           )
         `)
+        .eq("user_id", authUser.id)
         .not("expected_hatch_date", "is", null)
         .gte("expected_hatch_date", hatchingToday.toISOString())
         .eq("reptiles.status", "active")
