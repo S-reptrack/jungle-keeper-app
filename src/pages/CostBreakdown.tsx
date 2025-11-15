@@ -1,21 +1,200 @@
 import { Button } from "@/components/ui/button";
-import { Printer } from "lucide-react";
+import { Printer, Download } from "lucide-react";
 
 const CostBreakdown = () => {
   const handlePrint = () => {
     window.print();
   };
 
+  const handleDownloadTxt = () => {
+    const content = `================================================================================
+        ANALYSE COMPLÈTE DES COÛTS - S-REPTRACK 2025
+================================================================================
+
+Date: 2025
+Application: S-reptrack - Suivi et gestion de reptiles
+
+
+================================================================================
+1. FRAIS DE DÉVELOPPEMENT
+================================================================================
+
+Catégorie          | Détail                    | Coût        | Fréquence | Notes
+-------------------|---------------------------|-------------|-----------|------------------
+Lovable Pro        | Développement crédits     | 25$/mois    | Mensuel   | Déjà utilisé
+Lovable Cloud      | Backend (BDD, auth)       | Gratuit*    | Usage     | Payant si gros volume
+
+
+================================================================================
+2. FRAIS DE PUBLICATION
+================================================================================
+
+Plateforme                  | Coût      | Fréquence        | Obligatoire
+----------------------------|-----------|------------------|-------------
+Google Play (Android)       | 25$       | Une fois à vie   | Oui
+Apple App Store (iOS)       | 99$/an    | Annuel           | Oui si iOS
+
+
+================================================================================
+3. FRAIS DE FONCTIONNALITÉS (Optionnels)
+================================================================================
+
+Fonctionnalité              | Coût                      | Fréquence  | Nécessité
+----------------------------|---------------------------|------------|---------------------------
+Plugin NFC Premium          | 29$/mois ou 599$ une fois | Variable   | Si écriture NFC Android
+NFC sur iOS                 | 0$ (gratuit)              | -          | Déjà inclus
+
+
+================================================================================
+4. FRAIS BACKEND/CLOUD (Lovable Cloud)
+================================================================================
+
+Service                | Limite gratuite          | Coût au-delà        | Notes
+-----------------------|--------------------------|---------------------|-------------------
+Base de données        | 500 MB                   | Variable            | Reptiles + données
+Stockage fichiers      | 1 GB                     | ~0.021$/GB/mois     | Photos reptiles ⚠️
+Trafic/Bande passante  | 2 GB                     | ~0.09$/GB           | Transfert données
+Edge Functions         | 500k invocations/mois    | Variable            | Upload images
+
+
+================================================================================
+5. FRAIS LÉGAUX/CONFORMITÉ (France)
+================================================================================
+
+Obligation                  | Coût estimé      | Fréquence  | Détails
+----------------------------|------------------|------------|--------------------------------
+RGPD - Mentions légales     | 0$ à 500$        | Une fois   | Politique confidentialité, CGU
+RGPD - Audit conformité     | 0$ à 2000$       | Optionnel  | Si beaucoup données perso
+DPO/Conseil juridique       | 0$ à 150$/heure  | Si besoin  | Conseils RGPD spécifiques
+
+
+================================================================================
+6. FRAIS CACHÉS
+================================================================================
+
+Type                        | Coût              | Quand              | Pourquoi
+----------------------------|-------------------|--------------------|--------------------------
+Mac pour iOS                | 800$ à 2000$      | Obligatoire iOS    | Xcode Mac uniquement
+Certificats signature       | Inclus Apple 99$  | -                  | Déjà payé
+Domaine personnalisé        | 10-20$/an         | Optionnel          | sreptrack.com
+Backup/Sauvegarde          | Variable          | Mensuel            | Sauvegardes externes
+Dépassement stockage       | ~0.021$/GB/mois   | Si >1GB            | Photos HD ⚠️
+Analytics/Monitoring       | 0$ à 50$/mois     | Optionnel          | Sentry, etc.
+Push notifications         | 0$ à 100$/mois    | Optionnel          | Notifications avancées
+Email transactionnel       | 0$ à 20$/mois     | Si emails          | SendGrid, Mailgun
+Support client             | 0$ à 50$/mois     | Optionnel          | Zendesk, Intercom
+Mises à jour OS            | Temps dev         | Annuel             | Tester nouveaux OS
+
+
+================================================================================
+7. SCÉNARIOS DE COÛTS TOTAUX
+================================================================================
+
+🟢 SCÉNARIO MINIMAL (Android uniquement, sans écriture NFC)
+─────────────────────────────────────────────────────────────
+Lovable Pro (dev)               25$/mois
+Google Play                     25$ (une fois)
+───────────────────────────────────────────────────────────── 
+TOTAL PREMIÈRE ANNÉE            325$
+TOTAL ANNÉES SUIVANTES          300$/an
+
+
+🟡 SCÉNARIO RECOMMANDÉ (Android + iOS, écriture NFC sur iOS)
+─────────────────────────────────────────────────────────────
+                            Première année    Années suivantes
+Lovable Pro                      300$              300$
+Google Play                       25$                0$
+Apple Developer                   99$               99$
+Mac (si besoin)              800-2000$                0$
+RGPD basique                  0-200$                 0$
+───────────────────────────────────────────────────────────── 
+TOTAL                     1,224$ à 2,624$         399$/an
+
+
+🔴 SCÉNARIO COMPLET (Android + iOS + Écriture NFC Android)
+─────────────────────────────────────────────────────────────
+                            Première année    Années suivantes
+Lovable Pro                      300$              300$
+Google Play                       25$                0$
+Apple Developer                   99$               99$
+Plugin NFC Premium               348$              348$
+Mac (si besoin)              800-2000$                0$
+RGPD basique                  0-200$                 0$
+───────────────────────────────────────────────────────────── 
+TOTAL                     1,572$ à 2,972$         747$/an
+
+
+================================================================================
+8. FRAIS VARIABLES À SURVEILLER
+================================================================================
+
+Si votre app décolle :
+
+• +1000 utilisateurs actifs → Peut dépasser les limites gratuites
+• Photos HD massives → Stockage peut coûter 50-200$/mois
+• Edge Functions intensives → Au-delà de 500k appels
+
+Estimation conservative avec croissance :
+• Année 1 : 399-747$/an (selon NFC Android ou non)
+• Année 2-3 : +50-100$/mois si succès (stockage, bande passante)
+• Années suivantes : Peut grimper à 1000$/an si forte adoption
+
+
+================================================================================
+9. RECOMMANDATIONS
+================================================================================
+
+1. Commencez Android seul (25$ Play + plugin NFC si besoin)
+2. Testez la traction pendant 3-6 mois
+3. Ajoutez iOS seulement si demande forte (évite 99$/an + Mac)
+4. Surveillez le stockage photos (compresser les images)
+5. RGPD DIY au début (générateurs gratuits en ligne)
+
+
+================================================================================
+10. COMPARAISON PLATEFORMES NFC
+================================================================================
+
+Plateforme  | Compte dev    | Lecture NFC  | Écriture NFC              | Coût total minimal
+------------|---------------|--------------|---------------------------|-------------------
+Android     | 25$ (1x)      | ✅ Gratuit   | ❌ Plugin premium requis  | 25$ + 29$/mois
+iOS         | 99$/an        | ✅ Gratuit   | ✅ Gratuit                | 99$/an
+
+
+================================================================================
+FIN DU DOCUMENT
+================================================================================
+
+Document généré pour S-reptrack
+Pour toute question: consultez la documentation du projet`;
+
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'analyse-couts-sreptrack.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-6xl mx-auto">
-        {/* Header avec bouton d'impression */}
+        {/* Header avec boutons */}
         <div className="flex justify-between items-center mb-8 print:hidden">
           <h1 className="text-4xl font-bold">Analyse des Coûts - S-reptrack</h1>
-          <Button onClick={handlePrint} className="gap-2">
-            <Printer className="h-4 w-4" />
-            Imprimer
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={handleDownloadTxt} variant="outline" className="gap-2">
+              <Download className="h-4 w-4" />
+              Télécharger TXT
+            </Button>
+            <Button onClick={handlePrint} className="gap-2">
+              <Printer className="h-4 w-4" />
+              Imprimer
+            </Button>
+          </div>
         </div>
 
         {/* Header pour impression */}
