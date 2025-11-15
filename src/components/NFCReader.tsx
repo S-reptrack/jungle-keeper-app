@@ -16,7 +16,7 @@ interface NfcTagScannedEvent {
 }
 
 // Stub temporaire pour l'environnement Lovable
-const Nfc = {
+const StubNfc = {
   addListener: (_event: string, _callback: any) => Promise.resolve({ remove: () => {} }),
   startScanSession: () => Promise.resolve(),
   stopScanSession: () => Promise.resolve(),
@@ -32,6 +32,16 @@ class NfcUtils {
   }
 }
 import { Capacitor } from '@capacitor/core';
+
+// Récupère le plugin natif s'il est disponible, sinon le stub
+const getNfc = () => {
+  try {
+    const available = (Capacitor as any)?.isPluginAvailable?.('Nfc');
+    const native = (window as any)?.Capacitor?.Plugins?.Nfc;
+    if (available && native) return native;
+  } catch {}
+  return StubNfc;
+};
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Smartphone, Waves, AlertCircle, Info, Edit, ScanLine } from 'lucide-react';
@@ -95,12 +105,12 @@ export const NFCReader = () => {
       }
 
       // Configurer l'écouteur NFC
-      await Nfc.addListener('nfcTagScanned', (event: NfcTagScannedEvent) => {
+      await getNfc().addListener('nfcTagScanned', (event: NfcTagScannedEvent) => {
         handleNFCTag(event);
       });
 
       // Démarrer une session de scan NFC
-      await Nfc.startScanSession();
+      await getNfc().startScanSession();
       
       toast.success("✓ Lecteur NFC activé - Approchez un tag");
     } catch (err: any) {
@@ -114,7 +124,7 @@ export const NFCReader = () => {
   const stopScanning = async () => {
     try {
       if ((Capacitor as any).isPluginAvailable?.('Nfc') && (isScanning || isWriting)) {
-        await Nfc.stopScanSession();
+        await getNfc().stopScanSession();
       }
       setIsScanning(false);
       setIsWriting(false);
@@ -149,16 +159,16 @@ export const NFCReader = () => {
       });
 
       // Démarrer la session d'écriture
-      await Nfc.startScanSession();
+      await getNfc().startScanSession();
       
       toast.info("📝 Mode écriture activé - Approchez un tag NFC vierge");
 
       // Écrire sur le tag
-      await Nfc.write({ message: { records: [record] } });
+      await getNfc().write({ message: { records: [record] } });
 
       toast.success("✓ Tag NFC programmé avec succès !");
       setIsWriting(false);
-      await Nfc.stopScanSession();
+      await getNfc().stopScanSession();
 
     } catch (err: any) {
       console.error('[NFC] Erreur écriture:', err);
