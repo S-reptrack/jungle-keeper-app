@@ -41,7 +41,10 @@ export function useHatchingNotifications() {
           )
         `)
         .eq("user_id", user.id)
-        .not("expected_hatch_date", "is", null);
+        .eq("closed", false)
+        .not("expected_hatch_date", "is", null)
+        .eq("reptiles.status", "active")
+        .eq("reptiles.sex", "female");
 
       if (error) {
         console.error("Error fetching notifications:", error);
