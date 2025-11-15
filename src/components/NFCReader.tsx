@@ -178,34 +178,52 @@ export const NFCReader = () => {
     }
   };
 
-  const handleNFCTag = async (event: NfcTagScannedEvent) => {
+  const handleNFCTag = async (event: any) => {
+    // Protection maximale contre les crashes
     try {
-      console.log('[NFC] ===== Tag détecté =====');
+      console.log('[NFC] ===== DÉBUT TRAITEMENT TAG =====');
+      console.log('[NFC] Event brut:', JSON.stringify(event, null, 2));
+      console.log('[NFC] Type event:', typeof event);
+      console.log('[NFC] Clés event:', Object.keys(event || {}));
       
-      const { nfcTag } = event;
+      // Arrêter le scan immédiatement pour éviter les re-déclenchements
+      await stopScanning().catch((e) => console.error('[NFC] Erreur stop:', e));
       
-      // Logger chaque propriété individuellement
-      console.log('[NFC] nfcTag existe?', !!nfcTag);
-      console.log('[NFC] nfcTag.message existe?', !!nfcTag?.message);
-      console.log('[NFC] nfcTag.message.records existe?', !!nfcTag?.message?.records);
-      
-      if (nfcTag?.message?.records) {
-        console.log('[NFC] Nombre de records:', nfcTag.message.records.length);
+      // Extraire nfcTag de manière très défensive
+      let nfcTag;
+      try {
+        nfcTag = event?.nfcTag || event?.tag || event;
+      } catch (e) {
+        console.error('[NFC] Erreur extraction nfcTag:', e);
+        toast.error("Erreur lecture tag NFC");
+        return;
       }
       
-      // Vérifier si le tag a un message
+      console.log('[NFC] nfcTag existe?', !!nfcTag);
+      console.log('[NFC] nfcTag type:', typeof nfcTag);
+      
+      if (!nfcTag) {
+        console.error('[NFC] ❌ Aucun tag détecté');
+        toast.error("Tag NFC non reconnu");
+        return;
+      }
+      
+      // Vérifier message NDEF
+      console.log('[NFC] nfcTag.message existe?', !!nfcTag?.message);
+      
       if (!nfcTag?.message) {
         console.error('[NFC] ❌ Tag sans message NDEF');
-        toast.error("Tag NFC vierge - Utilisez le mode 'Écrire' pour le programmer");
-        await stopScanning();
+        toast.error("Tag NFC vierge ou incompatible (AirTag non supporté)");
         return;
       }
 
-      // Vérifier si le message a des records
+      // Vérifier records
+      console.log('[NFC] nfcTag.message.records existe?', !!nfcTag?.message?.records);
+      console.log('[NFC] Nombre de records:', nfcTag?.message?.records?.length || 0);
+      
       if (!nfcTag.message.records || nfcTag.message.records.length === 0) {
         console.error('[NFC] ❌ Message NDEF sans records');
-        toast.error("Tag NFC vide - Aucun enregistrement NDEF trouvé");
-        await stopScanning();
+        toast.error("Tag NFC vide");
         return;
       }
 
@@ -214,27 +232,23 @@ export const NFCReader = () => {
       // Parcourir les records NDEF
       const utils = new NfcUtils();
       for (let i = 0; i < nfcTag.message.records.length; i++) {
-        const record = nfcTag.message.records[i];
-        console.log(`[NFC] ===== Record ${i} =====`);
-        console.log(`[NFC] Record ${i} - payload existe?`, !!record.payload);
-        console.log(`[NFC] Record ${i} - payload length:`, record.payload?.length || 0);
-        
-        if (!record.payload || record.payload.length === 0) {
-          console.log(`[NFC] Record ${i} ⚠ vide, passer au suivant`);
-          continue;
-        }
-
         try {
+          const record = nfcTag.message.records[i];
+          console.log(`[NFC] Record ${i} - payload:`, record?.payload?.length || 0, 'bytes');
+          
+          if (!record?.payload || record.payload.length === 0) {
+            continue;
+          }
+
           // Convertir le payload en texte
           const text = utils.convertBytesToString(record.payload);
-          console.log(`[NFC] Record ${i} ✓ Texte extrait:`, text);
+          console.log(`[NFC] Record ${i} - texte:`, text);
 
           // Vérifier si c'est un ID de reptile (format: reptile:UUID)
           if (text.startsWith('reptile:')) {
             const reptileId = text.replace('reptile:', '').trim();
             console.log('[NFC] ✓ ID reptile trouvé:', reptileId);
             toast.success("🦎 Fiche reptile trouvée !");
-            await stopScanning();
             navigate(`/reptile/${reptileId}`);
             return;
           } 
@@ -242,32 +256,32 @@ export const NFCReader = () => {
           // Vérifier si c'est une URL contenant /reptile/UUID
           if (text.includes('/reptile/')) {
             const match = text.match(/\/reptile\/([a-f0-9-]{36})/i);
-            if (match && match[1]) {
+            if (match?.[1]) {
               console.log('[NFC] ✓ URL reptile trouvée:', match[1]);
               toast.success("🦎 Fiche reptile trouvée !");
-              await stopScanning();
               navigate(`/reptile/${match[1]}`);
               return;
             }
           }
-
-          // Afficher le contenu pour diagnostic
-          console.log('[NFC] ⚠ Contenu non reconnu:', text);
-          toast.info(`Tag lu: ${text.substring(0, 50)}...`);
           
-        } catch (parseErr) {
-          console.error(`[NFC] Erreur conversion record ${i}:`, parseErr);
+          console.log(`[NFC] Record ${i} ne contient pas d'ID reptile`);
+        } catch (recordErr) {
+          console.error(`[NFC] Erreur record ${i}:`, recordErr);
         }
       }
 
-      toast.error("Tag NFC ne contient pas d'ID de reptile valide");
-      await stopScanning();
+      toast.error("Tag NFC ne contient pas de données reptile valides");
       
     } catch (err: any) {
-      console.error('[NFC] ===== ERREUR =====');
-      console.error('[NFC] Erreur traitement tag:', err);
-      toast.error(err.message || "Impossible de lire ce tag NFC");
-      await stopScanning();
+      console.error('[NFC] ===== ERREUR CRITIQUE =====');
+      console.error('[NFC] Message:', err?.message);
+      console.error('[NFC] Stack:', err?.stack);
+      console.error('[NFC] Erreur complète:', err);
+      toast.error("Erreur lecture NFC - Consultez les logs");
+      
+      try {
+        await stopScanning();
+      } catch {}
     }
   };
 
