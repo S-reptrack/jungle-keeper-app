@@ -2,68 +2,22 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
-import { VitePWA } from "vite-plugin-pwa";
+// import { VitePWA } from "vite-plugin-pwa"; // Désactivé temporairement
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
-  // Désactiver PWA pour les builds natifs (cause des crashes Android)
-  const isNativeBuild = process.env.CAPACITOR_PLATFORM === 'android' || process.env.CAPACITOR_PLATFORM === 'ios';
-  
-  return {
-    server: {
-      host: "::",
-      port: 8080,
-    },
-    plugins: [
-      react(),
-      mode === "development" && componentTagger(),
-      !isNativeBuild && VitePWA({
-      registerType: "autoUpdate",
-      injectRegister: 'auto',
-      includeAssets: ["favicon.ico", "robots.txt"],
-      devOptions: { enabled: true },
-      manifest: {
-        name: "S-reptrack - Suivi de reptiles",
-        short_name: "S-reptrack",
-        description: "Application moderne de suivi et gestion de reptiles",
-        theme_color: "#0F172A",
-        background_color: "#0F172A",
-        display: "standalone",
-        orientation: "portrait",
-        scope: "/",
-        start_url: "/",
-        icons: [
-          {
-            src: "/icon-512.png",
-            sizes: "192x192 512x512",
-            type: "image/png",
-            purpose: "any maskable",
-          },
-        ],
-      },
-      workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,jpg,jpeg}"],
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5 MB
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
-            handler: "NetworkFirst",
-            options: {
-              cacheName: "supabase-cache",
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24, // 24 hours
-              },
-            },
-          },
-        ],
-      },
-    }),
+export default defineConfig(({ mode }) => ({
+  server: {
+    host: "::",
+    port: 8080,
+  },
+  plugins: [
+    react(),
+    mode === "development" && componentTagger(),
+    // PWA désactivé - cause des crashes Android (service worker bad-precaching-response)
   ].filter(Boolean),
-    resolve: {
-      alias: {
-        "@": path.resolve(__dirname, "./src"),
-      },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
     },
-  };
-});
+  },
+}));
