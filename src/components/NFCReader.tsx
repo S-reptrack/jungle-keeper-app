@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import { Nfc, NfcUtils, NfcTagScannedEvent } from '@capawesome-team/capacitor-nfc';
 
@@ -41,6 +41,15 @@ const getNfc = () => {
     if (available && native) return native;
   } catch {}
   return StubNfc;
+};
+
+// Helpers de détection (Capawesome vs Exxili)
+const getCapPlugins = () => ((window as any)?.Capacitor?.Plugins) || {};
+const detectNfcVariant = (): 'exxili' | 'capawesome' | 'none' => {
+  const p = getCapPlugins();
+  if (p?.NFC?.writeNDEF) return 'exxili';
+  if (p?.Nfc) return 'capawesome';
+  return 'none';
 };
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
