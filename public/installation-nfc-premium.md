@@ -20,8 +20,9 @@ cd jungle-keeper-app
 Remplacez `YOUR_LICENSE_KEY` par votre clé de licence :
 
 ```bash
-npm config set @capawesome-team:registry https://npm.registry.capawesome.dev
-npm config set //npm.registry.capawesome.dev/:_authToken YOUR_LICENSE_KEY
+npm config set @capawesome-team:registry https://npm.registry.capawesome.io
+npm config set //npm.registry.capawesome.io/:_authToken YOUR_LICENSE_KEY
+npm config set //npm.registry.capawesome.io/:always-auth true
 ```
 
 ### 4. Installer les dépendances
