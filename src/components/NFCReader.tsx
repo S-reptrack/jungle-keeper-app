@@ -75,6 +75,7 @@ export const NFCReader = () => {
   const [selectedReptileId, setSelectedReptileId] = useState<string>('');
   const listenerRef = useRef<any>(null);
   const isProcessingRef = useRef(false);
+  const [foundReptileId, setFoundReptileId] = useState<string | null>(null);
 
   useEffect(() => {
     // Ne rien initialiser au montage pour éviter les crashes
@@ -91,6 +92,15 @@ export const NFCReader = () => {
       }
     };
   }, []);
+
+  // Navigation séparée pour éviter crash Android
+  useEffect(() => {
+    if (foundReptileId) {
+      console.log('[NFC] Navigation vers:', foundReptileId);
+      // Utiliser window.location au lieu de navigate() pour éviter crash
+      window.location.href = `/reptile/${foundReptileId}`;
+    }
+  }, [foundReptileId]);
 
   const loadReptiles = async () => {
     try {
@@ -239,18 +249,6 @@ export const NFCReader = () => {
       console.log('[NFC] ===== DÉBUT TRAITEMENT TAG =====');
       console.log('[NFC] Event brut:', JSON.stringify(event, null, 2));
       
-      // Retirer immédiatement le listener pour éviter les scans multiples
-      if (listenerRef.current) {
-        listenerRef.current.remove().catch(() => {});
-        listenerRef.current = null;
-      }
-      
-      // Arrêter la session de manière non-bloquante
-      if ((Capacitor as any).isPluginAvailable?.('Nfc')) {
-        getNfc().stopScanSession().catch(() => {});
-      }
-      setIsScanning(false);
-      
       // Extraire nfcTag de manière très défensive
       let nfcTag;
       try {
@@ -312,8 +310,8 @@ export const NFCReader = () => {
             console.log('[NFC] ✓ ID reptile trouvé:', reptileId);
             toast.success("🦎 Fiche reptile trouvée !");
             
-            // Navigation immédiate (session déjà arrêtée)
-            navigate(`/reptile/${reptileId}`);
+            // Stocker l'ID trouvé pour navigation via useEffect
+            setFoundReptileId(reptileId);
             return;
           } 
           
@@ -324,8 +322,8 @@ export const NFCReader = () => {
               console.log('[NFC] ✓ URL reptile trouvée:', match[1]);
               toast.success("🦎 Fiche reptile trouvée !");
               
-              // Navigation immédiate (session déjà arrêtée)
-              navigate(`/reptile/${match[1]}`);
+              // Stocker l'ID trouvé pour navigation via useEffect
+              setFoundReptileId(match[1]);
               return;
             }
           }
