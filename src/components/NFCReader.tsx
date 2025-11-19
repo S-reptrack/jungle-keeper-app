@@ -216,8 +216,8 @@ export const NFCReader = () => {
       console.log('[NFC] Type event:', typeof event);
       console.log('[NFC] Clés event:', Object.keys(event || {}));
       
-      // Arrêter le scan immédiatement pour éviter les re-déclenchements
-      await stopScanning().catch((e) => console.error('[NFC] Erreur stop:', e));
+      // ⚠️ NE PAS arrêter le scan ici pour éviter les crashes Android
+      // La session sera arrêtée par le cleanup du useEffect lors du unmount
       
       // Extraire nfcTag de manière très défensive
       let nfcTag;
@@ -279,7 +279,11 @@ export const NFCReader = () => {
             const reptileId = text.replace('reptile:', '').trim();
             console.log('[NFC] ✓ ID reptile trouvé:', reptileId);
             toast.success("🦎 Fiche reptile trouvée !");
-            navigate(`/reptile/${reptileId}`);
+            
+            // Navigation retardée pour éviter crash Android
+            setTimeout(() => {
+              navigate(`/reptile/${reptileId}`);
+            }, 100);
             return;
           } 
           
@@ -289,7 +293,11 @@ export const NFCReader = () => {
             if (match?.[1]) {
               console.log('[NFC] ✓ URL reptile trouvée:', match[1]);
               toast.success("🦎 Fiche reptile trouvée !");
-              navigate(`/reptile/${match[1]}`);
+              
+              // Navigation retardée pour éviter crash Android
+              setTimeout(() => {
+                navigate(`/reptile/${match[1]}`);
+              }, 100);
               return;
             }
           }
