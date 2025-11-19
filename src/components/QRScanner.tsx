@@ -501,7 +501,7 @@ const handleScanSuccess = async (decodedText: string) => {
   }
   await stopScanning();
 
-  console.log("[QR Scanner] Texte scanné:", decodedText);
+  console.log("[🔍 QR Scanner] Texte brut scanné:", decodedText);
 
   // S'assurer d'une session valide
   const { data: { session }, error: sessionError } = await supabase.auth.getSession();
@@ -514,63 +514,79 @@ const handleScanSuccess = async (decodedText: string) => {
   }
   const userId = session.user.id;
 
-  // 1) Chercher un UUID complet dans le texte
-  const uuidPattern = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
-  const uuidMatch = decodedText.match(uuidPattern);
-
   let reptileId: string | null = null;
 
-  if (uuidMatch) {
-    reptileId = uuidMatch[0];
-    console.log("[QR Scanner] UUID extrait:", reptileId);
-    toast.info(`ID détecté: ${reptileId.substring(0, 8)}…`, { duration: 3000 });
-  } else {
-    // 2) Supporter les QR codes courts: extraire un préfixe hex (8 à 12 caractères)
-    const prefixMatch = decodedText.match(/[0-9a-f]{12}/i) || decodedText.match(/[0-9a-f]{10}/i) || decodedText.match(/[0-9a-f]{8}/i);
-    const prefix = prefixMatch?.[0]?.toLowerCase();
-
-    if (prefix) {
-      try {
-        // Récupère les IDs de vos reptiles actifs puis cherche ceux qui commencent par le préfixe
-        const { data: myReptiles, error: listErr } = await supabase
-          .from("reptiles")
-          .select("id,name")
-          .eq("user_id", userId)
-          .in("status", ["active", "for_sale"])
-          .limit(1000);
-        if (listErr) console.warn("[QR Scanner] Liste perso non dispo:", listErr);
-        const candidates = (myReptiles || []).filter((r) => r.id.toLowerCase().startsWith(prefix));
-
-        if (candidates.length === 1) {
-          reptileId = candidates[0].id;
-          toast.info(`ID court ${prefix} → ${reptileId.substring(0, 8)}…`, { duration: 3000 });
-        } else if (candidates.length > 1) {
-          toast.error(`Plusieurs correspondances pour ${prefix}. QR trop court.`);
-          setError("Ambiguïté d'ID - plusieurs correspondances");
-          return;
-        } else {
-          toast.error("Cet ID n'existe pas dans votre base");
-          setError("Reptile introuvable");
-          return;
-        }
-      } catch (e) {
-        console.warn("[QR Scanner] Erreur de résolution d'ID court:", e);
-        toast.error("Erreur pendant la résolution de l'ID");
-        return;
-      }
-    }
-  }
-
-  if (reptileId) {
+  // 1) Priorité: extraire l'UUID depuis une URL /reptile/[UUID]
+  const urlPattern = /\/reptile\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i;
+  const urlMatch = decodedText.match(urlPattern);
+  
+  if (urlMatch && urlMatch[1]) {
+    reptileId = urlMatch[1];
+    console.log("[✅ QR Scanner] UUID extrait depuis URL:", reptileId);
+    toast.success("QR code scanné !");
     onOpenChange(false);
-    toast.success("QR code scanné avec succès !");
     navigate(`/reptile/${reptileId}`);
     return;
   }
 
-  // 3) Si aucun ID n'a été trouvé, tenter d'ouvrir un lien si présent
+  // 2) Fallback: chercher un UUID complet n'importe où dans le texte
+  const uuidPattern = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
+  const uuidMatch = decodedText.match(uuidPattern);
+
+  if (uuidMatch) {
+    reptileId = uuidMatch[0];
+    console.log("[✅ QR Scanner] UUID brut extrait:", reptileId);
+    toast.success("QR code scanné !");
+    onOpenChange(false);
+    navigate(`/reptile/${reptileId}`);
+    return;
+  }
+
+  // 3) Supporter les QR codes courts: extraire un préfixe hex (8 à 12 caractères)
+  const prefixMatch = decodedText.match(/[0-9a-f]{12}/i) || decodedText.match(/[0-9a-f]{10}/i) || decodedText.match(/[0-9a-f]{8}/i);
+  const prefix = prefixMatch?.[0]?.toLowerCase();
+
+  if (prefix) {
+    console.log("[🔍 QR Scanner] ID court détecté:", prefix);
+    try {
+      const { data: myReptiles, error: listErr } = await supabase
+        .from("reptiles")
+        .select("id,name")
+        .eq("user_id", userId)
+        .in("status", ["active", "for_sale"])
+        .limit(1000);
+      
+      if (listErr) console.warn("[⚠️ QR Scanner] Liste perso non dispo:", listErr);
+      const candidates = (myReptiles || []).filter((r) => r.id.toLowerCase().startsWith(prefix));
+
+      if (candidates.length === 1) {
+        reptileId = candidates[0].id;
+        console.log("[✅ QR Scanner] ID court résolu:", reptileId);
+        toast.success(`Reptile trouvé: ${candidates[0].name}`);
+        onOpenChange(false);
+        navigate(`/reptile/${reptileId}`);
+        return;
+      } else if (candidates.length > 1) {
+        console.error("[❌ QR Scanner] Ambiguïté - plusieurs correspondances");
+        toast.error(`Plusieurs correspondances pour ${prefix}. QR trop court.`);
+        setError("Ambiguïté d'ID - plusieurs correspondances");
+        return;
+      } else {
+        console.error("[❌ QR Scanner] ID court introuvable");
+        toast.error("Cet ID n'existe pas dans votre base");
+        setError("Reptile introuvable");
+        return;
+      }
+    } catch (e) {
+      console.warn("[❌ QR Scanner] Erreur de résolution d'ID court:", e);
+      toast.error("Erreur pendant la résolution de l'ID");
+      return;
+    }
+  }
+
+  // 4) Si c'est une URL complète mais pas reconnue, l'ouvrir quand même
   if (/^https?:\/\//i.test(decodedText)) {
-    console.log("[QR Scanner] Lien détecté:", decodedText);
+    console.log("[🌐 QR Scanner] URL générique détectée:", decodedText);
     toast.info("Ouverture du lien détecté");
     try {
       if (Capacitor.isNativePlatform()) {
@@ -578,15 +594,16 @@ const handleScanSuccess = async (decodedText: string) => {
       } else {
         window.open(decodedText, '_blank', 'noopener,noreferrer');
       }
+      onOpenChange(false);
       return;
     } catch (e) {
-      console.error('[QR Scanner] Ouverture du lien a échoué:', e);
+      console.error('[❌ QR Scanner] Ouverture du lien a échoué:', e);
     }
   }
 
-  console.warn("[QR Scanner] Format non reconnu:", decodedText);
-  toast.error("Format de QR code non reconnu");
-  setError("QR code invalide - aucun ID trouvé");
+  console.error("[❌ QR Scanner] Format non reconnu:", decodedText);
+  toast.error("Format de QR code non reconnu. Vérifiez que c'est bien un QR code S-reptrack.");
+  setError("QR code invalide - format non reconnu");
 };
 
   const handleClose = async () => {
