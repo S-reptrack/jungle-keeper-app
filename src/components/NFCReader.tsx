@@ -73,6 +73,8 @@ export const NFCReader = () => {
   const [error, setError] = useState<string | null>(null);
   const [reptiles, setReptiles] = useState<Reptile[]>([]);
   const [selectedReptileId, setSelectedReptileId] = useState<string>('');
+  const listenerRef = useRef<any>(null);
+  const isProcessingRef = useRef(false);
 
   useEffect(() => {
     // Ne rien initialiser au montage pour éviter les crashes
@@ -80,7 +82,13 @@ export const NFCReader = () => {
     loadReptiles();
 
     return () => {
-      stopScanning().catch(() => {});
+      // Cleanup: retirer le listener et arrêter la session
+      if (listenerRef.current) {
+        listenerRef.current.remove().catch(() => {});
+      }
+      if ((Capacitor as any).isPluginAvailable?.('Nfc')) {
+        getNfc().stopScanSession().catch(() => {});
+      }
     };
   }, []);
 
@@ -103,6 +111,7 @@ export const NFCReader = () => {
     try {
       setError(null);
       setIsScanning(true);
+      isProcessingRef.current = false;
 
       if (!Capacitor.isNativePlatform()) {
         throw new Error("La lecture NFC n'est disponible que sur l'application mobile");
@@ -113,10 +122,11 @@ export const NFCReader = () => {
         throw new Error("Plugin NFC non disponible sur cet appareil");
       }
 
-      // Configurer l'écouteur NFC
-      await getNfc().addListener('nfcTagScanned', (event: NfcTagScannedEvent) => {
+      // Configurer l'écouteur NFC et sauvegarder la référence
+      const listener = await getNfc().addListener('nfcTagScanned', (event: NfcTagScannedEvent) => {
         handleNFCTag(event);
       });
+      listenerRef.current = listener;
 
       // Démarrer une session de scan NFC
       await getNfc().startScanSession();
@@ -132,11 +142,20 @@ export const NFCReader = () => {
 
   const stopScanning = async () => {
     try {
+      // Retirer le listener
+      if (listenerRef.current) {
+        await listenerRef.current.remove();
+        listenerRef.current = null;
+      }
+      
+      // Arrêter la session NFC
       if ((Capacitor as any).isPluginAvailable?.('Nfc') && (isScanning || isWriting)) {
         await getNfc().stopScanSession();
       }
+      
       setIsScanning(false);
       setIsWriting(false);
+      isProcessingRef.current = false;
     } catch (err) {
       console.error('[NFC] Erreur arrêt scan:', err);
     }
@@ -209,15 +228,28 @@ export const NFCReader = () => {
   };
 
   const handleNFCTag = async (event: any) => {
-    // Protection maximale contre les crashes
+    // Empêcher les traitements multiples
+    if (isProcessingRef.current) {
+      console.log('[NFC] Traitement déjà en cours, ignoré');
+      return;
+    }
+    isProcessingRef.current = true;
+    
     try {
       console.log('[NFC] ===== DÉBUT TRAITEMENT TAG =====');
       console.log('[NFC] Event brut:', JSON.stringify(event, null, 2));
-      console.log('[NFC] Type event:', typeof event);
-      console.log('[NFC] Clés event:', Object.keys(event || {}));
       
-      // ⚠️ NE PAS arrêter le scan ici pour éviter les crashes Android
-      // La session sera arrêtée par le cleanup du useEffect lors du unmount
+      // Retirer immédiatement le listener pour éviter les scans multiples
+      if (listenerRef.current) {
+        listenerRef.current.remove().catch(() => {});
+        listenerRef.current = null;
+      }
+      
+      // Arrêter la session de manière non-bloquante
+      if ((Capacitor as any).isPluginAvailable?.('Nfc')) {
+        getNfc().stopScanSession().catch(() => {});
+      }
+      setIsScanning(false);
       
       // Extraire nfcTag de manière très défensive
       let nfcTag;
@@ -280,10 +312,8 @@ export const NFCReader = () => {
             console.log('[NFC] ✓ ID reptile trouvé:', reptileId);
             toast.success("🦎 Fiche reptile trouvée !");
             
-            // Navigation retardée pour éviter crash Android
-            setTimeout(() => {
-              navigate(`/reptile/${reptileId}`);
-            }, 100);
+            // Navigation immédiate (session déjà arrêtée)
+            navigate(`/reptile/${reptileId}`);
             return;
           } 
           
@@ -294,10 +324,8 @@ export const NFCReader = () => {
               console.log('[NFC] ✓ URL reptile trouvée:', match[1]);
               toast.success("🦎 Fiche reptile trouvée !");
               
-              // Navigation retardée pour éviter crash Android
-              setTimeout(() => {
-                navigate(`/reptile/${match[1]}`);
-              }, 100);
+              // Navigation immédiate (session déjà arrêtée)
+              navigate(`/reptile/${match[1]}`);
               return;
             }
           }
@@ -312,14 +340,10 @@ export const NFCReader = () => {
       
     } catch (err: any) {
       console.error('[NFC] ===== ERREUR CRITIQUE =====');
-      console.error('[NFC] Message:', err?.message);
-      console.error('[NFC] Stack:', err?.stack);
       console.error('[NFC] Erreur complète:', err);
-      toast.error("Erreur lecture NFC - Consultez les logs");
-      
-      try {
-        await stopScanning();
-      } catch {}
+      toast.error("Erreur lecture NFC");
+    } finally {
+      isProcessingRef.current = false;
     }
   };
 
