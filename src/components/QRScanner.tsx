@@ -232,7 +232,13 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
             saveToGallery: false,
           });
 
+          console.log("📷 [Photo] Photo capturée");
+          console.log("📷 [Photo] Format:", photo.format);
+          console.log("📷 [Photo] Base64 disponible:", !!photo.base64String);
+          console.log("📷 [Photo] WebPath disponible:", !!photo.webPath);
+
           if (!photo.base64String && !photo.webPath) {
+            console.error("❌ [Photo] Aucune donnée d'image disponible");
             toast.error("Impossible de capturer la photo");
             return;
           }
@@ -262,6 +268,8 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
 
           const img = await loadImage();
 
+          console.log("🖼️ [Image] Image chargée:", img.width, "x", img.height, "px");
+
           // Redimensionne (max 1024px) pour améliorer les chances de détection
           const maxDim = 1024;
           const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
@@ -277,9 +285,10 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
 
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
           
-          console.log("[QR Scanner] Image chargée:", canvas.width, "x", canvas.height);
+          console.log("🎨 [Canvas] Canvas créé:", canvas.width, "x", canvas.height, "px");
           
           // ÉTAPE 1: Essayer jsQR sans modification
+          console.log("🔍 [jsQR - Étape 1] Tentative de décodage sur image originale...");
           let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
           let code = jsQR(imageData.data, imageData.width, imageData.height, {
             inversionAttempts: "attemptBoth",
@@ -398,8 +407,13 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
 
       // Get available cameras
       const cameras = await Html5Qrcode.getCameras();
+      console.log("📹 [Html5Qrcode] Caméras détectées:", cameras.length);
+      cameras.forEach((cam, i) => {
+        console.log(`  ${i + 1}. ${cam.label || 'Caméra sans nom'} [${cam.id}]`);
+      });
 
       if (!cameras || cameras.length === 0) {
+        console.error("❌ [Html5Qrcode] Aucune caméra trouvée");
         setError("Aucune caméra trouvée sur cet appareil");
         toast.error("Aucune caméra trouvée");
         return;
@@ -413,6 +427,8 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
             cam.label.toLowerCase().includes("arrière") ||
             cam.label.toLowerCase().includes("rear")
         ) || cameras[cameras.length - 1];
+      
+      console.log("✅ [Html5Qrcode] Caméra sélectionnée:", backCamera.label);
 
       await scanner.start(
         backCamera.id,
@@ -422,15 +438,17 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
           aspectRatio: 1.0,
         },
         (decodedText) => {
-          console.log("[QR Scanner] Web decode:", decodedText);
+          console.log("🎯 [Html5Qrcode] QR CODE DÉCODÉ:", decodedText);
           handleScanSuccess(decodedText);
         },
         (_errorMessage) => {
-          // Ignore scan errors, they happen continuously while scanning
+          // Les erreurs de scan arrivent constamment pendant le scan, on ne logue pas
         }
       );
 
       setScanning(true);
+      console.log("✅ [Html5Qrcode] Scan en direct démarré avec succès");
+      
       // Afficher un conseil si rien n'est détecté au bout de 10s (sans interrompre le scan)
       if (!Capacitor.isNativePlatform() || forceWeb) {
         if (webTimeoutRef.current) clearTimeout(webTimeoutRef.current);
@@ -439,7 +457,10 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
         }, 10000);
       }
     } catch (err: any) {
-      console.error("Erreur lors du démarrage du scan:", err);
+      console.error("╔═══════════════════════════════════════════════════════");
+      console.error("║ ❌ [ÉCHEC CRITIQUE] Toutes les méthodes ont échoué");
+      console.error("║ Erreur finale:", err);
+      console.error("╚═══════════════════════════════════════════════════════");
 
       let errorMessage = "Impossible de démarrer la caméra";
       if (err.name === "NotAllowedError") {
@@ -495,59 +516,69 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   };
 
 const handleScanSuccess = async (decodedText: string) => {
+  console.log("╔═══════════════════════════════════════════════════════");
+  console.log("║ 🎉 [SUCCÈS] QR CODE SCANNÉ !");
+  console.log("║ Texte brut décodé:", decodedText);
+  console.log("╚═══════════════════════════════════════════════════════");
+  
   if (webTimeoutRef.current) {
     clearTimeout(webTimeoutRef.current);
     webTimeoutRef.current = null;
   }
   await stopScanning();
 
-  console.log("[🔍 QR Scanner] Texte brut scanné:", decodedText);
-
   // S'assurer d'une session valide
+  console.log("🔐 [Authentification] Vérification de la session...");
   const { data: { session }, error: sessionError } = await supabase.auth.getSession();
   if (sessionError || !session) {
-    console.error("❌ Pas de session:", sessionError);
+    console.error("❌ [Authentification] Pas de session:", sessionError);
     toast.error("Vous devez être connecté pour scanner");
     onOpenChange(false);
     navigate("/auth");
     return;
   }
   const userId = session.user.id;
+  console.log("✅ [Authentification] Session valide, user ID:", userId);
 
   let reptileId: string | null = null;
 
   // 1) Priorité: extraire l'UUID depuis une URL /reptile/[UUID]
+  console.log("🔍 [Étape 1] Recherche d'un UUID dans une URL /reptile/...");
   const urlPattern = /\/reptile\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i;
   const urlMatch = decodedText.match(urlPattern);
   
   if (urlMatch && urlMatch[1]) {
     reptileId = urlMatch[1];
-    console.log("[✅ QR Scanner] UUID extrait depuis URL:", reptileId);
+    console.log("✅ [Étape 1] UUID TROUVÉ dans URL:", reptileId);
     toast.success("QR code scanné !");
     onOpenChange(false);
     navigate(`/reptile/${reptileId}`);
     return;
   }
+  console.log("⚠️ [Étape 1] Aucun UUID trouvé dans une URL /reptile/...");
 
   // 2) Fallback: chercher un UUID complet n'importe où dans le texte
+  console.log("🔍 [Étape 2] Recherche d'un UUID brut n'importe où dans le texte...");
   const uuidPattern = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
   const uuidMatch = decodedText.match(uuidPattern);
 
   if (uuidMatch) {
     reptileId = uuidMatch[0];
-    console.log("[✅ QR Scanner] UUID brut extrait:", reptileId);
+    console.log("✅ [Étape 2] UUID TROUVÉ:", reptileId);
     toast.success("QR code scanné !");
     onOpenChange(false);
     navigate(`/reptile/${reptileId}`);
     return;
   }
+  console.log("⚠️ [Étape 2] Aucun UUID complet trouvé dans le texte");
 
   // 3) Supporter les QR codes courts: extraire un préfixe hex (8 à 12 caractères)
+  console.log("🔍 [Étape 3] Recherche d'un ID court (8-12 caractères hex)...");
   const prefixMatch = decodedText.match(/[0-9a-f]{12}/i) || decodedText.match(/[0-9a-f]{10}/i) || decodedText.match(/[0-9a-f]{8}/i);
   const prefix = prefixMatch?.[0]?.toLowerCase();
 
   if (prefix) {
-    console.log("[🔍 QR Scanner] ID court détecté:", prefix);
+    console.log("✅ [Étape 3] ID court DÉTECTÉ:", prefix);
     try {
       const { data: myReptiles, error: listErr } = await supabase
         .from("reptiles")
@@ -561,32 +592,34 @@ const handleScanSuccess = async (decodedText: string) => {
 
       if (candidates.length === 1) {
         reptileId = candidates[0].id;
-        console.log("[✅ QR Scanner] ID court résolu:", reptileId);
+        console.log("✅ [Étape 3] ID court RÉSOLU vers UUID complet:", reptileId);
         toast.success(`Reptile trouvé: ${candidates[0].name}`);
         onOpenChange(false);
         navigate(`/reptile/${reptileId}`);
         return;
       } else if (candidates.length > 1) {
-        console.error("[❌ QR Scanner] Ambiguïté - plusieurs correspondances");
+        console.error("❌ [Étape 3] AMBIGUÏTÉ - plusieurs correspondances:", candidates.length);
         toast.error(`Plusieurs correspondances pour ${prefix}. QR trop court.`);
         setError("Ambiguïté d'ID - plusieurs correspondances");
         return;
       } else {
-        console.error("[❌ QR Scanner] ID court introuvable");
+        console.error("❌ [Étape 3] ID court INTROUVABLE dans la base de données");
         toast.error("Cet ID n'existe pas dans votre base");
         setError("Reptile introuvable");
         return;
       }
     } catch (e) {
-      console.warn("[❌ QR Scanner] Erreur de résolution d'ID court:", e);
+      console.error("❌ [Étape 3] ERREUR lors de la résolution d'ID court:", e);
       toast.error("Erreur pendant la résolution de l'ID");
       return;
     }
   }
+  console.log("⚠️ [Étape 3] Aucun ID court trouvé");
 
   // 4) Si c'est une URL complète mais pas reconnue, l'ouvrir quand même
+  console.log("🔍 [Étape 4] Vérification si c'est une URL générique...");
   if (/^https?:\/\//i.test(decodedText)) {
-    console.log("[🌐 QR Scanner] URL générique détectée:", decodedText);
+    console.log("✅ [Étape 4] URL générique DÉTECTÉE:", decodedText);
     toast.info("Ouverture du lien détecté");
     try {
       if (Capacitor.isNativePlatform()) {
@@ -597,13 +630,20 @@ const handleScanSuccess = async (decodedText: string) => {
       onOpenChange(false);
       return;
     } catch (e) {
-      console.error('[❌ QR Scanner] Ouverture du lien a échoué:', e);
+      console.error('❌ [Étape 4] ÉCHEC d\'ouverture du lien:', e);
     }
   }
+  console.log("⚠️ [Étape 4] Ce n'est pas une URL");
 
-  console.error("[❌ QR Scanner] Format non reconnu:", decodedText);
-  toast.error("Format de QR code non reconnu. Vérifiez que c'est bien un QR code S-reptrack.");
-  setError("QR code invalide - format non reconnu");
+  // 5) Si rien ne correspond
+  console.log("╔═══════════════════════════════════════════════════════");
+  console.log("║ ❌ [ÉCHEC FINAL] Format de QR code non reconnu");
+  console.log("║ Texte décodé:", decodedText);
+  console.log("║ Longueur:", decodedText.length, "caractères");
+  console.log("║ Contenu brut:", JSON.stringify(decodedText));
+  console.log("╚═══════════════════════════════════════════════════════");
+  toast.error("QR code non reconnu. Utilisez un QR généré par S-reptrack.");
+  setError("QR code non reconnu");
 };
 
   const handleClose = async () => {
