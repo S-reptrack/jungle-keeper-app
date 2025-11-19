@@ -12,6 +12,11 @@ interface QRCodeDialogProps {
 
 const QRCodeDialog = ({ open, onOpenChange, reptileId, reptileName }: QRCodeDialogProps) => {
   const qrCodeUrl = `${window.location.origin}/reptile/${reptileId}`;
+  
+  console.log("[🔍 QR Code Dialog] Génération QR code:");
+  console.log("  - Origin:", window.location.origin);
+  console.log("  - Reptile ID:", reptileId);
+  console.log("  - URL complète:", qrCodeUrl);
 
   const downloadQRCode = () => {
     const svg = document.getElementById("qr-code-svg");
