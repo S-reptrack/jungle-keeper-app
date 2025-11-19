@@ -14,12 +14,12 @@ interface QRCodeDialogProps {
 
 const QRCodeDialog = ({ open, onOpenChange, reptileId, reptileName }: QRCodeDialogProps) => {
   const navigate = useNavigate();
-  const qrCodeUrl = `${window.location.origin}/reptile/${reptileId}`;
+  // Format simplifié: juste l'UUID pour meilleure compatibilité
+  const qrCodeUrl = reptileId;
   
   console.log("[🔍 QR Code Dialog] Génération QR code:");
-  console.log("  - Origin:", window.location.origin);
-  console.log("  - Reptile ID:", reptileId);
-  console.log("  - URL complète:", qrCodeUrl);
+  console.log("  - Reptile ID (UUID):", reptileId);
+  console.log("  - Contenu du QR:", qrCodeUrl);
 
   const downloadQRCode = () => {
     const svg = document.getElementById("qr-code-svg");
