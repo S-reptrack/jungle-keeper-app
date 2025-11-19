@@ -175,9 +175,10 @@ const QRCodeBatch = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {reptiles.map((reptile) => {
-            const qrCodeUrl = `${window.location.origin}/reptile/${reptile.id}`;
+            // Format simplifié: juste l'UUID pour meilleure compatibilité
+            const qrCodeUrl = reptile.id;
             
-            console.log(`[QR Batch] ${reptile.name}:`, qrCodeUrl);
+            console.log(`[QR Batch] ${reptile.name}: ${qrCodeUrl}`);
 
             return (
               <Card key={reptile.id}>
