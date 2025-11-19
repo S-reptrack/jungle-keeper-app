@@ -53,20 +53,51 @@ const QRCodeBatch = () => {
     const svgData = new XMLSerializer().serializeToString(svg);
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    
     const img = new Image();
 
     img.onload = () => {
+      // Ajouter de l'espace pour le texte en bas (80px de plus)
       canvas.width = img.width;
-      canvas.height = img.height;
-      ctx?.drawImage(img, 0, 0);
+      canvas.height = img.height + 80;
+      
+      // Fond blanc
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Dessiner le QR code
+      ctx.drawImage(img, 0, 0);
+      
+      // Ajouter le numéro de version et la date
+      const today = new Date();
+      const dateStr = today.toLocaleDateString("fr-FR");
+      const versionText = `v2.0 - ${dateStr}`;
+      
+      // Style du texte de version (rouge pour attirer l'attention)
+      ctx.fillStyle = "#EF4444";
+      ctx.font = "bold 16px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText(versionText, canvas.width / 2, img.height + 25);
+      
+      // Nom du reptile en noir
+      ctx.fillStyle = "#000000";
+      ctx.font = "14px Arial";
+      ctx.fillText(reptileName, canvas.width / 2, img.height + 50);
+      
+      // Texte "NOUVEAU QR CODE"
+      ctx.fillStyle = "#10B981";
+      ctx.font = "bold 12px Arial";
+      ctx.fillText("✅ NOUVEAU QR CODE", canvas.width / 2, img.height + 70);
+      
       const pngFile = canvas.toDataURL("image/png");
 
       const downloadLink = document.createElement("a");
-      downloadLink.download = `qr-code-${reptileName}.png`;
+      downloadLink.download = `qr-code-${reptileName}-v2.0.png`;
       downloadLink.href = pngFile;
       downloadLink.click();
       
-      toast.success(`QR Code téléchargé: ${reptileName}`);
+      toast.success(`QR Code v2.0 téléchargé: ${reptileName}`);
     };
 
     img.src = "data:image/svg+xml;base64," + btoa(svgData);
@@ -128,6 +159,9 @@ const QRCodeBatch = () => {
               </h3>
               <div className="text-sm text-red-600 dark:text-red-300 space-y-2">
                 <p className="font-semibold">Les anciens QR codes imprimés NE FONCTIONNENT PLUS !</p>
+                <p className="text-xs bg-green-500/20 text-green-700 dark:text-green-300 p-2 rounded border border-green-500/30">
+                  ✅ Les nouveaux QR codes sont marqués <strong>v2.0</strong> + date du jour
+                </p>
                 <ol className="list-decimal list-inside space-y-1 ml-2">
                   <li>Cliquez sur "Télécharger Tous" ci-dessus</li>
                   <li>Imprimez les nouveaux QR codes téléchargés</li>
@@ -148,8 +182,15 @@ const QRCodeBatch = () => {
             return (
               <Card key={reptile.id}>
                 <CardHeader>
-                  <CardTitle className="text-lg">{reptile.name}</CardTitle>
-                  <p className="text-sm text-muted-foreground">{reptile.species}</p>
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <CardTitle className="text-lg">{reptile.name}</CardTitle>
+                      <p className="text-sm text-muted-foreground">{reptile.species}</p>
+                    </div>
+                    <div className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
+                      v2.0
+                    </div>
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="bg-white p-4 rounded-lg flex justify-center">
