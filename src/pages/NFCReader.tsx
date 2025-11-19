@@ -1,4 +1,4 @@
-import { NFCReader as NFCReaderComponent } from '@/components/NFCReader';
+import { NFCReader as NFCReaderComponent } from '@/components/NFCReaderNew';
 import Navigation from '@/components/Navigation';
 
 const NFCReader = () => {
