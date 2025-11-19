@@ -10,11 +10,13 @@ import { AuthForm } from "@/components/AuthForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Printer } from "lucide-react";
+import { Printer, QrCode } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Reptiles = () => {
   const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const [reptiles, setReptiles] = useState<any[]>([]);
   const [archivedReptiles, setArchivedReptiles] = useState<any[]>([]);
   const [transferredReptiles, setTransferredReptiles] = useState<any[]>([]);
@@ -215,6 +217,13 @@ const Reptiles = () => {
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold text-foreground">{t("common.reptiles")}</h1>
           <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => navigate("/qr-codes")}
+            >
+              <QrCode className="mr-2 h-4 w-4" />
+              Tous les QR codes
+            </Button>
             <Button
               variant="outline"
               onClick={() => setShowPrintDialog(true)}

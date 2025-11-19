@@ -22,6 +22,7 @@ import HealthReptilesList from "./pages/HealthReptilesList";
 import ReproductionReptilesList from "./pages/ReproductionReptilesList";
 import FeedingsDue from "./pages/FeedingsDue";
 import CostBreakdown from "./pages/CostBreakdown";
+import QRCodeBatch from "./pages/QRCodeBatch";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ const App = () => (
             <Route path="/transfers" element={<Transfers />} />
             <Route path="/nfc" element={<NFCReader />} />
             <Route path="/cost-breakdown" element={<CostBreakdown />} />
+            <Route path="/qr-codes" element={<QRCodeBatch />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
