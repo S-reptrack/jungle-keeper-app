@@ -1,7 +1,9 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { QRCodeSVG } from "qrcode.react";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
+import { Download, AlertTriangle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface QRCodeDialogProps {
   open: boolean;
@@ -11,6 +13,7 @@ interface QRCodeDialogProps {
 }
 
 const QRCodeDialog = ({ open, onOpenChange, reptileId, reptileName }: QRCodeDialogProps) => {
+  const navigate = useNavigate();
   const qrCodeUrl = `${window.location.origin}/reptile/${reptileId}`;
   
   console.log("[🔍 QR Code Dialog] Génération QR code:");
@@ -48,6 +51,27 @@ const QRCodeDialog = ({ open, onOpenChange, reptileId, reptileName }: QRCodeDial
         <DialogHeader>
           <DialogTitle>QR Code - {reptileName}</DialogTitle>
         </DialogHeader>
+        
+        <Alert className="bg-yellow-500/10 border-yellow-500/20">
+          <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-500" />
+          <AlertDescription className="text-sm">
+            <strong>⚠️ Ancien QR code obsolète</strong>
+            <br />
+            Si vous avez déjà imprimé ce QR code, il ne fonctionnera pas correctement.
+            <br />
+            <Button
+              variant="link"
+              className="h-auto p-0 text-primary underline"
+              onClick={() => {
+                onOpenChange(false);
+                navigate("/qr-codes");
+              }}
+            >
+              Téléchargez les nouveaux QR codes ici
+            </Button>
+          </AlertDescription>
+        </Alert>
+
         <div className="flex flex-col items-center gap-4 py-4">
           <div className="bg-white p-4 rounded-lg">
             <QRCodeSVG
