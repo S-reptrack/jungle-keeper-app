@@ -225,8 +225,8 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
             }
             
             .qr-container svg {
-              width: 120px !important;
-              height: 120px !important;
+              width: 80px !important;
+              height: 80px !important;
               display: block;
             }
             
