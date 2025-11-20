@@ -2,9 +2,10 @@ import { useState, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Printer, Nfc } from "lucide-react";
+import { Printer, Nfc, Download } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface PrintQRCodesDialogProps {
   open: boolean;
@@ -20,6 +21,7 @@ interface PrintQRCodesDialogProps {
 const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialogProps) => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const qrContainerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   const toggleSelection = (id: string) => {
     const newSelection = new Set(selectedIds);
@@ -62,17 +64,26 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
       // Generate print HTML with actual SVG content
       const html = generatePrintHTML(selectedReptiles, qrSvgs);
 
-      // Open print window
-      const printWindow = window.open('', '_blank');
-      if (!printWindow) return;
+      if (isMobile) {
+        // On mobile, open in new tab for better print experience
+        const printWindow = window.open('about:blank', '_blank');
+        if (!printWindow) return;
 
-      printWindow.document.write(html);
-      printWindow.document.close();
+        printWindow.document.write(html);
+        printWindow.document.close();
+      } else {
+        // On desktop, use print window
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) return;
 
-      // Print after content loads
-      setTimeout(() => {
-        printWindow.print();
-      }, 500);
+        printWindow.document.write(html);
+        printWindow.document.close();
+
+        // Print after content loads
+        setTimeout(() => {
+          printWindow.print();
+        }, 500);
+      }
     }, 300);
   };
 
@@ -304,11 +315,11 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
         </DialogHeader>
         
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="space-y-3">
             <p className="text-sm text-muted-foreground">
               Sélectionnez les reptiles pour générer des étiquettes avec QR code et zone NFC
             </p>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               <Button variant="outline" size="sm" onClick={selectAll}>
                 Tout sélectionner
               </Button>
@@ -339,16 +350,17 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
             </div>
           </ScrollArea>
 
-          <div className="flex items-center justify-between pt-4 border-t">
-            <p className="text-sm text-muted-foreground">
+          <div className="flex items-center justify-between pt-4 border-t gap-3">
+            <p className="text-sm text-muted-foreground flex-1">
               {selectedIds.size} reptile(s) sélectionné(s)
             </p>
             <Button
               onClick={handlePrint}
               disabled={selectedIds.size === 0}
+              className="gap-2"
             >
-              <Printer className="mr-2 h-4 w-4" />
-              Imprimer ({selectedIds.size})
+              {isMobile ? <Download className="h-4 w-4" /> : <Printer className="h-4 w-4" />}
+              {isMobile ? "Ouvrir" : "Imprimer"} ({selectedIds.size})
             </Button>
           </div>
         </div>
