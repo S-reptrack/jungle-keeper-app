@@ -58,22 +58,26 @@ const QRCodeBatch = () => {
     const img = new Image();
 
     img.onload = () => {
-      // Ajouter de l'espace pour le texte en bas (40px de plus)
-      canvas.width = img.width;
-      canvas.height = img.height + 40;
+      // Haute résolution pour l'impression (4x plus grande)
+      const scale = 4;
+      const textHeight = 80; // Plus d'espace pour le texte en haute résolution
+      
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale + textHeight;
       
       // Fond blanc
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Dessiner le QR code
-      ctx.drawImage(img, 0, 0);
+      // Dessiner le QR code en haute résolution
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(img, 0, 0, img.width * scale, img.height * scale);
       
-      // Nom du reptile en noir
+      // Nom du reptile en noir (police plus grande pour la haute résolution)
       ctx.fillStyle = "#000000";
-      ctx.font = "14px Arial";
+      ctx.font = "bold 48px Arial";
       ctx.textAlign = "center";
-      ctx.fillText(reptileName, canvas.width / 2, img.height + 25);
+      ctx.fillText(reptileName, canvas.width / 2, img.height * scale + 60);
       
       const pngFile = canvas.toDataURL("image/png");
 
@@ -85,7 +89,7 @@ const QRCodeBatch = () => {
       toast.success(`QR Code téléchargé: ${reptileName}`);
     };
 
-    img.src = "data:image/svg+xml;base64," + btoa(svgData);
+    img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
   };
 
   const downloadAllQRCodes = () => {
