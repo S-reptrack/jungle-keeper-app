@@ -225,8 +225,8 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
             }
             
             .qr-container svg {
-              width: 60px !important;
-              height: 60px !important;
+              width: 120px !important;
+              height: 120px !important;
               display: block;
             }
             
@@ -358,8 +358,8 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
           {reptiles.filter(r => selectedIds.has(r.id)).map((reptile) => (
             <div key={reptile.id} className="qr-code-item">
               <QRCodeSVG
-                value={`${window.location.origin}/reptile/${reptile.id}`}
-                size={90}
+                value={reptile.id}
+                size={200}
                 level="H"
                 includeMargin={false}
               />
