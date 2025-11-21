@@ -27,7 +27,7 @@ const Navigation = () => {
   return (
     <>
       <nav className="bg-card/80 backdrop-blur-lg border-t border-border/50 fixed left-0 right-0 bottom-0 z-50 md:top-0 md:bottom-auto pb-[env(safe-area-inset-bottom)]">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-2">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center justify-around md:justify-start md:gap-8 flex-1">
               {navItems.map((item) => {
@@ -38,14 +38,14 @@ const Navigation = () => {
                   <Link
                     key={item.path}
                     to={item.path}
-                    className={`flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 px-2 py-2 rounded-lg transition-all duration-300 min-w-[60px] md:min-w-0 ${
+                    className={`flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-2 px-1.5 py-2 rounded-lg transition-all duration-300 flex-1 max-w-[80px] md:flex-none md:max-w-none ${
                       isActive
                         ? "text-primary bg-primary/10"
                         : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                     }`}
                   >
                     <Icon className="w-5 h-5 flex-shrink-0" />
-                    <span className="text-[10px] md:text-sm font-medium text-center leading-tight">{item.label}</span>
+                    <span className="text-[9px] md:text-sm font-medium text-center leading-none whitespace-nowrap">{item.label}</span>
                   </Link>
                 );
               })}
