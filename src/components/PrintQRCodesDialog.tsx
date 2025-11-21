@@ -309,55 +309,53 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-2xl max-h-[90vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle>Imprimer les étiquettes hybrides (QR Code + NFC)</DialogTitle>
+          <DialogTitle className="text-base md:text-lg">Imprimer les étiquettes hybrides</DialogTitle>
+          <p className="text-xs md:text-sm text-muted-foreground mt-2">
+            Étiquettes avec QR code et zone NFC
+          </p>
         </DialogHeader>
         
-        <div className="space-y-4">
-          <div className="space-y-3">
-            <p className="text-sm text-muted-foreground">
-              Sélectionnez les reptiles pour générer des étiquettes avec QR code et zone NFC
-            </p>
-            <div className="flex gap-2 flex-wrap">
-              <Button variant="outline" size="sm" onClick={selectAll}>
-                Tout sélectionner
-              </Button>
-              <Button variant="outline" size="sm" onClick={deselectAll}>
-                Tout désélectionner
-              </Button>
-            </div>
+        <div className="flex-1 flex flex-col space-y-3 overflow-hidden">
+          <div className="flex gap-2 flex-wrap px-1">
+            <Button variant="outline" size="sm" onClick={selectAll} className="flex-1 min-w-[120px]">
+              Tout sélectionner
+            </Button>
+            <Button variant="outline" size="sm" onClick={deselectAll} className="flex-1 min-w-[120px]">
+              Tout désélectionner
+            </Button>
           </div>
 
-          <ScrollArea className="h-[300px] border rounded-md p-4">
-            <div className="space-y-3">
+          <ScrollArea className="flex-1 border rounded-md">
+            <div className="space-y-2 p-3">
               {reptiles.map((reptile) => (
                 <div
                   key={reptile.id}
-                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent cursor-pointer"
+                  className="flex items-center space-x-3 p-2.5 rounded-lg hover:bg-accent cursor-pointer transition-colors"
                   onClick={() => toggleSelection(reptile.id)}
                 >
                   <Checkbox
                     checked={selectedIds.has(reptile.id)}
                     onCheckedChange={() => toggleSelection(reptile.id)}
                   />
-                  <div className="flex-1">
-                    <p className="font-medium">{reptile.name}</p>
-                    <p className="text-sm text-muted-foreground">{reptile.species}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-sm truncate">{reptile.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">{reptile.species}</p>
                   </div>
                 </div>
               ))}
             </div>
           </ScrollArea>
 
-          <div className="flex items-center justify-between pt-4 border-t gap-3">
-            <p className="text-sm text-muted-foreground flex-1">
+          <div className="flex flex-col sm:flex-row items-center justify-between pt-3 border-t gap-3">
+            <p className="text-xs md:text-sm text-muted-foreground">
               {selectedIds.size} reptile(s) sélectionné(s)
             </p>
             <Button
               onClick={handlePrint}
               disabled={selectedIds.size === 0}
-              className="gap-2"
+              className="gap-2 w-full sm:w-auto"
             >
               {isMobile ? <Download className="h-4 w-4" /> : <Printer className="h-4 w-4" />}
               {isMobile ? "Ouvrir" : "Imprimer"} ({selectedIds.size})
