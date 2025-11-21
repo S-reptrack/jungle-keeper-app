@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Printer, Nfc, Download } from "lucide-react";
+import { Printer, Nfc } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -64,26 +64,33 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
       // Generate print HTML with actual SVG content
       const html = generatePrintHTML(selectedReptiles, qrSvgs);
 
-      if (isMobile) {
-        // On mobile, open in new tab for better print experience
-        const printWindow = window.open('about:blank', '_blank');
-        if (!printWindow) return;
+      // Create an iframe for printing
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'fixed';
+      iframe.style.right = '0';
+      iframe.style.bottom = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = 'none';
+      document.body.appendChild(iframe);
 
-        printWindow.document.write(html);
-        printWindow.document.close();
-      } else {
-        // On desktop, use print window
-        const printWindow = window.open('', '_blank');
-        if (!printWindow) return;
+      const iframeDoc = iframe.contentWindow?.document;
+      if (!iframeDoc) return;
 
-        printWindow.document.write(html);
-        printWindow.document.close();
+      iframeDoc.open();
+      iframeDoc.write(html);
+      iframeDoc.close();
 
-        // Print after content loads
+      // Wait for content to load, then trigger print
+      setTimeout(() => {
+        iframe.contentWindow?.focus();
+        iframe.contentWindow?.print();
+        
+        // Remove iframe after print dialog closes
         setTimeout(() => {
-          printWindow.print();
-        }, 500);
-      }
+          document.body.removeChild(iframe);
+        }, 1000);
+      }, 500);
     }, 300);
   };
 
@@ -357,8 +364,8 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
               disabled={selectedIds.size === 0}
               className="gap-2 w-full sm:w-auto"
             >
-              {isMobile ? <Download className="h-4 w-4" /> : <Printer className="h-4 w-4" />}
-              {isMobile ? "Ouvrir" : "Imprimer"} ({selectedIds.size})
+              <Printer className="h-4 w-4" />
+              Imprimer ({selectedIds.size})
             </Button>
           </div>
         </div>
