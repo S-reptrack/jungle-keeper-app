@@ -64,33 +64,49 @@ const PrintQRCodesDialog = ({ open, onOpenChange, reptiles }: PrintQRCodesDialog
       // Generate print HTML with actual SVG content
       const html = generatePrintHTML(selectedReptiles, qrSvgs);
 
-      // Create an iframe for printing
-      const iframe = document.createElement('iframe');
-      iframe.style.position = 'fixed';
-      iframe.style.right = '0';
-      iframe.style.bottom = '0';
-      iframe.style.width = '0';
-      iframe.style.height = '0';
-      iframe.style.border = 'none';
-      document.body.appendChild(iframe);
-
-      const iframeDoc = iframe.contentWindow?.document;
-      if (!iframeDoc) return;
-
-      iframeDoc.open();
-      iframeDoc.write(html);
-      iframeDoc.close();
-
-      // Wait for content to load, then trigger print
-      setTimeout(() => {
-        iframe.contentWindow?.focus();
-        iframe.contentWindow?.print();
+      if (isMobile) {
+        // On mobile, create a blob and open it
+        const blob = new Blob([html], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const printWindow = window.open(url, '_blank');
         
-        // Remove iframe after print dialog closes
+        if (printWindow) {
+          printWindow.onload = () => {
+            setTimeout(() => {
+              printWindow.print();
+              URL.revokeObjectURL(url);
+            }, 500);
+          };
+        }
+      } else {
+        // On desktop, use iframe method
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = 'none';
+        document.body.appendChild(iframe);
+
+        const iframeDoc = iframe.contentWindow?.document;
+        if (!iframeDoc) return;
+
+        iframeDoc.open();
+        iframeDoc.write(html);
+        iframeDoc.close();
+
+        // Wait for content to load, then trigger print
         setTimeout(() => {
-          document.body.removeChild(iframe);
-        }, 1000);
-      }, 500);
+          iframe.contentWindow?.focus();
+          iframe.contentWindow?.print();
+          
+          // Remove iframe after print dialog closes
+          setTimeout(() => {
+            document.body.removeChild(iframe);
+          }, 1000);
+        }, 500);
+      }
     }, 300);
   };
 
