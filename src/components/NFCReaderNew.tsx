@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NFC, NDEFMessagesTransformable } from '@exxili/capacitor-nfc';
 import { Capacitor } from '@capacitor/core';
@@ -24,23 +24,22 @@ export const NFCReader = () => {
   const [error, setError] = useState<string | null>(null);
   const [reptiles, setReptiles] = useState<Reptile[]>([]);
   const [selectedReptileId, setSelectedReptileId] = useState<string>('');
-  const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
+  const nfcCallbackRef = useRef<any>(null);
 
   useEffect(() => {
     loadReptiles();
+    
+    // Nettoyage au démontage du composant
+    return () => {
+      if (nfcCallbackRef.current) {
+        try {
+          console.log('[NFC] Listeners nettoyés');
+        } catch (err) {
+          console.error('[NFC] Erreur nettoyage:', err);
+        }
+      }
+    };
   }, []);
-
-  // Navigation avec délai pour éviter le crash
-  useEffect(() => {
-    if (pendingNavigation) {
-      const timer = setTimeout(() => {
-        console.log('[NFC] Navigation vers:', pendingNavigation);
-        navigate(pendingNavigation);
-        setPendingNavigation(null);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [pendingNavigation, navigate]);
 
   const loadReptiles = async () => {
     try {
@@ -69,7 +68,7 @@ export const NFCReader = () => {
       console.log('[NFC] Configuration de l\'écouteur NFC...');
 
       // Utiliser l'API @exxili/capacitor-nfc
-      NFC.onRead((data: NDEFMessagesTransformable) => {
+      nfcCallbackRef.current = NFC.onRead((data: NDEFMessagesTransformable) => {
         handleNFCTag(data);
       });
 
@@ -87,9 +86,11 @@ export const NFCReader = () => {
     }
   };
 
-  const stopScanning = () => {
+  const stopScanning = async () => {
     setIsScanning(false);
     setIsWriting(false);
+    nfcCallbackRef.current = null;
+    console.log('[NFC] Scan arrêté');
   };
 
   const startWriting = async () => {
@@ -135,9 +136,6 @@ export const NFCReader = () => {
     try {
       console.log('[NFC] ===== TAG DÉTECTÉ =====');
       
-      // Arrêter le scan
-      stopScanning();
-
       // Récupérer les données en string
       const asString = data.string();
       console.log('[NFC] Données complètes:', asString);
@@ -147,6 +145,8 @@ export const NFCReader = () => {
         toast.error("Tag NFC vide");
         return;
       }
+
+      let foundReptileId: string | null = null;
 
       // Parcourir les messages et records
       for (const message of asString.messages) {
@@ -160,28 +160,42 @@ export const NFCReader = () => {
 
           // Vérifier si c'est un ID de reptile (format: reptile:UUID)
           if (payload.startsWith('reptile:')) {
-            const reptileId = payload.replace('reptile:', '').trim();
-            console.log('[NFC] ✓ ID reptile trouvé:', reptileId);
-            toast.success("🦎 Fiche reptile trouvée ! Ouverture...");
-            
-            // Navigation différée pour éviter le crash
-            setPendingNavigation(`/reptile/${reptileId}`);
-            return;
+            foundReptileId = payload.replace('reptile:', '').trim();
+            console.log('[NFC] ✓ ID reptile trouvé:', foundReptileId);
+            break;
           }
           
           // Vérifier si c'est une URL contenant /reptile/UUID
           if (payload.includes('/reptile/')) {
             const match = payload.match(/\/reptile\/([a-f0-9-]{36})/i);
             if (match?.[1]) {
-              console.log('[NFC] ✓ URL reptile trouvée:', match[1]);
-              toast.success("🦎 Fiche reptile trouvée ! Ouverture...");
-              
-              // Navigation différée pour éviter le crash
-              setPendingNavigation(`/reptile/${match[1]}`);
-              return;
+              foundReptileId = match[1];
+              console.log('[NFC] ✓ URL reptile trouvée:', foundReptileId);
+              break;
             }
           }
         }
+        if (foundReptileId) break;
+      }
+
+      if (foundReptileId) {
+        // Nettoyer COMPLÈTEMENT le NFC avant de naviguer
+        console.log('[NFC] Nettoyage des listeners...');
+        setIsScanning(false);
+        nfcCallbackRef.current = null;
+        
+        // Attendre que tout soit nettoyé
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        toast.success("🦎 Fiche reptile trouvée !");
+        
+        // Navigation après nettoyage complet avec window.location
+        setTimeout(() => {
+          console.log('[NFC] Navigation vers:', foundReptileId);
+          window.location.href = `/reptile/${foundReptileId}`;
+        }, 500);
+        
+        return;
       }
 
       toast.error("Tag NFC ne contient pas de données reptile valides");
