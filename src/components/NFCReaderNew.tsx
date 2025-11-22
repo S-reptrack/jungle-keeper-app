@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { NFC, NDEFMessagesTransformable } from '@exxili/capacitor-nfc';
+import { Nfc, NfcTagScannedEvent } from '@capawesome-team/capacitor-nfc';
 import { Capacitor } from '@capacitor/core';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -65,19 +65,17 @@ export const NFCReader = () => {
         throw new Error("La lecture NFC n'est disponible que sur l'application mobile");
       }
 
-      console.log('[NFC] Configuration de l\'écouteur NFC...');
+      console.log('[NFC] Configuration de l\'écouteur NFC Premium...');
 
-      // Utiliser l'API @exxili/capacitor-nfc
-      nfcCallbackRef.current = NFC.onRead((data: NDEFMessagesTransformable) => {
-        handleNFCTag(data);
+      // Utiliser l'API premium @capawesome-team/capacitor-nfc
+      await Nfc.addListener('nfcTagScanned', (event: NfcTagScannedEvent) => {
+        handleNFCTagPremium(event);
       });
 
-      // Démarrer le scan (iOS uniquement, Android écoute automatiquement)
-      if (Capacitor.getPlatform() === 'ios') {
-        await NFC.startScan();
-      }
+      // Démarrer le scan
+      await Nfc.startScanSession();
       
-      toast.success("✓ Lecteur NFC activé - Approchez un tag");
+      toast.success("✓ Lecteur NFC Premium activé - Approchez un tag");
     } catch (err: any) {
       console.error('[NFC] Erreur démarrage scan:', err);
       setError(err.message || "Erreur lors du démarrage du scan NFC");
@@ -87,10 +85,18 @@ export const NFCReader = () => {
   };
 
   const stopScanning = async () => {
-    setIsScanning(false);
-    setIsWriting(false);
-    nfcCallbackRef.current = null;
-    console.log('[NFC] Scan arrêté');
+    try {
+      await Nfc.stopScanSession();
+      await Nfc.removeAllListeners();
+      setIsScanning(false);
+      setIsWriting(false);
+      nfcCallbackRef.current = null;
+      console.log('[NFC] Scan arrêté');
+    } catch (err) {
+      console.error('[NFC] Erreur arrêt scan:', err);
+      setIsScanning(false);
+      setIsWriting(false);
+    }
   };
 
   const startWriting = async () => {
@@ -111,18 +117,35 @@ export const NFCReader = () => {
 
       toast.info("📝 Approchez un tag NFC vierge");
 
-      // Écrire sur le tag (API @exxili)
-      await NFC.writeNDEF({
-        records: [
-          {
-            type: 'T', // Well Known Text record
-            payload: textToWrite
-          }
-        ]
+      // Ajouter le listener pour l'écriture
+      await Nfc.addListener('nfcTagScanned', async () => {
+        try {
+          // Écrire sur le tag avec l'API premium
+          await Nfc.write({
+            message: {
+              records: [
+                {
+                  tnf: 1, // TNF_WELL_KNOWN
+                  type: [0x54], // 'T' for text
+                  payload: Array.from(new TextEncoder().encode(textToWrite))
+                }
+              ]
+            }
+          });
+
+          await Nfc.stopScanSession();
+          await Nfc.removeAllListeners();
+          toast.success("✓ Tag NFC programmé avec succès !");
+          setIsWriting(false);
+        } catch (writeErr: any) {
+          console.error('[NFC] Erreur écriture tag:', writeErr);
+          toast.error("Erreur lors de l'écriture");
+          setIsWriting(false);
+        }
       });
 
-      toast.success("✓ Tag NFC programmé avec succès !");
-      setIsWriting(false);
+      // Démarrer la session de scan pour l'écriture
+      await Nfc.startScanSession();
 
     } catch (err: any) {
       console.error('[NFC] Erreur écriture:', err);
@@ -132,77 +155,83 @@ export const NFCReader = () => {
     }
   };
 
-  const handleNFCTag = async (data: NDEFMessagesTransformable) => {
+  const handleNFCTagPremium = async (event: NfcTagScannedEvent) => {
     try {
-      console.log('[NFC] ===== TAG DÉTECTÉ =====');
+      console.log('[NFC] ===== TAG PREMIUM DÉTECTÉ =====');
+      console.log('[NFC] Event complet:', event);
       
-      // Récupérer les données en string
-      const asString = data.string();
-      console.log('[NFC] Données complètes:', asString);
-
-      if (!asString.messages || asString.messages.length === 0) {
+      const ndefMessage = event.nfcTag?.message;
+      
+      if (!ndefMessage || !ndefMessage.records || ndefMessage.records.length === 0) {
         console.error('[NFC] Aucun message NDEF trouvé');
         toast.error("Tag NFC vide");
+        await Nfc.stopScanSession();
         return;
       }
 
       let foundReptileId: string | null = null;
 
-      // Parcourir les messages et records
-      for (const message of asString.messages) {
-        if (!message.records || message.records.length === 0) continue;
+      // Parcourir les records NDEF
+      for (const record of ndefMessage.records) {
+        console.log('[NFC] Record:', record);
+        
+        if (!record.payload || record.payload.length === 0) continue;
 
-        for (const record of message.records) {
-          const payload = record.payload;
-          console.log('[NFC] Payload du record:', payload);
+        // Convertir le payload en string
+        const decoder = new TextDecoder();
+        const payloadString = decoder.decode(new Uint8Array(record.payload));
+        console.log('[NFC] Payload décodé:', payloadString);
 
-          if (!payload) continue;
-
-          // Vérifier si c'est un ID de reptile (format: reptile:UUID)
-          if (payload.startsWith('reptile:')) {
-            foundReptileId = payload.replace('reptile:', '').trim();
+        // Vérifier si c'est un ID de reptile (format: reptile:UUID)
+        if (payloadString.includes('reptile:')) {
+          const match = payloadString.match(/reptile:([a-f0-9-]{36})/i);
+          if (match?.[1]) {
+            foundReptileId = match[1];
             console.log('[NFC] ✓ ID reptile trouvé:', foundReptileId);
             break;
           }
-          
-          // Vérifier si c'est une URL contenant /reptile/UUID
-          if (payload.includes('/reptile/')) {
-            const match = payload.match(/\/reptile\/([a-f0-9-]{36})/i);
-            if (match?.[1]) {
-              foundReptileId = match[1];
-              console.log('[NFC] ✓ URL reptile trouvée:', foundReptileId);
-              break;
-            }
+        }
+        
+        // Vérifier si c'est une URL contenant /reptile/UUID
+        if (payloadString.includes('/reptile/')) {
+          const match = payloadString.match(/\/reptile\/([a-f0-9-]{36})/i);
+          if (match?.[1]) {
+            foundReptileId = match[1];
+            console.log('[NFC] ✓ URL reptile trouvée:', foundReptileId);
+            break;
           }
         }
-        if (foundReptileId) break;
       }
 
       if (foundReptileId) {
-        // Nettoyer COMPLÈTEMENT le NFC avant de naviguer
-        console.log('[NFC] Nettoyage des listeners...');
+        // Arrêter proprement la session NFC
+        console.log('[NFC] Arrêt de la session NFC...');
+        await Nfc.stopScanSession();
+        await Nfc.removeAllListeners();
+        
         setIsScanning(false);
         nfcCallbackRef.current = null;
         
-        // Attendre que tout soit nettoyé
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
         toast.success("🦎 Fiche reptile trouvée !");
         
-        // Navigation après nettoyage complet avec window.location
-        setTimeout(() => {
-          console.log('[NFC] Navigation vers:', foundReptileId);
-          window.location.href = `/reptile/${foundReptileId}`;
-        }, 500);
+        // Navigation immédiate - le plugin premium gère mieux la synchronisation
+        console.log('[NFC] Navigation vers:', foundReptileId);
+        navigate(`/reptile/${foundReptileId}`);
         
         return;
       }
 
+      await Nfc.stopScanSession();
       toast.error("Tag NFC ne contient pas de données reptile valides");
       
     } catch (err: any) {
       console.error('[NFC] Erreur traitement tag:', err);
       toast.error("Erreur lecture NFC");
+      try {
+        await Nfc.stopScanSession();
+      } catch (stopErr) {
+        console.error('[NFC] Erreur arrêt session:', stopErr);
+      }
     }
   };
 
