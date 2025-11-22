@@ -24,10 +24,23 @@ export const NFCReader = () => {
   const [error, setError] = useState<string | null>(null);
   const [reptiles, setReptiles] = useState<Reptile[]>([]);
   const [selectedReptileId, setSelectedReptileId] = useState<string>('');
+  const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
 
   useEffect(() => {
     loadReptiles();
   }, []);
+
+  // Navigation avec délai pour éviter le crash
+  useEffect(() => {
+    if (pendingNavigation) {
+      const timer = setTimeout(() => {
+        console.log('[NFC] Navigation vers:', pendingNavigation);
+        navigate(pendingNavigation);
+        setPendingNavigation(null);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [pendingNavigation, navigate]);
 
   const loadReptiles = async () => {
     try {
@@ -149,10 +162,10 @@ export const NFCReader = () => {
           if (payload.startsWith('reptile:')) {
             const reptileId = payload.replace('reptile:', '').trim();
             console.log('[NFC] ✓ ID reptile trouvé:', reptileId);
-            toast.success("🦎 Fiche reptile trouvée !");
+            toast.success("🦎 Fiche reptile trouvée ! Ouverture...");
             
-            // Navigation
-            navigate(`/reptile/${reptileId}`);
+            // Navigation différée pour éviter le crash
+            setPendingNavigation(`/reptile/${reptileId}`);
             return;
           }
           
@@ -161,10 +174,10 @@ export const NFCReader = () => {
             const match = payload.match(/\/reptile\/([a-f0-9-]{36})/i);
             if (match?.[1]) {
               console.log('[NFC] ✓ URL reptile trouvée:', match[1]);
-              toast.success("🦎 Fiche reptile trouvée !");
+              toast.success("🦎 Fiche reptile trouvée ! Ouverture...");
               
-              // Navigation
-              navigate(`/reptile/${match[1]}`);
+              // Navigation différée pour éviter le crash
+              setPendingNavigation(`/reptile/${match[1]}`);
               return;
             }
           }
