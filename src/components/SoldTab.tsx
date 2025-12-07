@@ -93,13 +93,17 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
 
     setCheckingBuyer(true);
     try {
-      const { data } = await supabase
-        .from("profiles")
-        .select("user_id")
-        .eq("email", email.trim())
-        .maybeSingle();
+      // Use the secure database function to check if email exists
+      const { data, error } = await supabase.rpc('check_email_exists', {
+        check_email: email.trim()
+      });
 
-      setBuyerExists(!!data);
+      if (error) {
+        console.error("Error checking buyer:", error);
+        setBuyerExists(null);
+      } else {
+        setBuyerExists(data === true);
+      }
     } catch (error) {
       console.error("Error checking buyer:", error);
       setBuyerExists(null);
