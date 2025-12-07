@@ -169,28 +169,50 @@ export const NFCReader = () => {
 
       toast.info("📝 Approchez un tag NFC vierge");
 
+      // Créer le payload NDEF Text Record correctement formaté
+      // Format: [status byte (language length)] + [language code] + [text]
+      const languageCode = 'en';
+      const textBytes = new TextEncoder().encode(textToWrite);
+      const languageBytes = new TextEncoder().encode(languageCode);
+      
+      // Status byte: bit 7 = UTF-8 (0), bits 0-5 = language code length
+      const statusByte = languageBytes.length;
+      
+      // Payload = status byte + language code + text
+      const payload = new Uint8Array(1 + languageBytes.length + textBytes.length);
+      payload[0] = statusByte;
+      payload.set(languageBytes, 1);
+      payload.set(textBytes, 1 + languageBytes.length);
+
       await Nfc.addListener('nfcTagScanned', async () => {
         try {
+          console.log('[NFC] Tag détecté, écriture en cours...');
+          console.log('[NFC] Payload:', Array.from(payload));
+          
           await Nfc.write({
             message: {
               records: [
                 {
-                  tnf: 1,
-                  type: [0x54],
-                  payload: Array.from(new TextEncoder().encode(textToWrite))
+                  tnf: 1, // TNF_WELL_KNOWN
+                  type: Array.from(new TextEncoder().encode('T')), // Type 'T' pour Text
+                  payload: Array.from(payload)
                 }
               ]
             }
           });
 
+          console.log('[NFC] Écriture réussie !');
           await Nfc.stopScanSession();
           await Nfc.removeAllListeners();
           toast.success("✓ Tag NFC programmé avec succès !");
           setIsWriting(false);
         } catch (writeErr: any) {
           console.error('[NFC] Erreur écriture tag:', writeErr);
-          toast.error("Erreur lors de l'écriture");
+          console.error('[NFC] Message:', writeErr?.message);
+          toast.error("Erreur lors de l'écriture: " + (writeErr?.message || 'Erreur inconnue'));
           setIsWriting(false);
+          await Nfc.stopScanSession();
+          await Nfc.removeAllListeners();
         }
       });
 
