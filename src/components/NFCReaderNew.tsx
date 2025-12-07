@@ -284,30 +284,48 @@ export const NFCReader = () => {
 
       let foundReptileId: string | null = null;
 
-      for (const record of ndefMessage.records) {
+      for (let i = 0; i < ndefMessage.records.length; i++) {
+        const record = ndefMessage.records[i];
         try {
-          console.log('[NFC] Record TNF:', record.tnf);
-          console.log('[NFC] Record type:', record.type);
+          console.log('[NFC] Record #' + i + ' TNF:', record?.tnf);
+          console.log('[NFC] Record #' + i + ' type:', JSON.stringify(record?.type));
+          console.log('[NFC] Record #' + i + ' payload brut:', JSON.stringify(record?.payload));
           
-          if (!record.payload || record.payload.length === 0) {
-            console.log('[NFC] Record sans payload, ignoré');
+          // Extraire le payload - peut être un tableau, un objet ou undefined
+          let payloadArray: number[] = [];
+          
+          if (Array.isArray(record?.payload)) {
+            payloadArray = record.payload;
+          } else if (record?.payload && typeof record.payload === 'object') {
+            // Si c'est un objet avec des indices numériques (comme {0: 2, 1: 101, ...})
+            payloadArray = Object.values(record.payload).filter((v): v is number => typeof v === 'number');
+          }
+          
+          if (payloadArray.length === 0) {
+            console.log('[NFC] Record #' + i + ' sans payload valide, ignoré');
             continue;
           }
 
-          const payloadBytes = new Uint8Array(record.payload);
-          console.log('[NFC] Payload length:', payloadBytes.length);
+          const payloadBytes = new Uint8Array(payloadArray);
+          console.log('[NFC] Payload bytes length:', payloadBytes.length);
           console.log('[NFC] Payload hex:', Array.from(payloadBytes).map(b => b.toString(16).padStart(2, '0')).join(' '));
 
           let textContent = '';
           
           // Vérifier si c'est un record Text (type = 0x54 = 'T')
-          const isTextRecord = record.type && record.type.length === 1 && record.type[0] === 0x54;
+          const typeArray = Array.isArray(record?.type) ? record.type : 
+                           (record?.type && typeof record.type === 'object' ? Object.values(record.type) : []);
+          const isTextRecord = typeArray.length === 1 && typeArray[0] === 0x54;
+          
+          console.log('[NFC] Is Text record:', isTextRecord, 'typeArray:', JSON.stringify(typeArray));
           
           if (isTextRecord && payloadBytes.length > 1) {
             // Format NDEF Text: [status byte][language code][text]
             const statusByte = payloadBytes[0];
             const languageCodeLength = statusByte & 0x3F; // bits 0-5
             const textStartIndex = 1 + languageCodeLength;
+            
+            console.log('[NFC] Status byte:', statusByte, 'lang length:', languageCodeLength, 'text start:', textStartIndex);
             
             if (textStartIndex < payloadBytes.length) {
               const textBytes = payloadBytes.slice(textStartIndex);
@@ -352,7 +370,7 @@ export const NFCReader = () => {
             break;
           }
         } catch (recordErr) {
-          console.error('[NFC] Erreur traitement record:', recordErr);
+          console.error('[NFC] Erreur traitement record #' + i + ':', recordErr);
         }
       }
 
