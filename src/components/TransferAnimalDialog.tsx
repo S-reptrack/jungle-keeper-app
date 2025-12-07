@@ -35,15 +35,31 @@ export const TransferAnimalDialog = ({
 
     setLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+      // Force refresh session before transfer
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError || !session) {
+        toast.error("Session expirée. Veuillez vous reconnecter.");
+        return;
+      }
 
-      // Check if recipient exists
-      const { data: recipientProfile } = await supabase
-        .from("profiles")
-        .select("user_id")
-        .eq("email", toEmail.trim())
-        .single();
+      const user = session.user;
+
+      // Check if recipient exists using the secure function
+      const { data: recipientExists } = await supabase.rpc('check_email_exists', {
+        check_email: toEmail.trim()
+      });
+
+      // Get recipient user_id if they exist
+      let recipientUserId = null;
+      if (recipientExists) {
+        const { data: recipientProfile } = await supabase
+          .from("profiles")
+          .select("user_id")
+          .eq("email", toEmail.trim())
+          .maybeSingle();
+        recipientUserId = recipientProfile?.user_id || null;
+      }
 
       // Create transfer request
       const { error } = await supabase
@@ -52,7 +68,7 @@ export const TransferAnimalDialog = ({
           reptile_id: reptileId,
           from_user_id: user.id,
           to_user_email: toEmail.trim(),
-          to_user_id: recipientProfile?.user_id || null,
+          to_user_id: recipientUserId,
           message: message.trim() || null,
         });
 
