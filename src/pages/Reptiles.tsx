@@ -242,7 +242,7 @@ const Reptiles = () => {
           <div className="text-center py-12">Chargement...</div>
         ) : (
           <Tabs defaultValue="active" className="w-full">
-            <TabsList className="mb-6">
+            <TabsList className="mb-6 w-full grid grid-cols-3">
               <TabsTrigger value="active" className="gap-2">
                 Actifs
                 <Badge variant="secondary">{reptiles.length}</Badge>
