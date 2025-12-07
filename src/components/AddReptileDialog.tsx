@@ -256,44 +256,61 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                     </TabsList>
                     
                     <TabsContent value={selectedAnnex} className="mt-0">
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant="outline"
-                              role="combobox"
-                              className="w-full justify-between"
-                              disabled={!selectedCategory}
-                            >
-                              <span>
-                                {field.value 
-                                  ? t(getAllSpecies().find(s => s.id === field.value)?.commonNameKey || '')
-                                  : t("reptile.selectSpecies")}
-                              </span>
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-[--radix-popover-trigger-width] p-0 z-50 bg-card border-border" align="start">
-                          <Command>
-                            <CommandInput placeholder={t("reptile.selectSpecies") as string} />
-                            <CommandEmpty>Aucune espèce trouvée</CommandEmpty>
-                            <CommandGroup className="max-h-[300px] overflow-y-auto">
-                              {filteredSpecies.map((species) => (
-                                <CommandItem
-                                  key={species.id}
-                                  value={`${t(species.commonNameKey)} ${species.scientificName}`}
-                                  onSelect={() => field.onChange(species.id)}
-                                >
-                                  <div className="flex flex-col">
-                                    <span className="font-medium">{t(species.commonNameKey)}</span>
-                                    <span className="text-xs text-muted-foreground italic">{species.scientificName}</span>
-                                  </div>
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
+                      <div className="flex gap-2">
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                className="w-full justify-between"
+                                disabled={!selectedCategory}
+                              >
+                                <span>
+                                  {field.value 
+                                    ? t(getAllSpecies().find(s => s.id === field.value)?.commonNameKey || '')
+                                    : t("reptile.selectSpecies")}
+                                </span>
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[--radix-popover-trigger-width] p-0 z-50 bg-card border-border" align="start">
+                            <Command>
+                              <CommandInput placeholder={t("reptile.selectSpecies") as string} />
+                              <CommandEmpty>Aucune espèce trouvée</CommandEmpty>
+                              <CommandGroup className="max-h-[300px] overflow-y-auto">
+                                {filteredSpecies.map((species) => (
+                                  <CommandItem
+                                    key={species.id}
+                                    value={`${t(species.commonNameKey)} ${species.scientificName}`}
+                                    onSelect={() => field.onChange(species.id)}
+                                  >
+                                    <div className="flex flex-col">
+                                      <span className="font-medium">{t(species.commonNameKey)}</span>
+                                      <span className="text-xs text-muted-foreground italic">{species.scientificName}</span>
+                                    </div>
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                        {field.value && (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            onClick={() => {
+                              field.onChange("");
+                              setSelectedMorphs([]);
+                              form.setValue("morphs", []);
+                            }}
+                            className="shrink-0"
+                          >
+                            ✕
+                          </Button>
+                        )}
+                      </div>
                     </TabsContent>
                   </Tabs>
                   <FormMessage />
