@@ -12,7 +12,7 @@ if exist package-lock.json del package-lock.json
 
 echo.
 echo [2/7] Configuration du registre Capawesome...
-call npm config set @capawesome-team:registry https://npm.registry.capawesome.dev
+call npm config set @capawesome-team:registry https://npm.registry.capawesome.io
 
 echo.
 echo ========================================
@@ -21,7 +21,8 @@ echo (Exemple: POLAR-E9FB2266-275B-414A-8C47-E1FF116518B0)
 echo ========================================
 set /p LICENSE_KEY="Collez votre cle ici: "
 
-call npm config set //npm.registry.capawesome.dev/:_authToken %LICENSE_KEY%
+call npm config set //npm.registry.capawesome.io/:_authToken %LICENSE_KEY%
+call npm config set //npm.registry.capawesome.io/:always-auth true
 
 echo.
 echo [3/7] Installation des dependances...
