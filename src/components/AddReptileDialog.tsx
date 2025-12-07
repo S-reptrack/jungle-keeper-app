@@ -71,6 +71,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<"snake" | "lizard" | "turtle" | null>("snake");
   const [selectedAnnex, setSelectedAnnex] = useState<'A' | 'B' | 'C' | 'D'>('B');
+  const [speciesPopoverOpen, setSpeciesPopoverOpen] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -260,7 +261,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                     
                     <TabsContent value={selectedAnnex} className="mt-0">
                       <div className="flex gap-2">
-                        <Popover>
+                        <Popover open={speciesPopoverOpen} onOpenChange={setSpeciesPopoverOpen}>
                           <PopoverTrigger asChild>
                             <FormControl>
                               <Button
@@ -286,7 +287,10 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                                   <CommandItem
                                     key={species.id}
                                     value={`${t(species.commonNameKey)} ${species.scientificName}`}
-                                    onSelect={() => field.onChange(species.id)}
+                                    onSelect={() => {
+                                      field.onChange(species.id);
+                                      setSpeciesPopoverOpen(false);
+                                    }}
                                   >
                                     <div className="flex flex-col">
                                       <span className="font-medium">{t(species.commonNameKey)}</span>
