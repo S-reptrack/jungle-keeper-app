@@ -194,17 +194,18 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
-      // Get buyer's user_id
+      // Get buyer's user_id - use the secure function result
+      // If buyer exists (verified by check_email_exists), we can proceed
+      // The to_user_id will be resolved by the recipient when they accept
       const { data: buyerProfile } = await supabase
         .from("profiles")
         .select("user_id")
         .eq("email", buyerEmail.trim())
-        .single();
+        .maybeSingle();
 
-      if (!buyerProfile) {
-        toast.error("Impossible de trouver l'acheteur");
-        return;
-      }
+      // Even if we can't read the profile due to RLS, we know the user exists
+      // because check_email_exists returned true
+      const recipientUserId = buyerProfile?.user_id || null;
 
       // Create transfer request
       const { error } = await supabase
@@ -213,7 +214,7 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
           reptile_id: reptileId,
           from_user_id: user.id,
           to_user_email: buyerEmail.trim(),
-          to_user_id: buyerProfile.user_id,
+          to_user_id: recipientUserId,
           message: transferMessage.trim() || `Fiche de ${reptileName} suite à la vente`,
         });
 
