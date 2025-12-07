@@ -1,6 +1,6 @@
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send, DollarSign, Skull } from "lucide-react";
+import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send, DollarSign, Skull, CheckCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ import QRCodeDialog from "@/components/QRCodeDialog";
 import ImageUploadDialog from "@/components/ImageUploadDialog";
 import { TransferAnimalDialog } from "@/components/TransferAnimalDialog";
 import SellTab from "@/components/SellTab";
+import SoldTab from "@/components/SoldTab";
 import DeathTab from "@/components/DeathTab";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -421,7 +422,7 @@ const ReptileDetail = () => {
           <div className="lg:col-span-2">
             {(reptile.status === "active" || reptile.status === "for_sale") ? (
               <Tabs defaultValue={defaultTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-6">
+                <TabsList className="grid w-full grid-cols-7">
                   <TabsTrigger value="overview" className="flex items-center justify-center gap-1.5 px-2">
                     <Eye className="w-4 h-4 shrink-0" />
                     <span className="truncate text-xs md:text-sm">{t("reptile.tabs.overview")}</span>
@@ -441,6 +442,10 @@ const ReptileDetail = () => {
                   <TabsTrigger value="sell" className="flex items-center justify-center gap-1.5 px-2">
                     <DollarSign className="w-4 h-4 shrink-0" />
                     <span className="truncate text-xs md:text-sm">Vendre</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="sold" className="flex items-center justify-center gap-1.5 px-2">
+                    <CheckCircle className="w-4 h-4 shrink-0" />
+                    <span className="truncate text-xs md:text-sm">Vendu</span>
                   </TabsTrigger>
                   <TabsTrigger value="death" className="flex items-center justify-center gap-1.5 px-2">
                     <Skull className="w-4 h-4 shrink-0" />
@@ -503,6 +508,10 @@ const ReptileDetail = () => {
                 
                 <TabsContent value="sell">
                   <SellTab reptileId={reptile.id} reptileName={reptile.name} />
+                </TabsContent>
+                
+                <TabsContent value="sold">
+                  <SoldTab reptileId={reptile.id} reptileName={reptile.name} />
                 </TabsContent>
                 
                 <TabsContent value="death">
