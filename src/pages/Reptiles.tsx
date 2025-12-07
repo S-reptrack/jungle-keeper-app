@@ -188,16 +188,29 @@ const Reptiles = () => {
     }
   };
 
-  const calculateAge = (birthDate: string) => {
+  const calculateAge = (birthDate: string | null | undefined) => {
+    if (!birthDate) return "Inconnu";
+    
     const birth = new Date(birthDate);
+    if (isNaN(birth.getTime())) return "Inconnu";
+    
     const today = new Date();
-    const years = today.getFullYear() - birth.getFullYear();
-    const months = today.getMonth() - birth.getMonth();
+    let years = today.getFullYear() - birth.getFullYear();
+    let months = today.getMonth() - birth.getMonth();
+    
+    // Ajuster si l'anniversaire n'est pas encore passé cette année
+    if (months < 0 || (months === 0 && today.getDate() < birth.getDate())) {
+      years--;
+      months += 12;
+    }
     
     if (years > 0) {
       return `${years} an${years > 1 ? 's' : ''}`;
     }
-    return `${months} mois`;
+    if (months > 0) {
+      return `${months} mois`;
+    }
+    return "< 1 mois";
   };
 
   const groupBySpecies = (reptileList: any[]) => {
