@@ -10,8 +10,10 @@ import { AuthForm } from "@/components/AuthForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Printer, QrCode } from "lucide-react";
+import { Printer, QrCode, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+
+const ITEMS_PER_PAGE = 10;
 
 const Reptiles = () => {
   const { t } = useTranslation();
@@ -24,6 +26,9 @@ const Reptiles = () => {
   const [lastFeedings, setLastFeedings] = useState<Record<string, string>>({});
   const [showPrintDialog, setShowPrintDialog] = useState(false);
   const [daysUntilHatch, setDaysUntilHatch] = useState<Record<string, number | null>>({});
+  const [activePage, setActivePage] = useState(1);
+  const [archivedPage, setArchivedPage] = useState(1);
+  const [transferredPage, setTransferredPage] = useState(1);
 
   useEffect(() => {
     if (user) {
@@ -201,6 +206,51 @@ const Reptiles = () => {
     return Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b)) as [string, any[]][];
   };
 
+  const paginateReptiles = (reptileList: any[], page: number) => {
+    const startIndex = (page - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    return reptileList.slice(startIndex, endIndex);
+  };
+
+  const getTotalPages = (total: number) => Math.ceil(total / ITEMS_PER_PAGE);
+
+  const PaginationControls = ({ 
+    currentPage, 
+    totalItems, 
+    onPageChange 
+  }: { 
+    currentPage: number; 
+    totalItems: number; 
+    onPageChange: (page: number) => void;
+  }) => {
+    const totalPages = getTotalPages(totalItems);
+    if (totalPages <= 1) return null;
+
+    return (
+      <div className="flex items-center justify-center gap-2 mt-6">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </Button>
+        <span className="text-sm text-muted-foreground">
+          Page {currentPage} / {totalPages}
+        </span>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+      </div>
+    );
+  };
+
   if (authLoading) {
     return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
   }
@@ -264,29 +314,36 @@ const Reptiles = () => {
                   <AddReptileDialog onReptileAdded={fetchReptiles} />
                 </div>
               ) : (
-                <div className="space-y-8">
-                  {groupBySpecies(reptiles).map(([species, speciesReptiles]) => (
-                    <div key={species}>
-                      <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {speciesReptiles.map((reptile) => (
-                          <ReptileCard
-                            key={reptile.id}
-                            id={reptile.id}
-                            name={reptile.name}
-                            species={reptile.species}
-                            age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
-                            weight={`${reptile.weight || 0}g`}
-                            lastFed={lastFeedings[reptile.id] || "Jamais"}
-                            image={reptile.image_url}
-                            daysUntilHatch={daysUntilHatch[reptile.id]}
-                            status={reptile.status}
-                          />
-                        ))}
+                <>
+                  <div className="space-y-8">
+                    {groupBySpecies(paginateReptiles(reptiles, activePage)).map(([species, speciesReptiles]) => (
+                      <div key={species}>
+                        <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {speciesReptiles.map((reptile) => (
+                            <ReptileCard
+                              key={reptile.id}
+                              id={reptile.id}
+                              name={reptile.name}
+                              species={reptile.species}
+                              age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                              weight={`${reptile.weight || 0}g`}
+                              lastFed={lastFeedings[reptile.id] || "Jamais"}
+                              image={reptile.image_url}
+                              daysUntilHatch={daysUntilHatch[reptile.id]}
+                              status={reptile.status}
+                            />
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                  <PaginationControls
+                    currentPage={activePage}
+                    totalItems={reptiles.length}
+                    onPageChange={setActivePage}
+                  />
+                </>
               )}
             </TabsContent>
 
@@ -296,36 +353,43 @@ const Reptiles = () => {
                   <p className="text-muted-foreground">Aucun reptile archivé</p>
                 </div>
               ) : (
-                <div className="space-y-8">
-                  {groupBySpecies(archivedReptiles).map(([species, speciesReptiles]) => (
-                    <div key={species}>
-                      <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {speciesReptiles.map((reptile) => (
-                          <div key={reptile.id} className="relative">
-                            <ReptileCard
-                              id={reptile.id}
-                              name={reptile.name}
-                              species={reptile.species}
-                              age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
-                              weight={`${reptile.weight || 0}g`}
-                              lastFed={lastFeedings[reptile.id] || "Jamais"}
-                              image={reptile.image_url}
-                              daysUntilHatch={daysUntilHatch[reptile.id]}
-                            />
-                            <Badge 
-                              variant="secondary" 
-                              className="absolute top-4 right-4 z-10"
-                            >
-                              {reptile.status === "deceased" ? "Décédé" : "Vendu"}
-                              {reptile.status_date && ` - ${new Date(reptile.status_date).toLocaleDateString("fr-FR")}`}
-                            </Badge>
-                          </div>
-                        ))}
+                <>
+                  <div className="space-y-8">
+                    {groupBySpecies(paginateReptiles(archivedReptiles, archivedPage)).map(([species, speciesReptiles]) => (
+                      <div key={species}>
+                        <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {speciesReptiles.map((reptile) => (
+                            <div key={reptile.id} className="relative">
+                              <ReptileCard
+                                id={reptile.id}
+                                name={reptile.name}
+                                species={reptile.species}
+                                age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                                weight={`${reptile.weight || 0}g`}
+                                lastFed={lastFeedings[reptile.id] || "Jamais"}
+                                image={reptile.image_url}
+                                daysUntilHatch={daysUntilHatch[reptile.id]}
+                              />
+                              <Badge 
+                                variant="secondary" 
+                                className="absolute top-4 right-4 z-10"
+                              >
+                                {reptile.status === "deceased" ? "Décédé" : "Vendu"}
+                                {reptile.status_date && ` - ${new Date(reptile.status_date).toLocaleDateString("fr-FR")}`}
+                              </Badge>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                  <PaginationControls
+                    currentPage={archivedPage}
+                    totalItems={archivedReptiles.length}
+                    onPageChange={setArchivedPage}
+                  />
+                </>
               )}
             </TabsContent>
 
@@ -335,36 +399,43 @@ const Reptiles = () => {
                   <p className="text-muted-foreground">Aucun animal transféré</p>
                 </div>
               ) : (
-                <div className="space-y-8">
-                  {groupBySpecies(transferredReptiles).map(([species, speciesReptiles]) => (
-                    <div key={species}>
-                      <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {speciesReptiles.map((reptile) => (
-                          <div key={reptile.id} className="relative">
-                            <ReptileCard
-                              id={reptile.id}
-                              name={reptile.name}
-                              species={reptile.species}
-                              age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
-                              weight={`${reptile.weight || 0}g`}
-                              lastFed={lastFeedings[reptile.id] || "Jamais"}
-                              image={reptile.image_url}
-                              daysUntilHatch={daysUntilHatch[reptile.id]}
-                            />
-                            <Badge 
-                              variant="outline" 
-                              className="absolute top-4 right-4 z-10 border-yellow-500 text-yellow-700 dark:text-yellow-400 bg-card"
-                            >
-                              Transféré
-                              {reptile.transferred_at && ` - ${new Date(reptile.transferred_at).toLocaleDateString("fr-FR")}`}
-                            </Badge>
-                          </div>
-                        ))}
+                <>
+                  <div className="space-y-8">
+                    {groupBySpecies(paginateReptiles(transferredReptiles, transferredPage)).map(([species, speciesReptiles]) => (
+                      <div key={species}>
+                        <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {speciesReptiles.map((reptile) => (
+                            <div key={reptile.id} className="relative">
+                              <ReptileCard
+                                id={reptile.id}
+                                name={reptile.name}
+                                species={reptile.species}
+                                age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                                weight={`${reptile.weight || 0}g`}
+                                lastFed={lastFeedings[reptile.id] || "Jamais"}
+                                image={reptile.image_url}
+                                daysUntilHatch={daysUntilHatch[reptile.id]}
+                              />
+                              <Badge 
+                                variant="outline" 
+                                className="absolute top-4 right-4 z-10 border-yellow-500 text-yellow-700 dark:text-yellow-400 bg-card"
+                              >
+                                Transféré
+                                {reptile.transferred_at && ` - ${new Date(reptile.transferred_at).toLocaleDateString("fr-FR")}`}
+                              </Badge>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                  <PaginationControls
+                    currentPage={transferredPage}
+                    totalItems={transferredReptiles.length}
+                    onPageChange={setTransferredPage}
+                  />
+                </>
               )}
             </TabsContent>
           </Tabs>
