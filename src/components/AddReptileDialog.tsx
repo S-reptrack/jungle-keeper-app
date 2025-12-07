@@ -54,7 +54,7 @@ const formSchema = z.object({
   birthDate: z.date({
     required_error: "validation.dateRequired",
   }),
-  weight: z.coerce.number().min(1, "validation.weightMin"),
+  weight: z.coerce.number().optional(),
   purchaseDate: z.date({
     required_error: "validation.dateRequired",
   }),
