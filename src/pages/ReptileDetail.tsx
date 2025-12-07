@@ -33,7 +33,7 @@ interface Reptile {
   morphs: string[];
   birth_date: string;
   weight: number;
-  purchase_date: string;
+  purchase_date: string | null;
   image_url: string | null;
   status: string;
   status_date: string | null;
@@ -177,7 +177,8 @@ const ReptileDetail = () => {
     return new Date(year, month - 1, day);
   };
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string | null | undefined) => {
+    if (!dateString) return "Né à l'élevage";
     return parseDate(dateString).toLocaleDateString('fr-FR');
   };
 
