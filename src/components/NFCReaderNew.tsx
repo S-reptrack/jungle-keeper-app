@@ -62,24 +62,49 @@ const TypeNameFormat = {
   Unchanged: 6,
 };
 
-// Réplique de NfcUtils.createNdefTextRecord()
-const createNdefTextRecord = (text: string, language: string = 'en'): NdefRecord => {
-  const languageBytes = Array.from(new TextEncoder().encode(language));
+// Variable globale pour NfcUtils du plugin premium (chargé dynamiquement)
+let NfcUtils: any = null;
+
+// Essayer de charger NfcUtils depuis le plugin premium
+const loadNfcUtils = async () => {
+  try {
+    // Import dynamique du plugin premium - sera résolu à l'exécution sur mobile
+    // @ts-ignore - Le module sera disponible après installation locale du plugin premium
+    const module = await import('@capawesome-team/capacitor-nfc');
+    NfcUtils = module.NfcUtils;
+    console.log('[NFC] NfcUtils chargé depuis le plugin premium');
+    return true;
+  } catch (err) {
+    console.log('[NFC] NfcUtils non disponible, utilisation du fallback');
+    return false;
+  }
+};
+
+// Créer un record NDEF Text avec NfcUtils ou fallback manuel
+const createTextRecord = (text: string): NdefRecord => {
+  // Si NfcUtils est disponible, l'utiliser directement
+  if (NfcUtils) {
+    try {
+      const utils = new NfcUtils();
+      const result = utils.createNdefTextRecord({ text });
+      console.log('[NFC] Record créé avec NfcUtils:', result.record);
+      return result.record;
+    } catch (err) {
+      console.error('[NFC] Erreur NfcUtils, utilisation du fallback:', err);
+    }
+  }
+  
+  // Fallback manuel si NfcUtils n'est pas disponible
+  const languageBytes = Array.from(new TextEncoder().encode('en'));
   const textBytes = Array.from(new TextEncoder().encode(text));
-  
-  // Status byte: bit 7 = 0 (UTF-8), bits 0-5 = language code length
   const statusByte = languageBytes.length;
-  
-  // Payload = [statusByte, ...languageBytes, ...textBytes]
   const payload = [statusByte, ...languageBytes, ...textBytes];
-  
-  // Type = 'T' (0x54) pour Text Record
-  const type = [0x54];
   
   return {
     tnf: TypeNameFormat.WellKnown,
-    type,
-    payload
+    type: [0x54], // 'T' pour Text
+    payload,
+    id: [] // Important: id vide au lieu d'absent
   };
 };
 
@@ -211,8 +236,9 @@ export const NFCReader = () => {
 
       toast.info("📝 Approchez un tag NFC vierge");
 
-      // Utiliser notre fonction utilitaire qui réplique NfcUtils
-      const record = createNdefTextRecord(textToWrite);
+      // Charger NfcUtils et créer le record
+      await loadNfcUtils();
+      const record = createTextRecord(textToWrite);
 
       console.log('[NFC] Préparation écriture avec record:', record);
 
