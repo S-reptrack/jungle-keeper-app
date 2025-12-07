@@ -213,9 +213,9 @@ const Reptiles = () => {
     return "< 1 mois";
   };
 
-  const groupBySpecies = (reptileList: any[]) => {
-    // D'abord trier par espèce puis par nom alphabétique
-    const sortedList = [...reptileList].sort((a, b) => {
+  // Trier par espèce puis par nom alphabétique
+  const sortBySpeciesAndName = (reptileList: any[]) => {
+    return [...reptileList].sort((a, b) => {
       const speciesA = (a.species || "Non spécifié").toLowerCase();
       const speciesB = (b.species || "Non spécifié").toLowerCase();
       if (speciesA !== speciesB) {
@@ -225,8 +225,10 @@ const Reptiles = () => {
       const nameB = (b.name || "").toLowerCase();
       return nameA.localeCompare(nameB);
     });
+  };
 
-    const grouped = sortedList.reduce((acc, reptile) => {
+  const groupBySpecies = (reptileList: any[]) => {
+    const grouped = reptileList.reduce((acc, reptile) => {
       const species = reptile.species || "Non spécifié";
       if (!acc[species]) {
         acc[species] = [];
@@ -354,7 +356,7 @@ const Reptiles = () => {
               ) : (
                 <>
                   <div className="space-y-8">
-                    {groupBySpecies(paginateReptiles(reptiles, activePage)).map(([species, speciesReptiles]) => (
+                    {groupBySpecies(paginateReptiles(sortBySpeciesAndName(reptiles), activePage)).map(([species, speciesReptiles]) => (
                       <div key={species}>
                         <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
                         {viewMode === "grid" || !isMobile ? (
@@ -415,7 +417,7 @@ const Reptiles = () => {
               ) : (
                 <>
                   <div className="space-y-8">
-                    {groupBySpecies(paginateReptiles(archivedReptiles, archivedPage)).map(([species, speciesReptiles]) => (
+                    {groupBySpecies(paginateReptiles(sortBySpeciesAndName(archivedReptiles), archivedPage)).map(([species, speciesReptiles]) => (
                       <div key={species}>
                         <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
                         {viewMode === "grid" || !isMobile ? (
@@ -489,7 +491,7 @@ const Reptiles = () => {
               ) : (
                 <>
                   <div className="space-y-8">
-                    {groupBySpecies(paginateReptiles(transferredReptiles, transferredPage)).map(([species, speciesReptiles]) => (
+                    {groupBySpecies(paginateReptiles(sortBySpeciesAndName(transferredReptiles), transferredPage)).map(([species, speciesReptiles]) => (
                       <div key={species}>
                         <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
                         {viewMode === "grid" || !isMobile ? (
