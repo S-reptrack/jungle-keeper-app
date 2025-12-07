@@ -26,6 +26,7 @@
     "birthDate": "Birth Date",
     "weight": "Weight",
     "purchaseDate": "Purchase Date",
+    "bornInCaptivity": "Born in captivity",
     "lastFed": "Last Fed",
     "selectCategory": "Select a category",
     "selectSpecies": "Select a species",

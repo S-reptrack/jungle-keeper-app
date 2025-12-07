@@ -36,6 +36,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { getAllSpecies, getSpeciesByAnnex } from "@/data/citesSpecies";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -55,9 +56,8 @@ const formSchema = z.object({
     required_error: "validation.dateRequired",
   }),
   weight: z.coerce.number().optional(),
-  purchaseDate: z.date({
-    required_error: "validation.dateRequired",
-  }),
+  bornInCaptivity: z.boolean().optional(),
+  purchaseDate: z.date().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -79,6 +79,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
       category: "snake",
       weight: 0,
       morphs: [],
+      bornInCaptivity: false,
     },
   });
 
@@ -101,7 +102,9 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
         morphs: data.morphs || [],
         birth_date: `${data.birthDate.getFullYear()}-${String(data.birthDate.getMonth() + 1).padStart(2, '0')}-${String(data.birthDate.getDate()).padStart(2, '0')}`,
         weight: data.weight,
-        purchase_date: `${data.purchaseDate.getFullYear()}-${String(data.purchaseDate.getMonth() + 1).padStart(2, '0')}-${String(data.purchaseDate.getDate()).padStart(2, '0')}`,
+        purchase_date: data.purchaseDate && !data.bornInCaptivity
+          ? `${data.purchaseDate.getFullYear()}-${String(data.purchaseDate.getMonth() + 1).padStart(2, '0')}-${String(data.purchaseDate.getDate()).padStart(2, '0')}`
+          : null,
       });
 
       if (error) throw error;
@@ -489,6 +492,30 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
 
             <FormField
               control={form.control}
+              name="bornInCaptivity"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={(checked) => {
+                        field.onChange(checked);
+                        if (checked) {
+                          form.setValue("purchaseDate", undefined);
+                          setPurchaseDateInput("");
+                        }
+                      }}
+                    />
+                  </FormControl>
+                  <FormLabel className="font-normal cursor-pointer">
+                    {t("reptile.bornInCaptivity")}
+                  </FormLabel>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="weight"
               render={({ field }) => (
                 <FormItem>
@@ -501,64 +528,66 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="purchaseDate"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>{t("reptile.purchaseDate")}</FormLabel>
-                  <div className="flex gap-2">
-                    <Input
-                      type="text"
-                      placeholder="JJ/MM/AAAA"
-                      value={purchaseDateInput}
-                      onChange={(e) => handleDateInput(e.target.value, setPurchaseDateInput)}
-                      onBlur={() => {
-                        const parsed = parseInputToDate(purchaseDateInput);
-                        if (parsed) field.onChange(parsed);
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
+            {!form.watch("bornInCaptivity") && (
+              <FormField
+                control={form.control}
+                name="purchaseDate"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>{t("reptile.purchaseDate")}</FormLabel>
+                    <div className="flex gap-2">
+                      <Input
+                        type="text"
+                        placeholder="JJ/MM/AAAA"
+                        value={purchaseDateInput}
+                        onChange={(e) => handleDateInput(e.target.value, setPurchaseDateInput)}
+                        onBlur={() => {
                           const parsed = parseInputToDate(purchaseDateInput);
                           if (parsed) field.onChange(parsed);
-                        }
-                      }}
-                      className="flex-1"
-                      maxLength={10}
-                    />
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            "w-10 p-0",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon className="h-4 w-4" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0 z-50" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={(date) => {
-                            field.onChange(date);
-                            setPurchaseDateInput(formatDateToInput(date));
-                          }}
-                          disabled={(date) =>
-                            date > new Date() || date < new Date("1900-01-01")
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            const parsed = parseInputToDate(purchaseDateInput);
+                            if (parsed) field.onChange(parsed);
                           }
-                          initialFocus
-                          className="pointer-events-auto"
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                        }}
+                        className="flex-1"
+                        maxLength={10}
+                      />
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "w-10 p-0",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="h-4 w-4" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0 z-50" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={(date) => {
+                              field.onChange(date);
+                              setPurchaseDateInput(formatDateToInput(date));
+                            }}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date("1900-01-01")
+                            }
+                            initialFocus
+                            className="pointer-events-auto"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <div className="flex gap-2 pt-4">
               <Button
