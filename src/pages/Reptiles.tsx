@@ -214,12 +214,13 @@ const Reptiles = () => {
       <Navigation />
       
       <main className="max-w-7xl mx-auto px-4 py-8 pb-24 md:pb-8 md:pt-24">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <h1 className="text-3xl font-bold text-foreground">{t("common.reptiles")}</h1>
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <Button
               variant="outline"
               onClick={() => navigate("/qr-codes")}
+              className="w-full sm:w-auto"
             >
               <QrCode className="mr-2 h-4 w-4" />
               Tous les QR codes
@@ -228,6 +229,7 @@ const Reptiles = () => {
               variant="outline"
               onClick={() => setShowPrintDialog(true)}
               disabled={reptiles.length === 0}
+              className="w-full sm:w-auto"
             >
               <Printer className="mr-2 h-4 w-4" />
               Imprimer QR codes
