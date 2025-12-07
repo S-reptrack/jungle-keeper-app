@@ -197,15 +197,14 @@ export const NFCReader = () => {
         try {
           console.log('[NFC] Tag détecté pour écriture:', event);
           
-          // Utiliser le format exact attendu par le plugin premium
+          // Utiliser le format exact attendu par le plugin premium (sans id)
           await Nfc.write({
             message: {
               records: [
                 {
                   tnf: 1, // TNF_WELL_KNOWN
                   type: [0x54], // 'T' en ASCII = 0x54
-                  payload: payloadArray,
-                  id: []
+                  payload: payloadArray
                 }
               ]
             }
