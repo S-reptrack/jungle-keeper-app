@@ -214,7 +214,19 @@ const Reptiles = () => {
   };
 
   const groupBySpecies = (reptileList: any[]) => {
-    const grouped = reptileList.reduce((acc, reptile) => {
+    // D'abord trier par espèce puis par nom alphabétique
+    const sortedList = [...reptileList].sort((a, b) => {
+      const speciesA = (a.species || "Non spécifié").toLowerCase();
+      const speciesB = (b.species || "Non spécifié").toLowerCase();
+      if (speciesA !== speciesB) {
+        return speciesA.localeCompare(speciesB);
+      }
+      const nameA = (a.name || "").toLowerCase();
+      const nameB = (b.name || "").toLowerCase();
+      return nameA.localeCompare(nameB);
+    });
+
+    const grouped = sortedList.reduce((acc, reptile) => {
       const species = reptile.species || "Non spécifié";
       if (!acc[species]) {
         acc[species] = [];
