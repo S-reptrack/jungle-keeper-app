@@ -110,7 +110,7 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
     commonNameKey: 'species.morelia-bredli',
     category: 'snake',
     citesAnnex: 'B',
-    morphs: ['Normal', 'Hypo', 'Axanthic', 'Albino T-', 'Caramel'],
+    morphs: ['Normal', 'Hypo', 'Axanthic', 'Albino T-', 'Albino T+', 'Caramel', 'Ghost', 'Snow', 'Granite', 'Striped', 'Patternless', 'Amelanistic', 'Lavender'],
   },
   {
     id: 'morelia-carinata',
