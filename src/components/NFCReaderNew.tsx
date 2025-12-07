@@ -223,19 +223,11 @@ export const NFCReader = () => {
 
       await Nfc.addListener('nfcTagScanned', async (event: any) => {
         try {
-          console.log('[NFC] Tag détecté pour écriture:', event);
+          console.log('[NFC] Tag détecté pour écriture:', JSON.stringify(event));
           console.log('[NFC] Record à écrire:', JSON.stringify(record));
           
-          // Essayer d'abord de formater le tag
-          try {
-            console.log('[NFC] Formatage du tag...');
-            await Nfc.format();
-            console.log('[NFC] Tag formaté');
-          } catch (formatErr) {
-            console.log('[NFC] Format non nécessaire ou échec (normal):', formatErr);
-          }
-
-          // Écrire le record
+          // Écrire directement sans formater (format peut causer des erreurs)
+          console.log('[NFC] Tentative écriture...');
           await Nfc.write({
             message: {
               records: [record]
@@ -250,8 +242,12 @@ export const NFCReader = () => {
         } catch (writeErr: any) {
           console.error('[NFC] Erreur écriture tag:', writeErr);
           console.error('[NFC] Message:', writeErr?.message);
-          console.error('[NFC] Stack:', writeErr?.stack);
-          toast.error("Erreur lors de l'écriture: " + (writeErr?.message || 'Erreur inconnue'));
+          console.error('[NFC] Code:', writeErr?.code);
+          console.error('[NFC] Data:', JSON.stringify(writeErr?.data));
+          
+          // Afficher l'erreur complète
+          const errorMsg = writeErr?.message || writeErr?.code || JSON.stringify(writeErr) || 'Erreur inconnue';
+          toast.error("Erreur lors de l'écriture: " + errorMsg);
           setIsWriting(false);
           try {
             await Nfc.stopScanSession();
