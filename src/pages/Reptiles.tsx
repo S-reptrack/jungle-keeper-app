@@ -334,6 +334,7 @@ const Reptiles = () => {
                               image={reptile.image_url}
                               daysUntilHatch={daysUntilHatch[reptile.id]}
                               status={reptile.status}
+                              sex={reptile.sex}
                             />
                           ))}
                         </div>
@@ -372,6 +373,7 @@ const Reptiles = () => {
                                 lastFed={lastFeedings[reptile.id] || "Jamais"}
                                 image={reptile.image_url}
                                 daysUntilHatch={daysUntilHatch[reptile.id]}
+                                sex={reptile.sex}
                               />
                               <Badge 
                                 variant="secondary" 
@@ -418,6 +420,7 @@ const Reptiles = () => {
                                 lastFed={lastFeedings[reptile.id] || "Jamais"}
                                 image={reptile.image_url}
                                 daysUntilHatch={daysUntilHatch[reptile.id]}
+                                sex={reptile.sex}
                               />
                               <Badge 
                                 variant="outline" 

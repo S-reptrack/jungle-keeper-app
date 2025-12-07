@@ -16,9 +16,10 @@ interface ReptileCardProps {
   image?: string | null;
   daysUntilHatch?: number | null;
   status?: string;
+  sex?: string | null;
 }
 
-const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntilHatch, status }: ReptileCardProps) => {
+const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntilHatch, status, sex }: ReptileCardProps) => {
   const navigate = useNavigate();
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
   const { signedUrl, loading } = useSignedImageUrl(image);
@@ -61,9 +62,25 @@ const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntil
       </div>
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
-          <div>
-            <h3 className="text-xl font-bold text-foreground">{name}</h3>
-            <p className="text-sm text-muted-foreground">{species}</p>
+          <div className="flex items-center gap-2">
+            {sex && (
+              <span 
+                className={`text-2xl font-bold ${
+                  sex === "male" 
+                    ? "text-blue-500" 
+                    : sex === "female" 
+                    ? "text-pink-500" 
+                    : "text-muted-foreground"
+                }`}
+                title={sex === "male" ? "Mâle" : sex === "female" ? "Femelle" : "Inconnu"}
+              >
+                {sex === "male" ? "♂" : sex === "female" ? "♀" : "?"}
+              </span>
+            )}
+            <div>
+              <h3 className="text-xl font-bold text-foreground">{name}</h3>
+              <p className="text-sm text-muted-foreground">{species}</p>
+            </div>
           </div>
           <div className="flex flex-col items-end gap-2">
             {status === "for_sale" && (
