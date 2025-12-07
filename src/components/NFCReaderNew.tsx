@@ -137,7 +137,7 @@ export const NFCReader = () => {
       const { data, error } = await supabase
         .from('reptiles')
         .select('id, name, species')
-        .eq('status', 'active')
+        .in('status', ['active', 'for_sale'])
         .order('name');
 
       if (error) throw error;
