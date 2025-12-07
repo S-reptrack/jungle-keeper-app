@@ -35,18 +35,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { getAllSpecies, getSpeciesByAnnex } from "@/data/citesSpecies";
 
 const formSchema = z.object({
-  birthDate: z.date({
-    required_error: "La date de naissance est requise",
-  }),
-  purchaseDate: z.date({
-    required_error: "La date d'achat est requise",
-  }),
-  weight: z.coerce.number().min(1, "Le poids doit être supérieur à 0"),
+  species: z.string().min(1, "L'espèce est requise"),
+  birthDate: z.date().optional(),
+  purchaseDate: z.date().optional(),
+  weight: z.coerce.number().optional(),
   sex: z.enum(["male", "female", "unknown"], {
     required_error: "Le sexe est requis",
   }),
@@ -56,15 +56,17 @@ type FormValues = z.infer<typeof formSchema>;
 
 interface EditReptileDialogProps {
   reptileId: string;
-  currentBirthDate: string;
-  currentPurchaseDate: string;
-  currentWeight: number;
+  currentSpecies: string;
+  currentBirthDate?: string;
+  currentPurchaseDate?: string;
+  currentWeight?: number;
   currentSex: "male" | "female" | "unknown";
   onUpdate?: () => void;
 }
 
 const EditReptileDialog = ({ 
   reptileId, 
+  currentSpecies,
   currentBirthDate, 
   currentPurchaseDate,
   currentWeight,
@@ -75,13 +77,21 @@ const EditReptileDialog = ({
   const [open, setOpen] = useState(false);
   const [birthDateInput, setBirthDateInput] = useState("");
   const [purchaseDateInput, setPurchaseDateInput] = useState("");
+  const [selectedAnnex, setSelectedAnnex] = useState<'A' | 'B' | 'C' | 'D'>('B');
+
+  const parseDateSafe = (dateStr?: string) => {
+    if (!dateStr) return undefined;
+    const date = new Date(Number(dateStr.slice(0,4)), Number(dateStr.slice(5,7)) - 1, Number(dateStr.slice(8,10)));
+    return isNaN(date.getTime()) ? undefined : date;
+  };
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      birthDate: new Date(Number(currentBirthDate.slice(0,4)), Number(currentBirthDate.slice(5,7)) - 1, Number(currentBirthDate.slice(8,10))),
-      purchaseDate: new Date(Number(currentPurchaseDate.slice(0,4)), Number(currentPurchaseDate.slice(5,7)) - 1, Number(currentPurchaseDate.slice(8,10))),
-      weight: currentWeight,
+      species: currentSpecies,
+      birthDate: parseDateSafe(currentBirthDate),
+      purchaseDate: parseDateSafe(currentPurchaseDate),
+      weight: currentWeight || 0,
       sex: currentSex,
     },
   });
@@ -113,29 +123,42 @@ const EditReptileDialog = ({
     setter(formatted);
   };
 
+  const filteredSpecies = getSpeciesByAnnex(selectedAnnex);
+
   useEffect(() => {
     if (open) {
       form.reset({
-        birthDate: new Date(Number(currentBirthDate.slice(0,4)), Number(currentBirthDate.slice(5,7)) - 1, Number(currentBirthDate.slice(8,10))),
-        purchaseDate: new Date(Number(currentPurchaseDate.slice(0,4)), Number(currentPurchaseDate.slice(5,7)) - 1, Number(currentPurchaseDate.slice(8,10))),
-        weight: currentWeight,
+        species: currentSpecies,
+        birthDate: parseDateSafe(currentBirthDate),
+        purchaseDate: parseDateSafe(currentPurchaseDate),
+        weight: currentWeight || 0,
         sex: currentSex,
       });
-      setBirthDateInput(formatDateToInput(new Date(Number(currentBirthDate.slice(0,4)), Number(currentBirthDate.slice(5,7)) - 1, Number(currentBirthDate.slice(8,10)))));
-      setPurchaseDateInput(formatDateToInput(new Date(Number(currentPurchaseDate.slice(0,4)), Number(currentPurchaseDate.slice(5,7)) - 1, Number(currentPurchaseDate.slice(8,10)))));
+      setBirthDateInput(formatDateToInput(parseDateSafe(currentBirthDate)));
+      setPurchaseDateInput(formatDateToInput(parseDateSafe(currentPurchaseDate)));
     }
-  }, [open, currentBirthDate, currentPurchaseDate, currentWeight, currentSex]);
+  }, [open, currentSpecies, currentBirthDate, currentPurchaseDate, currentWeight, currentSex]);
 
   const onSubmit = async (data: FormValues) => {
     try {
+      const updateData: any = {
+        species: data.species,
+        sex: data.sex,
+      };
+
+      if (data.birthDate) {
+        updateData.birth_date = `${data.birthDate.getFullYear()}-${String(data.birthDate.getMonth() + 1).padStart(2, '0')}-${String(data.birthDate.getDate()).padStart(2, '0')}`;
+      }
+      if (data.purchaseDate) {
+        updateData.purchase_date = `${data.purchaseDate.getFullYear()}-${String(data.purchaseDate.getMonth() + 1).padStart(2, '0')}-${String(data.purchaseDate.getDate()).padStart(2, '0')}`;
+      }
+      if (data.weight) {
+        updateData.weight = data.weight;
+      }
+
       const { error } = await supabase
         .from("reptiles")
-        .update({
-          birth_date: `${data.birthDate.getFullYear()}-${String(data.birthDate.getMonth() + 1).padStart(2, '0')}-${String(data.birthDate.getDate()).padStart(2, '0')}`,
-          purchase_date: `${data.purchaseDate.getFullYear()}-${String(data.purchaseDate.getMonth() + 1).padStart(2, '0')}-${String(data.purchaseDate.getDate()).padStart(2, '0')}`,
-          weight: data.weight,
-          sex: data.sex,
-        })
+        .update(updateData)
         .eq("id", reptileId);
 
       if (error) throw error;
@@ -160,12 +183,86 @@ const EditReptileDialog = ({
           Modifier
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Modifier les informations</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="species"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Espèce CITES</FormLabel>
+                  
+                  <Tabs value={selectedAnnex} onValueChange={(value) => {
+                    setSelectedAnnex(value as 'A' | 'B' | 'C' | 'D');
+                  }}>
+                    <TabsList className="grid w-full grid-cols-4 mb-4">
+                      <TabsTrigger value="A">Annexe A</TabsTrigger>
+                      <TabsTrigger value="B">Annexe B</TabsTrigger>
+                      <TabsTrigger value="C">Annexe C</TabsTrigger>
+                      <TabsTrigger value="D">Annexe D</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value={selectedAnnex} className="mt-0">
+                      <div className="flex gap-2">
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                className="w-full justify-between"
+                              >
+                                <span>
+                                  {field.value 
+                                    ? t(getAllSpecies().find(s => s.id === field.value)?.commonNameKey || '')
+                                    : t("reptile.selectSpecies")}
+                                </span>
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[--radix-popover-trigger-width] p-0 z-50 bg-card border-border" align="start">
+                            <Command>
+                              <CommandInput placeholder={t("reptile.selectSpecies") as string} />
+                              <CommandEmpty>Aucune espèce trouvée</CommandEmpty>
+                              <CommandGroup className="max-h-[300px] overflow-y-auto">
+                                {filteredSpecies.map((species) => (
+                                  <CommandItem
+                                    key={species.id}
+                                    value={`${t(species.commonNameKey)} ${species.scientificName}`}
+                                    onSelect={() => field.onChange(species.id)}
+                                  >
+                                    <div className="flex flex-col">
+                                      <span className="font-medium">{t(species.commonNameKey)}</span>
+                                      <span className="text-xs text-muted-foreground italic">{species.scientificName}</span>
+                                    </div>
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                        {field.value && (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            onClick={() => field.onChange("")}
+                            className="shrink-0"
+                          >
+                            ✕
+                          </Button>
+                        )}
+                      </div>
+                    </TabsContent>
+                  </Tabs>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="birthDate"

@@ -383,6 +383,7 @@ const ReptileDetail = () => {
                   <div className="mt-4 flex gap-2">
                     <EditReptileDialog
                       reptileId={reptile.id}
+                      currentSpecies={reptile.species}
                       currentBirthDate={reptile.birth_date}
                       currentPurchaseDate={reptile.purchase_date}
                       currentWeight={reptile.weight}
@@ -453,6 +454,7 @@ const ReptileDetail = () => {
                       {isCurrentOwner && (
                         <EditReptileDialog
                           reptileId={reptile.id}
+                          currentSpecies={reptile.species}
                           currentBirthDate={reptile.birth_date}
                           currentPurchaseDate={reptile.purchase_date}
                           currentWeight={reptile.weight}
