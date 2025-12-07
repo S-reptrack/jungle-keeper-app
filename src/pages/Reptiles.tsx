@@ -72,43 +72,63 @@ const Reptiles = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Fetch active reptiles (current owner) including those for sale
-      const { data, error } = await supabase
-        .from("reptiles")
-        .select("*")
-        .in("status", ["active", "for_sale"])
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
+      // Fetch all reptile categories in parallel
+      const [activeResult, archivedResult, transferredResult] = await Promise.all([
+        supabase
+          .from("reptiles")
+          .select("*")
+          .in("status", ["active", "for_sale"])
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false }),
+        supabase
+          .from("reptiles")
+          .select("*")
+          .in("status", ["deceased", "sold"])
+          .eq("user_id", user.id)
+          .order("status_date", { ascending: false }),
+        supabase
+          .from("reptiles")
+          .select("*")
+          .eq("previous_owner_id", user.id)
+          .order("transferred_at", { ascending: false })
+      ]);
 
-      if (error) throw error;
+      if (activeResult.error) throw activeResult.error;
+      if (archivedResult.error) throw archivedResult.error;
+      if (transferredResult.error) throw transferredResult.error;
 
-      const reptileData = data || [];
+      const reptileData = activeResult.data || [];
+      const archivedData = archivedResult.data || [];
+      const transferredData = transferredResult.data || [];
+
       setReptiles(reptileData);
+      setArchivedReptiles(archivedData);
+      setTransferredReptiles(transferredData);
 
-      // Fetch archived reptiles
-      const { data: archivedData, error: archivedError } = await supabase
-        .from("reptiles")
-        .select("*")
-        .in("status", ["deceased", "sold"])
-        .eq("user_id", user.id)
-        .order("status_date", { ascending: false });
+      const allReptiles = [...reptileData, ...archivedData, ...transferredData];
+      const reptileIds = allReptiles.map(r => r.id);
+      const femaleReptileIds = allReptiles.filter(r => r.sex === "female").map(r => r.id);
 
-      if (archivedError) throw archivedError;
+      // Fetch all feedings and observations in batch
+      const [feedingsResult, observationsResult] = await Promise.all([
+        reptileIds.length > 0
+          ? supabase
+              .from("feedings")
+              .select("reptile_id, feeding_date")
+              .in("reptile_id", reptileIds)
+              .order("feeding_date", { ascending: false })
+          : Promise.resolve({ data: [] }),
+        femaleReptileIds.length > 0
+          ? supabase
+              .from("reproduction_observations")
+              .select("reptile_id, expected_hatch_date")
+              .in("reptile_id", femaleReptileIds)
+              .not("expected_hatch_date", "is", null)
+              .order("expected_hatch_date", { ascending: true })
+          : Promise.resolve({ data: [] })
+      ]);
 
-      setArchivedReptiles(archivedData || []);
-
-      // Fetch transferred reptiles (where user is previous owner)
-      const { data: transferredData, error: transferredError } = await supabase
-        .from("reptiles")
-        .select("*")
-        .eq("previous_owner_id", user.id)
-        .order("transferred_at", { ascending: false });
-
-      if (transferredError) throw transferredError;
-
-      setTransferredReptiles(transferredData || []);
-
-      // Calculate last feeding per reptile
+      // Process feedings - get latest per reptile
       const calculateDaysSince = (dateString: string) => {
         const feedDate = new Date(dateString);
         const today = new Date();
@@ -121,56 +141,38 @@ const Reptiles = () => {
         return `Il y a ${diffDays} jours`;
       };
 
-      const allReptiles = [...reptileData, ...(archivedData || []), ...(transferredData || [])];
       const feedingsMap: Record<string, string> = {};
+      const seenReptiles = new Set<string>();
+      
+      for (const feeding of feedingsResult.data || []) {
+        if (!seenReptiles.has(feeding.reptile_id)) {
+          feedingsMap[feeding.reptile_id] = calculateDaysSince(feeding.feeding_date);
+          seenReptiles.add(feeding.reptile_id);
+        }
+      }
+      
+      // Mark reptiles without feedings
       for (const reptile of allReptiles) {
-        const { data: feedingData } = await supabase
-          .from("feedings")
-          .select("feeding_date")
-          .eq("reptile_id", reptile.id)
-          .order("feeding_date", { ascending: false })
-          .limit(1)
-          .single();
-
-        if (feedingData) {
-          feedingsMap[reptile.id] = calculateDaysSince(feedingData.feeding_date);
-        } else {
+        if (!feedingsMap[reptile.id]) {
           feedingsMap[reptile.id] = "Jamais";
         }
       }
-
       setLastFeedings(feedingsMap);
 
-      // Calculate days until hatch for reproduction observations
+      // Process hatch dates
       const hatchMap: Record<string, number | null> = {};
-      for (const reptile of allReptiles) {
-        // Only calculate for female reptiles
-        if (reptile.sex === "female") {
-          const { data: observations } = await supabase
-            .from("reproduction_observations")
-            .select("expected_hatch_date")
-            .eq("reptile_id", reptile.id)
-            .not("expected_hatch_date", "is", null)
-            .order("expected_hatch_date", { ascending: true });
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-          if (observations && observations.length > 0) {
-            // Find the closest upcoming hatch date
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            for (const obs of observations) {
-              const hatchDate = new Date(obs.expected_hatch_date);
-              hatchDate.setHours(0, 0, 0, 0);
-              const diffTime = hatchDate.getTime() - today.getTime();
-              const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-              
-              // Only show if hatch date is in the future (0 or positive days)
-              if (diffDays >= 0) {
-                hatchMap[reptile.id] = diffDays;
-                break;
-              }
-            }
-          }
+      for (const obs of observationsResult.data || []) {
+        if (hatchMap[obs.reptile_id] !== undefined) continue;
+        
+        const hatchDate = new Date(obs.expected_hatch_date);
+        hatchDate.setHours(0, 0, 0, 0);
+        const diffDays = Math.ceil((hatchDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+        
+        if (diffDays >= 0) {
+          hatchMap[obs.reptile_id] = diffDays;
         }
       }
       setDaysUntilHatch(hatchMap);
