@@ -11,13 +11,20 @@ if exist node_modules rmdir /s /q node_modules
 if exist package-lock.json del package-lock.json
 
 echo.
-echo [2/7] Configuration du registre Capawesome...
+echo [2/7] Nettoyage anciennes configurations npm...
+call npm config delete @capawesome-team:registry 2>nul
+call npm config delete //npm.registry.capawesome.dev/:_authToken 2>nul
+call npm config delete //npm.registry.capawesome.dev/:always-auth 2>nul
+call npm config delete //npm.registry.capawesome.io/:_authToken 2>nul
+call npm config delete //npm.registry.capawesome.io/:always-auth 2>nul
+
+echo.
+echo [3/7] Configuration du registre Capawesome (.io)...
 call npm config set @capawesome-team:registry https://npm.registry.capawesome.io
 
 echo.
 echo ========================================
 echo IMPORTANT: Entrez votre cle de licence Capawesome
-echo (Exemple: POLAR-E9FB2266-275B-414A-8C47-E1FF116518B0)
 echo ========================================
 set /p LICENSE_KEY="Collez votre cle ici: "
 
