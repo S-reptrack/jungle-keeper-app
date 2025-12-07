@@ -6,37 +6,42 @@ echo.
 
 cd /d C:\Users\berti\jungle-keeper-app
 
-echo [1/6] Configuration du registre Capawesome...
+echo [1/7] Nettoyage node_modules...
+if exist node_modules rmdir /s /q node_modules
+if exist package-lock.json del package-lock.json
+
+echo.
+echo [2/7] Configuration du registre Capawesome...
 call npm config set @capawesome-team:registry https://npm.registry.capawesome.dev
 
 echo.
 echo ========================================
 echo IMPORTANT: Entrez votre cle de licence Capawesome
-echo (Elle ressemble a: POLAR-XXXXX-XXXXX-XXXXX-XXXXXXXXXXXX)
+echo (Exemple: POLAR-E9FB2266-275B-414A-8C47-E1FF116518B0)
 echo ========================================
 set /p LICENSE_KEY="Collez votre cle ici: "
 
 call npm config set //npm.registry.capawesome.dev/:_authToken %LICENSE_KEY%
-call npm config set //npm.registry.capawesome.dev/:always-auth true
 
 echo.
-echo [2/6] Desinstallation ancien plugin NFC...
-call npm uninstall @exxili/capacitor-nfc
+echo [3/7] Installation des dependances...
+call npm install
 
 echo.
-echo [3/6] Installation plugin NFC Premium...
+echo [4/7] Installation plugin NFC Premium...
 call npm install @capawesome-team/capacitor-nfc
 
 echo.
-echo [4/6] Build du projet...
+echo [5/7] Desinstallation ancien plugin NFC gratuit...
+call npm uninstall @exxili/capacitor-nfc
+
+echo.
+echo [6/7] Build du projet...
 call npm run build
 
 echo.
-echo [5/6] Synchronisation Android...
+echo [7/7] Synchronisation et lancement Android...
 call npx cap sync android
-
-echo.
-echo [6/6] Lancement de l'application...
 call npx cap run android
 
 echo.
