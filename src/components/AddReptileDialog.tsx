@@ -72,6 +72,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
   const [selectedCategory, setSelectedCategory] = useState<"snake" | "lizard" | "turtle" | null>("snake");
   const [selectedAnnex, setSelectedAnnex] = useState<'A' | 'B' | 'C' | 'D'>('B');
   const [speciesPopoverOpen, setSpeciesPopoverOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -85,6 +86,9 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
   });
 
   const onSubmit = async (data: FormValues) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    
     try {
       const { supabase } = await import("@/integrations/supabase/client");
       const { data: { user } } = await supabase.auth.getUser();
@@ -124,6 +128,8 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
     } catch (error: any) {
       console.error("Error adding reptile:", error);
       toast.error("Erreur lors de l'ajout du reptile");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -602,8 +608,8 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
               >
                 {t("common.cancel")}
               </Button>
-              <Button type="submit" className="flex-1">
-                {t("common.save")}
+              <Button type="submit" className="flex-1" disabled={isSubmitting}>
+                {isSubmitting ? "..." : t("common.save")}
               </Button>
             </div>
           </form>
