@@ -168,43 +168,40 @@ export const NFCReader = () => {
 
       toast.info("📝 Approchez un tag NFC vierge");
 
-      // Créer le record NDEF Text manuellement avec le bon format
-      // Le type doit être un array de bytes représentant 'T' (0x54)
-      // Le payload doit être: [status_byte] + [language_code] + [text]
-      const languageCode = 'en';
-      const textBytes = new TextEncoder().encode(textToWrite);
-      const languageBytes = new TextEncoder().encode(languageCode);
-      
-      // Status byte: UTF-8 (bit 7 = 0) + language code length (bits 0-5)
-      const statusByte = languageBytes.length; // 2 pour 'en'
-      
-      // Construire le payload complet
-      const payloadArray: number[] = [statusByte];
-      for (let i = 0; i < languageBytes.length; i++) {
-        payloadArray.push(languageBytes[i]);
+      // Utiliser un format MIME Media qui est plus simple et bien supporté
+      // Type: text/plain, Payload: le texte directement
+      const mimeType = 'text/plain';
+      const typeBytes: number[] = [];
+      for (let i = 0; i < mimeType.length; i++) {
+        typeBytes.push(mimeType.charCodeAt(i));
       }
-      for (let i = 0; i < textBytes.length; i++) {
-        payloadArray.push(textBytes[i]);
+      
+      const payloadBytes: number[] = [];
+      for (let i = 0; i < textToWrite.length; i++) {
+        payloadBytes.push(textToWrite.charCodeAt(i));
       }
 
-      console.log('[NFC] Préparation écriture:', {
+      console.log('[NFC] Préparation écriture MIME:', {
         text: textToWrite,
-        payloadLength: payloadArray.length,
-        payload: payloadArray.slice(0, 20) // Premiers 20 bytes pour debug
+        mimeType: mimeType,
+        typeLength: typeBytes.length,
+        payloadLength: payloadBytes.length
       });
 
       await Nfc.addListener('nfcTagScanned', async (event: any) => {
         try {
           console.log('[NFC] Tag détecté pour écriture:', event);
           
-          // Utiliser le format exact attendu par le plugin premium (sans id)
+          // Utiliser TNF_MIME_MEDIA (2) avec type text/plain
+          // Format plus simple qui ne nécessite pas de traitement spécial
           await Nfc.write({
             message: {
               records: [
                 {
-                  tnf: 1, // TNF_WELL_KNOWN
-                  type: [0x54], // 'T' en ASCII = 0x54
-                  payload: payloadArray
+                  tnf: 2, // TNF_MIME_MEDIA
+                  type: typeBytes,
+                  payload: payloadBytes,
+                  id: [] // Tableau vide pour id
                 }
               ]
             }
