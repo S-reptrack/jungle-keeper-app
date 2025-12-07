@@ -63,7 +63,8 @@ const TypeNameFormat = {
 };
 
 // Créer un record NDEF Text manuellement (compatible avec le plugin premium)
-// IMPORTANT: Le champ 'id' doit être présent (même vide) sinon l'erreur "No value for id" apparaît
+// IMPORTANT: Le champ 'id' doit être un tableau non-null pour le plugin Android
+// Un tableau vide [] peut être sérialisé en null par Capacitor, causant "No value for id"
 const createTextRecord = (text: string): NdefRecord => {
   const languageBytes = Array.from(new TextEncoder().encode('en'));
   const textBytes = Array.from(new TextEncoder().encode(text));
@@ -74,13 +75,17 @@ const createTextRecord = (text: string): NdefRecord => {
   // Payload = [statusByte, ...languageBytes, ...textBytes]
   const payload = [statusByte, ...languageBytes, ...textBytes];
   
-  // Le record DOIT avoir le champ id (même vide) pour le plugin Android
-  return {
+  // Le record avec id comme tableau avec un byte (0x00) au lieu de vide
+  // pour s'assurer que le JSON contient bien un array
+  const record: NdefRecord = {
     tnf: TypeNameFormat.WellKnown,
     type: [0x54], // 'T' pour Text Record
     payload: payload,
-    id: [] // OBLIGATOIRE: id vide mais présent
+    id: [0x00] // ID avec un byte null - sera ignoré mais présent dans le JSON
   };
+  
+  console.log('[NFC] Record créé:', JSON.stringify(record));
+  return record;
 };
 
 // Variable pour tracker les erreurs
