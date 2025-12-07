@@ -26,7 +26,6 @@ interface NfcPlugin {
 }
 
 // Charger le plugin NFC via registerPlugin (méthode Capacitor standard)
-// Le plugin @capawesome-team/capacitor-nfc enregistre le plugin sous le nom 'Nfc'
 const Nfc = registerPlugin<NfcPlugin>('Nfc', {
   web: () => {
     console.log('[NFC] Plugin web stub loaded');
@@ -169,33 +168,44 @@ export const NFCReader = () => {
 
       toast.info("📝 Approchez un tag NFC vierge");
 
-      // Créer le payload NDEF Text Record correctement formaté
-      // Format: [status byte (language length)] + [language code] + [text]
+      // Créer le record NDEF Text manuellement avec le bon format
+      // Le type doit être un array de bytes représentant 'T' (0x54)
+      // Le payload doit être: [status_byte] + [language_code] + [text]
       const languageCode = 'en';
       const textBytes = new TextEncoder().encode(textToWrite);
       const languageBytes = new TextEncoder().encode(languageCode);
       
-      // Status byte: bit 7 = UTF-8 (0), bits 0-5 = language code length
-      const statusByte = languageBytes.length;
+      // Status byte: UTF-8 (bit 7 = 0) + language code length (bits 0-5)
+      const statusByte = languageBytes.length; // 2 pour 'en'
       
-      // Payload = status byte + language code + text
-      const payload = new Uint8Array(1 + languageBytes.length + textBytes.length);
-      payload[0] = statusByte;
-      payload.set(languageBytes, 1);
-      payload.set(textBytes, 1 + languageBytes.length);
+      // Construire le payload complet
+      const payloadArray: number[] = [statusByte];
+      for (let i = 0; i < languageBytes.length; i++) {
+        payloadArray.push(languageBytes[i]);
+      }
+      for (let i = 0; i < textBytes.length; i++) {
+        payloadArray.push(textBytes[i]);
+      }
 
-      await Nfc.addListener('nfcTagScanned', async () => {
+      console.log('[NFC] Préparation écriture:', {
+        text: textToWrite,
+        payloadLength: payloadArray.length,
+        payload: payloadArray.slice(0, 20) // Premiers 20 bytes pour debug
+      });
+
+      await Nfc.addListener('nfcTagScanned', async (event: any) => {
         try {
-          console.log('[NFC] Tag détecté, écriture en cours...');
-          console.log('[NFC] Payload:', Array.from(payload));
+          console.log('[NFC] Tag détecté pour écriture:', event);
           
+          // Utiliser le format exact attendu par le plugin premium
           await Nfc.write({
             message: {
               records: [
                 {
                   tnf: 1, // TNF_WELL_KNOWN
-                  type: Array.from(new TextEncoder().encode('T')), // Type 'T' pour Text
-                  payload: Array.from(payload)
+                  type: [0x54], // 'T' en ASCII = 0x54
+                  payload: payloadArray,
+                  id: []
                 }
               ]
             }
@@ -209,10 +219,15 @@ export const NFCReader = () => {
         } catch (writeErr: any) {
           console.error('[NFC] Erreur écriture tag:', writeErr);
           console.error('[NFC] Message:', writeErr?.message);
+          console.error('[NFC] Stack:', writeErr?.stack);
           toast.error("Erreur lors de l'écriture: " + (writeErr?.message || 'Erreur inconnue'));
           setIsWriting(false);
-          await Nfc.stopScanSession();
-          await Nfc.removeAllListeners();
+          try {
+            await Nfc.stopScanSession();
+            await Nfc.removeAllListeners();
+          } catch (e) {
+            console.error('[NFC] Erreur cleanup:', e);
+          }
         }
       });
 
