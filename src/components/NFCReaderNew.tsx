@@ -27,22 +27,28 @@ interface NfcPlugin {
 // Variable globale pour le plugin NFC
 let NfcModule: NfcPlugin | null = null;
 let nfcLoadAttempted = false;
+let nfcLoadError: string | null = null;
 
 // Fonction pour charger le plugin NFC Premium dynamiquement
 const loadNfcPlugin = async (): Promise<NfcPlugin | null> => {
   if (NfcModule) return NfcModule;
-  if (nfcLoadAttempted) return null;
+  if (nfcLoadAttempted && !NfcModule) return null;
   
   nfcLoadAttempted = true;
   
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const module = await (Function('return import("@capawesome-team/capacitor-nfc")')() as Promise<any>);
-    NfcModule = module.Nfc;
-    console.log('[NFC] Plugin premium chargé avec succès');
+    // Import dynamique avec eval pour éviter l'erreur TypeScript en build
+    const moduleName = '@capawesome-team/capacitor-nfc';
+    // @ts-ignore - Module chargé dynamiquement sur mobile uniquement
+    const module = await import(/* @vite-ignore */ moduleName);
+    NfcModule = module.Nfc as unknown as NfcPlugin;
+    console.log('[NFC] Plugin premium chargé avec succès:', NfcModule);
     return NfcModule;
-  } catch (err) {
-    console.log('[NFC] Plugin premium non disponible (normal en mode web):', err);
+  } catch (err: any) {
+    nfcLoadError = err?.message || 'Erreur inconnue';
+    console.error('[NFC] ERREUR chargement plugin premium:', err);
+    console.error('[NFC] Message:', err?.message);
+    console.error('[NFC] Stack:', err?.stack);
     return null;
   }
 };
