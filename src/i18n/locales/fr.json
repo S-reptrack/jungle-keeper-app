@@ -24,6 +24,7 @@
     "birthDate": "Date de naissance",
     "weight": "Poids",
     "purchaseDate": "Date d'achat",
+    "bornInCaptivity": "Né à l'élevage",
     "lastFed": "Dernier repas",
     "selectCategory": "Sélectionner une catégorie",
     "selectSpecies": "Sélectionner une espèce",
