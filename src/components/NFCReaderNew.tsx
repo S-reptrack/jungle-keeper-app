@@ -168,42 +168,36 @@ export const NFCReader = () => {
 
       toast.info("📝 Approchez un tag NFC vierge");
 
-      // Utiliser un format MIME Media qui est plus simple et bien supporté
-      // Type: text/plain, Payload: le texte directement
-      const mimeType = 'text/plain';
-      const typeBytes: number[] = [];
-      for (let i = 0; i < mimeType.length; i++) {
-        typeBytes.push(mimeType.charCodeAt(i));
-      }
-      
-      const payloadBytes: number[] = [];
-      for (let i = 0; i < textToWrite.length; i++) {
-        payloadBytes.push(textToWrite.charCodeAt(i));
+      // Créer un record NDEF URI - format le plus simple et universel
+      // URI identifier code 0x00 = pas de préfixe, suivi de l'URI complète
+      const uriPayload: number[] = [0x00]; // Identifier code = none
+      const uriText = `sreptrack://reptile/${selectedReptileId}`;
+      for (let i = 0; i < uriText.length; i++) {
+        uriPayload.push(uriText.charCodeAt(i));
       }
 
-      console.log('[NFC] Préparation écriture MIME:', {
-        text: textToWrite,
-        mimeType: mimeType,
-        typeLength: typeBytes.length,
-        payloadLength: payloadBytes.length
+      console.log('[NFC] Préparation écriture URI:', {
+        uri: uriText,
+        payloadLength: uriPayload.length
       });
 
       await Nfc.addListener('nfcTagScanned', async (event: any) => {
         try {
           console.log('[NFC] Tag détecté pour écriture:', event);
           
-          // Utiliser TNF_MIME_MEDIA (2) avec type text/plain
-          // Format plus simple qui ne nécessite pas de traitement spécial
+          // Créer le record manuellement comme l'exemple de la doc
+          // En utilisant un object simple sans le champ id
+          const ndefRecord = {
+            tnf: 1, // TNF_WELL_KNOWN
+            type: [0x55], // 'U' pour URI
+            payload: uriPayload
+          };
+          
+          console.log('[NFC] Record à écrire:', ndefRecord);
+
           await Nfc.write({
             message: {
-              records: [
-                {
-                  tnf: 2, // TNF_MIME_MEDIA
-                  type: typeBytes,
-                  payload: payloadBytes,
-                  id: [] // Tableau vide pour id
-                }
-              ]
+              records: [ndefRecord]
             }
           });
 
