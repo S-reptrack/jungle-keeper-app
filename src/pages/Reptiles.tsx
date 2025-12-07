@@ -301,10 +301,7 @@ const Reptiles = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div className="flex items-center justify-between md:justify-start gap-4">
             <h1 className="text-3xl font-bold text-foreground">{t("common.reptiles")}</h1>
-            {/* Sélecteur de vue visible uniquement sur mobile/tablette */}
-            <div className="lg:hidden">
-              <ViewModeSelector viewMode={viewMode} onViewModeChange={setViewMode} />
-            </div>
+            <ViewModeSelector viewMode={viewMode} onViewModeChange={setViewMode} />
           </div>
           <div className="flex flex-col sm:flex-row gap-2">
             <Button
@@ -359,7 +356,7 @@ const Reptiles = () => {
                     {groupBySpecies(paginateReptiles(sortBySpeciesAndName(reptiles), activePage)).map(([species, speciesReptiles]) => (
                       <div key={species}>
                         <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
-                        {viewMode === "grid" || !isMobile ? (
+                        {viewMode === "grid" ? (
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {speciesReptiles.map((reptile) => (
                               <ReptileCard
@@ -420,7 +417,7 @@ const Reptiles = () => {
                     {groupBySpecies(paginateReptiles(sortBySpeciesAndName(archivedReptiles), archivedPage)).map(([species, speciesReptiles]) => (
                       <div key={species}>
                         <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
-                        {viewMode === "grid" || !isMobile ? (
+                        {viewMode === "grid" ? (
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {speciesReptiles.map((reptile) => (
                               <div key={reptile.id} className="relative">
@@ -494,7 +491,7 @@ const Reptiles = () => {
                     {groupBySpecies(paginateReptiles(sortBySpeciesAndName(transferredReptiles), transferredPage)).map(([species, speciesReptiles]) => (
                       <div key={species}>
                         <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
-                        {viewMode === "grid" || !isMobile ? (
+                        {viewMode === "grid" ? (
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {speciesReptiles.map((reptile) => (
                               <div key={reptile.id} className="relative">
