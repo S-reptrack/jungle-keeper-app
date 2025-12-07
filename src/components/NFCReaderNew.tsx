@@ -285,30 +285,52 @@ export const NFCReader = () => {
       let foundReptileId: string | null = null;
 
       for (const record of ndefMessage.records) {
-        console.log('[NFC] Record:', record);
+        console.log('[NFC] Record:', JSON.stringify(record));
         
-        if (!record.payload || record.payload.length === 0) continue;
+        if (!record.payload || record.payload.length === 0) {
+          console.log('[NFC] Record sans payload, ignoré');
+          continue;
+        }
 
         const decoder = new TextDecoder();
         const payloadString = decoder.decode(new Uint8Array(record.payload));
-        console.log('[NFC] Payload décodé:', payloadString);
+        console.log('[NFC] Payload brut:', payloadString);
+        console.log('[NFC] Payload hex:', Array.from(new Uint8Array(record.payload)).map(b => b.toString(16).padStart(2, '0')).join(' '));
 
-        if (payloadString.includes('reptile:')) {
-          const match = payloadString.match(/reptile:([a-f0-9-]{36})/i);
+        // Nettoyer le payload (enlever les caractères de contrôle au début)
+        // Le format NDEF Text commence par un byte de status + code langue
+        const cleanPayload = payloadString.replace(/^[\x00-\x1F]+[a-z]{2}/, '').trim();
+        console.log('[NFC] Payload nettoyé:', cleanPayload);
+
+        // Regex plus flexible pour UUID (avec ou sans préfixe)
+        const uuidRegex = /([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/i;
+
+        // Chercher format "reptile:UUID"
+        if (payloadString.includes('reptile:') || cleanPayload.includes('reptile:')) {
+          const match = (payloadString + cleanPayload).match(/reptile:([a-f0-9-]{36})/i);
           if (match?.[1]) {
-            foundReptileId = match[1];
-            console.log('[NFC] ✓ ID reptile trouvé:', foundReptileId);
+            foundReptileId = match[1].toLowerCase();
+            console.log('[NFC] ✓ ID reptile trouvé (format reptile:):', foundReptileId);
             break;
           }
         }
         
-        if (payloadString.includes('/reptile/')) {
-          const match = payloadString.match(/\/reptile\/([a-f0-9-]{36})/i);
+        // Chercher format "/reptile/UUID"
+        if (payloadString.includes('/reptile/') || cleanPayload.includes('/reptile/')) {
+          const match = (payloadString + cleanPayload).match(/\/reptile\/([a-f0-9-]{36})/i);
           if (match?.[1]) {
-            foundReptileId = match[1];
+            foundReptileId = match[1].toLowerCase();
             console.log('[NFC] ✓ URL reptile trouvée:', foundReptileId);
             break;
           }
+        }
+
+        // Fallback: chercher simplement un UUID dans le payload
+        const uuidMatch = (payloadString + cleanPayload).match(uuidRegex);
+        if (uuidMatch?.[1]) {
+          foundReptileId = uuidMatch[1].toLowerCase();
+          console.log('[NFC] ✓ UUID trouvé (fallback):', foundReptileId);
+          break;
         }
       }
 
