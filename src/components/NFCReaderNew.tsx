@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Capacitor } from '@capacitor/core';
+import { Capacitor, registerPlugin } from '@capacitor/core';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Smartphone, Waves, AlertCircle, Info, Edit, ScanLine } from 'lucide-react';
@@ -22,34 +22,30 @@ interface NfcPlugin {
   startScanSession: () => Promise<void>;
   stopScanSession: () => Promise<void>;
   write: (options: any) => Promise<void>;
+  isSupported: () => Promise<{ isSupported: boolean }>;
 }
 
-// Variable globale pour le plugin NFC
-let NfcModule: NfcPlugin | null = null;
-let nfcLoadAttempted = false;
-let nfcLoadError: string | null = null;
+// Charger le plugin NFC via registerPlugin (méthode Capacitor standard)
+const Nfc = registerPlugin<NfcPlugin>('Nfc');
 
-// Fonction pour charger le plugin NFC Premium dynamiquement
-const loadNfcPlugin = async (): Promise<NfcPlugin | null> => {
-  if (NfcModule) return NfcModule;
-  if (nfcLoadAttempted && !NfcModule) return null;
-  
-  nfcLoadAttempted = true;
-  
+// Variable pour tracker les erreurs
+let nfcError: string | null = null;
+
+// Fonction pour vérifier si le plugin NFC est disponible
+const checkNfcAvailable = async (): Promise<boolean> => {
   try {
-    // Import dynamique avec eval pour éviter l'erreur TypeScript en build
-    const moduleName = '@capawesome-team/capacitor-nfc';
-    // @ts-ignore - Module chargé dynamiquement sur mobile uniquement
-    const module = await import(/* @vite-ignore */ moduleName);
-    NfcModule = module.Nfc as unknown as NfcPlugin;
-    console.log('[NFC] Plugin premium chargé avec succès:', NfcModule);
-    return NfcModule;
+    if (!Capacitor.isNativePlatform()) {
+      return false;
+    }
+    
+    // Vérifier si le plugin répond
+    const result = await Nfc.isSupported();
+    console.log('[NFC] Plugin disponible, isSupported:', result);
+    return true;
   } catch (err: any) {
-    nfcLoadError = err?.message || 'Erreur inconnue';
-    console.error('[NFC] ERREUR chargement plugin premium:', err);
-    console.error('[NFC] Message:', err?.message);
-    console.error('[NFC] Stack:', err?.stack);
-    return null;
+    console.error('[NFC] Plugin non disponible:', err);
+    nfcError = err?.message || 'Plugin non disponible';
+    return false;
   }
 };
 
@@ -97,9 +93,9 @@ export const NFCReader = () => {
         throw new Error("La lecture NFC n'est disponible que sur l'application mobile");
       }
 
-      const Nfc = await loadNfcPlugin();
-      if (!Nfc) {
-        throw new Error("Plugin NFC Premium non disponible. Installez @capawesome-team/capacitor-nfc localement.");
+      const isAvailable = await checkNfcAvailable();
+      if (!isAvailable) {
+        throw new Error("Plugin NFC Premium non disponible. Vérifiez que le plugin est installé.");
       }
 
       console.log('[NFC] Configuration de l\'écouteur NFC Premium...');
@@ -121,11 +117,8 @@ export const NFCReader = () => {
 
   const stopScanning = async () => {
     try {
-      const Nfc = await loadNfcPlugin();
-      if (Nfc) {
-        await Nfc.stopScanSession();
-        await Nfc.removeAllListeners();
-      }
+      await Nfc.stopScanSession();
+      await Nfc.removeAllListeners();
       setIsScanning(false);
       setIsWriting(false);
       nfcCallbackRef.current = null;
@@ -148,8 +141,8 @@ export const NFCReader = () => {
         throw new Error("L'écriture NFC n'est disponible que sur l'application mobile");
       }
 
-      const Nfc = await loadNfcPlugin();
-      if (!Nfc) {
+      const isAvailable = await checkNfcAvailable();
+      if (!isAvailable) {
         throw new Error("Plugin NFC Premium non disponible");
       }
 
@@ -205,8 +198,7 @@ export const NFCReader = () => {
       if (!ndefMessage || !ndefMessage.records || ndefMessage.records.length === 0) {
         console.error('[NFC] Aucun message NDEF trouvé');
         toast.error("Tag NFC vide");
-        const Nfc = await loadNfcPlugin();
-        if (Nfc) await Nfc.stopScanSession();
+        await Nfc.stopScanSession();
         return;
       }
 
@@ -242,11 +234,8 @@ export const NFCReader = () => {
 
       if (foundReptileId) {
         console.log('[NFC] Arrêt de la session NFC...');
-        const Nfc = await loadNfcPlugin();
-        if (Nfc) {
-          await Nfc.stopScanSession();
-          await Nfc.removeAllListeners();
-        }
+        await Nfc.stopScanSession();
+        await Nfc.removeAllListeners();
         
         setIsScanning(false);
         nfcCallbackRef.current = null;
@@ -259,16 +248,14 @@ export const NFCReader = () => {
         return;
       }
 
-      const Nfc = await loadNfcPlugin();
-      if (Nfc) await Nfc.stopScanSession();
+      await Nfc.stopScanSession();
       toast.error("Tag NFC ne contient pas de données reptile valides");
       
     } catch (err: any) {
       console.error('[NFC] Erreur traitement tag:', err);
       toast.error("Erreur lecture NFC");
       try {
-        const Nfc = await loadNfcPlugin();
-        if (Nfc) await Nfc.stopScanSession();
+        await Nfc.stopScanSession();
       } catch (stopErr) {
         console.error('[NFC] Erreur arrêt session:', stopErr);
       }
