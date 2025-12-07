@@ -16,13 +16,22 @@ interface Reptile {
 }
 
 // Type pour le plugin NFC Premium
+interface NdefRecord {
+  tnf: number;
+  type: number[];
+  payload: number[];
+  id?: number[];
+}
+
 interface NfcPlugin {
   addListener: (event: string, callback: (event: any) => void) => Promise<any>;
   removeAllListeners: () => Promise<void>;
   startScanSession: () => Promise<void>;
   stopScanSession: () => Promise<void>;
-  write: (options: any) => Promise<void>;
+  write: (options: { message: { records: NdefRecord[] } }) => Promise<void>;
   isSupported: () => Promise<{ isSupported: boolean }>;
+  erase: () => Promise<void>;
+  format: () => Promise<void>;
 }
 
 // Charger le plugin NFC via registerPlugin (méthode Capacitor standard)
@@ -36,9 +45,43 @@ const Nfc = registerPlugin<NfcPlugin>('Nfc', {
       stopScanSession: async () => {},
       write: async () => { throw new Error('NFC non disponible sur le web'); },
       isSupported: async () => ({ isSupported: false }),
+      erase: async () => { throw new Error('NFC non disponible sur le web'); },
+      format: async () => { throw new Error('NFC non disponible sur le web'); },
     };
   },
 });
+
+// Enum TypeNameFormat comme dans le plugin
+const TypeNameFormat = {
+  Empty: 0,
+  WellKnown: 1,
+  MimeMedia: 2,
+  AbsoluteUri: 3,
+  External: 4,
+  Unknown: 5,
+  Unchanged: 6,
+};
+
+// Réplique de NfcUtils.createNdefTextRecord()
+const createNdefTextRecord = (text: string, language: string = 'en'): NdefRecord => {
+  const languageBytes = Array.from(new TextEncoder().encode(language));
+  const textBytes = Array.from(new TextEncoder().encode(text));
+  
+  // Status byte: bit 7 = 0 (UTF-8), bits 0-5 = language code length
+  const statusByte = languageBytes.length;
+  
+  // Payload = [statusByte, ...languageBytes, ...textBytes]
+  const payload = [statusByte, ...languageBytes, ...textBytes];
+  
+  // Type = 'T' (0x54) pour Text Record
+  const type = [0x54];
+  
+  return {
+    tnf: TypeNameFormat.WellKnown,
+    type,
+    payload
+  };
+};
 
 // Variable pour tracker les erreurs
 let nfcError: string | null = null;
@@ -168,36 +211,29 @@ export const NFCReader = () => {
 
       toast.info("📝 Approchez un tag NFC vierge");
 
-      // Créer un record NDEF URI - format le plus simple et universel
-      // URI identifier code 0x00 = pas de préfixe, suivi de l'URI complète
-      const uriPayload: number[] = [0x00]; // Identifier code = none
-      const uriText = `sreptrack://reptile/${selectedReptileId}`;
-      for (let i = 0; i < uriText.length; i++) {
-        uriPayload.push(uriText.charCodeAt(i));
-      }
+      // Utiliser notre fonction utilitaire qui réplique NfcUtils
+      const record = createNdefTextRecord(textToWrite);
 
-      console.log('[NFC] Préparation écriture URI:', {
-        uri: uriText,
-        payloadLength: uriPayload.length
-      });
+      console.log('[NFC] Préparation écriture avec record:', record);
 
       await Nfc.addListener('nfcTagScanned', async (event: any) => {
         try {
           console.log('[NFC] Tag détecté pour écriture:', event);
+          console.log('[NFC] Record à écrire:', JSON.stringify(record));
           
-          // Créer le record manuellement comme l'exemple de la doc
-          // En utilisant un object simple sans le champ id
-          const ndefRecord = {
-            tnf: 1, // TNF_WELL_KNOWN
-            type: [0x55], // 'U' pour URI
-            payload: uriPayload
-          };
-          
-          console.log('[NFC] Record à écrire:', ndefRecord);
+          // Essayer d'abord de formater le tag
+          try {
+            console.log('[NFC] Formatage du tag...');
+            await Nfc.format();
+            console.log('[NFC] Tag formaté');
+          } catch (formatErr) {
+            console.log('[NFC] Format non nécessaire ou échec (normal):', formatErr);
+          }
 
+          // Écrire le record
           await Nfc.write({
             message: {
-              records: [ndefRecord]
+              records: [record]
             }
           });
 
