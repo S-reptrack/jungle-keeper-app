@@ -408,6 +408,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_see_transfer_sender: {
+        Args: { sender_user_id: string }
+        Returns: boolean
+      }
       check_email_exists: { Args: { check_email: string }; Returns: boolean }
       has_role: {
         Args: {
