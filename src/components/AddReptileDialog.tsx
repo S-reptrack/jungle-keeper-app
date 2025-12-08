@@ -98,21 +98,34 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
         return;
       }
 
-      const { error } = await supabase.from("reptiles").insert({
+      const birthDateStr = `${data.birthDate.getFullYear()}-${String(data.birthDate.getMonth() + 1).padStart(2, '0')}-${String(data.birthDate.getDate()).padStart(2, '0')}`;
+      
+      const { data: insertedReptile, error } = await supabase.from("reptiles").insert({
         user_id: user.id,
         name: data.name,
         category: data.category,
         species: data.species,
         sex: data.sex,
         morphs: data.morphs || [],
-        birth_date: `${data.birthDate.getFullYear()}-${String(data.birthDate.getMonth() + 1).padStart(2, '0')}-${String(data.birthDate.getDate()).padStart(2, '0')}`,
+        birth_date: birthDateStr,
         weight: data.weight,
         purchase_date: data.purchaseDate && !data.bornInCaptivity
           ? `${data.purchaseDate.getFullYear()}-${String(data.purchaseDate.getMonth() + 1).padStart(2, '0')}-${String(data.purchaseDate.getDate()).padStart(2, '0')}`
           : null,
-      });
+      }).select('id').single();
 
       if (error) throw error;
+
+      // Enregistrer le poids initial comme première pesée
+      if (data.weight && data.weight > 0 && insertedReptile) {
+        await supabase.from("weight_records").insert({
+          reptile_id: insertedReptile.id,
+          user_id: user.id,
+          weight: data.weight,
+          measurement_date: new Date().toISOString().split('T')[0],
+          notes: "Poids initial",
+        });
+      }
 
       toast.success(t("reptile.addReptile"), {
         description: `${data.name} a été ajouté avec succès!`,
