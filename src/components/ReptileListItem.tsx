@@ -77,7 +77,7 @@ const ReptileListItem = ({
             </Badge>
           )}
           {status === "for_sale" && (
-            <Badge variant="outline" className="border-primary text-primary text-xs px-1.5 py-0.5">
+            <Badge className="bg-primary/20 text-primary border-0 text-[10px] px-1.5 py-0">
               À vendre
             </Badge>
           )}
