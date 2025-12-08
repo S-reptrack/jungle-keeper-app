@@ -270,7 +270,7 @@ const ReptileDetail = () => {
                     </Badge>
                   </div>
                 )}
-                {reptile.status === "active" && (
+                {(reptile.status === "active" || reptile.status === "for_sale") && (
                   <>
                     <div className="absolute top-3 right-3 flex gap-2">
                       <button 
