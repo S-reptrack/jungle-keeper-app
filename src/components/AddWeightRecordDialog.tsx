@@ -80,6 +80,11 @@ const AddWeightRecordDialog = ({ reptileId, onSuccess }: AddWeightRecordDialogPr
 
       if (error) throw error;
 
+      // Mettre à jour le poids du reptile
+      await supabase.from("reptiles").update({
+        weight: parseFloat(values.weight),
+      }).eq("id", reptileId);
+
       toast.success("Pesée enregistrée avec succès");
       setOpen(false);
       form.reset();
