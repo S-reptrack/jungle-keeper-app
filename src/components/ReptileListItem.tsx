@@ -77,9 +77,10 @@ const ReptileListItem = ({
             </Badge>
           )}
           {status === "for_sale" && (
-            <Badge className="bg-primary/20 text-primary border-0 text-[10px] px-1.5 py-0">
-              À vendre
-            </Badge>
+            <span className="inline-flex items-center gap-0.5 text-[10px] font-medium text-amber-400/90 bg-amber-400/10 px-1.5 py-0.5 rounded-full">
+              <span className="text-[8px]">💰</span>
+              vendre
+            </span>
           )}
         </div>
         <p className="text-xs text-muted-foreground truncate">{species}</p>
