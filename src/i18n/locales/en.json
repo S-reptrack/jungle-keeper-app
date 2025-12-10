@@ -362,7 +362,14 @@
     "ctaTitle": "Ready to manage your breeding?",
     "ctaDescription": "Join breeders who trust S-reptrack to manage their reptile collection.",
     "ctaButton": "Create my free account",
-    "privacyPolicy": "Privacy Policy"
+    "privacyPolicy": "Privacy Policy",
+    "quickSignupBadge": "Express signup",
+    "quickSignupTitle": "Sign up in one scan",
+    "quickSignupDescription": "Scan this QR code with your smartphone to go directly to the signup page and start managing your breeding.",
+    "quickSignupStep1": "Scan the QR code with your phone",
+    "quickSignupStep2": "Create your account in seconds",
+    "quickSignupStep3": "Start adding your reptiles",
+    "scanToSignup": "Scan to sign up"
   },
   "species": {
     "python-molurus-bivittatus": "Burmese Python",

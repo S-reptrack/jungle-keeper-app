@@ -354,7 +354,14 @@
     "ctaTitle": "Bereit, Ihre Zucht zu verwalten?",
     "ctaDescription": "Schließen Sie sich den Züchtern an, die S-reptrack für die Verwaltung ihrer Reptiliensammlung vertrauen.",
     "ctaButton": "Mein kostenloses Konto erstellen",
-    "privacyPolicy": "Datenschutzerklärung"
+    "privacyPolicy": "Datenschutzerklärung",
+    "quickSignupBadge": "Express-Anmeldung",
+    "quickSignupTitle": "Mit einem Scan anmelden",
+    "quickSignupDescription": "Scannen Sie diesen QR-Code mit Ihrem Smartphone, um direkt zur Anmeldeseite zu gelangen und Ihre Zucht zu verwalten.",
+    "quickSignupStep1": "QR-Code mit Ihrem Telefon scannen",
+    "quickSignupStep2": "Erstellen Sie Ihr Konto in Sekunden",
+    "quickSignupStep3": "Beginnen Sie mit dem Hinzufügen Ihrer Reptilien",
+    "scanToSignup": "Zum Anmelden scannen"
   },
   "species": {
     "python-molurus-bivittatus": "Burma-Python",

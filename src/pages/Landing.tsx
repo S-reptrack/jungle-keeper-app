@@ -12,7 +12,8 @@ import {
   Download,
   ChevronRight,
   Check,
-  Star
+  Star,
+  Zap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,6 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSelector from "@/components/LanguageSelector";
 import sreptrackLogo from "@/assets/sreptrack-logo.png";
+import { QRCodeSVG } from "qrcode.react";
 
 const Landing = () => {
   const { t } = useTranslation();
@@ -318,6 +320,57 @@ const Landing = () => {
               {t("landing.installNow")}
               <Download className="w-5 h-5 ml-2" />
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Signup QR Code Section */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-card rounded-3xl p-8 md:p-12 shadow-xl border border-border">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="space-y-4 text-center md:text-left">
+                <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
+                  <Zap className="w-4 h-4" />
+                  {t("landing.quickSignupBadge")}
+                </div>
+                <h2 className="text-2xl md:text-3xl font-bold text-foreground">
+                  {t("landing.quickSignupTitle")}
+                </h2>
+                <p className="text-muted-foreground">
+                  {t("landing.quickSignupDescription")}
+                </p>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-primary" />
+                    {t("landing.quickSignupStep1")}
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-primary" />
+                    {t("landing.quickSignupStep2")}
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-primary" />
+                    {t("landing.quickSignupStep3")}
+                  </li>
+                </ul>
+              </div>
+              <div className="flex justify-center">
+                <div className="bg-white p-6 rounded-2xl shadow-lg">
+                  <QRCodeSVG 
+                    value={`${window.location.origin}/auth`}
+                    size={180}
+                    level="H"
+                    includeMargin={false}
+                    bgColor="#ffffff"
+                    fgColor="#000000"
+                  />
+                  <p className="text-center text-xs text-muted-foreground mt-3 font-medium">
+                    {t("landing.scanToSignup")}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

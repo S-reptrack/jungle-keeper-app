@@ -352,7 +352,14 @@
     "ctaTitle": "¿Listo para gestionar tu criadero?",
     "ctaDescription": "Únete a los criadores que confían en S-reptrack para gestionar su colección de reptiles.",
     "ctaButton": "Crear mi cuenta gratis",
-    "privacyPolicy": "Política de privacidad"
+    "privacyPolicy": "Política de privacidad",
+    "quickSignupBadge": "Registro express",
+    "quickSignupTitle": "Regístrate en un escaneo",
+    "quickSignupDescription": "Escanea este código QR con tu smartphone para ir directamente a la página de registro y comenzar a gestionar tu criadero.",
+    "quickSignupStep1": "Escanea el código QR con tu teléfono",
+    "quickSignupStep2": "Crea tu cuenta en segundos",
+    "quickSignupStep3": "Empieza a añadir tus reptiles",
+    "scanToSignup": "Escanear para registrarse"
   },
   "species": {
     "python-molurus-bivittatus": "Pitón birmana",

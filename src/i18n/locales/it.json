@@ -352,7 +352,14 @@
     "ctaTitle": "Pronto a gestire il tuo allevamento?",
     "ctaDescription": "Unisciti agli allevatori che si affidano a S-reptrack per gestire la loro collezione di rettili.",
     "ctaButton": "Crea il mio account gratuito",
-    "privacyPolicy": "Informativa sulla privacy"
+    "privacyPolicy": "Informativa sulla privacy",
+    "quickSignupBadge": "Registrazione express",
+    "quickSignupTitle": "Iscriviti con una scansione",
+    "quickSignupDescription": "Scansiona questo codice QR con il tuo smartphone per andare direttamente alla pagina di registrazione e iniziare a gestire il tuo allevamento.",
+    "quickSignupStep1": "Scansiona il codice QR con il tuo telefono",
+    "quickSignupStep2": "Crea il tuo account in pochi secondi",
+    "quickSignupStep3": "Inizia ad aggiungere i tuoi rettili",
+    "scanToSignup": "Scansiona per registrarti"
   },
   "species": {
     "python-molurus-bivittatus": "Pitone birmano",

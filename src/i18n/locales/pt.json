@@ -342,7 +342,14 @@
     "ctaTitle": "Pronto para gerenciar sua criação?",
     "ctaDescription": "Junte-se aos criadores que confiam no S-reptrack para gerenciar sua coleção de répteis.",
     "ctaButton": "Criar minha conta grátis",
-    "privacyPolicy": "Política de privacidade"
+    "privacyPolicy": "Política de privacidade",
+    "quickSignupBadge": "Cadastro expresso",
+    "quickSignupTitle": "Cadastre-se em um scan",
+    "quickSignupDescription": "Escaneie este código QR com seu smartphone para ir diretamente à página de cadastro e começar a gerenciar sua criação.",
+    "quickSignupStep1": "Escaneie o código QR com seu telefone",
+    "quickSignupStep2": "Crie sua conta em segundos",
+    "quickSignupStep3": "Comece a adicionar seus répteis",
+    "scanToSignup": "Escanear para cadastrar"
   },
   "species": {
     "python-molurus-bivittatus": "Píton-birmanesa",

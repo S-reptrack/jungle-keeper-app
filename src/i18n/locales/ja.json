@@ -368,7 +368,14 @@
     "ctaTitle": "繁殖を管理する準備はできましたか？",
     "ctaDescription": "爬虫類コレクションの管理にS-reptrackを信頼するブリーダーに参加。",
     "ctaButton": "無料でアカウントを作成",
-    "privacyPolicy": "プライバシーポリシー"
+    "privacyPolicy": "プライバシーポリシー",
+    "quickSignupBadge": "エクスプレス登録",
+    "quickSignupTitle": "ワンスキャンで登録",
+    "quickSignupDescription": "スマートフォンでこのQRコードをスキャンして、登録ページに直接アクセスし、繁殖管理を始めましょう。",
+    "quickSignupStep1": "スマホでQRコードをスキャン",
+    "quickSignupStep2": "数秒でアカウント作成",
+    "quickSignupStep3": "爬虫類の登録を開始",
+    "scanToSignup": "スキャンして登録"
   },
   "species": {
     "python-regius": "ボールパイソン",

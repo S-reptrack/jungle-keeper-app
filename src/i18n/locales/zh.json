@@ -368,7 +368,14 @@
     "ctaTitle": "准备好管理您的繁殖了吗？",
     "ctaDescription": "加入信任S-reptrack管理爬行动物收藏的繁殖者。",
     "ctaButton": "创建免费账户",
-    "privacyPolicy": "隐私政策"
+    "privacyPolicy": "隐私政策",
+    "quickSignupBadge": "快速注册",
+    "quickSignupTitle": "扫一扫即可注册",
+    "quickSignupDescription": "用智能手机扫描此二维码，直接进入注册页面，开始管理您的繁殖。",
+    "quickSignupStep1": "用手机扫描二维码",
+    "quickSignupStep2": "几秒钟内创建账户",
+    "quickSignupStep3": "开始添加您的爬行动物",
+    "scanToSignup": "扫码注册"
   },
   "species": {
     "python-regius": "球蟒",
