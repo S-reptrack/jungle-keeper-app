@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { CheckCircle, XCircle, Send, Inbox, Ban } from "lucide-react";
 import { format } from "date-fns";
+import { maskEmail } from "@/lib/emailUtils";
 
 interface Transfer {
   id: string;
@@ -202,7 +203,7 @@ export default function Transfers() {
                       <div>
                         <CardTitle>{transfer.reptiles.name}</CardTitle>
                         <CardDescription>
-                          {transfer.reptiles.species} • {t("transfer.from")}: {transfer.from_user_email || transfer.from_user_id}
+                          {transfer.reptiles.species} • {t("transfer.from")}: {maskEmail(transfer.from_user_email) || t("transfer.unknownSender")}
                         </CardDescription>
                       </div>
                       {getStatusBadge(transfer.status)}
@@ -246,7 +247,7 @@ export default function Transfers() {
                       <div>
                         <CardTitle>{transfer.reptiles.name}</CardTitle>
                         <CardDescription>
-                          {transfer.reptiles.species} • {t("transfer.to")}: {transfer.to_user_email}
+                          {transfer.reptiles.species} • {t("transfer.to")}: {maskEmail(transfer.to_user_email)}
                         </CardDescription>
                       </div>
                       {getStatusBadge(transfer.status)}
