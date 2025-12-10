@@ -1,0 +1,343 @@
+{
+  "stats": {
+    "title": "आंकड़े",
+    "totalReptiles": "कुल सरीसृप",
+    "totalFeedings": "कुल भोजन",
+    "healthRecords": "स्वास्थ्य रिकॉर्ड",
+    "feedingsDue": "लंबित भोजन",
+    "noFeedingsDue": "कोई भोजन लंबित नहीं",
+    "feedingsDueCount": "{{count}} भोजन लंबित",
+    "viewAll": "सभी देखें"
+  },
+  "reptile": {
+    "name": "नाम",
+    "species": "प्रजाति",
+    "category": "श्रेणी",
+    "sex": "लिंग",
+    "male": "नर",
+    "female": "मादा",
+    "unknown": "अज्ञात",
+    "birthDate": "जन्म तिथि",
+    "purchaseDate": "खरीद तिथि",
+    "weight": "वजन",
+    "morphs": "मॉर्फ्स",
+    "status": "स्थिति",
+    "active": "सक्रिय",
+    "archived": "संग्रहीत",
+    "deceased": "मृत",
+    "sold": "बेचा गया",
+    "forSale": "बिक्री के लिए",
+    "transferred": "स्थानांतरित",
+    "addReptile": "सरीसृप जोड़ें",
+    "editReptile": "सरीसृप संपादित करें",
+    "deleteReptile": "सरीसृप हटाएं",
+    "archiveReptile": "सरीसृप संग्रहित करें",
+    "confirmDelete": "क्या आप वाकई इस सरीसृप को हटाना चाहते हैं?",
+    "noReptiles": "अभी तक कोई सरीसृप नहीं",
+    "addFirst": "अपना पहला सरीसृप जोड़ें",
+    "feedingInterval": "भोजन अंतराल",
+    "days": "दिन",
+    "lastFeeding": "अंतिम भोजन",
+    "nextFeeding": "अगला भोजन",
+    "noFeedings": "अभी तक कोई भोजन नहीं",
+    "categories": {
+      "snake": "सांप",
+      "lizard": "छिपकली",
+      "turtle": "कछुआ",
+      "tortoise": "कछुआ",
+      "crocodilian": "मगरमच्छ",
+      "other": "अन्य"
+    },
+    "bornInCaptivity": "बंधक में जन्मा",
+    "selectSpecies": "प्रजाति चुनें",
+    "clearSelection": "चयन साफ़ करें",
+    "searchSpecies": "प्रजाति खोजें...",
+    "noSpeciesFound": "कोई प्रजाति नहीं मिली",
+    "weightHistory": "वजन इतिहास",
+    "addWeight": "वजन जोड़ें",
+    "selectReptile": "सरीसृप चुनें",
+    "initialWeight": "प्रारंभिक वजन"
+  },
+  "feeding": {
+    "title": "भोजन",
+    "addFeeding": "भोजन जोड़ें",
+    "date": "तारीख",
+    "rodentType": "कृंतक प्रकार",
+    "rodentStage": "कृंतक चरण",
+    "quantity": "मात्रा",
+    "notes": "नोट्स",
+    "mouse": "चूहा",
+    "rat": "चूहा",
+    "chick": "चूजा",
+    "quail": "बटेर",
+    "rabbit": "खरगोश",
+    "pinky": "पिंकी",
+    "fuzzy": "फज़ी",
+    "hopper": "हॉपर",
+    "weaned": "वीन्ड",
+    "adult": "वयस्क",
+    "jumbo": "जंबो",
+    "noFeedings": "कोई भोजन रिकॉर्ड नहीं",
+    "weight": "वजन",
+    "refused": "मना किया",
+    "accepted": "स्वीकार किया"
+  },
+  "health": {
+    "title": "स्वास्थ्य",
+    "addRecord": "रिकॉर्ड जोड़ें",
+    "condition": "स्थिति",
+    "diagnosisDate": "निदान तिथि",
+    "treatment": "उपचार",
+    "resolved": "हल हो गया",
+    "ongoing": "जारी",
+    "noRecords": "कोई स्वास्थ्य रिकॉर्ड नहीं",
+    "shedding": "त्वचा उतारना",
+    "mites": "कीट",
+    "respiratoryInfection": "श्वसन संक्रमण",
+    "scaleRot": "स्केल रॉट",
+    "mouthRot": "मुंह सड़न",
+    "parasites": "परजीवी",
+    "injury": "चोट",
+    "other": "अन्य"
+  },
+  "reproduction": {
+    "title": "प्रजनन",
+    "addObservation": "अवलोकन जोड़ें",
+    "partner": "साथी",
+    "observationDate": "अवलोकन तिथि",
+    "action": "क्रिया",
+    "copulation": "संभोग",
+    "ovulation": "अंडोत्सर्ग",
+    "laying": "अंडे देना",
+    "hatching": "अंडे सेना",
+    "expectedHatchDate": "अपेक्षित हैचिंग तिथि",
+    "incubationDays": "ऊष्मायन दिन",
+    "hatchedEggs": "हैच किए गए अंडे",
+    "unhatchedEggs": "नहीं हैच हुए अंडे",
+    "stillbornJuveniles": "मृत जन्मे बच्चे",
+    "noObservations": "कोई प्रजनन अवलोकन नहीं",
+    "closeHatching": "हैचिंग बंद करें",
+    "notificationDaysBefore": "पहले अधिसूचना दिन",
+    "hatchingIn": "हैचिंग में",
+    "daysRemaining": "दिन शेष"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "appearance": "दिखावट",
+    "theme": "थीम",
+    "light": "लाइट",
+    "dark": "डार्क",
+    "system": "सिस्टम",
+    "language": "भाषा",
+    "preferences": "प्राथमिकताएं",
+    "weightUnit": "वजन इकाई",
+    "grams": "ग्राम",
+    "ounces": "औंस",
+    "feedingReminders": "भोजन अनुस्मारक",
+    "account": "खाता",
+    "signOut": "साइन आउट",
+    "deleteAccount": "खाता हटाएं",
+    "confirmDeleteAccount": "क्या आप वाकई अपना खाता हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।",
+    "subscription": "सदस्यता",
+    "privacyData": "गोपनीयता और डेटा",
+    "exportData": "डेटा निर्यात करें",
+    "privacyPolicy": "गोपनीयता नीति",
+    "transfers": "स्थानांतरण"
+  },
+  "common": {
+    "save": "सहेजें",
+    "cancel": "रद्द करें",
+    "delete": "हटाएं",
+    "edit": "संपादित करें",
+    "add": "जोड़ें",
+    "close": "बंद करें",
+    "confirm": "पुष्टि करें",
+    "back": "वापस",
+    "next": "अगला",
+    "loading": "लोड हो रहा है...",
+    "error": "त्रुटि",
+    "success": "सफलता",
+    "warning": "चेतावनी",
+    "info": "जानकारी",
+    "yes": "हां",
+    "no": "नहीं",
+    "optional": "वैकल्पिक",
+    "required": "आवश्यक",
+    "search": "खोजें",
+    "filter": "फ़िल्टर",
+    "sort": "क्रमबद्ध करें",
+    "ascending": "आरोही",
+    "descending": "अवरोही",
+    "all": "सभी",
+    "none": "कोई नहीं",
+    "select": "चुनें",
+    "selected": "चयनित",
+    "login": "लॉग इन",
+    "signup": "साइन अप",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "forgotPassword": "पासवर्ड भूल गए?",
+    "resetPassword": "पासवर्ड रीसेट करें",
+    "orContinueWith": "या इसके साथ जारी रखें",
+    "noAccount": "खाता नहीं है?",
+    "haveAccount": "पहले से खाता है?",
+    "print": "प्रिंट करें",
+    "printAll": "सभी प्रिंट करें",
+    "qrCodes": "QR कोड",
+    "download": "डाउनलोड"
+  },
+  "admin": {
+    "title": "एडमिन डैशबोर्ड",
+    "users": "उपयोगकर्ता",
+    "totalUsers": "कुल उपयोगकर्ता",
+    "activeUsers": "सक्रिय उपयोगकर्ता",
+    "newUsers": "नए उपयोगकर्ता",
+    "revenue": "राजस्व"
+  },
+  "gdpr": {
+    "title": "गोपनीयता सहमति",
+    "description": "हम आपके अनुभव को बेहतर बनाने के लिए कुकीज़ का उपयोग करते हैं। जारी रखकर, आप हमारी गोपनीयता नीति से सहमत हैं।",
+    "accept": "स्वीकार करें",
+    "decline": "अस्वीकार करें",
+    "learnMore": "और जानें"
+  },
+  "privacy": {
+    "title": "गोपनीयता नीति",
+    "lastUpdated": "अंतिम अपडेट",
+    "introduction": "परिचय",
+    "dataCollection": "डेटा संग्रह",
+    "dataUse": "डेटा उपयोग",
+    "dataSharing": "डेटा साझाकरण",
+    "security": "सुरक्षा",
+    "rights": "आपके अधिकार",
+    "contact": "संपर्क"
+  },
+  "install": {
+    "title": "S-reptrack इंस्टॉल करें",
+    "description": "त्वरित पहुंच के लिए अपने होम स्क्रीन पर S-reptrack इंस्टॉल करें।",
+    "ios": "iOS पर",
+    "android": "Android पर",
+    "step1": "शेयर बटन टैप करें",
+    "step2": "'होम स्क्रीन में जोड़ें' चुनें",
+    "step3": "'जोड़ें' पर टैप करें",
+    "androidStep1": "मेनू बटन (⋮) टैप करें",
+    "androidStep2": "'ऐप इंस्टॉल करें' या 'होम स्क्रीन में जोड़ें' चुनें",
+    "androidStep3": "'इंस्टॉल करें' पर टैप करें"
+  },
+  "transfer": {
+    "title": "पशु स्थानांतरण",
+    "send": "पशु भेजें",
+    "receive": "पशु प्राप्त करें",
+    "pending": "लंबित",
+    "accepted": "स्वीकृत",
+    "rejected": "अस्वीकृत",
+    "cancelled": "रद्द",
+    "recipientEmail": "प्राप्तकर्ता ईमेल",
+    "message": "संदेश",
+    "sendTransfer": "स्थानांतरण भेजें",
+    "acceptTransfer": "स्थानांतरण स्वीकार करें",
+    "rejectTransfer": "स्थानांतरण अस्वीकार करें",
+    "cancelTransfer": "स्थानांतरण रद्द करें",
+    "noTransfers": "कोई स्थानांतरण नहीं",
+    "from": "से",
+    "to": "को",
+    "transferDate": "स्थानांतरण तिथि",
+    "sentTransfers": "भेजे गए स्थानांतरण",
+    "receivedTransfers": "प्राप्त स्थानांतरण",
+    "incomingTransfer": "आने वाला स्थानांतरण"
+  },
+  "landing": {
+    "title": "S-reptrack",
+    "tagline": "आपके सरीसृप प्रजनन के लिए पूर्ण प्रबंधन",
+    "description": "NFC और QR कोड के साथ अपने सरीसृपों, उनके भोजन, स्वास्थ्य और प्रजनन को ट्रैक करें। {{count}} भाषाओं में उपलब्ध।",
+    "cta": {
+      "start": "मुफ्त शुरू करें",
+      "login": "लॉग इन",
+      "demo": "डेमो देखें"
+    },
+    "features": {
+      "title": "शक्तिशाली सुविधाएं",
+      "subtitle": "वह सब कुछ जो आपको अपने प्रजनन को प्रबंधित करने के लिए चाहिए",
+      "nfc": {
+        "title": "NFC स्कैनिंग",
+        "description": "एक स्कैन से अपने पशुओं की तुरंत पहचान करें"
+      },
+      "reproduction": {
+        "title": "प्रजनन ट्रैकिंग",
+        "description": "संभोग, अंडे देने और हैचिंग का पालन करें"
+      },
+      "qr": {
+        "title": "QR कोड",
+        "description": "त्वरित पहचान के लिए QR कोड उत्पन्न और प्रिंट करें"
+      },
+      "multilingual": {
+        "title": "बहुभाषी",
+        "description": "{{count}} भाषाओं में उपलब्ध इंटरफ़ेस"
+      },
+      "feeding": {
+        "title": "भोजन",
+        "description": "अनुस्मारक के साथ भोजन प्रबंधित करें"
+      },
+      "health": {
+        "title": "स्वास्थ्य",
+        "description": "स्वास्थ्य इतिहास और उपचार का पालन करें"
+      },
+      "cites": {
+        "title": "CITES अनुपालन",
+        "description": "एकीकृत CITES अनुबंधों के साथ प्रजातियां"
+      },
+      "transfer": {
+        "title": "स्थानांतरण",
+        "description": "सुरक्षित रूप से प्रजनकों के बीच पशुओं का स्थानांतरण करें"
+      }
+    },
+    "benefits": {
+      "title": "प्रजनकों के लिए डिज़ाइन किया गया",
+      "time": {
+        "title": "समय बचाएं",
+        "description": "त्वरित NFC/QR स्कैनिंग के साथ मैन्युअल प्रविष्टि कम करें"
+      },
+      "organized": {
+        "title": "व्यवस्थित रहें",
+        "description": "आपका सारा प्रजनन डेटा एक ही स्थान पर"
+      },
+      "tracking": {
+        "title": "सटीक ट्रैकिंग",
+        "description": "कभी भी भोजन या प्रजनन न भूलें"
+      }
+    },
+    "install": {
+      "title": "S-reptrack इंस्टॉल करें",
+      "subtitle": "त्वरित पहुंच के लिए ऐप को अपने होम स्क्रीन पर जोड़ें",
+      "step1": {
+        "title": "ब्राउज़र खोलें",
+        "description": "Chrome (Android) या Safari (iOS) में S-reptrack तक पहुंचें"
+      },
+      "step2": {
+        "title": "ऐप जोड़ें",
+        "description": "मेनू बटन टैप करें, फिर 'होम स्क्रीन में जोड़ें'"
+      },
+      "step3": {
+        "title": "आनंद लें",
+        "description": "एक वास्तविक ऐप की तरह S-reptrack लॉन्च करें!"
+      }
+    },
+    "finalCta": {
+      "title": "अपने प्रजनन को बदलने के लिए तैयार हैं?",
+      "subtitle": "हजारों प्रजनकों से जुड़ें जो पहले से S-reptrack का उपयोग करते हैं",
+      "button": "अभी शुरू करें"
+    },
+    "footer": {
+      "rights": "सर्वाधिकार सुरक्षित।",
+      "privacy": "गोपनीयता नीति"
+    }
+  },
+  "species": {
+    "pythonRegius": "रॉयल पाइथन",
+    "boaConstrictor": "बोआ कंस्ट्रिक्टर",
+    "elapheGuttata": "कॉर्न स्नेक",
+    "pogona": "बियर्डेड ड्रैगन",
+    "geckoLeopard": "लेपर्ड गेको",
+    "testudoHermanni": "हर्मन का कछुआ"
+  }
+}

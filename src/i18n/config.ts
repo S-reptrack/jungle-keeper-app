@@ -8,6 +8,13 @@ import it from './locales/it.json';
 import pt from './locales/pt.json';
 import nl from './locales/nl.json';
 import pl from './locales/pl.json';
+import hi from './locales/hi.json';
+import pa from './locales/pa.json';
+import ta from './locales/ta.json';
+import th from './locales/th.json';
+import id from './locales/id.json';
+import ru from './locales/ru.json';
+import ja from './locales/ja.json';
 
 export const languages = [
   { code: 'fr', name: 'Français', flag: '🇫🇷' },
@@ -18,6 +25,13 @@ export const languages = [
   { code: 'pt', name: 'Português', flag: '🇵🇹' },
   { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
   { code: 'pl', name: 'Polski', flag: '🇵🇱' },
+  { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
+  { code: 'pa', name: 'ਪੰਜਾਬੀ', flag: '🇮🇳' },
+  { code: 'ta', name: 'தமிழ்', flag: '🇮🇳' },
+  { code: 'th', name: 'ไทย', flag: '🇹🇭' },
+  { code: 'id', name: 'Bahasa Indonesia', flag: '🇮🇩' },
+  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+  { code: 'ja', name: '日本語', flag: '🇯🇵' },
 ];
 
 // Get saved language from localStorage or default to 'fr'
@@ -35,6 +49,13 @@ i18n
       pt: { translation: pt },
       nl: { translation: nl },
       pl: { translation: pl },
+      hi: { translation: hi },
+      pa: { translation: pa },
+      ta: { translation: ta },
+      th: { translation: th },
+      id: { translation: id },
+      ru: { translation: ru },
+      ja: { translation: ja },
     },
     lng: savedLanguage,
     fallbackLng: 'en',

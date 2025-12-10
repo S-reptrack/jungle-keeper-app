@@ -1,0 +1,343 @@
+{
+  "stats": {
+    "title": "ਅੰਕੜੇ",
+    "totalReptiles": "ਕੁੱਲ ਸੱਪ-ਜੀਵ",
+    "totalFeedings": "ਕੁੱਲ ਖੁਰਾਕ",
+    "healthRecords": "ਸਿਹਤ ਰਿਕਾਰਡ",
+    "feedingsDue": "ਬਕਾਇਆ ਖੁਰਾਕ",
+    "noFeedingsDue": "ਕੋਈ ਬਕਾਇਆ ਖੁਰਾਕ ਨਹੀਂ",
+    "feedingsDueCount": "{{count}} ਬਕਾਇਆ ਖੁਰਾਕ",
+    "viewAll": "ਸਭ ਵੇਖੋ"
+  },
+  "reptile": {
+    "name": "ਨਾਮ",
+    "species": "ਪ੍ਰਜਾਤੀ",
+    "category": "ਸ਼੍ਰੇਣੀ",
+    "sex": "ਲਿੰਗ",
+    "male": "ਨਰ",
+    "female": "ਮਾਦਾ",
+    "unknown": "ਅਣਜਾਣ",
+    "birthDate": "ਜਨਮ ਮਿਤੀ",
+    "purchaseDate": "ਖਰੀਦ ਮਿਤੀ",
+    "weight": "ਭਾਰ",
+    "morphs": "ਮੋਰਫ਼ਸ",
+    "status": "ਸਥਿਤੀ",
+    "active": "ਸਰਗਰਮ",
+    "archived": "ਆਰਕਾਈਵਡ",
+    "deceased": "ਮ੍ਰਿਤ",
+    "sold": "ਵੇਚਿਆ",
+    "forSale": "ਵਿਕਰੀ ਲਈ",
+    "transferred": "ਤਬਦੀਲ",
+    "addReptile": "ਸੱਪ-ਜੀਵ ਸ਼ਾਮਲ ਕਰੋ",
+    "editReptile": "ਸੱਪ-ਜੀਵ ਸੋਧੋ",
+    "deleteReptile": "ਸੱਪ-ਜੀਵ ਮਿਟਾਓ",
+    "archiveReptile": "ਸੱਪ-ਜੀਵ ਆਰਕਾਈਵ ਕਰੋ",
+    "confirmDelete": "ਕੀ ਤੁਸੀਂ ਸੱਚਮੁੱਚ ਇਸ ਸੱਪ-ਜੀਵ ਨੂੰ ਮਿਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?",
+    "noReptiles": "ਅਜੇ ਕੋਈ ਸੱਪ-ਜੀਵ ਨਹੀਂ",
+    "addFirst": "ਆਪਣਾ ਪਹਿਲਾ ਸੱਪ-ਜੀਵ ਸ਼ਾਮਲ ਕਰੋ",
+    "feedingInterval": "ਖੁਰਾਕ ਅੰਤਰਾਲ",
+    "days": "ਦਿਨ",
+    "lastFeeding": "ਆਖਰੀ ਖੁਰਾਕ",
+    "nextFeeding": "ਅਗਲੀ ਖੁਰਾਕ",
+    "noFeedings": "ਅਜੇ ਕੋਈ ਖੁਰਾਕ ਨਹੀਂ",
+    "categories": {
+      "snake": "ਸੱਪ",
+      "lizard": "ਕਿਰਲੀ",
+      "turtle": "ਕੱਛੂ",
+      "tortoise": "ਕੱਛੂ",
+      "crocodilian": "ਮਗਰਮੱਛ",
+      "other": "ਹੋਰ"
+    },
+    "bornInCaptivity": "ਕੈਦ ਵਿੱਚ ਪੈਦਾ ਹੋਇਆ",
+    "selectSpecies": "ਪ੍ਰਜਾਤੀ ਚੁਣੋ",
+    "clearSelection": "ਚੋਣ ਸਾਫ਼ ਕਰੋ",
+    "searchSpecies": "ਪ੍ਰਜਾਤੀ ਖੋਜੋ...",
+    "noSpeciesFound": "ਕੋਈ ਪ੍ਰਜਾਤੀ ਨਹੀਂ ਮਿਲੀ",
+    "weightHistory": "ਭਾਰ ਇਤਿਹਾਸ",
+    "addWeight": "ਭਾਰ ਸ਼ਾਮਲ ਕਰੋ",
+    "selectReptile": "ਸੱਪ-ਜੀਵ ਚੁਣੋ",
+    "initialWeight": "ਸ਼ੁਰੂਆਤੀ ਭਾਰ"
+  },
+  "feeding": {
+    "title": "ਖੁਰਾਕ",
+    "addFeeding": "ਖੁਰਾਕ ਸ਼ਾਮਲ ਕਰੋ",
+    "date": "ਮਿਤੀ",
+    "rodentType": "ਚੂਹੇ ਦੀ ਕਿਸਮ",
+    "rodentStage": "ਚੂਹੇ ਦਾ ਪੜਾਅ",
+    "quantity": "ਮਾਤਰਾ",
+    "notes": "ਨੋਟਸ",
+    "mouse": "ਚੂਹਾ",
+    "rat": "ਚੂਹਾ",
+    "chick": "ਚੂਜ਼ਾ",
+    "quail": "ਬਟੇਰ",
+    "rabbit": "ਖਰਗੋਸ਼",
+    "pinky": "ਪਿੰਕੀ",
+    "fuzzy": "ਫਜ਼ੀ",
+    "hopper": "ਹੌਪਰ",
+    "weaned": "ਵੀਨਡ",
+    "adult": "ਬਾਲਗ",
+    "jumbo": "ਜੰਬੋ",
+    "noFeedings": "ਕੋਈ ਖੁਰਾਕ ਰਿਕਾਰਡ ਨਹੀਂ",
+    "weight": "ਭਾਰ",
+    "refused": "ਇਨਕਾਰ ਕੀਤਾ",
+    "accepted": "ਸਵੀਕਾਰ ਕੀਤਾ"
+  },
+  "health": {
+    "title": "ਸਿਹਤ",
+    "addRecord": "ਰਿਕਾਰਡ ਸ਼ਾਮਲ ਕਰੋ",
+    "condition": "ਹਾਲਤ",
+    "diagnosisDate": "ਤਸ਼ਖੀਸ ਮਿਤੀ",
+    "treatment": "ਇਲਾਜ",
+    "resolved": "ਹੱਲ ਹੋਇਆ",
+    "ongoing": "ਜਾਰੀ",
+    "noRecords": "ਕੋਈ ਸਿਹਤ ਰਿਕਾਰਡ ਨਹੀਂ",
+    "shedding": "ਚਮੜੀ ਉਤਾਰਨਾ",
+    "mites": "ਕੀੜੇ",
+    "respiratoryInfection": "ਸਾਹ ਦੀ ਲਾਗ",
+    "scaleRot": "ਸਕੇਲ ਰੌਟ",
+    "mouthRot": "ਮੂੰਹ ਸੜਨ",
+    "parasites": "ਪਰਜੀਵੀ",
+    "injury": "ਸੱਟ",
+    "other": "ਹੋਰ"
+  },
+  "reproduction": {
+    "title": "ਪ੍ਰਜਨਨ",
+    "addObservation": "ਨਿਰੀਖਣ ਸ਼ਾਮਲ ਕਰੋ",
+    "partner": "ਸਾਥੀ",
+    "observationDate": "ਨਿਰੀਖਣ ਮਿਤੀ",
+    "action": "ਕਾਰਵਾਈ",
+    "copulation": "ਸੰਭੋਗ",
+    "ovulation": "ਅੰਡਕੋਸ਼",
+    "laying": "ਅੰਡੇ ਦੇਣਾ",
+    "hatching": "ਅੰਡੇ ਸੇਣਾ",
+    "expectedHatchDate": "ਅਪੇਖਿਤ ਹੈਚਿੰਗ ਮਿਤੀ",
+    "incubationDays": "ਇਨਕਿਊਬੇਸ਼ਨ ਦਿਨ",
+    "hatchedEggs": "ਹੈਚ ਹੋਏ ਅੰਡੇ",
+    "unhatchedEggs": "ਨਹੀਂ ਹੈਚ ਹੋਏ ਅੰਡੇ",
+    "stillbornJuveniles": "ਮਰੇ ਹੋਏ ਬੱਚੇ",
+    "noObservations": "ਕੋਈ ਪ੍ਰਜਨਨ ਨਿਰੀਖਣ ਨਹੀਂ",
+    "closeHatching": "ਹੈਚਿੰਗ ਬੰਦ ਕਰੋ",
+    "notificationDaysBefore": "ਪਹਿਲਾਂ ਨੋਟੀਫਿਕੇਸ਼ਨ ਦਿਨ",
+    "hatchingIn": "ਹੈਚਿੰਗ ਵਿੱਚ",
+    "daysRemaining": "ਦਿਨ ਬਾਕੀ"
+  },
+  "settings": {
+    "title": "ਸੈਟਿੰਗਾਂ",
+    "appearance": "ਦਿੱਖ",
+    "theme": "ਥੀਮ",
+    "light": "ਲਾਈਟ",
+    "dark": "ਡਾਰਕ",
+    "system": "ਸਿਸਟਮ",
+    "language": "ਭਾਸ਼ਾ",
+    "preferences": "ਤਰਜੀਹਾਂ",
+    "weightUnit": "ਭਾਰ ਯੂਨਿਟ",
+    "grams": "ਗ੍ਰਾਮ",
+    "ounces": "ਔਂਸ",
+    "feedingReminders": "ਖੁਰਾਕ ਯਾਦ-ਦਹਾਨੀ",
+    "account": "ਖਾਤਾ",
+    "signOut": "ਸਾਈਨ ਆਊਟ",
+    "deleteAccount": "ਖਾਤਾ ਮਿਟਾਓ",
+    "confirmDeleteAccount": "ਕੀ ਤੁਸੀਂ ਸੱਚਮੁੱਚ ਆਪਣਾ ਖਾਤਾ ਮਿਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ? ਇਹ ਕਾਰਵਾਈ ਵਾਪਸ ਨਹੀਂ ਹੋ ਸਕਦੀ।",
+    "subscription": "ਮੈਂਬਰਸ਼ਿਪ",
+    "privacyData": "ਪ੍ਰਾਈਵੇਸੀ ਅਤੇ ਡੇਟਾ",
+    "exportData": "ਡੇਟਾ ਐਕਸਪੋਰਟ ਕਰੋ",
+    "privacyPolicy": "ਪ੍ਰਾਈਵੇਸੀ ਨੀਤੀ",
+    "transfers": "ਤਬਦੀਲੀਆਂ"
+  },
+  "common": {
+    "save": "ਸੇਵ ਕਰੋ",
+    "cancel": "ਰੱਦ ਕਰੋ",
+    "delete": "ਮਿਟਾਓ",
+    "edit": "ਸੋਧੋ",
+    "add": "ਸ਼ਾਮਲ ਕਰੋ",
+    "close": "ਬੰਦ ਕਰੋ",
+    "confirm": "ਪੁਸ਼ਟੀ ਕਰੋ",
+    "back": "ਵਾਪਸ",
+    "next": "ਅਗਲਾ",
+    "loading": "ਲੋਡ ਹੋ ਰਿਹਾ...",
+    "error": "ਗਲਤੀ",
+    "success": "ਸਫਲਤਾ",
+    "warning": "ਚੇਤਾਵਨੀ",
+    "info": "ਜਾਣਕਾਰੀ",
+    "yes": "ਹਾਂ",
+    "no": "ਨਹੀਂ",
+    "optional": "ਵਿਕਲਪਿਕ",
+    "required": "ਲੋੜੀਂਦਾ",
+    "search": "ਖੋਜੋ",
+    "filter": "ਫਿਲਟਰ",
+    "sort": "ਕ੍ਰਮਬੱਧ ਕਰੋ",
+    "ascending": "ਵਧਦੇ ਕ੍ਰਮ ਵਿੱਚ",
+    "descending": "ਘਟਦੇ ਕ੍ਰਮ ਵਿੱਚ",
+    "all": "ਸਭ",
+    "none": "ਕੋਈ ਨਹੀਂ",
+    "select": "ਚੁਣੋ",
+    "selected": "ਚੁਣਿਆ",
+    "login": "ਲੌਗਇਨ",
+    "signup": "ਸਾਈਨ ਅੱਪ",
+    "email": "ਈਮੇਲ",
+    "password": "ਪਾਸਵਰਡ",
+    "forgotPassword": "ਪਾਸਵਰਡ ਭੁੱਲ ਗਏ?",
+    "resetPassword": "ਪਾਸਵਰਡ ਰੀਸੈਟ ਕਰੋ",
+    "orContinueWith": "ਜਾਂ ਇਸ ਨਾਲ ਜਾਰੀ ਰੱਖੋ",
+    "noAccount": "ਖਾਤਾ ਨਹੀਂ ਹੈ?",
+    "haveAccount": "ਪਹਿਲਾਂ ਤੋਂ ਖਾਤਾ ਹੈ?",
+    "print": "ਪ੍ਰਿੰਟ ਕਰੋ",
+    "printAll": "ਸਭ ਪ੍ਰਿੰਟ ਕਰੋ",
+    "qrCodes": "QR ਕੋਡ",
+    "download": "ਡਾਊਨਲੋਡ"
+  },
+  "admin": {
+    "title": "ਐਡਮਿਨ ਡੈਸ਼ਬੋਰਡ",
+    "users": "ਉਪਭੋਗਤਾ",
+    "totalUsers": "ਕੁੱਲ ਉਪਭੋਗਤਾ",
+    "activeUsers": "ਸਰਗਰਮ ਉਪਭੋਗਤਾ",
+    "newUsers": "ਨਵੇਂ ਉਪਭੋਗਤਾ",
+    "revenue": "ਮਾਲੀਆ"
+  },
+  "gdpr": {
+    "title": "ਪ੍ਰਾਈਵੇਸੀ ਸਹਿਮਤੀ",
+    "description": "ਅਸੀਂ ਤੁਹਾਡੇ ਅਨੁਭਵ ਨੂੰ ਬਿਹਤਰ ਬਣਾਉਣ ਲਈ ਕੂਕੀਜ਼ ਵਰਤਦੇ ਹਾਂ। ਜਾਰੀ ਰੱਖ ਕੇ, ਤੁਸੀਂ ਸਾਡੀ ਪ੍ਰਾਈਵੇਸੀ ਨੀਤੀ ਨਾਲ ਸਹਿਮਤ ਹੁੰਦੇ ਹੋ।",
+    "accept": "ਸਵੀਕਾਰ ਕਰੋ",
+    "decline": "ਅਸਵੀਕਾਰ ਕਰੋ",
+    "learnMore": "ਹੋਰ ਜਾਣੋ"
+  },
+  "privacy": {
+    "title": "ਪ੍ਰਾਈਵੇਸੀ ਨੀਤੀ",
+    "lastUpdated": "ਆਖਰੀ ਅੱਪਡੇਟ",
+    "introduction": "ਜਾਣ-ਪਛਾਣ",
+    "dataCollection": "ਡੇਟਾ ਸੰਗ੍ਰਹਿ",
+    "dataUse": "ਡੇਟਾ ਵਰਤੋਂ",
+    "dataSharing": "ਡੇਟਾ ਸਾਂਝਾਕਰਨ",
+    "security": "ਸੁਰੱਖਿਆ",
+    "rights": "ਤੁਹਾਡੇ ਅਧਿਕਾਰ",
+    "contact": "ਸੰਪਰਕ"
+  },
+  "install": {
+    "title": "S-reptrack ਇੰਸਟਾਲ ਕਰੋ",
+    "description": "ਤੇਜ਼ ਪਹੁੰਚ ਲਈ ਆਪਣੀ ਹੋਮ ਸਕ੍ਰੀਨ ਤੇ S-reptrack ਇੰਸਟਾਲ ਕਰੋ।",
+    "ios": "iOS ਤੇ",
+    "android": "Android ਤੇ",
+    "step1": "ਸ਼ੇਅਰ ਬਟਨ ਟੈਪ ਕਰੋ",
+    "step2": "'ਹੋਮ ਸਕ੍ਰੀਨ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ' ਚੁਣੋ",
+    "step3": "'ਸ਼ਾਮਲ ਕਰੋ' ਟੈਪ ਕਰੋ",
+    "androidStep1": "ਮੀਨੂ ਬਟਨ (⋮) ਟੈਪ ਕਰੋ",
+    "androidStep2": "'ਐਪ ਇੰਸਟਾਲ ਕਰੋ' ਜਾਂ 'ਹੋਮ ਸਕ੍ਰੀਨ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ' ਚੁਣੋ",
+    "androidStep3": "'ਇੰਸਟਾਲ ਕਰੋ' ਟੈਪ ਕਰੋ"
+  },
+  "transfer": {
+    "title": "ਜਾਨਵਰ ਤਬਦੀਲੀ",
+    "send": "ਜਾਨਵਰ ਭੇਜੋ",
+    "receive": "ਜਾਨਵਰ ਪ੍ਰਾਪਤ ਕਰੋ",
+    "pending": "ਬਕਾਇਆ",
+    "accepted": "ਸਵੀਕਾਰਿਆ",
+    "rejected": "ਰੱਦ ਕੀਤਾ",
+    "cancelled": "ਰੱਦ",
+    "recipientEmail": "ਪ੍ਰਾਪਤਕਰਤਾ ਈਮੇਲ",
+    "message": "ਸੁਨੇਹਾ",
+    "sendTransfer": "ਤਬਦੀਲੀ ਭੇਜੋ",
+    "acceptTransfer": "ਤਬਦੀਲੀ ਸਵੀਕਾਰ ਕਰੋ",
+    "rejectTransfer": "ਤਬਦੀਲੀ ਰੱਦ ਕਰੋ",
+    "cancelTransfer": "ਤਬਦੀਲੀ ਰੱਦ ਕਰੋ",
+    "noTransfers": "ਕੋਈ ਤਬਦੀਲੀ ਨਹੀਂ",
+    "from": "ਤੋਂ",
+    "to": "ਨੂੰ",
+    "transferDate": "ਤਬਦੀਲੀ ਮਿਤੀ",
+    "sentTransfers": "ਭੇਜੀਆਂ ਤਬਦੀਲੀਆਂ",
+    "receivedTransfers": "ਪ੍ਰਾਪਤ ਤਬਦੀਲੀਆਂ",
+    "incomingTransfer": "ਆਉਣ ਵਾਲੀ ਤਬਦੀਲੀ"
+  },
+  "landing": {
+    "title": "S-reptrack",
+    "tagline": "ਤੁਹਾਡੇ ਸੱਪ-ਜੀਵ ਪਾਲਣ ਲਈ ਪੂਰਾ ਪ੍ਰਬੰਧਨ",
+    "description": "NFC ਅਤੇ QR ਕੋਡ ਨਾਲ ਆਪਣੇ ਸੱਪ-ਜੀਵਾਂ, ਉਨ੍ਹਾਂ ਦੀ ਖੁਰਾਕ, ਸਿਹਤ ਅਤੇ ਪ੍ਰਜਨਨ ਨੂੰ ਟ੍ਰੈਕ ਕਰੋ। {{count}} ਭਾਸ਼ਾਵਾਂ ਵਿੱਚ ਉਪਲਬਧ।",
+    "cta": {
+      "start": "ਮੁਫ਼ਤ ਸ਼ੁਰੂ ਕਰੋ",
+      "login": "ਲੌਗਇਨ",
+      "demo": "ਡੈਮੋ ਵੇਖੋ"
+    },
+    "features": {
+      "title": "ਸ਼ਕਤੀਸ਼ਾਲੀ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ",
+      "subtitle": "ਤੁਹਾਡੇ ਪਾਲਣ ਨੂੰ ਪ੍ਰਬੰਧਿਤ ਕਰਨ ਲਈ ਸਭ ਕੁਝ",
+      "nfc": {
+        "title": "NFC ਸਕੈਨਿੰਗ",
+        "description": "ਇੱਕ ਸਕੈਨ ਨਾਲ ਆਪਣੇ ਜਾਨਵਰਾਂ ਦੀ ਤੁਰੰਤ ਪਛਾਣ ਕਰੋ"
+      },
+      "reproduction": {
+        "title": "ਪ੍ਰਜਨਨ ਟ੍ਰੈਕਿੰਗ",
+        "description": "ਸੰਭੋਗ, ਅੰਡੇ ਦੇਣਾ ਅਤੇ ਹੈਚਿੰਗ ਦੀ ਪਾਲਣਾ ਕਰੋ"
+      },
+      "qr": {
+        "title": "QR ਕੋਡ",
+        "description": "ਤੇਜ਼ ਪਛਾਣ ਲਈ QR ਕੋਡ ਬਣਾਓ ਅਤੇ ਪ੍ਰਿੰਟ ਕਰੋ"
+      },
+      "multilingual": {
+        "title": "ਬਹੁਭਾਸ਼ੀ",
+        "description": "{{count}} ਭਾਸ਼ਾਵਾਂ ਵਿੱਚ ਉਪਲਬਧ ਇੰਟਰਫੇਸ"
+      },
+      "feeding": {
+        "title": "ਖੁਰਾਕ",
+        "description": "ਯਾਦ-ਦਹਾਨੀ ਨਾਲ ਖੁਰਾਕ ਪ੍ਰਬੰਧਿਤ ਕਰੋ"
+      },
+      "health": {
+        "title": "ਸਿਹਤ",
+        "description": "ਸਿਹਤ ਇਤਿਹਾਸ ਅਤੇ ਇਲਾਜ ਦੀ ਪਾਲਣਾ ਕਰੋ"
+      },
+      "cites": {
+        "title": "CITES ਅਨੁਕੂਲਤਾ",
+        "description": "ਏਕੀਕ੍ਰਿਤ CITES ਅਨੁਬੰਧਾਂ ਨਾਲ ਪ੍ਰਜਾਤੀਆਂ"
+      },
+      "transfer": {
+        "title": "ਤਬਦੀਲੀਆਂ",
+        "description": "ਪਾਲਕਾਂ ਵਿਚਕਾਰ ਸੁਰੱਖਿਅਤ ਤੌਰ ਤੇ ਜਾਨਵਰਾਂ ਨੂੰ ਤਬਦੀਲ ਕਰੋ"
+      }
+    },
+    "benefits": {
+      "title": "ਪਾਲਕਾਂ ਲਈ ਡਿਜ਼ਾਈਨ ਕੀਤਾ",
+      "time": {
+        "title": "ਸਮਾਂ ਬਚਾਓ",
+        "description": "ਤੇਜ਼ NFC/QR ਸਕੈਨਿੰਗ ਨਾਲ ਮੈਨੁਅਲ ਐਂਟਰੀ ਘਟਾਓ"
+      },
+      "organized": {
+        "title": "ਸੰਗਠਿਤ ਰਹੋ",
+        "description": "ਤੁਹਾਡਾ ਸਾਰਾ ਪਾਲਣ ਡੇਟਾ ਇੱਕ ਥਾਂ ਤੇ"
+      },
+      "tracking": {
+        "title": "ਸਹੀ ਟ੍ਰੈਕਿੰਗ",
+        "description": "ਕਦੇ ਵੀ ਖੁਰਾਕ ਜਾਂ ਪ੍ਰਜਨਨ ਨਾ ਭੁੱਲੋ"
+      }
+    },
+    "install": {
+      "title": "S-reptrack ਇੰਸਟਾਲ ਕਰੋ",
+      "subtitle": "ਤੇਜ਼ ਪਹੁੰਚ ਲਈ ਐਪ ਨੂੰ ਆਪਣੀ ਹੋਮ ਸਕ੍ਰੀਨ ਤੇ ਸ਼ਾਮਲ ਕਰੋ",
+      "step1": {
+        "title": "ਬ੍ਰਾਊਜ਼ਰ ਖੋਲ੍ਹੋ",
+        "description": "Chrome (Android) ਜਾਂ Safari (iOS) ਵਿੱਚ S-reptrack ਤੱਕ ਪਹੁੰਚ ਕਰੋ"
+      },
+      "step2": {
+        "title": "ਐਪ ਸ਼ਾਮਲ ਕਰੋ",
+        "description": "ਮੀਨੂ ਬਟਨ ਟੈਪ ਕਰੋ, ਫਿਰ 'ਹੋਮ ਸਕ੍ਰੀਨ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ'"
+      },
+      "step3": {
+        "title": "ਆਨੰਦ ਲਵੋ",
+        "description": "ਅਸਲ ਐਪ ਵਾਂਗ S-reptrack ਲਾਂਚ ਕਰੋ!"
+      }
+    },
+    "finalCta": {
+      "title": "ਆਪਣੇ ਪਾਲਣ ਨੂੰ ਬਦਲਣ ਲਈ ਤਿਆਰ ਹੋ?",
+      "subtitle": "ਹਜ਼ਾਰਾਂ ਪਾਲਕਾਂ ਨਾਲ ਜੁੜੋ ਜੋ ਪਹਿਲਾਂ ਤੋਂ S-reptrack ਵਰਤਦੇ ਹਨ",
+      "button": "ਹੁਣੇ ਸ਼ੁਰੂ ਕਰੋ"
+    },
+    "footer": {
+      "rights": "ਸਾਰੇ ਹੱਕ ਰਾਖਵੇਂ ਹਨ।",
+      "privacy": "ਪ੍ਰਾਈਵੇਸੀ ਨੀਤੀ"
+    }
+  },
+  "species": {
+    "pythonRegius": "ਰੌਇਲ ਪਾਇਥਨ",
+    "boaConstrictor": "ਬੋਆ ਕੰਸਟ੍ਰਿਕਟਰ",
+    "elapheGuttata": "ਕੌਰਨ ਸਨੇਕ",
+    "pogona": "ਬਿਅਰਡਿਡ ਡ੍ਰੈਗਨ",
+    "geckoLeopard": "ਲੇਪਰਡ ਗੇਕੋ",
+    "testudoHermanni": "ਹਰਮਨ ਦਾ ਕੱਛੂ"
+  }
+}
