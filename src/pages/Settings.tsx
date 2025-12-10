@@ -16,6 +16,7 @@ import { languages } from "@/i18n/config";
 import { useState, useEffect } from "react";
 import ExportDataDialog from "@/components/ExportDataDialog";
 import DeleteAccountDialog from "@/components/DeleteAccountDialog";
+import SubscriptionCard from "@/components/SubscriptionCard";
 
 const Settings = () => {
   const { t, i18n } = useTranslation();
@@ -66,6 +67,8 @@ const Settings = () => {
         </div>
 
         <div className="space-y-6">
+          {/* Abonnement Premium */}
+          <SubscriptionCard />
           {/* Apparence */}
           <Card>
             <CardHeader>
