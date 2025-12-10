@@ -15,6 +15,7 @@ import th from './locales/th.json';
 import id from './locales/id.json';
 import ru from './locales/ru.json';
 import ja from './locales/ja.json';
+import zh from './locales/zh.json';
 
 export const languages = [
   { code: 'fr', name: 'Français', flag: '🇫🇷' },
@@ -32,6 +33,7 @@ export const languages = [
   { code: 'id', name: 'Bahasa Indonesia', flag: '🇮🇩' },
   { code: 'ru', name: 'Русский', flag: '🇷🇺' },
   { code: 'ja', name: '日本語', flag: '🇯🇵' },
+  { code: 'zh', name: '简体中文', flag: '🇨🇳' },
 ];
 
 // Get saved language from localStorage or default to 'fr'
@@ -56,6 +58,7 @@ i18n
       id: { translation: id },
       ru: { translation: ru },
       ja: { translation: ja },
+      zh: { translation: zh },
     },
     lng: savedLanguage,
     fallbackLng: 'en',
