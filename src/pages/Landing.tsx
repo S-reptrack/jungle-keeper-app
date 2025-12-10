@@ -27,8 +27,8 @@ const Landing = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   
-  // Production URL for QR code - update this when using a custom domain
-  const productionUrl = "https://sreptrack.lovable.app";
+  // Production URL for QR code
+  const productionUrl = "https://sreptrack.app";
 
   const features = [
     {
