@@ -342,7 +342,14 @@
     "ctaTitle": "Gotowy do zarządzania swoją hodowlą?",
     "ctaDescription": "Dołącz do hodowców, którzy ufają S-reptrack w zarządzaniu swoją kolekcją gadów.",
     "ctaButton": "Utwórz moje darmowe konto",
-    "privacyPolicy": "Polityka prywatności"
+    "privacyPolicy": "Polityka prywatności",
+    "quickSignupBadge": "Szybka rejestracja",
+    "quickSignupTitle": "Zarejestruj się jednym skanem",
+    "quickSignupDescription": "Zeskanuj ten kod QR smartfonem, aby przejść bezpośrednio do strony rejestracji i rozpocząć zarządzanie swoją hodowlą.",
+    "quickSignupStep1": "Zeskanuj kod QR telefonem",
+    "quickSignupStep2": "Utwórz konto w kilka sekund",
+    "quickSignupStep3": "Zacznij dodawać swoje gady",
+    "scanToSignup": "Zeskanuj, aby się zarejestrować"
   },
   "species": {
     "python-molurus-bivittatus": "Pyton birmański",

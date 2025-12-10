@@ -368,7 +368,14 @@
     "ctaTitle": "Siap Mengelola Penangkaran Anda?",
     "ctaDescription": "Bergabunglah dengan peternak yang mempercayai S-reptrack untuk mengelola koleksi reptil mereka.",
     "ctaButton": "Buat Akun Anda Gratis",
-    "privacyPolicy": "Kebijakan Privasi"
+    "privacyPolicy": "Kebijakan Privasi",
+    "quickSignupBadge": "Pendaftaran Ekspres",
+    "quickSignupTitle": "Daftar dalam Satu Pemindaian",
+    "quickSignupDescription": "Pindai kode QR ini dengan smartphone Anda untuk langsung ke halaman pendaftaran dan mulai mengelola penangkaran Anda.",
+    "quickSignupStep1": "Pindai kode QR dengan ponsel Anda",
+    "quickSignupStep2": "Buat akun dalam hitungan detik",
+    "quickSignupStep3": "Mulai tambahkan reptil Anda",
+    "scanToSignup": "Pindai untuk mendaftar"
   },
   "species": {
     "python-regius": "Ball Python",

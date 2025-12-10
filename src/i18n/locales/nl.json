@@ -342,7 +342,14 @@
     "ctaTitle": "Klaar om uw kweek te beheren?",
     "ctaDescription": "Sluit u aan bij kwekers die vertrouwen op S-reptrack om hun reptielencollectie te beheren.",
     "ctaButton": "Mijn gratis account aanmaken",
-    "privacyPolicy": "Privacybeleid"
+    "privacyPolicy": "Privacybeleid",
+    "quickSignupBadge": "Express registratie",
+    "quickSignupTitle": "Registreer met één scan",
+    "quickSignupDescription": "Scan deze QR-code met uw smartphone om direct naar de registratiepagina te gaan en uw kweek te beheren.",
+    "quickSignupStep1": "Scan de QR-code met uw telefoon",
+    "quickSignupStep2": "Maak uw account aan in seconden",
+    "quickSignupStep3": "Begin met het toevoegen van uw reptielen",
+    "scanToSignup": "Scan om te registreren"
   },
   "species": {
     "python-molurus-bivittatus": "Birmese python",

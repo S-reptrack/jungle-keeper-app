@@ -368,7 +368,14 @@
     "ctaTitle": "Prêt à gérer votre élevage ?",
     "ctaDescription": "Rejoignez les éleveurs qui font confiance à S-reptrack pour gérer leur collection de reptiles.",
     "ctaButton": "Créer mon compte gratuitement",
-    "privacyPolicy": "Politique de confidentialité"
+    "privacyPolicy": "Politique de confidentialité",
+    "quickSignupBadge": "Inscription express",
+    "quickSignupTitle": "Inscrivez-vous en un scan",
+    "quickSignupDescription": "Scannez ce QR code avec votre smartphone pour accéder directement à la page d'inscription et commencer à gérer votre élevage.",
+    "quickSignupStep1": "Scannez le QR code avec votre téléphone",
+    "quickSignupStep2": "Créez votre compte en quelques secondes",
+    "quickSignupStep3": "Commencez à ajouter vos reptiles",
+    "scanToSignup": "Scanner pour s'inscrire"
   },
   "species": {
     "python-molurus-bivittatus": "Python birman",
