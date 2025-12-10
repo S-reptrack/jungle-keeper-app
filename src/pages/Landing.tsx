@@ -19,6 +19,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSelector from "@/components/LanguageSelector";
+import sreptrackLogo from "@/assets/sreptrack-logo.png";
 
 const Landing = () => {
   const { t } = useTranslation();
@@ -84,7 +85,7 @@ const Landing = () => {
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-2xl">🦎</span>
+            <img src={sreptrackLogo} alt="S-reptrack" className="w-8 h-8 rounded-lg" />
             <span className="font-bold text-xl text-foreground">S-reptrack</span>
           </div>
           <div className="flex items-center gap-2">
@@ -148,7 +149,7 @@ const Landing = () => {
                     <div className="p-4 space-y-4">
                       {/* App Header */}
                       <div className="flex items-center gap-2 mb-4">
-                        <span className="text-xl">🦎</span>
+                        <img src={sreptrackLogo} alt="S-reptrack" className="w-6 h-6 rounded" />
                         <span className="font-bold text-foreground">S-reptrack</span>
                       </div>
                       
@@ -341,7 +342,7 @@ const Landing = () => {
       <footer className="border-t border-border py-8 px-4">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="text-xl">🦎</span>
+            <img src={sreptrackLogo} alt="S-reptrack" className="w-6 h-6 rounded" />
             <span className="font-semibold text-foreground">S-reptrack</span>
           </div>
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
