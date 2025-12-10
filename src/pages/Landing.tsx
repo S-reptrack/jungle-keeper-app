@@ -28,7 +28,7 @@ const Landing = () => {
   const navigate = useNavigate();
   
   // Production URL for QR code
-  const productionUrl = "https://s-reptrack.app";
+  const productionUrl = "https://sreptrack.app";
 
   const features = [
     {
