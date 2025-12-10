@@ -1,0 +1,343 @@
+{
+  "stats": {
+    "title": "Статистика",
+    "totalReptiles": "Всего рептилий",
+    "totalFeedings": "Всего кормлений",
+    "healthRecords": "Записи о здоровье",
+    "feedingsDue": "Ожидающие кормления",
+    "noFeedingsDue": "Нет ожидающих кормлений",
+    "feedingsDueCount": "{{count}} ожидающих кормлений",
+    "viewAll": "Смотреть все"
+  },
+  "reptile": {
+    "name": "Имя",
+    "species": "Вид",
+    "category": "Категория",
+    "sex": "Пол",
+    "male": "Самец",
+    "female": "Самка",
+    "unknown": "Неизвестно",
+    "birthDate": "Дата рождения",
+    "purchaseDate": "Дата покупки",
+    "weight": "Вес",
+    "morphs": "Морфы",
+    "status": "Статус",
+    "active": "Активный",
+    "archived": "В архиве",
+    "deceased": "Умерший",
+    "sold": "Продан",
+    "forSale": "На продажу",
+    "transferred": "Передан",
+    "addReptile": "Добавить рептилию",
+    "editReptile": "Редактировать рептилию",
+    "deleteReptile": "Удалить рептилию",
+    "archiveReptile": "Архивировать рептилию",
+    "confirmDelete": "Вы уверены, что хотите удалить эту рептилию?",
+    "noReptiles": "Пока нет рептилий",
+    "addFirst": "Добавьте свою первую рептилию",
+    "feedingInterval": "Интервал кормления",
+    "days": "дней",
+    "lastFeeding": "Последнее кормление",
+    "nextFeeding": "Следующее кормление",
+    "noFeedings": "Пока нет кормлений",
+    "categories": {
+      "snake": "Змея",
+      "lizard": "Ящерица",
+      "turtle": "Черепаха",
+      "tortoise": "Сухопутная черепаха",
+      "crocodilian": "Крокодил",
+      "other": "Другое"
+    },
+    "bornInCaptivity": "Рождён в неволе",
+    "selectSpecies": "Выберите вид",
+    "clearSelection": "Очистить выбор",
+    "searchSpecies": "Поиск вида...",
+    "noSpeciesFound": "Вид не найден",
+    "weightHistory": "История веса",
+    "addWeight": "Добавить вес",
+    "selectReptile": "Выберите рептилию",
+    "initialWeight": "Начальный вес"
+  },
+  "feeding": {
+    "title": "Кормление",
+    "addFeeding": "Добавить кормление",
+    "date": "Дата",
+    "rodentType": "Тип грызуна",
+    "rodentStage": "Стадия грызуна",
+    "quantity": "Количество",
+    "notes": "Заметки",
+    "mouse": "Мышь",
+    "rat": "Крыса",
+    "chick": "Цыплёнок",
+    "quail": "Перепел",
+    "rabbit": "Кролик",
+    "pinky": "Пинки",
+    "fuzzy": "Фаззи",
+    "hopper": "Хоппер",
+    "weaned": "Отнятый",
+    "adult": "Взрослый",
+    "jumbo": "Джамбо",
+    "noFeedings": "Нет записей о кормлении",
+    "weight": "Вес",
+    "refused": "Отказался",
+    "accepted": "Принял"
+  },
+  "health": {
+    "title": "Здоровье",
+    "addRecord": "Добавить запись",
+    "condition": "Состояние",
+    "diagnosisDate": "Дата диагноза",
+    "treatment": "Лечение",
+    "resolved": "Вылечен",
+    "ongoing": "В процессе",
+    "noRecords": "Нет записей о здоровье",
+    "shedding": "Линька",
+    "mites": "Клещи",
+    "respiratoryInfection": "Респираторная инфекция",
+    "scaleRot": "Гниение чешуи",
+    "mouthRot": "Стоматит",
+    "parasites": "Паразиты",
+    "injury": "Травма",
+    "other": "Другое"
+  },
+  "reproduction": {
+    "title": "Размножение",
+    "addObservation": "Добавить наблюдение",
+    "partner": "Партнёр",
+    "observationDate": "Дата наблюдения",
+    "action": "Действие",
+    "copulation": "Спаривание",
+    "ovulation": "Овуляция",
+    "laying": "Откладка яиц",
+    "hatching": "Вылупление",
+    "expectedHatchDate": "Ожидаемая дата вылупления",
+    "incubationDays": "Дни инкубации",
+    "hatchedEggs": "Вылупившиеся яйца",
+    "unhatchedEggs": "Невылупившиеся яйца",
+    "stillbornJuveniles": "Мертворождённые",
+    "noObservations": "Нет наблюдений о размножении",
+    "closeHatching": "Закрыть вылупление",
+    "notificationDaysBefore": "Уведомление за дней до",
+    "hatchingIn": "Вылупление через",
+    "daysRemaining": "дней осталось"
+  },
+  "settings": {
+    "title": "Настройки",
+    "appearance": "Внешний вид",
+    "theme": "Тема",
+    "light": "Светлая",
+    "dark": "Тёмная",
+    "system": "Системная",
+    "language": "Язык",
+    "preferences": "Предпочтения",
+    "weightUnit": "Единица веса",
+    "grams": "Граммы",
+    "ounces": "Унции",
+    "feedingReminders": "Напоминания о кормлении",
+    "account": "Аккаунт",
+    "signOut": "Выйти",
+    "deleteAccount": "Удалить аккаунт",
+    "confirmDeleteAccount": "Вы уверены, что хотите удалить аккаунт? Это действие нельзя отменить.",
+    "subscription": "Подписка",
+    "privacyData": "Конфиденциальность и данные",
+    "exportData": "Экспорт данных",
+    "privacyPolicy": "Политика конфиденциальности",
+    "transfers": "Передачи"
+  },
+  "common": {
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "add": "Добавить",
+    "close": "Закрыть",
+    "confirm": "Подтвердить",
+    "back": "Назад",
+    "next": "Далее",
+    "loading": "Загрузка...",
+    "error": "Ошибка",
+    "success": "Успех",
+    "warning": "Предупреждение",
+    "info": "Информация",
+    "yes": "Да",
+    "no": "Нет",
+    "optional": "Необязательно",
+    "required": "Обязательно",
+    "search": "Поиск",
+    "filter": "Фильтр",
+    "sort": "Сортировка",
+    "ascending": "По возрастанию",
+    "descending": "По убыванию",
+    "all": "Все",
+    "none": "Нет",
+    "select": "Выбрать",
+    "selected": "Выбрано",
+    "login": "Войти",
+    "signup": "Регистрация",
+    "email": "Email",
+    "password": "Пароль",
+    "forgotPassword": "Забыли пароль?",
+    "resetPassword": "Сбросить пароль",
+    "orContinueWith": "Или продолжить с",
+    "noAccount": "Нет аккаунта?",
+    "haveAccount": "Уже есть аккаунт?",
+    "print": "Печать",
+    "printAll": "Печатать все",
+    "qrCodes": "QR-коды",
+    "download": "Скачать"
+  },
+  "admin": {
+    "title": "Панель администратора",
+    "users": "Пользователи",
+    "totalUsers": "Всего пользователей",
+    "activeUsers": "Активные пользователи",
+    "newUsers": "Новые пользователи",
+    "revenue": "Доход"
+  },
+  "gdpr": {
+    "title": "Согласие на конфиденциальность",
+    "description": "Мы используем cookies для улучшения вашего опыта. Продолжая, вы соглашаетесь с нашей политикой конфиденциальности.",
+    "accept": "Принять",
+    "decline": "Отклонить",
+    "learnMore": "Узнать больше"
+  },
+  "privacy": {
+    "title": "Политика конфиденциальности",
+    "lastUpdated": "Последнее обновление",
+    "introduction": "Введение",
+    "dataCollection": "Сбор данных",
+    "dataUse": "Использование данных",
+    "dataSharing": "Обмен данными",
+    "security": "Безопасность",
+    "rights": "Ваши права",
+    "contact": "Контакты"
+  },
+  "install": {
+    "title": "Установить S-reptrack",
+    "description": "Установите S-reptrack на главный экран для быстрого доступа.",
+    "ios": "На iOS",
+    "android": "На Android",
+    "step1": "Нажмите кнопку «Поделиться»",
+    "step2": "Выберите «На экран Домой»",
+    "step3": "Нажмите «Добавить»",
+    "androidStep1": "Нажмите кнопку меню (⋮)",
+    "androidStep2": "Выберите «Установить приложение» или «На главный экран»",
+    "androidStep3": "Нажмите «Установить»"
+  },
+  "transfer": {
+    "title": "Передача животных",
+    "send": "Отправить животное",
+    "receive": "Получить животное",
+    "pending": "Ожидает",
+    "accepted": "Принято",
+    "rejected": "Отклонено",
+    "cancelled": "Отменено",
+    "recipientEmail": "Email получателя",
+    "message": "Сообщение",
+    "sendTransfer": "Отправить передачу",
+    "acceptTransfer": "Принять передачу",
+    "rejectTransfer": "Отклонить передачу",
+    "cancelTransfer": "Отменить передачу",
+    "noTransfers": "Нет передач",
+    "from": "От",
+    "to": "Кому",
+    "transferDate": "Дата передачи",
+    "sentTransfers": "Отправленные передачи",
+    "receivedTransfers": "Полученные передачи",
+    "incomingTransfer": "Входящая передача"
+  },
+  "landing": {
+    "title": "S-reptrack",
+    "tagline": "Полное управление вашим разведением рептилий",
+    "description": "Отслеживайте рептилий, кормление, здоровье и размножение с помощью NFC и QR-кодов. Доступно на {{count}} языках.",
+    "cta": {
+      "start": "Начать бесплатно",
+      "login": "Войти",
+      "demo": "Смотреть демо"
+    },
+    "features": {
+      "title": "Мощные функции",
+      "subtitle": "Всё, что нужно для управления разведением",
+      "nfc": {
+        "title": "Сканирование NFC",
+        "description": "Мгновенно идентифицируйте животных одним сканированием"
+      },
+      "reproduction": {
+        "title": "Отслеживание размножения",
+        "description": "Следите за спариванием, откладкой яиц и вылуплением"
+      },
+      "qr": {
+        "title": "QR-коды",
+        "description": "Создавайте и печатайте QR-коды для быстрой идентификации"
+      },
+      "multilingual": {
+        "title": "Многоязычность",
+        "description": "Интерфейс доступен на {{count}} языках"
+      },
+      "feeding": {
+        "title": "Кормление",
+        "description": "Управляйте кормлением с напоминаниями"
+      },
+      "health": {
+        "title": "Здоровье",
+        "description": "Следите за историей здоровья и лечением"
+      },
+      "cites": {
+        "title": "Соответствие CITES",
+        "description": "Виды с интегрированными приложениями CITES"
+      },
+      "transfer": {
+        "title": "Передачи",
+        "description": "Безопасно передавайте животных между заводчиками"
+      }
+    },
+    "benefits": {
+      "title": "Создано для заводчиков",
+      "time": {
+        "title": "Экономьте время",
+        "description": "Сократите ручной ввод с быстрым сканированием NFC/QR"
+      },
+      "organized": {
+        "title": "Оставайтесь организованными",
+        "description": "Все данные о разведении в одном месте"
+      },
+      "tracking": {
+        "title": "Точное отслеживание",
+        "description": "Никогда не пропускайте кормление или размножение"
+      }
+    },
+    "install": {
+      "title": "Установите S-reptrack",
+      "subtitle": "Добавьте приложение на главный экран для быстрого доступа",
+      "step1": {
+        "title": "Откройте браузер",
+        "description": "Откройте S-reptrack в Chrome (Android) или Safari (iOS)"
+      },
+      "step2": {
+        "title": "Добавьте приложение",
+        "description": "Нажмите кнопку меню, затем «На главный экран»"
+      },
+      "step3": {
+        "title": "Наслаждайтесь",
+        "description": "Запускайте S-reptrack как настоящее приложение!"
+      }
+    },
+    "finalCta": {
+      "title": "Готовы преобразить своё разведение?",
+      "subtitle": "Присоединяйтесь к тысячам заводчиков, уже использующих S-reptrack",
+      "button": "Начать сейчас"
+    },
+    "footer": {
+      "rights": "Все права защищены.",
+      "privacy": "Политика конфиденциальности"
+    }
+  },
+  "species": {
+    "pythonRegius": "Королевский питон",
+    "boaConstrictor": "Удав обыкновенный",
+    "elapheGuttata": "Маисовый полоз",
+    "pogona": "Бородатая агама",
+    "geckoLeopard": "Леопардовый геккон",
+    "testudoHermanni": "Средиземноморская черепаха"
+  }
+}

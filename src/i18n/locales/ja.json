@@ -1,0 +1,343 @@
+{
+  "stats": {
+    "title": "統計",
+    "totalReptiles": "爬虫類の総数",
+    "totalFeedings": "給餌の総数",
+    "healthRecords": "健康記録",
+    "feedingsDue": "予定の給餌",
+    "noFeedingsDue": "予定の給餌はありません",
+    "feedingsDueCount": "{{count}}件の予定給餌",
+    "viewAll": "すべて表示"
+  },
+  "reptile": {
+    "name": "名前",
+    "species": "種",
+    "category": "カテゴリー",
+    "sex": "性別",
+    "male": "オス",
+    "female": "メス",
+    "unknown": "不明",
+    "birthDate": "生年月日",
+    "purchaseDate": "購入日",
+    "weight": "体重",
+    "morphs": "モルフ",
+    "status": "ステータス",
+    "active": "アクティブ",
+    "archived": "アーカイブ済み",
+    "deceased": "死亡",
+    "sold": "売却済み",
+    "forSale": "販売中",
+    "transferred": "譲渡済み",
+    "addReptile": "爬虫類を追加",
+    "editReptile": "爬虫類を編集",
+    "deleteReptile": "爬虫類を削除",
+    "archiveReptile": "爬虫類をアーカイブ",
+    "confirmDelete": "この爬虫類を削除してもよろしいですか？",
+    "noReptiles": "爬虫類はまだいません",
+    "addFirst": "最初の爬虫類を追加してください",
+    "feedingInterval": "給餌間隔",
+    "days": "日",
+    "lastFeeding": "最後の給餌",
+    "nextFeeding": "次の給餌",
+    "noFeedings": "まだ給餌がありません",
+    "categories": {
+      "snake": "ヘビ",
+      "lizard": "トカゲ",
+      "turtle": "カメ",
+      "tortoise": "リクガメ",
+      "crocodilian": "ワニ",
+      "other": "その他"
+    },
+    "bornInCaptivity": "飼育下生まれ",
+    "selectSpecies": "種を選択",
+    "clearSelection": "選択をクリア",
+    "searchSpecies": "種を検索...",
+    "noSpeciesFound": "種が見つかりません",
+    "weightHistory": "体重履歴",
+    "addWeight": "体重を追加",
+    "selectReptile": "爬虫類を選択",
+    "initialWeight": "初期体重"
+  },
+  "feeding": {
+    "title": "給餌",
+    "addFeeding": "給餌を追加",
+    "date": "日付",
+    "rodentType": "げっ歯類の種類",
+    "rodentStage": "げっ歯類のステージ",
+    "quantity": "数量",
+    "notes": "メモ",
+    "mouse": "マウス",
+    "rat": "ラット",
+    "chick": "ヒヨコ",
+    "quail": "ウズラ",
+    "rabbit": "ウサギ",
+    "pinky": "ピンキー",
+    "fuzzy": "ファジー",
+    "hopper": "ホッパー",
+    "weaned": "離乳",
+    "adult": "成体",
+    "jumbo": "ジャンボ",
+    "noFeedings": "給餌記録がありません",
+    "weight": "重量",
+    "refused": "拒否",
+    "accepted": "受け入れ"
+  },
+  "health": {
+    "title": "健康",
+    "addRecord": "記録を追加",
+    "condition": "状態",
+    "diagnosisDate": "診断日",
+    "treatment": "治療",
+    "resolved": "解決済み",
+    "ongoing": "継続中",
+    "noRecords": "健康記録がありません",
+    "shedding": "脱皮",
+    "mites": "ダニ",
+    "respiratoryInfection": "呼吸器感染症",
+    "scaleRot": "スケールロット",
+    "mouthRot": "マウスロット",
+    "parasites": "寄生虫",
+    "injury": "怪我",
+    "other": "その他"
+  },
+  "reproduction": {
+    "title": "繁殖",
+    "addObservation": "観察を追加",
+    "partner": "パートナー",
+    "observationDate": "観察日",
+    "action": "アクション",
+    "copulation": "交尾",
+    "ovulation": "排卵",
+    "laying": "産卵",
+    "hatching": "孵化",
+    "expectedHatchDate": "予定孵化日",
+    "incubationDays": "孵化日数",
+    "hatchedEggs": "孵化した卵",
+    "unhatchedEggs": "孵化しなかった卵",
+    "stillbornJuveniles": "死産",
+    "noObservations": "繁殖観察がありません",
+    "closeHatching": "孵化を終了",
+    "notificationDaysBefore": "事前通知日数",
+    "hatchingIn": "孵化まで",
+    "daysRemaining": "日残り"
+  },
+  "settings": {
+    "title": "設定",
+    "appearance": "外観",
+    "theme": "テーマ",
+    "light": "ライト",
+    "dark": "ダーク",
+    "system": "システム",
+    "language": "言語",
+    "preferences": "設定",
+    "weightUnit": "重量単位",
+    "grams": "グラム",
+    "ounces": "オンス",
+    "feedingReminders": "給餌リマインダー",
+    "account": "アカウント",
+    "signOut": "サインアウト",
+    "deleteAccount": "アカウントを削除",
+    "confirmDeleteAccount": "アカウントを削除してもよろしいですか？この操作は取り消せません。",
+    "subscription": "サブスクリプション",
+    "privacyData": "プライバシーとデータ",
+    "exportData": "データをエクスポート",
+    "privacyPolicy": "プライバシーポリシー",
+    "transfers": "譲渡"
+  },
+  "common": {
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "add": "追加",
+    "close": "閉じる",
+    "confirm": "確認",
+    "back": "戻る",
+    "next": "次へ",
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "success": "成功",
+    "warning": "警告",
+    "info": "情報",
+    "yes": "はい",
+    "no": "いいえ",
+    "optional": "任意",
+    "required": "必須",
+    "search": "検索",
+    "filter": "フィルター",
+    "sort": "並べ替え",
+    "ascending": "昇順",
+    "descending": "降順",
+    "all": "すべて",
+    "none": "なし",
+    "select": "選択",
+    "selected": "選択済み",
+    "login": "ログイン",
+    "signup": "サインアップ",
+    "email": "メール",
+    "password": "パスワード",
+    "forgotPassword": "パスワードをお忘れですか？",
+    "resetPassword": "パスワードをリセット",
+    "orContinueWith": "または次で続行",
+    "noAccount": "アカウントをお持ちでないですか？",
+    "haveAccount": "すでにアカウントをお持ちですか？",
+    "print": "印刷",
+    "printAll": "すべて印刷",
+    "qrCodes": "QRコード",
+    "download": "ダウンロード"
+  },
+  "admin": {
+    "title": "管理ダッシュボード",
+    "users": "ユーザー",
+    "totalUsers": "総ユーザー数",
+    "activeUsers": "アクティブユーザー",
+    "newUsers": "新規ユーザー",
+    "revenue": "収益"
+  },
+  "gdpr": {
+    "title": "プライバシー同意",
+    "description": "より良い体験を提供するためにCookieを使用しています。続行することで、プライバシーポリシーに同意したことになります。",
+    "accept": "同意する",
+    "decline": "拒否する",
+    "learnMore": "詳細を見る"
+  },
+  "privacy": {
+    "title": "プライバシーポリシー",
+    "lastUpdated": "最終更新",
+    "introduction": "はじめに",
+    "dataCollection": "データ収集",
+    "dataUse": "データ使用",
+    "dataSharing": "データ共有",
+    "security": "セキュリティ",
+    "rights": "あなたの権利",
+    "contact": "お問い合わせ"
+  },
+  "install": {
+    "title": "S-reptrackをインストール",
+    "description": "素早いアクセスのために、ホーム画面にS-reptrackをインストールしてください。",
+    "ios": "iOSの場合",
+    "android": "Androidの場合",
+    "step1": "共有ボタンをタップ",
+    "step2": "「ホーム画面に追加」を選択",
+    "step3": "「追加」をタップ",
+    "androidStep1": "メニューボタン（⋮）をタップ",
+    "androidStep2": "「アプリをインストール」または「ホーム画面に追加」を選択",
+    "androidStep3": "「インストール」をタップ"
+  },
+  "transfer": {
+    "title": "動物の譲渡",
+    "send": "動物を送る",
+    "receive": "動物を受け取る",
+    "pending": "保留中",
+    "accepted": "承認済み",
+    "rejected": "拒否済み",
+    "cancelled": "キャンセル済み",
+    "recipientEmail": "受取人のメール",
+    "message": "メッセージ",
+    "sendTransfer": "譲渡を送信",
+    "acceptTransfer": "譲渡を承認",
+    "rejectTransfer": "譲渡を拒否",
+    "cancelTransfer": "譲渡をキャンセル",
+    "noTransfers": "譲渡はありません",
+    "from": "送信元",
+    "to": "送信先",
+    "transferDate": "譲渡日",
+    "sentTransfers": "送信した譲渡",
+    "receivedTransfers": "受信した譲渡",
+    "incomingTransfer": "受信中の譲渡"
+  },
+  "landing": {
+    "title": "S-reptrack",
+    "tagline": "爬虫類繁殖の完全管理",
+    "description": "NFCとQRコードで爬虫類、給餌、健康、繁殖を追跡。{{count}}言語で利用可能。",
+    "cta": {
+      "start": "無料で始める",
+      "login": "ログイン",
+      "demo": "デモを見る"
+    },
+    "features": {
+      "title": "強力な機能",
+      "subtitle": "繁殖管理に必要なすべて",
+      "nfc": {
+        "title": "NFCスキャン",
+        "description": "ワンスキャンで動物を即座に識別"
+      },
+      "reproduction": {
+        "title": "繁殖追跡",
+        "description": "交尾、産卵、孵化をフォロー"
+      },
+      "qr": {
+        "title": "QRコード",
+        "description": "素早い識別のためにQRコードを生成・印刷"
+      },
+      "multilingual": {
+        "title": "多言語対応",
+        "description": "{{count}}言語で利用可能なインターフェース"
+      },
+      "feeding": {
+        "title": "給餌",
+        "description": "リマインダー付きで給餌を管理"
+      },
+      "health": {
+        "title": "健康",
+        "description": "健康履歴と治療をフォロー"
+      },
+      "cites": {
+        "title": "CITES準拠",
+        "description": "CITES附属書が統合された種"
+      },
+      "transfer": {
+        "title": "譲渡",
+        "description": "ブリーダー間で安全に動物を譲渡"
+      }
+    },
+    "benefits": {
+      "title": "ブリーダーのために設計",
+      "time": {
+        "title": "時間を節約",
+        "description": "高速NFC/QRスキャンで手動入力を削減"
+      },
+      "organized": {
+        "title": "整理整頓",
+        "description": "すべての繁殖データを一箇所で"
+      },
+      "tracking": {
+        "title": "正確な追跡",
+        "description": "給餌や繁殖を見逃さない"
+      }
+    },
+    "install": {
+      "title": "S-reptrackをインストール",
+      "subtitle": "素早いアクセスのためにホーム画面にアプリを追加",
+      "step1": {
+        "title": "ブラウザを開く",
+        "description": "Chrome（Android）またはSafari（iOS）でS-reptrackにアクセス"
+      },
+      "step2": {
+        "title": "アプリを追加",
+        "description": "メニューボタンをタップし、「ホーム画面に追加」を選択"
+      },
+      "step3": {
+        "title": "楽しむ",
+        "description": "本物のアプリのようにS-reptrackを起動！"
+      }
+    },
+    "finalCta": {
+      "title": "繁殖を変革する準備はできましたか？",
+      "subtitle": "すでにS-reptrackを使用している数千人のブリーダーに参加",
+      "button": "今すぐ始める"
+    },
+    "footer": {
+      "rights": "全著作権所有。",
+      "privacy": "プライバシーポリシー"
+    }
+  },
+  "species": {
+    "pythonRegius": "ボールパイソン",
+    "boaConstrictor": "ボアコンストリクター",
+    "elapheGuttata": "コーンスネーク",
+    "pogona": "フトアゴヒゲトカゲ",
+    "geckoLeopard": "ヒョウモントカゲモドキ",
+    "testudoHermanni": "ヘルマンリクガメ"
+  }
+}

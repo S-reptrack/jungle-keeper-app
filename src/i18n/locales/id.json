@@ -1,0 +1,343 @@
+{
+  "stats": {
+    "title": "Statistik",
+    "totalReptiles": "Total Reptil",
+    "totalFeedings": "Total Pemberian Makan",
+    "healthRecords": "Catatan Kesehatan",
+    "feedingsDue": "Pemberian Makan Tertunda",
+    "noFeedingsDue": "Tidak ada pemberian makan tertunda",
+    "feedingsDueCount": "{{count}} pemberian makan tertunda",
+    "viewAll": "Lihat Semua"
+  },
+  "reptile": {
+    "name": "Nama",
+    "species": "Spesies",
+    "category": "Kategori",
+    "sex": "Jenis Kelamin",
+    "male": "Jantan",
+    "female": "Betina",
+    "unknown": "Tidak diketahui",
+    "birthDate": "Tanggal Lahir",
+    "purchaseDate": "Tanggal Pembelian",
+    "weight": "Berat",
+    "morphs": "Morph",
+    "status": "Status",
+    "active": "Aktif",
+    "archived": "Diarsipkan",
+    "deceased": "Meninggal",
+    "sold": "Terjual",
+    "forSale": "Dijual",
+    "transferred": "Ditransfer",
+    "addReptile": "Tambah Reptil",
+    "editReptile": "Edit Reptil",
+    "deleteReptile": "Hapus Reptil",
+    "archiveReptile": "Arsipkan Reptil",
+    "confirmDelete": "Apakah Anda yakin ingin menghapus reptil ini?",
+    "noReptiles": "Belum ada reptil",
+    "addFirst": "Tambahkan reptil pertama Anda",
+    "feedingInterval": "Interval Pemberian Makan",
+    "days": "hari",
+    "lastFeeding": "Pemberian Makan Terakhir",
+    "nextFeeding": "Pemberian Makan Berikutnya",
+    "noFeedings": "Belum ada pemberian makan",
+    "categories": {
+      "snake": "Ular",
+      "lizard": "Kadal",
+      "turtle": "Kura-kura",
+      "tortoise": "Penyu",
+      "crocodilian": "Buaya",
+      "other": "Lainnya"
+    },
+    "bornInCaptivity": "Lahir di penangkaran",
+    "selectSpecies": "Pilih spesies",
+    "clearSelection": "Hapus pilihan",
+    "searchSpecies": "Cari spesies...",
+    "noSpeciesFound": "Spesies tidak ditemukan",
+    "weightHistory": "Riwayat Berat",
+    "addWeight": "Tambah Berat",
+    "selectReptile": "Pilih reptil",
+    "initialWeight": "Berat awal"
+  },
+  "feeding": {
+    "title": "Pemberian Makan",
+    "addFeeding": "Tambah Pemberian Makan",
+    "date": "Tanggal",
+    "rodentType": "Jenis Pengerat",
+    "rodentStage": "Tahap Pengerat",
+    "quantity": "Jumlah",
+    "notes": "Catatan",
+    "mouse": "Mencit",
+    "rat": "Tikus",
+    "chick": "Anak Ayam",
+    "quail": "Puyuh",
+    "rabbit": "Kelinci",
+    "pinky": "Pinky",
+    "fuzzy": "Fuzzy",
+    "hopper": "Hopper",
+    "weaned": "Sapih",
+    "adult": "Dewasa",
+    "jumbo": "Jumbo",
+    "noFeedings": "Tidak ada catatan pemberian makan",
+    "weight": "Berat",
+    "refused": "Ditolak",
+    "accepted": "Diterima"
+  },
+  "health": {
+    "title": "Kesehatan",
+    "addRecord": "Tambah Catatan",
+    "condition": "Kondisi",
+    "diagnosisDate": "Tanggal Diagnosis",
+    "treatment": "Pengobatan",
+    "resolved": "Sembuh",
+    "ongoing": "Berlangsung",
+    "noRecords": "Tidak ada catatan kesehatan",
+    "shedding": "Ganti Kulit",
+    "mites": "Kutu",
+    "respiratoryInfection": "Infeksi Pernapasan",
+    "scaleRot": "Busuk Sisik",
+    "mouthRot": "Busuk Mulut",
+    "parasites": "Parasit",
+    "injury": "Cedera",
+    "other": "Lainnya"
+  },
+  "reproduction": {
+    "title": "Reproduksi",
+    "addObservation": "Tambah Pengamatan",
+    "partner": "Pasangan",
+    "observationDate": "Tanggal Pengamatan",
+    "action": "Aksi",
+    "copulation": "Kopulasi",
+    "ovulation": "Ovulasi",
+    "laying": "Bertelur",
+    "hatching": "Menetas",
+    "expectedHatchDate": "Tanggal Menetas yang Diharapkan",
+    "incubationDays": "Hari Inkubasi",
+    "hatchedEggs": "Telur Menetas",
+    "unhatchedEggs": "Telur Tidak Menetas",
+    "stillbornJuveniles": "Anak Lahir Mati",
+    "noObservations": "Tidak ada pengamatan reproduksi",
+    "closeHatching": "Tutup Penetasan",
+    "notificationDaysBefore": "Hari pemberitahuan sebelumnya",
+    "hatchingIn": "Menetas dalam",
+    "daysRemaining": "hari tersisa"
+  },
+  "settings": {
+    "title": "Pengaturan",
+    "appearance": "Tampilan",
+    "theme": "Tema",
+    "light": "Terang",
+    "dark": "Gelap",
+    "system": "Sistem",
+    "language": "Bahasa",
+    "preferences": "Preferensi",
+    "weightUnit": "Satuan Berat",
+    "grams": "Gram",
+    "ounces": "Ons",
+    "feedingReminders": "Pengingat Pemberian Makan",
+    "account": "Akun",
+    "signOut": "Keluar",
+    "deleteAccount": "Hapus Akun",
+    "confirmDeleteAccount": "Apakah Anda yakin ingin menghapus akun? Tindakan ini tidak dapat dibatalkan.",
+    "subscription": "Langganan",
+    "privacyData": "Privasi dan Data",
+    "exportData": "Ekspor Data",
+    "privacyPolicy": "Kebijakan Privasi",
+    "transfers": "Transfer"
+  },
+  "common": {
+    "save": "Simpan",
+    "cancel": "Batal",
+    "delete": "Hapus",
+    "edit": "Edit",
+    "add": "Tambah",
+    "close": "Tutup",
+    "confirm": "Konfirmasi",
+    "back": "Kembali",
+    "next": "Berikutnya",
+    "loading": "Memuat...",
+    "error": "Error",
+    "success": "Sukses",
+    "warning": "Peringatan",
+    "info": "Info",
+    "yes": "Ya",
+    "no": "Tidak",
+    "optional": "Opsional",
+    "required": "Wajib",
+    "search": "Cari",
+    "filter": "Filter",
+    "sort": "Urutkan",
+    "ascending": "Naik",
+    "descending": "Turun",
+    "all": "Semua",
+    "none": "Tidak ada",
+    "select": "Pilih",
+    "selected": "Dipilih",
+    "login": "Masuk",
+    "signup": "Daftar",
+    "email": "Email",
+    "password": "Kata Sandi",
+    "forgotPassword": "Lupa kata sandi?",
+    "resetPassword": "Reset Kata Sandi",
+    "orContinueWith": "Atau lanjutkan dengan",
+    "noAccount": "Belum punya akun?",
+    "haveAccount": "Sudah punya akun?",
+    "print": "Cetak",
+    "printAll": "Cetak Semua",
+    "qrCodes": "Kode QR",
+    "download": "Unduh"
+  },
+  "admin": {
+    "title": "Dashboard Admin",
+    "users": "Pengguna",
+    "totalUsers": "Total Pengguna",
+    "activeUsers": "Pengguna Aktif",
+    "newUsers": "Pengguna Baru",
+    "revenue": "Pendapatan"
+  },
+  "gdpr": {
+    "title": "Persetujuan Privasi",
+    "description": "Kami menggunakan cookie untuk meningkatkan pengalaman Anda. Dengan melanjutkan, Anda menyetujui kebijakan privasi kami.",
+    "accept": "Terima",
+    "decline": "Tolak",
+    "learnMore": "Pelajari Lebih Lanjut"
+  },
+  "privacy": {
+    "title": "Kebijakan Privasi",
+    "lastUpdated": "Terakhir Diperbarui",
+    "introduction": "Pendahuluan",
+    "dataCollection": "Pengumpulan Data",
+    "dataUse": "Penggunaan Data",
+    "dataSharing": "Berbagi Data",
+    "security": "Keamanan",
+    "rights": "Hak Anda",
+    "contact": "Kontak"
+  },
+  "install": {
+    "title": "Instal S-reptrack",
+    "description": "Instal S-reptrack di layar beranda Anda untuk akses cepat.",
+    "ios": "Di iOS",
+    "android": "Di Android",
+    "step1": "Ketuk tombol bagikan",
+    "step2": "Pilih 'Tambahkan ke Layar Beranda'",
+    "step3": "Ketuk 'Tambah'",
+    "androidStep1": "Ketuk tombol menu (⋮)",
+    "androidStep2": "Pilih 'Instal aplikasi' atau 'Tambahkan ke Layar Beranda'",
+    "androidStep3": "Ketuk 'Instal'"
+  },
+  "transfer": {
+    "title": "Transfer Hewan",
+    "send": "Kirim Hewan",
+    "receive": "Terima Hewan",
+    "pending": "Tertunda",
+    "accepted": "Diterima",
+    "rejected": "Ditolak",
+    "cancelled": "Dibatalkan",
+    "recipientEmail": "Email Penerima",
+    "message": "Pesan",
+    "sendTransfer": "Kirim Transfer",
+    "acceptTransfer": "Terima Transfer",
+    "rejectTransfer": "Tolak Transfer",
+    "cancelTransfer": "Batalkan Transfer",
+    "noTransfers": "Tidak ada transfer",
+    "from": "Dari",
+    "to": "Ke",
+    "transferDate": "Tanggal Transfer",
+    "sentTransfers": "Transfer Terkirim",
+    "receivedTransfers": "Transfer Diterima",
+    "incomingTransfer": "Transfer Masuk"
+  },
+  "landing": {
+    "title": "S-reptrack",
+    "tagline": "Manajemen lengkap untuk penangkaran reptil Anda",
+    "description": "Lacak reptil, pemberian makan, kesehatan, dan reproduksi dengan NFC dan kode QR. Tersedia dalam {{count}} bahasa.",
+    "cta": {
+      "start": "Mulai Gratis",
+      "login": "Masuk",
+      "demo": "Lihat Demo"
+    },
+    "features": {
+      "title": "Fitur Unggulan",
+      "subtitle": "Semua yang Anda butuhkan untuk mengelola penangkaran",
+      "nfc": {
+        "title": "Pemindaian NFC",
+        "description": "Identifikasi hewan Anda secara instan dengan satu kali pemindaian"
+      },
+      "reproduction": {
+        "title": "Pelacakan Reproduksi",
+        "description": "Pantau kopulasi, bertelur, dan penetasan"
+      },
+      "qr": {
+        "title": "Kode QR",
+        "description": "Buat dan cetak kode QR untuk identifikasi cepat"
+      },
+      "multilingual": {
+        "title": "Multibahasa",
+        "description": "Antarmuka tersedia dalam {{count}} bahasa"
+      },
+      "feeding": {
+        "title": "Pemberian Makan",
+        "description": "Kelola pemberian makan dengan pengingat"
+      },
+      "health": {
+        "title": "Kesehatan",
+        "description": "Pantau riwayat kesehatan dan pengobatan"
+      },
+      "cites": {
+        "title": "Sesuai CITES",
+        "description": "Spesies dengan lampiran CITES terintegrasi"
+      },
+      "transfer": {
+        "title": "Transfer",
+        "description": "Transfer hewan antar peternak dengan aman"
+      }
+    },
+    "benefits": {
+      "title": "Dirancang untuk Peternak",
+      "time": {
+        "title": "Hemat Waktu",
+        "description": "Kurangi input manual dengan pemindaian NFC/QR yang cepat"
+      },
+      "organized": {
+        "title": "Tetap Teratur",
+        "description": "Semua data penangkaran Anda di satu tempat"
+      },
+      "tracking": {
+        "title": "Pelacakan Akurat",
+        "description": "Jangan lewatkan pemberian makan atau reproduksi"
+      }
+    },
+    "install": {
+      "title": "Instal S-reptrack",
+      "subtitle": "Tambahkan aplikasi ke layar beranda untuk akses cepat",
+      "step1": {
+        "title": "Buka Browser",
+        "description": "Akses S-reptrack di Chrome (Android) atau Safari (iOS)"
+      },
+      "step2": {
+        "title": "Tambahkan Aplikasi",
+        "description": "Ketuk tombol menu, lalu 'Tambahkan ke Layar Beranda'"
+      },
+      "step3": {
+        "title": "Nikmati",
+        "description": "Luncurkan S-reptrack seperti aplikasi sungguhan!"
+      }
+    },
+    "finalCta": {
+      "title": "Siap mengubah penangkaran Anda?",
+      "subtitle": "Bergabunglah dengan ribuan peternak yang sudah menggunakan S-reptrack",
+      "button": "Mulai Sekarang"
+    },
+    "footer": {
+      "rights": "Hak cipta dilindungi.",
+      "privacy": "Kebijakan Privasi"
+    }
+  },
+  "species": {
+    "pythonRegius": "Ball Python",
+    "boaConstrictor": "Boa Constrictor",
+    "elapheGuttata": "Corn Snake",
+    "pogona": "Bearded Dragon",
+    "geckoLeopard": "Leopard Gecko",
+    "testudoHermanni": "Hermann's Tortoise"
+  }
+}
