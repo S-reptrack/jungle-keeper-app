@@ -26,6 +26,9 @@ import { QRCodeSVG } from "qrcode.react";
 const Landing = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  
+  // Production URL for QR code - update this when using a custom domain
+  const productionUrl = "https://sreptrack.lovable.app";
 
   const features = [
     {
@@ -358,7 +361,7 @@ const Landing = () => {
               <div className="flex justify-center">
                 <div className="bg-white p-6 rounded-2xl shadow-lg">
                   <QRCodeSVG 
-                    value={`${window.location.origin}/auth`}
+                    value={`${productionUrl}/auth`}
                     size={180}
                     level="H"
                     includeMargin={false}
