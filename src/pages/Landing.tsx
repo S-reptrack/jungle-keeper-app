@@ -28,55 +28,65 @@ const Landing = () => {
   const features = [
     {
       icon: QrCode,
-      title: "QR Codes",
-      description: "Générez et imprimez des QR codes pour identifier rapidement chaque animal de votre collection.",
+      title: t("landing.featureQrTitle"),
+      description: t("landing.featureQrDescription"),
     },
     {
       icon: Nfc,
-      title: "Scanner NFC",
-      description: "Scannez les tags NFC pour accéder instantanément aux fiches de vos reptiles.",
+      title: t("landing.featureNfcTitle"),
+      description: t("landing.featureNfcDescription"),
     },
     {
       icon: Calendar,
-      title: "Suivi Nourrissage",
-      description: "Planifiez et suivez les repas de chaque animal avec des rappels automatiques.",
+      title: t("landing.featureFeedingTitle"),
+      description: t("landing.featureFeedingDescription"),
     },
     {
       icon: Heart,
-      title: "Santé & Vétérinaire",
-      description: "Enregistrez les visites vétérinaires, traitements et problèmes de santé.",
+      title: t("landing.featureHealthTitle"),
+      description: t("landing.featureHealthDescription"),
     },
     {
       icon: TrendingUp,
-      title: "Reproduction",
-      description: "Suivez les accouplements, pontes et éclosions avec des notifications d'alerte.",
+      title: t("landing.featureReproTitle"),
+      description: t("landing.featureReproDescription"),
     },
     {
       icon: Shield,
-      title: "Conformité CITES",
-      description: "Base de données complète des espèces avec annexes CITES intégrées.",
+      title: t("landing.featureCitesTitle"),
+      description: t("landing.featureCitesDescription"),
     },
   ];
 
   const installSteps = [
     {
       step: 1,
-      title: "Ouvrez l'application",
-      description: "Accédez à S-reptrack depuis votre navigateur mobile",
+      title: t("landing.installStep1Title"),
+      description: t("landing.installStep1Description"),
       icon: Globe,
     },
     {
       step: 2,
-      title: "Menu du navigateur",
-      description: "Appuyez sur le menu (⋮ sur Android, Partager sur iPhone)",
+      title: t("landing.installStep2Title"),
+      description: t("landing.installStep2Description"),
       icon: Smartphone,
     },
     {
       step: 3,
-      title: "Ajouter à l'écran d'accueil",
-      description: "Sélectionnez 'Ajouter à l'écran d'accueil' ou 'Installer l'application'",
+      title: t("landing.installStep3Title"),
+      description: t("landing.installStep3Description"),
       icon: Download,
     },
+  ];
+
+  const additionalFeatures = [
+    t("landing.featureWeight"),
+    t("landing.featureMorphs"),
+    t("landing.featureExport"),
+    t("landing.featureDarkMode"),
+    t("landing.featureLanguages"),
+    t("landing.featureTransfer"),
+    t("landing.featurePrint"),
   ];
 
   return (
@@ -92,7 +102,7 @@ const Landing = () => {
             <LanguageSelector />
             <ThemeToggle />
             <Button onClick={() => navigate("/auth")} size="sm">
-              Connexion
+              {t("landing.login")}
             </Button>
           </div>
         </div>
@@ -106,24 +116,23 @@ const Landing = () => {
             <div className="space-y-6 text-center lg:text-left">
               <Badge variant="secondary" className="text-sm">
                 <Star className="w-3 h-3 mr-1" />
-                Application professionnelle d'élevage
+                {t("landing.badge")}
               </Badge>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-                Gérez votre élevage de{" "}
-                <span className="text-primary">reptiles</span>{" "}
-                comme un pro
+                {t("landing.heroTitle")}{" "}
+                <span className="text-primary">{t("landing.heroTitleHighlight")}</span>{" "}
+                {t("landing.heroTitleEnd")}
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
-                S-reptrack est l'application tout-en-un pour les éleveurs passionnés. 
-                Suivi des nourrissages, reproduction, santé, et bien plus encore.
+                {t("landing.heroDescription")}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Button size="lg" onClick={() => navigate("/")} className="text-lg px-8">
-                  Commencer gratuitement
+                  {t("landing.startFree")}
                   <ChevronRight className="w-5 h-5 ml-2" />
                 </Button>
                 <Button size="lg" variant="outline" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>
-                  Découvrir les fonctionnalités
+                  {t("landing.discoverFeatures")}
                 </Button>
               </div>
             </div>
@@ -157,11 +166,11 @@ const Landing = () => {
                       <div className="grid grid-cols-2 gap-2">
                         <div className="bg-primary/10 rounded-lg p-3 text-center">
                           <p className="text-2xl font-bold text-primary">12</p>
-                          <p className="text-xs text-muted-foreground">Reptiles</p>
+                          <p className="text-xs text-muted-foreground">{t("landing.reptiles")}</p>
                         </div>
                         <div className="bg-orange-500/10 rounded-lg p-3 text-center">
                           <p className="text-2xl font-bold text-orange-500">3</p>
-                          <p className="text-xs text-muted-foreground">À nourrir</p>
+                          <p className="text-xs text-muted-foreground">{t("landing.toFeed")}</p>
                         </div>
                       </div>
                       
@@ -174,7 +183,7 @@ const Landing = () => {
                             </div>
                             <div className="flex-1">
                               <p className="font-medium text-sm text-foreground">{name}</p>
-                              <p className="text-xs text-muted-foreground">Nourri il y a {i + 2} jours</p>
+                              <p className="text-xs text-muted-foreground">{t("landing.fedAgo", { days: i + 2 })}</p>
                             </div>
                             <ChevronRight className="w-4 h-4 text-muted-foreground" />
                           </div>
@@ -207,11 +216,10 @@ const Landing = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Tout ce dont vous avez besoin
+              {t("landing.featuresTitle")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Des fonctionnalités puissantes pour gérer votre élevage efficacement, 
-              accessibles depuis n'importe quel appareil.
+              {t("landing.featuresDescription")}
             </p>
           </div>
           
@@ -237,18 +245,10 @@ const Landing = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-                Conçu pour les éleveurs exigeants
+                {t("landing.forBreedersTitle")}
               </h2>
               <div className="space-y-4">
-                {[
-                  "Suivi de poids avec graphiques d'évolution",
-                  "Gestion des morphs et lignées génétiques",
-                  "Export de données conforme RGPD",
-                  "Mode sombre pour le confort visuel",
-                  "Disponible en 8 langues",
-                  "Transfert d'animaux entre éleveurs",
-                  "Impression de fiches et QR codes",
-                ].map((item, index) => (
+                {additionalFeatures.map((item, index) => (
                   <div key={index} className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0">
                       <Check className="w-4 h-4 text-primary" />
@@ -261,18 +261,18 @@ const Landing = () => {
             
             <div className="bg-gradient-to-br from-primary/20 to-primary/5 rounded-3xl p-8 space-y-6">
               <div className="text-center">
-                <p className="text-sm text-muted-foreground mb-2">Abonnement Premium</p>
+                <p className="text-sm text-muted-foreground mb-2">{t("landing.premiumSubscription")}</p>
                 <div className="flex items-baseline justify-center gap-1">
                   <span className="text-5xl font-bold text-foreground">4,99€</span>
-                  <span className="text-muted-foreground">/mois</span>
+                  <span className="text-muted-foreground">{t("landing.perMonth")}</span>
                 </div>
-                <p className="text-sm text-muted-foreground mt-2">ou 39,99€/an (2 mois offerts)</p>
+                <p className="text-sm text-muted-foreground mt-2">{t("landing.yearlyOffer")}</p>
               </div>
               <Button size="lg" className="w-full" onClick={() => navigate("/auth")}>
-                Essayer gratuitement
+                {t("landing.tryFree")}
               </Button>
               <p className="text-xs text-center text-muted-foreground">
-                Paiement sécurisé par Stripe. Annulez à tout moment.
+                {t("landing.securePayment")}
               </p>
             </div>
           </div>
@@ -284,10 +284,10 @@ const Landing = () => {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Installation en 3 étapes
+              {t("landing.installTitle")}
             </h2>
             <p className="text-lg text-muted-foreground">
-              Installez S-reptrack sur votre mobile en quelques secondes, sans passer par un store.
+              {t("landing.installDescription")}
             </p>
           </div>
           
@@ -315,7 +315,7 @@ const Landing = () => {
           
           <div className="mt-8 text-center">
             <Button size="lg" onClick={() => navigate("/auth")} className="text-lg px-8">
-              Installer maintenant
+              {t("landing.installNow")}
               <Download className="w-5 h-5 ml-2" />
             </Button>
           </div>
@@ -326,13 +326,13 @@ const Landing = () => {
       <section className="py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Prêt à gérer votre élevage ?
+            {t("landing.ctaTitle")}
           </h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Rejoignez les éleveurs qui font confiance à S-reptrack pour gérer leur collection de reptiles.
+            {t("landing.ctaDescription")}
           </p>
           <Button size="lg" onClick={() => navigate("/auth")} className="text-lg px-10 py-6">
-            Créer mon compte gratuitement
+            {t("landing.ctaButton")}
             <ChevronRight className="w-5 h-5 ml-2" />
           </Button>
         </div>
@@ -347,7 +347,7 @@ const Landing = () => {
           </div>
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
             <button onClick={() => navigate("/privacy")} className="hover:text-foreground transition-colors">
-              Politique de confidentialité
+              {t("landing.privacyPolicy")}
             </button>
             <span>© 2024 S-reptrack</span>
           </div>
