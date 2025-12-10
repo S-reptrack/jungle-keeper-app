@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Users, Calendar, Activity, TrendingUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import StatsCard from "@/components/StatsCard";
 import ReptileCard from "@/components/ReptileCard";
@@ -271,7 +271,7 @@ const Index = () => {
   }
 
   if (!user) {
-    return <AuthForm />;
+    return <Navigate to="/welcome" replace />;
   }
 
   return (

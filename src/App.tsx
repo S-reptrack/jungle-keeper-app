@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import "./i18n/config";
 import Index from "./pages/Index";
+import Landing from "./pages/Landing";
+import Auth from "./pages/Auth";
 import ReptileDetail from "./pages/ReptileDetail";
 import Reptiles from "./pages/Reptiles";
 import ForSale from "./pages/ForSale";
@@ -37,6 +39,8 @@ const App = () => (
           <HatchingNotificationDialog />
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/welcome" element={<Landing />} />
+            <Route path="/auth" element={<Auth />} />
             <Route path="/reptile/:id" element={<ReptileDetail />} />
             <Route path="/reptiles" element={<Reptiles />} />
             <Route path="/all-reptiles" element={<AllReptilesList />} />
