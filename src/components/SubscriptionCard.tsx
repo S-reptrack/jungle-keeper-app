@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { CreditCard, Check, Crown, Loader2, ExternalLink } from "lucide-react";
+import { CreditCard, Check, Crown, Loader2, ExternalLink, User } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { useSubscription, SUBSCRIPTION_TIERS } from "@/hooks/useSubscription";
+import { useReptileCount } from "@/hooks/useReptileCount";
 import { useSearchParams } from "react-router-dom";
 
 const SubscriptionCard = () => {
@@ -21,6 +22,8 @@ const SubscriptionCard = () => {
     getCurrentTier,
     checkSubscription,
   } = useSubscription();
+
+  const { count, FREE_TIER_LIMIT } = useReptileCount();
 
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
@@ -96,7 +99,7 @@ const SubscriptionCard = () => {
         <CardDescription>
           {subscribed
             ? t("subscription.activeDescription") || "Gérez votre abonnement S-reptrack Premium"
-            : t("subscription.inactiveDescription") || "Passez à Premium pour accéder à toutes les fonctionnalités"}
+            : t("subscription.inactiveDescription") || "Gérez jusqu'à 5 reptiles gratuitement. Passez à Premium pour un nombre illimité."}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -137,19 +140,56 @@ const SubscriptionCard = () => {
           </>
         ) : (
           <>
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-3">
+              {/* Free Plan */}
+              <div className="relative p-4 border-2 border-primary rounded-lg bg-primary/5">
+                <Badge className="absolute -top-2 right-4 bg-primary">
+                  {t("subscription.currentPlanBadge") || "Votre plan"}
+                </Badge>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <User className="w-5 h-5 text-primary" />
+                    <h3 className="font-semibold text-lg">
+                      {t("subscription.freeTitle") || "Gratuit"}
+                    </h3>
+                  </div>
+                  <p className="text-2xl font-bold text-primary">
+                    0€
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {count}/{FREE_TIER_LIMIT} reptiles
+                  </p>
+
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-primary" />
+                      {t("subscription.freeFeature1") || "Jusqu'à 5 reptiles"}
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-primary" />
+                      {t("subscription.freeFeature2") || "Suivi reproduction"}
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-primary" />
+                      {t("subscription.freeFeature3") || "Scanner NFC & QR"}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
               {/* Monthly Plan */}
               <div className="relative p-4 border rounded-lg hover:border-primary transition-colors">
                 <div className="space-y-3">
-                  <div>
+                  <div className="flex items-center gap-2">
+                    <Crown className="w-5 h-5 text-muted-foreground" />
                     <h3 className="font-semibold text-lg">
                       {t("subscription.monthlyTitle") || "Mensuel"}
                     </h3>
-                    <p className="text-2xl font-bold text-primary">
-                      {SUBSCRIPTION_TIERS.monthly.price}€
-                      <span className="text-sm font-normal text-muted-foreground">/mois</span>
-                    </p>
                   </div>
+                  <p className="text-2xl font-bold text-primary">
+                    {SUBSCRIPTION_TIERS.monthly.price}€
+                    <span className="text-sm font-normal text-muted-foreground">/mois</span>
+                  </p>
 
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
@@ -180,23 +220,24 @@ const SubscriptionCard = () => {
               </div>
 
               {/* Yearly Plan */}
-              <div className="relative p-4 border-2 border-primary rounded-lg">
-                <Badge className="absolute -top-2 right-4 bg-primary">
-                  {t("subscription.bestValue") || "Meilleur rapport"}
+              <div className="relative p-4 border rounded-lg hover:border-primary transition-colors">
+                <Badge className="absolute -top-2 right-4 bg-amber-500">
+                  {t("subscription.bestValue") || "Meilleur prix"}
                 </Badge>
                 <div className="space-y-3">
-                  <div>
+                  <div className="flex items-center gap-2">
+                    <Crown className="w-5 h-5 text-amber-500" />
                     <h3 className="font-semibold text-lg">
                       {t("subscription.yearlyTitle") || "Annuel"}
                     </h3>
-                    <p className="text-2xl font-bold text-primary">
-                      {SUBSCRIPTION_TIERS.yearly.price}€
-                      <span className="text-sm font-normal text-muted-foreground">/an</span>
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {t("subscription.yearlySavings") || "Économisez 2 mois !"}
-                    </p>
                   </div>
+                  <p className="text-2xl font-bold text-primary">
+                    {SUBSCRIPTION_TIERS.yearly.price}€
+                    <span className="text-sm font-normal text-muted-foreground">/an</span>
+                  </p>
+                  <p className="text-xs text-amber-600 font-medium">
+                    {t("subscription.yearlySavings") || "Économisez 2 mois !"}
+                  </p>
 
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">

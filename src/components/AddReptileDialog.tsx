@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { format } from "date-fns";
-import { CalendarIcon, Plus } from "lucide-react";
+import { CalendarIcon, Plus, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -41,6 +41,9 @@ import { cn } from "@/lib/utils";
 import { getAllSpecies, getSpeciesByAnnex } from "@/data/citesSpecies";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { useSubscription } from "@/hooks/useSubscription";
+import { useReptileCount } from "@/hooks/useReptileCount";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
   name: z.string().min(2, "validation.nameMin"),
@@ -68,11 +71,16 @@ interface AddReptileDialogProps {
 
 const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<"snake" | "lizard" | "turtle" | null>("snake");
   const [selectedAnnex, setSelectedAnnex] = useState<'A' | 'B' | 'C' | 'D'>('B');
   const [speciesPopoverOpen, setSpeciesPopoverOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showLimitDialog, setShowLimitDialog] = useState(false);
+
+  const { subscribed } = useSubscription();
+  const { count, canAddReptile, FREE_TIER_LIMIT, refreshCount } = useReptileCount();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -84,6 +92,14 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
       bornInCaptivity: false,
     },
   });
+
+  const handleOpenChange = (newOpen: boolean) => {
+    if (newOpen && !canAddReptile(subscribed)) {
+      setShowLimitDialog(true);
+      return;
+    }
+    setOpen(newOpen);
+  };
 
   const onSubmit = async (data: FormValues) => {
     if (isSubmitting) return;
@@ -134,7 +150,8 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
       setSelectedMorphs([]);
       setOpen(false);
       
-      // Call the callback to refresh the list
+      // Refresh count and call the callback to refresh the list
+      refreshCount();
       if (onReptileAdded) {
         onReptileAdded();
       }
@@ -204,11 +221,52 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
   }, [open]);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="gap-2">
-          <Plus className="w-4 h-4" />
-          {t("reptile.addReptile")}
+    <>
+      {/* Limit Reached Dialog */}
+      <Dialog open={showLimitDialog} onOpenChange={setShowLimitDialog}>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Crown className="w-5 h-5 text-primary" />
+              {t("subscription.limitReached")}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-muted-foreground">
+              {t("subscription.limitReachedDescription")}
+            </p>
+            <p className="text-sm text-muted-foreground">
+              {t("subscription.reptilesUsed", { count })}
+            </p>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => setShowLimitDialog(false)}
+              >
+                {t("common.cancel")}
+              </Button>
+              <Button
+                className="flex-1 gap-2"
+                onClick={() => {
+                  setShowLimitDialog(false);
+                  navigate("/settings");
+                }}
+              >
+                <Crown className="w-4 h-4" />
+                {t("subscription.upgradeNow")}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Reptile Dialog */}
+      <Dialog open={open} onOpenChange={handleOpenChange}>
+        <DialogTrigger asChild>
+          <Button className="gap-2">
+            <Plus className="w-4 h-4" />
+            {t("reptile.addReptile")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
@@ -629,6 +687,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
         </Form>
       </DialogContent>
     </Dialog>
+    </>
   );
 };
 
