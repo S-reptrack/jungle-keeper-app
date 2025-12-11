@@ -271,15 +271,36 @@
   "install": {
     "title": "Installer l'application",
     "description": "Ajoutez S-reptrack à l'écran d'accueil pour une expérience plein écran et un accès hors ligne.",
+    "detectingDevice": "Détection de votre appareil...",
+    "yourDevice": "Votre appareil",
+    "otherDevice": "Autre appareil ?",
+    "showAndroid": "Voir les instructions Android",
+    "showIos": "Voir les instructions iPhone",
     "android": {
-      "title": "Android (Chrome)",
-      "instruction": "Utilisez le menu ⋮ puis « Ajouter à l'écran d'accueil ».",
+      "title": "Installation sur Android",
+      "subtitle": "Suivez ces étapes simples",
+      "requirement": "Navigateur requis : Google Chrome",
+      "step1": "Ouvrez Chrome et allez sur s-reptrack.app",
+      "step2": "Appuyez sur le menu ⋮ (3 points verticaux en haut à droite)",
+      "step3": "Appuyez sur « Installer l'application » ou « Ajouter à l'écran d'accueil »",
+      "step4": "Confirmez en appuyant sur « Installer »",
+      "done": "L'icône S-reptrack apparaît sur votre écran d'accueil !",
       "installNow": "Installer maintenant",
-      "installNotReady": "Bouton activé quand l'installation est possible"
+      "installNotReady": "Ouvrez cette page dans Chrome pour activer ce bouton",
+      "tip": "Si le bouton ne s'active pas, utilisez les étapes manuelles ci-dessus"
     },
     "ios": {
-      "title": "iPhone (Safari)",
-      "instruction": "Appuyez sur le bouton « Partager » puis « Sur l'écran d'accueil ». Le bouton ci-dessus n'est pas disponible sur iOS."
+      "title": "Installation sur iPhone / iPad",
+      "subtitle": "Safari est obligatoire",
+      "requirement": "Navigateur requis : Safari uniquement (Chrome ne fonctionne pas)",
+      "warning": "L'installation ne fonctionne PAS avec Chrome, Firefox ou autre navigateur sur iOS",
+      "step1": "Ouvrez Safari et allez sur s-reptrack.app",
+      "step2": "Appuyez sur l'icône Partager (carré avec flèche vers le haut)",
+      "step3": "Défilez vers le bas dans le menu",
+      "step4": "Appuyez sur « Sur l'écran d'accueil »",
+      "step5": "Appuyez sur « Ajouter » en haut à droite",
+      "done": "L'icône S-reptrack apparaît sur votre écran d'accueil !",
+      "important": "Ne confondez pas avec « S-reptrack app » qui apparaît parfois dans le menu - cette option ne fonctionne pas. Utilisez uniquement « Sur l'écran d'accueil »."
     }
   },
   "transfer": {
