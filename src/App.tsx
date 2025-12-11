@@ -7,6 +7,7 @@ import { ThemeProvider } from "next-themes";
 import "./i18n/config";
 import Index from "./pages/Index";
 import Landing from "./pages/Landing";
+import ComingSoon from "./pages/ComingSoon";
 import Auth from "./pages/Auth";
 import ReptileDetail from "./pages/ReptileDetail";
 import Reptiles from "./pages/Reptiles";
@@ -39,7 +40,8 @@ const App = () => (
           <HatchingNotificationDialog />
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/welcome" element={<Landing />} />
+            <Route path="/welcome" element={<ComingSoon />} />
+            <Route path="/landing" element={<Landing />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/reptile/:id" element={<ReptileDetail />} />
             <Route path="/reptiles" element={<Reptiles />} />
