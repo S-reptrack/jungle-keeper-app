@@ -265,15 +265,36 @@
   "install": {
     "title": "Install the App",
     "description": "Add S-reptrack to your home screen for a full-screen experience and offline access.",
+    "detectingDevice": "Detecting your device...",
+    "yourDevice": "Your device",
+    "otherDevice": "Other device?",
+    "showAndroid": "Show Android instructions",
+    "showIos": "Show iPhone instructions",
     "android": {
-      "title": "Android (Chrome)",
-      "instruction": "Use the ⋮ menu then 'Add to Home screen'.",
+      "title": "Install on Android",
+      "subtitle": "Follow these simple steps",
+      "requirement": "Required browser: Google Chrome",
+      "step1": "Open Chrome and go to s-reptrack.app",
+      "step2": "Tap the ⋮ menu (3 vertical dots in top right)",
+      "step3": "Tap 'Install app' or 'Add to Home screen'",
+      "step4": "Confirm by tapping 'Install'",
+      "done": "The S-reptrack icon appears on your home screen!",
       "installNow": "Install now",
-      "installNotReady": "Button enabled when installation is possible"
+      "installNotReady": "Open this page in Chrome to enable this button",
+      "tip": "If the button doesn't activate, use the manual steps above"
     },
     "ios": {
-      "title": "iPhone (Safari)",
-      "instruction": "Tap the 'Share' button then 'Add to Home Screen'. The button above is not available on iOS."
+      "title": "Install on iPhone / iPad",
+      "subtitle": "Safari is required",
+      "requirement": "Required browser: Safari only (Chrome doesn't work)",
+      "warning": "Installation does NOT work with Chrome, Firefox or other browsers on iOS",
+      "step1": "Open Safari and go to s-reptrack.app",
+      "step2": "Tap the Share icon (square with arrow pointing up)",
+      "step3": "Scroll down in the menu",
+      "step4": "Tap 'Add to Home Screen'",
+      "step5": "Tap 'Add' in the top right",
+      "done": "The S-reptrack icon appears on your home screen!",
+      "important": "Don't confuse with 'S-reptrack app' that sometimes appears in the menu - this option doesn't work. Only use 'Add to Home Screen'."
     }
   },
   "transfer": {
