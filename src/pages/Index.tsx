@@ -26,6 +26,7 @@ const Index = () => {
   const [lastFeedings, setLastFeedings] = useState<Record<string, string>>({});
   const [upcomingHatchings, setUpcomingHatchings] = useState<any[]>([]);
   const [reptilesWithHealthIssues, setReptilesWithHealthIssues] = useState<Set<string>>(new Set());
+  const [reptilesWithReproduction, setReptilesWithReproduction] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (user) {
@@ -131,7 +132,7 @@ const Index = () => {
       // Count reptiles with active hatching observations (only those with expected_hatch_date)
       const { data: reproductionData, error: reproductionError } = await supabase
         .from("reproduction_observations")
-        .select("reptile_id, reptiles!reproduction_observations_reptile_id_fkey(id, status, user_id)")
+        .select("reptile_id, partner_id, action, reptiles!reproduction_observations_reptile_id_fkey(id, status, user_id)")
         .eq("user_id", authUser.id)
         .eq("closed", false)
         .not("expected_hatch_date", "is", null)
@@ -144,6 +145,21 @@ const Index = () => {
       const validObservations = (reproductionData || []).filter(r => r.reptiles !== null);
       const uniqueReproductionReptiles = new Set(validObservations.map(r => r.reptile_id));
       const reproduction = uniqueReproductionReptiles.size;
+      
+      // Get all active reproduction observations (en présence or accouplement)
+      const { data: allReproData } = await supabase
+        .from("reproduction_observations")
+        .select("reptile_id, partner_id, action")
+        .eq("user_id", authUser.id)
+        .eq("closed", false);
+      
+      // Track reptiles with reproduction activity (both main reptile and partner)
+      const reproReptileIds = new Set<string>();
+      (allReproData || []).forEach(r => {
+        reproReptileIds.add(r.reptile_id);
+        if (r.partner_id) reproReptileIds.add(r.partner_id);
+      });
+      setReptilesWithReproduction(reproReptileIds);
       
       // Calculate feedings due - count reptiles to feed within 10 days
       const { data: reptilesWithInterval } = await supabase
@@ -378,6 +394,7 @@ const Index = () => {
                   lastFed={lastFeedings[reptile.id] || "Jamais"}
                   image={reptile.image_url}
                   hasHealthIssue={reptilesWithHealthIssues.has(reptile.id)}
+                  hasReproductionActivity={reptilesWithReproduction.has(reptile.id)}
                 />
               ))}
             </div>
