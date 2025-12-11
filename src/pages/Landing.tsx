@@ -132,7 +132,7 @@ const Landing = () => {
                 {t("landing.heroDescription")}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Button size="lg" onClick={() => navigate("/")} className="text-lg px-8">
+                <Button size="lg" onClick={() => navigate("/auth")} className="text-lg px-8">
                   {t("landing.startFree")}
                   <ChevronRight className="w-5 h-5 ml-2" />
                 </Button>
