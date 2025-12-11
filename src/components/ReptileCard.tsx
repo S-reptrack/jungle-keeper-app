@@ -17,9 +17,10 @@ interface ReptileCardProps {
   daysUntilHatch?: number | null;
   status?: string;
   sex?: string | null;
+  hasHealthIssue?: boolean;
 }
 
-const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntilHatch, status, sex }: ReptileCardProps) => {
+const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntilHatch, status, sex, hasHealthIssue }: ReptileCardProps) => {
   const navigate = useNavigate();
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
   const { signedUrl, loading } = useSignedImageUrl(image);
@@ -45,6 +46,13 @@ const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntil
           <div className="absolute top-3 left-3">
             <Badge className="bg-orange-500 hover:bg-orange-600 text-white border-0 text-sm font-bold px-3 py-1.5 shadow-lg animate-pulse">
               🥚 Éclosion dans {daysUntilHatch}j
+            </Badge>
+          </div>
+        )}
+        {hasHealthIssue && (
+          <div className={`absolute ${daysUntilHatch !== undefined && daysUntilHatch !== null && status !== 'deceased' ? 'top-14' : 'top-3'} left-3`}>
+            <Badge className="bg-blue-500 hover:bg-blue-600 text-white border-0 text-sm font-bold px-3 py-1.5 shadow-lg">
+              🩺 Santé
             </Badge>
           </div>
         )}

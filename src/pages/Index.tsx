@@ -25,6 +25,7 @@ const Index = () => {
   });
   const [lastFeedings, setLastFeedings] = useState<Record<string, string>>({});
   const [upcomingHatchings, setUpcomingHatchings] = useState<any[]>([]);
+  const [reptilesWithHealthIssues, setReptilesWithHealthIssues] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (user) {
@@ -122,6 +123,10 @@ const Index = () => {
       // Filter out records where reptile is null (archived/deleted)
       const validHealthRecords = (healthData || []).filter(h => h.reptiles !== null);
       const healthIssues = validHealthRecords.length;
+      
+      // Track reptiles with health issues
+      const healthIssueReptileIds = new Set(validHealthRecords.map(h => h.reptile_id));
+      setReptilesWithHealthIssues(healthIssueReptileIds);
       
       // Count reptiles with active hatching observations (only those with expected_hatch_date)
       const { data: reproductionData, error: reproductionError } = await supabase
@@ -372,6 +377,7 @@ const Index = () => {
                   weight={`${reptile.weight || 0}g`}
                   lastFed={lastFeedings[reptile.id] || "Jamais"}
                   image={reptile.image_url}
+                  hasHealthIssue={reptilesWithHealthIssues.has(reptile.id)}
                 />
               ))}
             </div>
