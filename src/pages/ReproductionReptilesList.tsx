@@ -5,7 +5,8 @@ import Navigation from "@/components/Navigation";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ChevronRight, Heart } from "lucide-react";
+import { ChevronRight, Heart, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ReproductionRecord {
   id: string;
@@ -107,6 +108,15 @@ const ReproductionReptilesList = () => {
       <Navigation />
       <main className="max-w-7xl mx-auto px-4 py-8 md:mt-16" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
         <div className="mb-8">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/")}
+            className="mb-4 -ml-2"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Retour
+          </Button>
           <div className="flex items-center gap-2 mb-2">
             <Heart className="w-8 h-8 text-primary" />
             <h1 className="text-3xl font-bold text-foreground">Reproduction</h1>
