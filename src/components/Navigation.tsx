@@ -1,5 +1,5 @@
 import { Home, List, Tag, Settings, QrCode, Waves } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import LanguageSelector from "./LanguageSelector";
@@ -8,9 +8,16 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useBottomInset } from "@/hooks/useBottomInset";
 import { QRScanner } from "./QRScanner";
 import { Button } from "./ui/button";
+import { toast } from "sonner";
+
+const isIOS = (): boolean => {
+  const userAgent = navigator.userAgent.toLowerCase();
+  return /iphone|ipad|ipod/.test(userAgent);
+};
 
 const Navigation = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const [scannerOpen, setScannerOpen] = useState(false);
@@ -23,6 +30,17 @@ const Navigation = () => {
     { icon: Tag, label: t("common.forSale"), path: "/for-sale" },
     { icon: Settings, label: t("common.settings"), path: "/settings" },
   ];
+
+  const handleNFCClick = () => {
+    if (isIOS()) {
+      toast.info(t("nfc.iosNotSupported"), {
+        description: t("nfc.iosNotSupportedDescription"),
+        duration: 6000,
+      });
+    } else {
+      navigate("/nfc");
+    }
+  };
 
   return (
     <>
@@ -60,16 +78,15 @@ const Navigation = () => {
 
       {isMobile && (
         <>
-          <Link to="/nfc">
-            <Button
-              size="icon"
-              style={{ bottom: qrButtonBottom }}
-              className="fixed right-20 z-40 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all bg-gradient-to-br from-primary to-primary/80"
-              aria-label="Lecteur NFC"
-            >
-              <Waves className="h-6 w-6" />
-            </Button>
-          </Link>
+          <Button
+            onClick={handleNFCClick}
+            size="icon"
+            style={{ bottom: qrButtonBottom }}
+            className="fixed right-20 z-40 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all bg-gradient-to-br from-primary to-primary/80"
+            aria-label="Lecteur NFC"
+          >
+            <Waves className="h-6 w-6" />
+          </Button>
 
           <Button
             onClick={() => setScannerOpen(true)}

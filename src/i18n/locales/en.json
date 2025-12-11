@@ -157,7 +157,12 @@
     "search": "Search",
     "language": "Language",
     "back": "Back",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "close": "Close"
+  },
+  "nfc": {
+    "iosNotSupported": "NFC not available on iPhone",
+    "iosNotSupportedDescription": "Apple does not allow NFC access from web apps. Use the QR code scanner instead, or install the native Android app to use NFC."
   },
   "admin": {
     "dashboard": "Administration",
