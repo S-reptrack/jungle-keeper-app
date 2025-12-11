@@ -424,9 +424,16 @@
     "lampropeltis-alterna": "Faux-corail gris"
   },
   "subscription": {
-    "title": "Abonnement Premium",
-    "inactiveDescription": "Débloquez toutes les fonctionnalités avec un abonnement Premium",
+    "title": "Abonnement",
+    "inactiveDescription": "Gérez jusqu'à 5 reptiles gratuitement. Passez à Premium pour un nombre illimité.",
     "activeDescription": "Vous bénéficiez de toutes les fonctionnalités Premium",
+    "freeTitle": "Gratuit",
+    "freePlan": "Version Gratuite",
+    "freeDescription": "Toutes les fonctionnalités, jusqu'à 5 reptiles",
+    "freeFeature1": "Jusqu'à 5 reptiles",
+    "freeFeature2": "Suivi de reproduction",
+    "freeFeature3": "Scanner NFC & QR codes",
+    "currentPlanBadge": "Votre plan",
     "monthlyTitle": "Mensuel",
     "yearlyTitle": "Annuel",
     "bestValue": "Meilleur prix",
@@ -447,6 +454,10 @@
     "successMessage": "Abonnement activé avec succès !",
     "cancelledMessage": "Paiement annulé",
     "checkoutError": "Erreur lors de la création du paiement",
-    "portalError": "Erreur lors de l'ouverture du portail"
+    "portalError": "Erreur lors de l'ouverture du portail",
+    "limitReached": "Limite de 5 reptiles atteinte",
+    "limitReachedDescription": "Passez à Premium pour ajouter un nombre illimité de reptiles.",
+    "upgradeNow": "Passer à Premium",
+    "reptilesUsed": "{{count}}/5 reptiles utilisés"
   }
 }
