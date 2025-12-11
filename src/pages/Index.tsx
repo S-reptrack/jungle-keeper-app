@@ -32,30 +32,33 @@ const Index = () => {
     if (user) {
       fetchReptiles();
       
-      // Subscribe to real-time updates for feedings and reptiles
+      // Subscribe to real-time updates for all data tables
       const channel = supabase
         .channel('data-changes')
         .on(
           'postgres_changes',
-          {
-            event: '*',
-            schema: 'public',
-            table: 'feedings',
-          },
-          () => {
-            fetchReptiles();
-          }
+          { event: '*', schema: 'public', table: 'feedings' },
+          () => fetchReptiles()
         )
         .on(
           'postgres_changes',
-          {
-            event: '*',
-            schema: 'public',
-            table: 'reptiles',
-          },
-          () => {
-            fetchReptiles();
-          }
+          { event: '*', schema: 'public', table: 'reptiles' },
+          () => fetchReptiles()
+        )
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'health_records' },
+          () => fetchReptiles()
+        )
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'reproduction_observations' },
+          () => fetchReptiles()
+        )
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'weight_records' },
+          () => fetchReptiles()
         )
         .subscribe();
 
