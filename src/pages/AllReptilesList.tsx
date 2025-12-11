@@ -5,7 +5,8 @@ import Navigation from "@/components/Navigation";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface Reptile {
   id: string;
@@ -90,6 +91,15 @@ const AllReptilesList = () => {
       <Navigation />
       <main className="max-w-7xl mx-auto px-4 py-8 md:mt-16" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
         <div className="mb-8">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/")}
+            className="mb-4 -ml-2"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Retour
+          </Button>
           <h1 className="text-3xl font-bold text-foreground mb-2">Tous les reptiles</h1>
           <p className="text-muted-foreground">{reptiles.length} reptile{reptiles.length > 1 ? 's' : ''} actif{reptiles.length > 1 ? 's' : ''}</p>
         </div>
