@@ -422,5 +422,31 @@
     "lampropeltis-californiae": "Faux-corail",
     "thamnopis-proximus": "Couleuvre des marais",
     "lampropeltis-alterna": "Faux-corail gris"
+  },
+  "subscription": {
+    "title": "Abonnement Premium",
+    "inactiveDescription": "Débloquez toutes les fonctionnalités avec un abonnement Premium",
+    "activeDescription": "Vous bénéficiez de toutes les fonctionnalités Premium",
+    "monthlyTitle": "Mensuel",
+    "yearlyTitle": "Annuel",
+    "bestValue": "Meilleur prix",
+    "yearlySavings": "Économisez 2 mois !",
+    "feature1": "Nombre illimité de reptiles",
+    "feature2": "Suivi de reproduction avancé",
+    "feature3": "Scanner NFC & QR codes",
+    "subscribe": "S'abonner",
+    "manage": "Gérer l'abonnement",
+    "manageSubscription": "Gérer mon abonnement",
+    "securePayment": "Paiement sécurisé par Stripe. Annulez à tout moment.",
+    "expiresOn": "Expire le",
+    "renewsOn": "Renouvellement le",
+    "currentPlan": "Votre abonnement",
+    "premiumActive": "Premium Actif",
+    "monthlyPlan": "Abonnement Mensuel",
+    "yearlyPlan": "Abonnement Annuel",
+    "successMessage": "Abonnement activé avec succès !",
+    "cancelledMessage": "Paiement annulé",
+    "checkoutError": "Erreur lors de la création du paiement",
+    "portalError": "Erreur lors de l'ouverture du portail"
   }
 }
