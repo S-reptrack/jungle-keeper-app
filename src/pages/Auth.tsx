@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { AlertCircle, CheckCircle2, Shield } from "lucide-react";
+import { AlertCircle, ArrowLeft, CheckCircle2, Shield } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import jungleHero from "@/assets/jungle-hero.jpg";
 import { validatePassword, validatePasswordComplete, type PasswordValidationResult } from "@/lib/passwordValidation";
@@ -112,6 +112,17 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      {/* Back Button */}
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => navigate("/welcome")}
+        className="absolute top-4 left-4 z-10 gap-2"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        {t("common.back")}
+      </Button>
+
       {/* Hero Section */}
       <div className="relative h-64 overflow-hidden">
         <img 
