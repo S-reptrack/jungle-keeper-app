@@ -361,7 +361,7 @@ const Landing = () => {
               <div className="flex justify-center">
                 <div className="bg-white p-6 rounded-2xl shadow-lg">
                   <QRCodeSVG 
-                    value={`${productionUrl}/auth`}
+                    value={`${productionUrl}/install`}
                     size={180}
                     level="H"
                     includeMargin={false}
