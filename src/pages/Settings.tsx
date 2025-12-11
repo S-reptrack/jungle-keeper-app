@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Globe, LogOut, User, Shield, Send } from "lucide-react";
+import { Moon, Sun, Globe, LogOut, User, Shield, Send, ArrowLeft } from "lucide-react";
 import { useTheme } from "next-themes";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -58,6 +58,15 @@ const Settings = () => {
       
       <main className="max-w-4xl mx-auto px-4 py-8 md:pt-24">
         <div className="mb-8">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/")}
+            className="mb-4 -ml-2"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Retour
+          </Button>
           <h1 className="text-3xl font-bold text-foreground mb-2">
             {t("common.settings")}
           </h1>

@@ -5,7 +5,8 @@ import Navigation from "@/components/Navigation";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tag, Scale, Calendar } from "lucide-react";
+import { Tag, Scale, Calendar, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useSignedImageUrl } from "@/lib/storageUtils";
 import { differenceInYears, differenceInMonths } from "date-fns";
 
@@ -113,11 +114,22 @@ const ForSale = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       <main className="max-w-7xl mx-auto px-4 py-8 md:mt-16" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
-        <div className="mb-8 flex items-center gap-3">
-          <Tag className="w-8 h-8 text-primary" />
-          <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">À vendre</h1>
-            <p className="text-muted-foreground">{reptiles.length} reptile{reptiles.length > 1 ? 's' : ''} à vendre</p>
+        <div className="mb-8">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/")}
+            className="mb-4 -ml-2"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Retour
+          </Button>
+          <div className="flex items-center gap-3">
+            <Tag className="w-8 h-8 text-primary" />
+            <div>
+              <h1 className="text-3xl font-bold text-foreground mb-2">À vendre</h1>
+              <p className="text-muted-foreground">{reptiles.length} reptile{reptiles.length > 1 ? 's' : ''} à vendre</p>
+            </div>
           </div>
         </div>
 
