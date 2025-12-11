@@ -36,7 +36,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          {/* <GDPRConsentDialog /> */}
+          <GDPRConsentDialog />
           <HatchingNotificationDialog />
           <Routes>
             <Route path="/" element={<Index />} />
