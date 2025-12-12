@@ -218,58 +218,108 @@
     "lastUpdated": "Dernière mise à jour",
     "intro": {
       "title": "Introduction",
-      "content": "S-reptrack respecte votre vie privée et s'engage à protéger vos données personnelles. Cette politique de confidentialité explique comment nous collectons, utilisons et protégeons vos informations."
+      "content": "S-reptrack (ci-après « l'Application ») respecte votre vie privée et s'engage à protéger vos données personnelles conformément au Règlement Général sur la Protection des Données (RGPD - UE 2016/679). Cette politique de confidentialité explique comment nous collectons, utilisons, stockons et protégeons vos informations personnelles."
+    },
+    "dataController": {
+      "title": "Responsable du traitement",
+      "content": "Le responsable du traitement des données personnelles est S-reptrack, exploité en tant qu'auto-entrepreneur enregistré en France. Pour toute question relative à vos données personnelles, contactez-nous à l'adresse : contact@s-reptrack.app"
     },
     "dataCollection": {
       "title": "Données collectées",
-      "intro": "Nous collectons les informations suivantes :",
+      "intro": "Nous collectons les informations suivantes lorsque vous utilisez notre Application :",
       "items": {
-        "email": "Votre adresse email pour l'authentification",
-        "reptileData": "Les informations sur vos reptiles (nom, espèce, âge, etc.)",
-        "feedingRecords": "Les enregistrements de nourrissage",
-        "healthRecords": "Les enregistrements de santé et de poids",
-        "images": "Les photos que vous téléchargez"
+        "email": "Votre adresse email pour l'authentification et la communication",
+        "reptileData": "Les informations sur vos reptiles (nom, espèce, sexe, morphs, dates de naissance et d'achat, poids)",
+        "feedingRecords": "Les enregistrements de nourrissage (dates, types de proies, quantités)",
+        "healthRecords": "Les enregistrements de santé (conditions médicales, traitements, notes vétérinaires)",
+        "reproductionRecords": "Les observations de reproduction (accouplements, pontes, éclosions)",
+        "weightRecords": "L'historique des pesées de vos animaux",
+        "images": "Les photos que vous téléchargez de vos reptiles"
+      }
+    },
+    "legalBasis": {
+      "title": "Base légale du traitement",
+      "intro": "Nous traitons vos données personnelles sur les bases légales suivantes :",
+      "items": {
+        "consent": "Votre consentement explicite lors de la création de votre compte",
+        "contract": "L'exécution du contrat de service lorsque vous utilisez notre Application",
+        "legitimate": "Notre intérêt légitime à améliorer nos services et assurer la sécurité de l'Application"
       }
     },
     "dataUsage": {
       "title": "Utilisation des données",
       "intro": "Vos données sont utilisées pour :",
       "items": {
-        "service": "Fournir et améliorer nos services",
-        "management": "Vous permettre de gérer vos reptiles",
-        "improvements": "Améliorer l'expérience utilisateur"
+        "service": "Fournir les fonctionnalités de l'Application (suivi de vos reptiles, nourrissage, reproduction, santé)",
+        "management": "Vous permettre de gérer votre élevage et accéder à vos données depuis tous vos appareils",
+        "notifications": "Vous envoyer des notifications importantes (éclosions à venir, rappels de nourrissage)",
+        "improvements": "Améliorer l'expérience utilisateur et développer de nouvelles fonctionnalités",
+        "support": "Répondre à vos demandes d'assistance"
       }
+    },
+    "dataRetention": {
+      "title": "Durée de conservation",
+      "content": "Vos données personnelles sont conservées aussi longtemps que votre compte est actif. En cas de suppression de votre compte, toutes vos données sont définitivement effacées de nos serveurs dans un délai maximum de 30 jours. Les données de facturation liées aux abonnements peuvent être conservées jusqu'à 10 ans conformément aux obligations légales comptables françaises."
     },
     "dataSecurity": {
       "title": "Sécurité des données",
-      "content": "Nous utilisons des mesures de sécurité conformes aux normes de l'industrie pour protéger vos données. Toutes les données sont chiffrées en transit et au repos. Nous appliquons également des politiques de mot de passe strictes pour protéger votre compte."
+      "content": "Nous mettons en œuvre des mesures techniques et organisationnelles appropriées pour protéger vos données personnelles contre tout accès non autorisé, modification, divulgation ou destruction. Toutes les communications sont chiffrées via HTTPS/TLS. Les données sont stockées de manière sécurisée dans des centres de données conformes aux normes de l'industrie. Les mots de passe sont hachés de manière irréversible. L'accès à vos données est strictement limité aux systèmes nécessaires au fonctionnement de l'Application."
     },
     "userRights": {
-      "title": "Vos droits",
+      "title": "Vos droits RGPD",
+      "intro": "Conformément au RGPD, vous disposez des droits suivants :",
       "items": {
-        "access": "Accéder à vos données personnelles",
-        "correction": "Corriger ou mettre à jour vos informations",
-        "deletion": "Demander la suppression de votre compte et de vos données",
-        "export": "Exporter vos données"
-      }
+        "access": "Droit d'accès : obtenir une copie de vos données personnelles",
+        "correction": "Droit de rectification : corriger ou mettre à jour vos informations inexactes",
+        "deletion": "Droit à l'effacement : demander la suppression de votre compte et de toutes vos données",
+        "export": "Droit à la portabilité : exporter vos données dans un format structuré (JSON)",
+        "restriction": "Droit à la limitation : restreindre le traitement de vos données",
+        "opposition": "Droit d'opposition : vous opposer au traitement de vos données"
+      },
+      "exercise": "Pour exercer ces droits, rendez-vous dans les Paramètres > Confidentialité et données de l'Application, ou contactez-nous à contact@s-reptrack.app"
     },
     "dataSharing": {
       "title": "Partage des données",
-      "content": "Nous ne vendons ni ne partageons vos données personnelles avec des tiers. Vos données restent privées et ne sont accessibles que par vous."
+      "content": "Nous ne vendons, n'échangeons ni ne louons vos données personnelles à des tiers. Vos données ne sont partagées qu'avec :",
+      "items": {
+        "hosting": "Notre hébergeur (infrastructure cloud sécurisée) pour le stockage des données",
+        "payment": "Notre prestataire de paiement (Stripe) pour le traitement des abonnements - seules les données de facturation nécessaires sont transmises",
+        "legal": "Les autorités compétentes si la loi l'exige"
+      }
+    },
+    "cookies": {
+      "title": "Cookies et stockage local",
+      "content": "L'Application utilise le stockage local de votre navigateur pour mémoriser vos préférences (langue, thème, consentement RGPD). Nous n'utilisons pas de cookies de traçage publicitaire ni d'outils d'analyse tiers qui collecteraient vos données personnelles."
+    },
+    "international": {
+      "title": "Transferts internationaux",
+      "content": "Vos données sont hébergées dans l'Union Européenne. En cas de transfert vers des pays tiers, des garanties appropriées sont mises en place conformément au RGPD (clauses contractuelles types, décision d'adéquation)."
+    },
+    "minors": {
+      "title": "Protection des mineurs",
+      "content": "L'Application n'est pas destinée aux enfants de moins de 16 ans. Nous ne collectons pas sciemment de données personnelles auprès de mineurs. Si vous êtes parent ou tuteur et que vous découvrez que votre enfant nous a fourni des données, contactez-nous pour que nous procédions à leur suppression."
+    },
+    "changes": {
+      "title": "Modifications de la politique",
+      "content": "Nous nous réservons le droit de modifier cette politique de confidentialité à tout moment. En cas de modification substantielle, vous serez informé via l'Application. La date de dernière mise à jour est indiquée en bas de cette page."
     },
     "contact": {
       "title": "Contact",
-      "content": "Pour toute question concernant cette politique de confidentialité ou vos données personnelles, veuillez nous contacter via les paramètres de l'application."
+      "content": "Pour toute question concernant cette politique de confidentialité, vos données personnelles, ou pour exercer vos droits, contactez-nous à : contact@s-reptrack.app"
     },
     "copyright": {
       "title": "Droits d'Auteur et Propriété Intellectuelle",
-      "content": "Tous les contenus, designs, codes et fonctionnalités de S-reptrack sont protégés par les lois sur les droits d'auteur et la propriété intellectuelle :",
+      "content": "Tous les contenus, designs, codes et fonctionnalités de S-reptrack sont protégés par les lois françaises et internationales sur les droits d'auteur et la propriété intellectuelle :",
       "items": {
-        "code": "Le code source et l'architecture de l'application sont protégés",
+        "code": "Le code source et l'architecture de l'application sont protégés par le droit d'auteur",
         "design": "Les designs, interfaces et éléments visuels sont notre propriété exclusive",
         "content": "Tous les textes, images et contenus sont protégés par le droit d'auteur",
         "prohibited": "La copie, reproduction, modification ou distribution non autorisée de tout ou partie de l'application est strictement interdite et passible de poursuites judiciaires"
       }
+    },
+    "authority": {
+      "title": "Autorité de contrôle",
+      "content": "Si vous estimez que le traitement de vos données personnelles constitue une violation du RGPD, vous avez le droit d'introduire une réclamation auprès de la CNIL (Commission Nationale de l'Informatique et des Libertés) : www.cnil.fr"
     }
   },
   "install": {
