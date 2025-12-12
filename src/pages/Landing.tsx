@@ -405,7 +405,13 @@ const Landing = () => {
             <button onClick={() => navigate("/privacy")} className="hover:text-foreground transition-colors">
               {t("landing.privacyPolicy")}
             </button>
-            <span>© 2024 S-reptrack</span>
+            <button onClick={() => navigate("/terms")} className="hover:text-foreground transition-colors">
+              {t("landing.termsOfService")}
+            </button>
+            <button onClick={() => navigate("/legal")} className="hover:text-foreground transition-colors">
+              {t("landing.legalNotice")}
+            </button>
+            <span>© 2025 S-reptrack</span>
           </div>
         </div>
       </footer>

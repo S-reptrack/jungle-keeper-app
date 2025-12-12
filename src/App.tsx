@@ -14,6 +14,8 @@ import Reptiles from "./pages/Reptiles";
 import ForSale from "./pages/ForSale";
 import Settings from "./pages/Settings";
 import Privacy from "./pages/Privacy";
+import Legal from "./pages/Legal";
+import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 import GDPRConsentDialog from "./components/GDPRConsentDialog";
 import { HatchingNotificationDialog } from "./components/HatchingNotificationDialog";
@@ -52,6 +54,8 @@ const App = () => (
             <Route path="/for-sale" element={<ForSale />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/privacy" element={<Privacy />} />
+            <Route path="/legal" element={<Legal />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="/install" element={<Install />} />
             <Route path="/transfers" element={<Transfers />} />
             <Route path="/nfc" element={<NFCReader />} />
