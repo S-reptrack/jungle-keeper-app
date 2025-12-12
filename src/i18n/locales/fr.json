@@ -444,6 +444,8 @@
     "ctaDescription": "Rejoignez les éleveurs qui font confiance à S-reptrack pour gérer leur collection de reptiles.",
     "ctaButton": "Créer mon compte gratuitement",
     "privacyPolicy": "Politique de confidentialité",
+    "termsOfService": "CGU",
+    "legalNotice": "Mentions légales",
     "quickSignupBadge": "Inscription express",
     "quickSignupTitle": "Inscrivez-vous en un scan",
     "quickSignupDescription": "Scannez ce QR code avec votre smartphone pour accéder directement à la page d'inscription et commencer à gérer votre élevage.",
@@ -534,5 +536,148 @@
     "limitReachedDescription": "Passez à Premium pour ajouter un nombre illimité de reptiles.",
     "upgradeNow": "Passer à Premium",
     "reptilesUsed": "{{count}}/5 reptiles utilisés"
+  },
+  "legal": {
+    "title": "Mentions Légales",
+    "lastUpdated": "Dernière mise à jour",
+    "editor": {
+      "title": "Éditeur du site",
+      "name": "Nom",
+      "status": "Statut",
+      "statusValue": "Auto-entrepreneur (Micro-entreprise)",
+      "siret": "SIRET",
+      "address": "Adresse",
+      "email": "Email"
+    },
+    "director": {
+      "title": "Directeur de la publication"
+    },
+    "hosting": {
+      "title": "Hébergement",
+      "name": "Nom",
+      "address": "Adresse",
+      "website": "Site web"
+    },
+    "intellectual": {
+      "title": "Propriété intellectuelle",
+      "content": "L'ensemble du contenu du site S-reptrack (textes, images, graphismes, logo, icônes, sons, logiciels, etc.) est la propriété exclusive de l'éditeur, à l'exception des marques, logos ou contenus appartenant à d'autres sociétés partenaires ou auteurs. Toute reproduction, distribution, modification, adaptation, retransmission ou publication de ces éléments est strictement interdite sans l'accord écrit préalable de l'éditeur."
+    },
+    "liability": {
+      "title": "Limitation de responsabilité",
+      "content": "L'éditeur s'efforce de fournir des informations aussi précises que possible. Toutefois, il ne pourra être tenu responsable des omissions, des inexactitudes et des carences dans la mise à jour, qu'elles soient de son fait ou du fait des tiers partenaires qui lui fournissent ces informations. L'utilisateur est seul responsable de l'utilisation qu'il fait des informations et contenus présents sur le site."
+    },
+    "personalData": {
+      "title": "Données personnelles",
+      "content": "Pour plus d'informations sur le traitement de vos données personnelles, veuillez consulter notre",
+      "link": "Politique de confidentialité"
+    },
+    "cookies": {
+      "title": "Cookies",
+      "content": "Le site utilise le stockage local du navigateur pour mémoriser vos préférences (langue, thème, consentement). Aucun cookie de traçage publicitaire n'est utilisé."
+    },
+    "law": {
+      "title": "Droit applicable",
+      "content": "Les présentes mentions légales sont régies par le droit français. En cas de litige, et après échec de toute tentative de recherche d'une solution amiable, les tribunaux français seront seuls compétents."
+    }
+  },
+  "terms": {
+    "title": "Conditions Générales d'Utilisation",
+    "lastUpdated": "Dernière mise à jour",
+    "preamble": {
+      "title": "Préambule",
+      "content": "Les présentes Conditions Générales d'Utilisation (CGU) régissent l'utilisation de l'application S-reptrack. En accédant à l'application et en créant un compte, vous acceptez sans réserve les présentes CGU. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser l'application."
+    },
+    "definitions": {
+      "title": "Définitions",
+      "app": "Application",
+      "appDef": "L'application web progressive S-reptrack accessible à l'adresse s-reptrack.app",
+      "user": "Utilisateur",
+      "userDef": "Toute personne physique ou morale utilisant l'Application",
+      "service": "Service",
+      "serviceDef": "L'ensemble des fonctionnalités proposées par l'Application",
+      "content": "Contenu Utilisateur",
+      "contentDef": "Toute information, donnée, texte ou image soumis par l'Utilisateur"
+    },
+    "object": {
+      "title": "Objet",
+      "content": "L'Application S-reptrack est une plateforme de gestion d'élevage de reptiles permettant le suivi des animaux, de leur alimentation, de leur santé et de leur reproduction. Les présentes CGU ont pour objet de définir les conditions d'accès et d'utilisation de l'Application."
+    },
+    "access": {
+      "title": "Accès au Service",
+      "intro": "Pour utiliser l'Application, l'Utilisateur doit :",
+      "items": {
+        "age": "Être âgé d'au moins 16 ans (ou avoir l'autorisation parentale)",
+        "email": "Disposer d'une adresse email valide",
+        "accurate": "Fournir des informations exactes lors de l'inscription",
+        "security": "Maintenir la confidentialité de ses identifiants de connexion"
+      }
+    },
+    "services": {
+      "title": "Description des Services",
+      "intro": "L'Application propose les fonctionnalités suivantes :",
+      "items": {
+        "tracking": "Gestion et suivi de reptiles (informations, photos, poids)",
+        "feeding": "Enregistrement et planification des nourrissages",
+        "health": "Suivi de santé et historique vétérinaire",
+        "reproduction": "Suivi de reproduction (accouplements, pontes, éclosions)",
+        "nfc": "Identification par QR codes et tags NFC",
+        "transfer": "Transfert d'animaux entre utilisateurs"
+      }
+    },
+    "subscription": {
+      "title": "Abonnement et Tarification",
+      "intro": "L'Application propose une offre gratuite et une offre premium :",
+      "items": {
+        "free": "Version gratuite : accès à toutes les fonctionnalités pour 5 reptiles maximum",
+        "premium": "Version Premium : accès illimité au nombre de reptiles (4,99€/mois ou 39,99€/an)",
+        "payment": "Les paiements sont traités de manière sécurisée par notre prestataire de paiement",
+        "cancel": "L'abonnement peut être résilié à tout moment depuis les paramètres. L'accès premium reste actif jusqu'à la fin de la période payée"
+      }
+    },
+    "obligations": {
+      "title": "Obligations de l'Utilisateur",
+      "intro": "L'Utilisateur s'engage à :",
+      "items": {
+        "legal": "Utiliser l'Application conformément à la législation en vigueur",
+        "accurate": "Fournir des informations exactes et les maintenir à jour",
+        "noAbuse": "Ne pas tenter de contourner les mesures de sécurité ou les limitations du Service",
+        "noHarm": "Ne pas utiliser l'Application pour des activités illégales, notamment le trafic d'espèces protégées",
+        "respect": "Respecter les droits de propriété intellectuelle de l'éditeur"
+      }
+    },
+    "intellectual": {
+      "title": "Propriété intellectuelle",
+      "content": "L'Application, son code source, son design, ses fonctionnalités et son contenu sont la propriété exclusive de l'éditeur et sont protégés par les lois françaises et internationales sur la propriété intellectuelle. Toute reproduction, modification ou utilisation non autorisée est strictement interdite."
+    },
+    "userContent": {
+      "title": "Contenu Utilisateur",
+      "content": "L'Utilisateur conserve la propriété de ses données et contenus. En utilisant l'Application, l'Utilisateur accorde à l'éditeur une licence limitée pour stocker, afficher et traiter ces contenus aux seules fins de fourniture du Service. L'éditeur s'engage à ne pas utiliser ces contenus à d'autres fins."
+    },
+    "liability": {
+      "title": "Limitation de responsabilité",
+      "intro": "L'éditeur ne peut être tenu responsable :",
+      "items": {
+        "availability": "Des interruptions de service, bugs ou dysfonctionnements techniques",
+        "data": "De la perte de données résultant de circonstances indépendantes de sa volonté",
+        "indirect": "Des dommages indirects résultant de l'utilisation de l'Application",
+        "thirdParty": "Des contenus de sites tiers accessibles via des liens depuis l'Application"
+      }
+    },
+    "termination": {
+      "title": "Résiliation",
+      "content": "L'éditeur se réserve le droit de suspendre ou supprimer tout compte en cas de violation des présentes CGU, sans préavis ni indemnité. L'Utilisateur peut supprimer son compte à tout moment depuis les paramètres de l'Application."
+    },
+    "modifications": {
+      "title": "Modification des CGU",
+      "content": "L'éditeur se réserve le droit de modifier les présentes CGU à tout moment. Les utilisateurs seront informés des modifications substantielles. La poursuite de l'utilisation de l'Application après modification vaut acceptation des nouvelles CGU."
+    },
+    "law": {
+      "title": "Droit applicable et juridiction",
+      "content": "Les présentes CGU sont régies par le droit français. En cas de litige relatif à l'interprétation ou à l'exécution des présentes, et après échec de toute tentative de résolution amiable, les tribunaux français seront seuls compétents."
+    },
+    "contact": {
+      "title": "Contact",
+      "content": "Pour toute question relative aux présentes CGU, vous pouvez nous contacter à l'adresse : contact@s-reptrack.app"
+    }
   }
 }
