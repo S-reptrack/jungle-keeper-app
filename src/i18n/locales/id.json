@@ -381,5 +381,9 @@
     "python-regius": "Ball Python",
     "boa-constrictor": "Boa Constrictor",
     "pantherophis-guttatus": "Corn Snake"
+  },
+  "comingSoon": {
+    "title": "Segera Hadir",
+    "description": "Aplikasi manajemen penangkaran reptil kami akan segera hadir. Tetap terhubung!"
   }
 }

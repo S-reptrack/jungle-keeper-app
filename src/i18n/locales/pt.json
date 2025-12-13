@@ -384,5 +384,9 @@
     "lampropeltis-californiae": "Cobra-rei das montanhas da Califórnia",
     "thamnopis-proximus": "Cobra-fita ocidental",
     "lampropeltis-alterna": "Cobra-rei de bandas cinzentas"
+  },
+  "comingSoon": {
+    "title": "Em breve",
+    "description": "Nossa aplicação de gestão de criação de répteis chegará muito em breve. Fique ligado!"
   }
 }

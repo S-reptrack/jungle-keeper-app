@@ -384,5 +384,9 @@
     "lampropeltis-californiae": "Californische bergkoningsslang",
     "thamnopis-proximus": "Westelijke lintslang",
     "lampropeltis-alterna": "Grijsgestreepte koningsslang"
+  },
+  "comingSoon": {
+    "title": "Binnenkort beschikbaar",
+    "description": "Onze applicatie voor het beheer van reptielenkweek komt zeer binnenkort. Blijf op de hoogte!"
   }
 }

@@ -394,5 +394,9 @@
     "lampropeltis-californiae": "Serpente re delle montagne della California",
     "thamnopis-proximus": "Biscia nastro occidentale",
     "lampropeltis-alterna": "Serpente re dalle bande grigie"
+  },
+  "comingSoon": {
+    "title": "Prossimamente",
+    "description": "La nostra applicazione di gestione dell'allevamento di rettili arriverà molto presto. Restate sintonizzati!"
   }
 }

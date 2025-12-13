@@ -442,5 +442,9 @@
     "lampropeltis-californiae": "California Mountain Kingsnake",
     "thamnopis-proximus": "Western Ribbon Snake",
     "lampropeltis-alterna": "Gray-banded Kingsnake"
+  },
+  "comingSoon": {
+    "title": "Coming Soon",
+    "description": "Our reptile breeding management application is coming very soon. Stay tuned!"
   }
 }

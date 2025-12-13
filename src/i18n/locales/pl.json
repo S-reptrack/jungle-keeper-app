@@ -384,5 +384,9 @@
     "lampropeltis-californiae": "Wąż królewski górski kalifornijski",
     "thamnopis-proximus": "Wąż wstęgowy zachodni",
     "lampropeltis-alterna": "Wąż królewski szaropasmowy"
+  },
+  "comingSoon": {
+    "title": "Wkrótce",
+    "description": "Nasza aplikacja do zarządzania hodowlą gadów będzie dostępna już wkrótce. Bądź na bieżąco!"
   }
 }

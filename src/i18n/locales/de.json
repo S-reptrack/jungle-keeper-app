@@ -396,5 +396,9 @@
     "lampropeltis-californiae": "Kalifornische Bergkönigsnatter",
     "thamnopis-proximus": "Westliche Bandnatter",
     "lampropeltis-alterna": "Graugebänderte Königsnatter"
+  },
+  "comingSoon": {
+    "title": "Demnächst verfügbar",
+    "description": "Unsere Reptilienzucht-Management-Anwendung kommt sehr bald. Bleiben Sie dran!"
   }
 }
