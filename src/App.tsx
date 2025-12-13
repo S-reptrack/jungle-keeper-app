@@ -41,6 +41,10 @@ const App = () => (
           <GDPRConsentDialog />
           <HatchingNotificationDialog />
           <Routes>
+            {/* MODE MAINTENANCE - Décommenter les lignes ci-dessous pour réactiver le site */}
+            <Route path="*" element={<ComingSoon />} />
+            
+            {/* ROUTES NORMALES - Commentées pour maintenance
             <Route path="/" element={<Index />} />
             <Route path="/welcome" element={<ComingSoon />} />
             <Route path="/landing" element={<Landing />} />
@@ -61,8 +65,8 @@ const App = () => (
             <Route path="/nfc" element={<NFCReader />} />
             <Route path="/cost-breakdown" element={<CostBreakdown />} />
             <Route path="/qr-codes" element={<QRCodeBatch />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
+            */}
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
