@@ -396,5 +396,9 @@
     "lampropeltis-triangulum": "奶蛇",
     "lampropeltis-getula": "加州王蛇",
     "heterodon-nasicus": "西部猪鼻蛇"
+  },
+  "comingSoon": {
+    "title": "即将推出",
+    "description": "我们的爬行动物繁殖管理应用程序即将推出。敬请期待！"
   }
 }

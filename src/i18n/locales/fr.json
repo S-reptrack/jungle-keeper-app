@@ -679,5 +679,9 @@
       "title": "Contact",
       "content": "Pour toute question relative aux présentes CGU, vous pouvez nous contacter à l'adresse : contact@s-reptrack.app"
     }
+  },
+  "comingSoon": {
+    "title": "Bientôt disponible",
+    "description": "Notre application de gestion d'élevage de reptiles arrive très bientôt. Restez connectés !"
   }
 }

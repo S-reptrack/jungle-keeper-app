@@ -381,5 +381,9 @@
     "python-regius": "रॉयल पाइथन",
     "boa-constrictor": "बोआ कंस्ट्रिक्टर",
     "pantherophis-guttatus": "कॉर्न स्नेक"
+  },
+  "comingSoon": {
+    "title": "जल्द आ रहा है",
+    "description": "हमारा सरीसृप प्रजनन प्रबंधन ऐप बहुत जल्द आ रहा है। जुड़े रहें!"
   }
 }

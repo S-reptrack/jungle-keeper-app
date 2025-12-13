@@ -381,5 +381,9 @@
     "python-regius": "ボールパイソン",
     "boa-constrictor": "ボアコンストリクター",
     "pantherophis-guttatus": "コーンスネーク"
+  },
+  "comingSoon": {
+    "title": "近日公開",
+    "description": "爬虫類繁殖管理アプリケーションは間もなく登場します。お楽しみに！"
   }
 }

@@ -394,5 +394,9 @@
     "lampropeltis-californiae": "Serpiente rey de las montañas de California",
     "thamnopis-proximus": "Culebra de cinta occidental",
     "lampropeltis-alterna": "Serpiente rey de bandas grises"
+  },
+  "comingSoon": {
+    "title": "Próximamente",
+    "description": "Nuestra aplicación de gestión de cría de reptiles llegará muy pronto. ¡Mantente atento!"
   }
 }
