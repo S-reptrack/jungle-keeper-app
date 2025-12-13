@@ -44,7 +44,10 @@ const App = () => (
           <GDPRConsentDialog />
           <HatchingNotificationDialog />
           <Routes>
-            {/* ROUTES NORMALES - Actives dans l'aperçu */}
+            {/* MODE MAINTENANCE ACTIF - Toutes les routes redirigent vers ComingSoon */}
+            <Route path="*" element={<ComingSoon />} />
+            
+            {/* ROUTES NORMALES - Décommentez pour réouvrir l'app:
             <Route path="/" element={<Index />} />
             <Route path="/welcome" element={<ComingSoon />} />
             <Route path="/landing" element={<Landing />} />
@@ -68,10 +71,7 @@ const App = () => (
             <Route path="/cost-breakdown" element={<CostBreakdown />} />
             <Route path="/qr-codes" element={<QRCodeBatch />} />
             <Route path="*" element={<NotFound />} />
-            
-            {/* MODE MAINTENANCE - Pour activer: remplacer toutes les routes ci-dessus par:
-            <Route path="*" element={<ComingSoon />} />
-            puis PUBLIER */}
+            */}
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
