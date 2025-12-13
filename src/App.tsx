@@ -28,6 +28,9 @@ import ReproductionReptilesList from "./pages/ReproductionReptilesList";
 import FeedingsDue from "./pages/FeedingsDue";
 import CostBreakdown from "./pages/CostBreakdown";
 import QRCodeBatch from "./pages/QRCodeBatch";
+import Feeding from "./pages/Feeding";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminRoute from "./components/AdminRoute";
 
 const queryClient = new QueryClient();
 
@@ -41,32 +44,34 @@ const App = () => (
           <GDPRConsentDialog />
           <HatchingNotificationDialog />
           <Routes>
-            {/* MODE MAINTENANCE - Décommenter les lignes ci-dessous pour réactiver le site */}
-            <Route path="*" element={<ComingSoon />} />
-            
-            {/* ROUTES NORMALES - Commentées pour maintenance
+            {/* ROUTES NORMALES - Actives dans l'aperçu */}
             <Route path="/" element={<Index />} />
             <Route path="/welcome" element={<ComingSoon />} />
             <Route path="/landing" element={<Landing />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/reptile/:id" element={<ReptileDetail />} />
-            <Route path="/reptiles" element={<Reptiles />} />
-            <Route path="/all-reptiles" element={<AllReptilesList />} />
-            <Route path="/health-reptiles" element={<HealthReptilesList />} />
-            <Route path="/reproduction-reptiles" element={<ReproductionReptilesList />} />
-            <Route path="/feedings-due" element={<FeedingsDue />} />
-            <Route path="/for-sale" element={<ForSale />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/legal" element={<Legal />} />
-            <Route path="/terms" element={<Terms />} />
             <Route path="/install" element={<Install />} />
+            <Route path="/reptiles" element={<Reptiles />} />
+            <Route path="/reptile/:id" element={<ReptileDetail />} />
+            <Route path="/feeding" element={<Feeding />} />
+            <Route path="/feedings-due" element={<FeedingsDue />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/health" element={<HealthReptilesList />} />
+            <Route path="/reproduction" element={<ReproductionReptilesList />} />
+            <Route path="/all-reptiles" element={<AllReptilesList />} />
+            <Route path="/for-sale" element={<ForSale />} />
             <Route path="/transfers" element={<Transfers />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/legal" element={<Legal />} />
+            <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
             <Route path="/nfc" element={<NFCReader />} />
             <Route path="/cost-breakdown" element={<CostBreakdown />} />
             <Route path="/qr-codes" element={<QRCodeBatch />} />
             <Route path="*" element={<NotFound />} />
-            */}
+            
+            {/* MODE MAINTENANCE - Pour activer: remplacer toutes les routes ci-dessus par:
+            <Route path="*" element={<ComingSoon />} />
+            puis PUBLIER */}
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
