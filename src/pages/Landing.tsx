@@ -13,7 +13,8 @@ import {
   ChevronRight,
   Check,
   Star,
-  Zap
+  Zap,
+  Play
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -22,6 +23,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSelector from "@/components/LanguageSelector";
 import sreptrackLogo from "@/assets/sreptrack-logo.png";
 import { QRCodeSVG } from "qrcode.react";
+import PromoSlideshow from "@/components/PromoSlideshow";
 
 const Landing = () => {
   const { t } = useTranslation();
@@ -324,6 +326,25 @@ const Landing = () => {
               <Download className="w-5 h-5 ml-2" />
             </Button>
           </div>
+        </div>
+      </section>
+
+      {/* Promo Video Section */}
+      <section className="py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-8">
+            <Badge variant="secondary" className="mb-4">
+              <Play className="w-3 h-3 mr-1" />
+              Découvrez l'application
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Aperçu de S-reptrack
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Explorez les différentes fonctionnalités de l'application en quelques secondes
+            </p>
+          </div>
+          <PromoSlideshow />
         </div>
       </section>
 
