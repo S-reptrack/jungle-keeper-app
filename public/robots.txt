@@ -1,8 +1,28 @@
+# S-reptrack - Robots.txt
+# https://s-reptrack.app
+
 User-agent: Googlebot
 Allow: /
+Allow: /welcome
+Allow: /auth
+Allow: /install
+Allow: /legal
+Allow: /terms
+Allow: /privacy
+Disallow: /reptiles
+Disallow: /feeding
+Disallow: /settings
+Disallow: /admin
+Disallow: /transfers
+Disallow: /nfc
+Disallow: /for-sale
 
 User-agent: Bingbot
 Allow: /
+Allow: /welcome
+Disallow: /reptiles
+Disallow: /settings
+Disallow: /admin
 
 User-agent: Twitterbot
 Allow: /
@@ -12,3 +32,11 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /reptiles
+Disallow: /feeding
+Disallow: /settings
+Disallow: /admin
+Disallow: /transfers
+
+# Sitemap
+Sitemap: https://s-reptrack.app/sitemap.xml
