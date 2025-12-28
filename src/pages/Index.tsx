@@ -95,7 +95,7 @@ const Index = () => {
           .eq("reptile_id", reptile.id)
           .order("feeding_date", { ascending: false })
           .limit(1)
-          .single();
+          .maybeSingle();
         
         if (feedingData) {
           const daysSince = calculateDaysSince(feedingData.feeding_date);
