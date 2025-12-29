@@ -2,17 +2,17 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 
-// Stripe price IDs
+// Stripe LIVE price IDs
 export const SUBSCRIPTION_TIERS = {
   monthly: {
-    priceId: "price_1ScnvkBb7t0BI2CKbcQ4hNo0",
-    productId: "prod_TZxrOcG5j7G1Zv",
+    priceId: "price_1SjkYyBpVrf7V1XbsPWXwUIc",
+    productId: "prod_Th8qQ66ByaGeZa",
     price: 4.99,
     interval: "month" as const,
   },
   yearly: {
-    priceId: "price_1ScnwbBb7t0BI2CKiZ8S7Pyr",
-    productId: "prod_TZxsqtES1OzC6U",
+    priceId: "price_1SjkZEBpVrf7V1Xbd1DD1Ems",
+    productId: "prod_Th8qGp0s3PNarf",
     price: 39.99,
     interval: "year" as const,
   },
