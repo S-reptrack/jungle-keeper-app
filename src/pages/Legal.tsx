@@ -25,17 +25,17 @@ const Legal = () => {
             <section>
               <h2 className="text-xl font-semibold mb-3">{t("legal.editor.title")}</h2>
               <div className="text-muted-foreground space-y-2">
-                <p><strong>{t("legal.editor.name")}:</strong> [À COMPLÉTER - Votre nom complet]</p>
+                <p><strong>{t("legal.editor.name")}:</strong> BERTIN Franck, Michel</p>
                 <p><strong>{t("legal.editor.status")}:</strong> {t("legal.editor.statusValue")}</p>
-                <p><strong>{t("legal.editor.siret")}:</strong> [À COMPLÉTER - Votre SIRET]</p>
-                <p><strong>{t("legal.editor.address")}:</strong> [À COMPLÉTER - Ville], France</p>
+                <p><strong>{t("legal.editor.siret")}:</strong> 99500161700019</p>
+                <p><strong>{t("legal.editor.address")}:</strong> Nogent-sur-Seine, France</p>
                 <p><strong>{t("legal.editor.email")}:</strong> contact@s-reptrack.app</p>
               </div>
             </section>
 
             <section>
               <h2 className="text-xl font-semibold mb-3">{t("legal.director.title")}</h2>
-              <p className="text-muted-foreground">[À COMPLÉTER - Votre nom complet]</p>
+              <p className="text-muted-foreground">BERTIN Franck, Michel</p>
             </section>
 
             <section>
@@ -79,7 +79,7 @@ const Legal = () => {
 
             <section className="pt-4 border-t">
               <p className="text-sm text-muted-foreground">
-                {t("legal.lastUpdated")}: 12 décembre 2025
+                {t("legal.lastUpdated")}: 29 décembre 2025
               </p>
             </section>
           </CardContent>
