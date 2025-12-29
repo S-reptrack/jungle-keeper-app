@@ -46,7 +46,7 @@ const App = () => (
           <Routes>
             {/* ROUTES NORMALES - Actives pour travailler dans l'aperçu */}
             <Route path="/" element={<Index />} />
-            <Route path="/welcome" element={<ComingSoon />} />
+            <Route path="/welcome" element={<Landing />} />
             <Route path="/landing" element={<Landing />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/install" element={<Install />} />
