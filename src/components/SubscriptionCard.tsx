@@ -270,9 +270,14 @@ const SubscriptionCard = () => {
 
             <Separator />
 
-            <p className="text-xs text-center text-muted-foreground">
-              {t("subscription.securePayment") || "Paiement sécurisé par Stripe. Annulez à tout moment."}
-            </p>
+            <div className="text-xs text-center text-muted-foreground space-y-1">
+              <p>
+                {t("subscription.nfcNote") || "⚠️ NFC non compatible avec iOS/Apple. Utilisez les QR codes sur iPhone."}
+              </p>
+              <p>
+                {t("subscription.securePayment") || "Paiement sécurisé. Annulez à tout moment."}
+              </p>
+            </div>
           </>
         )}
       </CardContent>
