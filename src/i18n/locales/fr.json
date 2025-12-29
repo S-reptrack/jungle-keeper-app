@@ -522,6 +522,7 @@
     "manage": "Gérer l'abonnement",
     "manageSubscription": "Gérer mon abonnement",
     "securePayment": "Paiement sécurisé. Annulez à tout moment.",
+    "nfcNote": "⚠️ NFC non compatible avec iOS/Apple. Utilisez les QR codes sur iPhone.",
     "expiresOn": "Expire le",
     "renewsOn": "Renouvellement le",
     "currentPlan": "Votre abonnement",
