@@ -335,6 +335,7 @@
     "featureQrDescription": "Buat dan cetak kode QR untuk mengidentifikasi setiap hewan dalam koleksi Anda secara instan.",
     "featureNfcTitle": "Pemindai NFC",
     "featureNfcDescription": "Pindai tag NFC untuk mengakses catatan reptil Anda secara instan.",
+    "nfcIosNote": "(Tidak kompatibel dengan iOS/Apple)",
     "featureFeedingTitle": "Pelacakan Pemberian Makan",
     "featureFeedingDescription": "Rencanakan dan lacak pemberian makan setiap hewan dengan pengingat otomatis.",
     "featureHealthTitle": "Kesehatan & Dokter Hewan",

@@ -410,6 +410,7 @@
     "featureQrDescription": "Générez et imprimez des QR codes pour identifier rapidement chaque animal de votre collection.",
     "featureNfcTitle": "Scanner NFC",
     "featureNfcDescription": "Scannez les tags NFC pour accéder instantanément aux fiches de vos reptiles.",
+    "nfcIosNote": "(Non compatible iOS/Apple)",
     "featureFeedingTitle": "Suivi Nourrissage",
     "featureFeedingDescription": "Planifiez et suivez les repas de chaque animal avec des rappels automatiques.",
     "featureHealthTitle": "Santé & Vétérinaire",
