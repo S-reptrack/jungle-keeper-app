@@ -335,6 +335,7 @@
     "featureQrDescription": "Создавайте и печатайте QR-коды для мгновенной идентификации каждого животного в коллекции.",
     "featureNfcTitle": "NFC-сканер",
     "featureNfcDescription": "Сканируйте NFC-метки для мгновенного доступа к карточкам рептилий.",
+    "nfcIosNote": "(Не совместим с iOS/Apple)",
     "featureFeedingTitle": "Отслеживание кормления",
     "featureFeedingDescription": "Планируйте и отслеживайте кормление каждого животного с автоматическими напоминаниями.",
     "featureHealthTitle": "Здоровье и ветеринария",

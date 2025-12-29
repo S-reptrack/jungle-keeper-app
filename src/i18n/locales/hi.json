@@ -335,6 +335,7 @@
     "featureQrDescription": "अपने संग्रह में प्रत्येक पशु को तुरंत पहचानने के लिए QR कोड बनाएं और प्रिंट करें।",
     "featureNfcTitle": "NFC स्कैनर",
     "featureNfcDescription": "अपने सरीसृपों के रिकॉर्ड तुरंत एक्सेस करने के लिए NFC टैग स्कैन करें।",
+    "nfcIosNote": "(iOS/Apple के साथ संगत नहीं)",
     "featureFeedingTitle": "भोजन ट्रैकिंग",
     "featureFeedingDescription": "स्वचालित अनुस्मारकों के साथ प्रत्येक पशु के भोजन की योजना बनाएं और ट्रैक करें।",
     "featureHealthTitle": "स्वास्थ्य और पशु चिकित्सा",

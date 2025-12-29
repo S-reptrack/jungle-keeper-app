@@ -335,6 +335,7 @@
     "featureQrDescription": "生成和打印二维码，快速识别收藏中的每个动物。",
     "featureNfcTitle": "NFC扫描器",
     "featureNfcDescription": "扫描NFC标签，即时访问您的爬行动物档案。",
+    "nfcIosNote": "(不兼容iOS/Apple)",
     "featureFeedingTitle": "喂食追踪",
     "featureFeedingDescription": "自动提醒，计划和追踪每个动物的喂食。",
     "featureHealthTitle": "健康与兽医",

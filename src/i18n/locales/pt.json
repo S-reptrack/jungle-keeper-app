@@ -309,6 +309,7 @@
     "featureQrDescription": "Gere e imprima códigos QR para identificar rapidamente cada animal da sua coleção.",
     "featureNfcTitle": "Scanner NFC",
     "featureNfcDescription": "Escaneie etiquetas NFC para acessar instantaneamente as fichas dos seus répteis.",
+    "nfcIosNote": "(Não compatível com iOS/Apple)",
     "featureFeedingTitle": "Acompanhamento de Alimentação",
     "featureFeedingDescription": "Planeje e acompanhe as refeições de cada animal com lembretes automáticos.",
     "featureHealthTitle": "Saúde e Veterinária",

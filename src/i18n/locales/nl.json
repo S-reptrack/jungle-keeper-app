@@ -309,6 +309,7 @@
     "featureQrDescription": "Genereer en print QR-codes om elk dier in uw collectie snel te identificeren.",
     "featureNfcTitle": "NFC-scanner",
     "featureNfcDescription": "Scan NFC-tags voor directe toegang tot uw reptielenprofielen.",
+    "nfcIosNote": "(Niet compatibel met iOS/Apple)",
     "featureFeedingTitle": "Voedingsmonitoring",
     "featureFeedingDescription": "Plan en volg de maaltijden van elk dier met automatische herinneringen.",
     "featureHealthTitle": "Gezondheid & Dierenarts",

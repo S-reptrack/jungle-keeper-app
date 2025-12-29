@@ -309,6 +309,7 @@
     "featureQrDescription": "Generuj i drukuj kody QR do szybkiej identyfikacji każdego zwierzęcia w swojej kolekcji.",
     "featureNfcTitle": "Skaner NFC",
     "featureNfcDescription": "Skanuj tagi NFC, aby natychmiast uzyskać dostęp do profili swoich gadów.",
+    "nfcIosNote": "(Niekompatybilny z iOS/Apple)",
     "featureFeedingTitle": "Śledzenie Karmienia",
     "featureFeedingDescription": "Planuj i śledź posiłki każdego zwierzęcia z automatycznymi przypomnieniami.",
     "featureHealthTitle": "Zdrowie i Weterynaria",

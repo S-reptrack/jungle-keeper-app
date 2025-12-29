@@ -335,6 +335,7 @@
     "featureQrDescription": "ਆਪਣੇ ਸੰਗ੍ਰਹਿ ਵਿੱਚ ਹਰੇਕ ਜਾਨਵਰ ਨੂੰ ਤੁਰੰਤ ਪਛਾਣਨ ਲਈ QR ਕੋਡ ਬਣਾਓ ਅਤੇ ਪ੍ਰਿੰਟ ਕਰੋ।",
     "featureNfcTitle": "NFC ਸਕੈਨਰ",
     "featureNfcDescription": "ਆਪਣੇ ਸੱਪ-ਜੀਵਾਂ ਦੇ ਰਿਕਾਰਡ ਤੁਰੰਤ ਐਕਸੈਸ ਕਰਨ ਲਈ NFC ਟੈਗ ਸਕੈਨ ਕਰੋ।",
+    "nfcIosNote": "(iOS/Apple ਨਾਲ ਅਨੁਕੂਲ ਨਹੀਂ)",
     "featureFeedingTitle": "ਖੁਰਾਕ ਟ੍ਰੈਕਿੰਗ",
     "featureFeedingDescription": "ਆਟੋਮੈਟਿਕ ਯਾਦ-ਦਹਾਨੀਆਂ ਨਾਲ ਹਰੇਕ ਜਾਨਵਰ ਦੀ ਖੁਰਾਕ ਦੀ ਯੋਜਨਾ ਬਣਾਓ ਅਤੇ ਟ੍ਰੈਕ ਕਰੋ।",
     "featureHealthTitle": "ਸਿਹਤ ਅਤੇ ਵੈਟਰਨਰੀ",

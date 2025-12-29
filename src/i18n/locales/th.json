@@ -335,6 +335,7 @@
     "featureQrDescription": "สร้างและพิมพ์รหัส QR เพื่อระบุสัตว์แต่ละตัวในคอลเลกชันของคุณได้ทันที",
     "featureNfcTitle": "สแกนเนอร์ NFC",
     "featureNfcDescription": "สแกนแท็ก NFC เพื่อเข้าถึงบันทึกสัตว์เลื้อยคลานของคุณได้ทันที",
+    "nfcIosNote": "(ไม่รองรับ iOS/Apple)",
     "featureFeedingTitle": "การติดตามการให้อาหาร",
     "featureFeedingDescription": "วางแผนและติดตามการให้อาหารของสัตว์แต่ละตัวพร้อมการเตือนอัตโนมัติ",
     "featureHealthTitle": "สุขภาพและสัตวแพทย์",

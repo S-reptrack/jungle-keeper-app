@@ -335,6 +335,7 @@
     "featureQrDescription": "コレクション内の各動物を即座に識別するためにQRコードを生成・印刷。",
     "featureNfcTitle": "NFCスキャナー",
     "featureNfcDescription": "NFCタグをスキャンして爬虫類の記録に即座にアクセス。",
+    "nfcIosNote": "(iOS/Appleとの互換性なし)",
     "featureFeedingTitle": "給餌追跡",
     "featureFeedingDescription": "自動リマインダーで各動物の給餌を計画・追跡。",
     "featureHealthTitle": "健康と獣医",

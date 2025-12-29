@@ -41,7 +41,7 @@ const Landing = () => {
     {
       icon: Nfc,
       title: t("landing.featureNfcTitle"),
-      description: t("landing.featureNfcDescription"),
+      description: t("landing.featureNfcDescription") + " " + t("landing.nfcIosNote"),
     },
     {
       icon: Calendar,
