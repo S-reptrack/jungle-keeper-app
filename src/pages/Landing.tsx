@@ -99,7 +99,7 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border pt-[env(safe-area-inset-top)]">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <img src={sreptrackLogo} alt="S-reptrack" className="w-8 h-8 rounded-lg" />
@@ -116,7 +116,7 @@ const Landing = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-24 pb-16 px-4 md:pt-32 md:pb-24">
+      <section className="pt-24 pb-16 px-4 md:pt-32 md:pb-24" style={{ paddingTop: 'calc(6rem + env(safe-area-inset-top))' }}>
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Text Content */}
