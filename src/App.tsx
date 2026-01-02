@@ -31,6 +31,7 @@ import QRCodeBatch from "./pages/QRCodeBatch";
 import Feeding from "./pages/Feeding";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminRoute from "./components/AdminRoute";
+import MaintenanceGuard from "./components/MaintenanceGuard";
 
 const queryClient = new QueryClient();
 
@@ -41,34 +42,36 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <GDPRConsentDialog />
-          <HatchingNotificationDialog />
-          <Routes>
-            {/* ROUTES NORMALES - Actives pour travailler dans l'aperçu */}
-            <Route path="/" element={<Index />} />
-            <Route path="/welcome" element={<Landing />} />
-            <Route path="/landing" element={<Landing />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/install" element={<Install />} />
-            <Route path="/reptiles" element={<Reptiles />} />
-            <Route path="/reptile/:id" element={<ReptileDetail />} />
-            <Route path="/feeding" element={<Feeding />} />
-            <Route path="/feedings-due" element={<FeedingsDue />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/health" element={<HealthReptilesList />} />
-            <Route path="/reproduction" element={<ReproductionReptilesList />} />
-            <Route path="/all-reptiles" element={<AllReptilesList />} />
-            <Route path="/for-sale" element={<ForSale />} />
-            <Route path="/transfers" element={<Transfers />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/legal" element={<Legal />} />
-            <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-            <Route path="/nfc" element={<NFCReader />} />
-            <Route path="/cost-breakdown" element={<CostBreakdown />} />
-            <Route path="/qr-codes" element={<QRCodeBatch />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <MaintenanceGuard>
+            <GDPRConsentDialog />
+            <HatchingNotificationDialog />
+            <Routes>
+              {/* ROUTES NORMALES - Actives pour travailler dans l'aperçu */}
+              <Route path="/" element={<Index />} />
+              <Route path="/welcome" element={<Landing />} />
+              <Route path="/landing" element={<Landing />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/install" element={<Install />} />
+              <Route path="/reptiles" element={<Reptiles />} />
+              <Route path="/reptile/:id" element={<ReptileDetail />} />
+              <Route path="/feeding" element={<Feeding />} />
+              <Route path="/feedings-due" element={<FeedingsDue />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/health" element={<HealthReptilesList />} />
+              <Route path="/reproduction" element={<ReproductionReptilesList />} />
+              <Route path="/all-reptiles" element={<AllReptilesList />} />
+              <Route path="/for-sale" element={<ForSale />} />
+              <Route path="/transfers" element={<Transfers />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/legal" element={<Legal />} />
+              <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+              <Route path="/nfc" element={<NFCReader />} />
+              <Route path="/cost-breakdown" element={<CostBreakdown />} />
+              <Route path="/qr-codes" element={<QRCodeBatch />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </MaintenanceGuard>
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>
