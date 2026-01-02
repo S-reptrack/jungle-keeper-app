@@ -46,8 +46,9 @@ const App = () => (
             <GDPRConsentDialog />
             <HatchingNotificationDialog />
             <Routes>
-              {/* ROUTES NORMALES - Actives pour travailler dans l'aperçu */}
-              <Route path="/" element={<Index />} />
+              {/* ROUTES NORMALES - Landing page en racine pour la production */}
+              <Route path="/" element={<Landing />} />
+              <Route path="/dashboard" element={<Index />} />
               <Route path="/welcome" element={<Landing />} />
               <Route path="/landing" element={<Landing />} />
               <Route path="/auth" element={<Auth />} />
