@@ -132,7 +132,7 @@ const Terms = () => {
 
             <section className="pt-4 border-t">
               <p className="text-sm text-muted-foreground">
-                {t("terms.lastUpdated")}: 12 décembre 2025
+                {t("terms.lastUpdated")}: 3 janvier 2026
               </p>
             </section>
           </CardContent>

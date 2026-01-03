@@ -79,7 +79,7 @@ const Legal = () => {
 
             <section className="pt-4 border-t">
               <p className="text-sm text-muted-foreground">
-                {t("legal.lastUpdated")}: 29 décembre 2025
+                {t("legal.lastUpdated")}: 3 janvier 2026
               </p>
             </section>
           </CardContent>
