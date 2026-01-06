@@ -13,6 +13,7 @@ rmdir /s /q "android\app\src\main\res\mipmap-mdpi" 2>nul
 rmdir /s /q "android\app\src\main\res\mipmap-xhdpi" 2>nul
 rmdir /s /q "android\app\src\main\res\mipmap-xxhdpi" 2>nul
 rmdir /s /q "android\app\src\main\res\mipmap-xxxhdpi" 2>nul
+rmdir /s /q "android\app\src\main\res\mipmap-anydpi-v26" 2>nul
 
 echo.
 echo [2/4] Regeneration de la plateforme Android...
