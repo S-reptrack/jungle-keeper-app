@@ -11,16 +11,26 @@ interface MaintenanceGuardProps {
 }
 
 const MaintenanceGuard = ({ children }: MaintenanceGuardProps) => {
+  // Si le mode maintenance est désactivé, afficher directement les enfants
+  // sans attendre le chargement du rôle utilisateur
+  if (!MAINTENANCE_MODE) {
+    return <>{children}</>;
+  }
+
+  // Mode maintenance activé - besoin de vérifier le rôle
+  return <MaintenanceCheck>{children}</MaintenanceCheck>;
+};
+
+// Composant séparé pour la vérification du mode maintenance
+const MaintenanceCheck = ({ children }: MaintenanceGuardProps) => {
   const { user, loading: authLoading } = useAuth();
   const { isAdmin, loading: roleLoading } = useUserRole();
   const [shouldShowMaintenance, setShouldShowMaintenance] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !roleLoading) {
-      // Show maintenance page if:
-      // 1. Maintenance mode is enabled
-      // 2. User is not an admin
-      if (MAINTENANCE_MODE && !isAdmin) {
+      // Show maintenance page if user is not an admin
+      if (!isAdmin) {
         setShouldShowMaintenance(true);
       } else {
         setShouldShowMaintenance(false);
@@ -28,7 +38,7 @@ const MaintenanceGuard = ({ children }: MaintenanceGuardProps) => {
     }
   }, [user, isAdmin, authLoading, roleLoading]);
 
-  // While loading, show nothing (or a loading spinner)
+  // While loading, show spinner
   if (authLoading || roleLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -37,12 +47,12 @@ const MaintenanceGuard = ({ children }: MaintenanceGuardProps) => {
     );
   }
 
-  // If maintenance mode and not admin, show maintenance page
+  // If not admin, show maintenance page
   if (shouldShowMaintenance) {
     return <Maintenance />;
   }
 
-  // Otherwise, render children normally
+  // Admin user, render children
   return <>{children}</>;
 };
 
