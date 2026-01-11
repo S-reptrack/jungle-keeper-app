@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import Maintenance from "@/pages/Maintenance";
 
 // TOGGLE THIS TO ENABLE/DISABLE MAINTENANCE MODE
-const MAINTENANCE_MODE = false;
+const MAINTENANCE_MODE = true;
 
 interface MaintenanceGuardProps {
   children: React.ReactNode;
