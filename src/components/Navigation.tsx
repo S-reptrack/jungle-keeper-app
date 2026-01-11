@@ -1,4 +1,4 @@
-import { Home, List, Tag, Settings, QrCode, Waves } from "lucide-react";
+import { Home, List, Tag, Settings, QrCode, Waves, User } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -9,6 +9,8 @@ import { useBottomInset } from "@/hooks/useBottomInset";
 import { QRScanner } from "./QRScanner";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import { Badge } from "./ui/badge";
 
 const isIOS = (): boolean => {
   const userAgent = navigator.userAgent.toLowerCase();
@@ -21,6 +23,10 @@ const Navigation = () => {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const [scannerOpen, setScannerOpen] = useState(false);
+  const { user } = useAuth();
+
+  // Extraire le pseudo de l'email (partie avant @)
+  const userDisplayName = user?.email?.split('@')[0] || null;
   
   const qrButtonBottom = `calc(5rem + env(safe-area-inset-bottom))`;
   
@@ -69,7 +75,13 @@ const Navigation = () => {
               })}
               <LanguageSelector />
             </div>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
+              {userDisplayName && !isMobile && (
+                <Badge variant="outline" className="flex items-center gap-1.5 px-3 py-1.5">
+                  <User className="w-3.5 h-3.5" />
+                  <span className="text-sm font-medium max-w-[120px] truncate">{userDisplayName}</span>
+                </Badge>
+              )}
               <ThemeToggle />
             </div>
           </div>
