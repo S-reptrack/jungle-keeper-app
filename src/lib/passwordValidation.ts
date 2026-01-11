@@ -1,4 +1,4 @@
-import { SHA1 } from 'crypto-js';
+import CryptoJS from 'crypto-js';
 
 export interface PasswordValidationResult {
   isValid: boolean;
@@ -88,7 +88,7 @@ export function validatePassword(password: string): PasswordValidationResult {
 export async function checkPasswordBreach(password: string): Promise<boolean> {
   try {
     // Générer le hash SHA-1 du mot de passe
-    const hash = SHA1(password).toString().toUpperCase();
+    const hash = CryptoJS.SHA1(password).toString().toUpperCase();
     const prefix = hash.substring(0, 5);
     const suffix = hash.substring(5);
 
