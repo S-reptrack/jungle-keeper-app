@@ -1,16 +1,46 @@
 import { useTranslation } from "react-i18next";
+import { LogOut } from "lucide-react";
 import sreptrackLogo from "@/assets/sreptrack-logo.png";
 import LanguageSelector from "@/components/LanguageSelector";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
 
 const Maintenance = () => {
   const { t } = useTranslation();
+  const { user } = useAuth();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast.success(t("settings.signOutSuccess", "Déconnexion réussie"));
+    window.location.reload();
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex flex-col items-center justify-center p-6">
-      {/* Language Selector */}
-      <div className="absolute top-4 right-4">
+      {/* Language Selector & Logout */}
+      <div className="absolute top-4 right-4 flex items-center gap-2">
         <LanguageSelector />
+        {user && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleLogout}
+            className="gap-2"
+          >
+            <LogOut className="h-4 w-4" />
+            {t("settings.signOut", "Déconnexion")}
+          </Button>
+        )}
       </div>
+
+      {/* Current user info */}
+      {user && (
+        <div className="absolute top-16 right-4 text-xs text-muted-foreground">
+          {t("maintenance.loggedAs", "Connecté en tant que")}: {user.email}
+        </div>
+      )}
 
       {/* Logo */}
       <div className="mb-8">
