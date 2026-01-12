@@ -11,6 +11,7 @@ import { AlertCircle, ArrowLeft, CheckCircle2, Shield } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import jungleHero from "@/assets/jungle-hero.jpg";
 import { validatePassword, validatePasswordComplete, type PasswordValidationResult } from "@/lib/passwordValidation";
+import LanguageSelector from "@/components/LanguageSelector";
 
 const Auth = () => {
   const { t } = useTranslation();
@@ -104,9 +105,9 @@ const Auth = () => {
 
   const getStrengthLabel = (strength: 'weak' | 'medium' | 'strong') => {
     switch (strength) {
-      case 'weak': return 'Faible';
-      case 'medium': return 'Moyen';
-      case 'strong': return 'Fort';
+      case 'weak': return t('auth.passwordWeak');
+      case 'medium': return t('auth.passwordMedium');
+      case 'strong': return t('auth.passwordStrong');
     }
   };
 
@@ -122,6 +123,11 @@ const Auth = () => {
         <ArrowLeft className="h-4 w-4" />
         {t("common.back")}
       </Button>
+
+      {/* Language Selector */}
+      <div className="absolute top-4 right-4 z-10">
+        <LanguageSelector />
+      </div>
 
       {/* Hero Section */}
       <div className="relative h-64 overflow-hidden">
@@ -142,32 +148,32 @@ const Auth = () => {
       <div className="flex-1 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle>{isLogin ? "Connexion" : "Inscription"}</CardTitle>
+            <CardTitle>{isLogin ? t('auth.login') : t('auth.signup')}</CardTitle>
             <CardDescription>
               {isLogin 
-                ? "Connectez-vous pour accéder à vos reptiles" 
-                : "Créez un compte pour commencer"}
+                ? t('auth.loginDescription') 
+                : t('auth.signupDescription')}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleAuth} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t('auth.email')}</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="votre@email.com"
+                  placeholder={t('auth.emailPlaceholder')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">Mot de passe</Label>
+                <Label htmlFor="password">{t('auth.password')}</Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder={isLogin ? "••••••••" : "Minimum 12 caractères"}
+                  placeholder={isLogin ? "••••••••" : t('auth.passwordPlaceholder')}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -179,7 +185,7 @@ const Auth = () => {
                   <div className="space-y-2 mt-2">
                     <div className="flex items-center gap-2 text-sm">
                       <Shield className="h-4 w-4" />
-                      <span>Force: </span>
+                      <span>{t('auth.strength')}: </span>
                       <span className={`font-semibold ${getStrengthColor(passwordValidation.strength)}`}>
                         {getStrengthLabel(passwordValidation.strength)}
                       </span>
@@ -204,7 +210,7 @@ const Auth = () => {
                       <Alert className="py-2 border-green-500 bg-green-50 dark:bg-green-950">
                         <CheckCircle2 className="h-4 w-4 text-green-600" />
                         <AlertDescription className="text-xs text-green-700 dark:text-green-400">
-                          Mot de passe sécurisé ✓
+                          {t('auth.passwordSecure')} ✓
                         </AlertDescription>
                       </Alert>
                     )}
@@ -217,7 +223,7 @@ const Auth = () => {
                 <Alert>
                   <Shield className="h-4 w-4" />
                   <AlertDescription className="text-xs">
-                    Vérification de la sécurité du mot de passe...
+                    {t('auth.checkingPassword')}
                   </AlertDescription>
                 </Alert>
               )}
@@ -227,7 +233,7 @@ const Auth = () => {
                 className="w-full" 
                 disabled={loading || checkingBreach || (!isLogin && passwordValidation && !passwordValidation.isValid)}
               >
-                {loading || checkingBreach ? "Chargement..." : (isLogin ? "Se connecter" : "S'inscrire")}
+                {loading || checkingBreach ? t('common.loading') : (isLogin ? t('auth.loginButton') : t('auth.signupButton'))}
               </Button>
             </form>
             <div className="mt-4 text-center space-y-2">
@@ -237,15 +243,15 @@ const Auth = () => {
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 {isLogin 
-                  ? "Pas encore de compte ? S'inscrire" 
-                  : "Déjà un compte ? Se connecter"}
+                  ? t('auth.noAccount') 
+                  : t('auth.hasAccount')}
               </button>
               <div>
                 <a 
                   href="/privacy" 
                   className="text-xs text-muted-foreground hover:text-foreground transition-colors underline"
                 >
-                  Politique de confidentialité
+                  {t('auth.privacyPolicy')}
                 </a>
               </div>
             </div>

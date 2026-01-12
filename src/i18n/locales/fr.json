@@ -165,6 +165,27 @@
     "loading": "Chargement...",
     "close": "Fermer"
   },
+  "auth": {
+    "login": "Connexion",
+    "signup": "Inscription",
+    "loginDescription": "Connectez-vous pour accéder à vos reptiles",
+    "signupDescription": "Créez un compte pour commencer",
+    "email": "Email",
+    "emailPlaceholder": "votre@email.com",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Minimum 12 caractères",
+    "loginButton": "Se connecter",
+    "signupButton": "S'inscrire",
+    "noAccount": "Pas encore de compte ? S'inscrire",
+    "hasAccount": "Déjà un compte ? Se connecter",
+    "privacyPolicy": "Politique de confidentialité",
+    "strength": "Force",
+    "passwordWeak": "Faible",
+    "passwordMedium": "Moyen",
+    "passwordStrong": "Fort",
+    "passwordSecure": "Mot de passe sécurisé",
+    "checkingPassword": "Vérification de la sécurité du mot de passe..."
+  },
   "nfc": {
     "iosNotSupported": "NFC non disponible sur iPhone",
     "iosNotSupportedDescription": "Apple ne permet pas l'accès au NFC depuis les applications web. Utilisez le scanner QR code à la place, ou installez l'app native Android pour profiter du NFC."
