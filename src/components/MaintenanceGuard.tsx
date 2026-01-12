@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import Maintenance from "@/pages/Maintenance";
 
 // TOGGLE THIS TO ENABLE/DISABLE MAINTENANCE MODE
-const MAINTENANCE_MODE = false;
+const MAINTENANCE_MODE = true;
 
 interface MaintenanceGuardProps {
   children: React.ReactNode;
@@ -24,19 +24,16 @@ const MaintenanceGuard = ({ children }: MaintenanceGuardProps) => {
 // Composant séparé pour la vérification du mode maintenance
 const MaintenanceCheck = ({ children }: MaintenanceGuardProps) => {
   const { user, loading: authLoading } = useAuth();
-  const { isAdmin, loading: roleLoading } = useUserRole();
-  const [shouldShowMaintenance, setShouldShowMaintenance] = useState(false);
+  const { isAdmin, loading: roleLoading, role } = useUserRole();
 
+  // Debug logs
   useEffect(() => {
-    if (!authLoading && !roleLoading) {
-      // Show maintenance page if user is not an admin
-      if (!isAdmin) {
-        setShouldShowMaintenance(true);
-      } else {
-        setShouldShowMaintenance(false);
-      }
-    }
-  }, [user, isAdmin, authLoading, roleLoading]);
+    console.log("MaintenanceCheck - authLoading:", authLoading);
+    console.log("MaintenanceCheck - roleLoading:", roleLoading);
+    console.log("MaintenanceCheck - user:", user?.email);
+    console.log("MaintenanceCheck - role:", role);
+    console.log("MaintenanceCheck - isAdmin:", isAdmin);
+  }, [authLoading, roleLoading, user, role, isAdmin]);
 
   // While loading, show spinner
   if (authLoading || roleLoading) {
@@ -48,11 +45,13 @@ const MaintenanceCheck = ({ children }: MaintenanceGuardProps) => {
   }
 
   // If not admin, show maintenance page
-  if (shouldShowMaintenance) {
+  if (!isAdmin) {
+    console.log("MaintenanceCheck - Showing maintenance page (not admin)");
     return <Maintenance />;
   }
 
   // Admin user, render children
+  console.log("MaintenanceCheck - Admin access granted");
   return <>{children}</>;
 };
 
