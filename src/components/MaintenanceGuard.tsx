@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useAuth } from "@/hooks/useAuth";
 import Maintenance from "@/pages/Maintenance";
@@ -6,14 +7,23 @@ import Maintenance from "@/pages/Maintenance";
 // TOGGLE THIS TO ENABLE/DISABLE MAINTENANCE MODE
 const MAINTENANCE_MODE = true;
 
+// Routes accessibles même en mode maintenance
+const ALLOWED_ROUTES = ["/auth", "/privacy", "/terms", "/legal"];
+
 interface MaintenanceGuardProps {
   children: React.ReactNode;
 }
 
 const MaintenanceGuard = ({ children }: MaintenanceGuardProps) => {
+  const location = useLocation();
+  
   // Si le mode maintenance est désactivé, afficher directement les enfants
-  // sans attendre le chargement du rôle utilisateur
   if (!MAINTENANCE_MODE) {
+    return <>{children}</>;
+  }
+
+  // Si la route actuelle est dans les routes autorisées, afficher les enfants
+  if (ALLOWED_ROUTES.includes(location.pathname)) {
     return <>{children}</>;
   }
 
