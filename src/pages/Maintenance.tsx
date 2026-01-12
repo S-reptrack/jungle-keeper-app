@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { LogOut } from "lucide-react";
+import { LogOut, LogIn } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import sreptrackLogo from "@/assets/sreptrack-logo.png";
 import LanguageSelector from "@/components/LanguageSelector";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,7 @@ import { toast } from "sonner";
 const Maintenance = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -29,8 +31,19 @@ const Maintenance = () => {
             onClick={handleLogout}
             className="gap-2"
           >
-            <LogOut className="h-4 w-4" />
+          <LogOut className="h-4 w-4" />
             {t("settings.signOut", "Déconnexion")}
+          </Button>
+        )}
+        {!user && (
+          <Button
+            variant="default"
+            size="sm"
+            onClick={() => navigate("/auth")}
+            className="gap-2"
+          >
+            <LogIn className="h-4 w-4" />
+            {t("auth.login", "Connexion")}
           </Button>
         )}
       </div>
