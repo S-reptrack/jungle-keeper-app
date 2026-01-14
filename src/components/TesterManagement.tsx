@@ -16,9 +16,17 @@ interface Tester {
   created_at: string;
 }
 
+interface PendingInvitation {
+  id: string;
+  email: string;
+  created_at: string;
+  status: string;
+}
+
 const TesterManagement = () => {
   const { t } = useTranslation();
   const [testers, setTesters] = useState<Tester[]>([]);
+  const [pendingInvitations, setPendingInvitations] = useState<PendingInvitation[]>([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
   const [inviting, setInviting] = useState(false);
@@ -59,8 +67,24 @@ const TesterManagement = () => {
     }
   };
 
+  const fetchPendingInvitations = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("tester_invitations")
+        .select("id, email, created_at, status")
+        .eq("status", "pending")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setPendingInvitations(data || []);
+    } catch (error) {
+      console.error("Error fetching pending invitations:", error);
+    }
+  };
+
   useEffect(() => {
     fetchTesters();
+    fetchPendingInvitations();
   }, []);
 
   const addTester = async () => {
@@ -118,11 +142,13 @@ const TesterManagement = () => {
       return;
     }
 
+    const emailLower = inviteEmail.trim().toLowerCase();
+
     // Vérifier si l'utilisateur existe déjà
     const { data: existingProfile } = await supabase
       .from("profiles")
       .select("user_id")
-      .eq("email", inviteEmail.trim().toLowerCase())
+      .eq("email", emailLower)
       .maybeSingle();
 
     if (existingProfile) {
@@ -130,28 +156,70 @@ const TesterManagement = () => {
       return;
     }
 
+    // Vérifier si une invitation existe déjà
+    const existingInvitation = pendingInvitations.find(inv => inv.email === emailLower);
+    if (existingInvitation) {
+      toast.error("Une invitation est déjà en attente pour cet email.");
+      return;
+    }
+
     setInviting(true);
     try {
+      // Récupérer l'ID de l'admin
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Non authentifié");
+
+      // Créer l'invitation dans la base de données
+      const { error: insertError } = await supabase
+        .from("tester_invitations")
+        .insert({
+          email: emailLower,
+          invited_by: user.id,
+          status: "pending",
+        });
+
+      if (insertError) throw insertError;
+
+      // Envoyer l'email d'invitation
       const appUrl = window.location.origin;
-      
       const response = await supabase.functions.invoke("invite-tester", {
         body: {
-          email: inviteEmail.trim().toLowerCase(),
+          email: emailLower,
           appUrl,
         },
       });
 
       if (response.error) {
+        // Supprimer l'invitation si l'email échoue
+        await supabase.from("tester_invitations").delete().eq("email", emailLower);
         throw new Error(response.error.message);
       }
 
       toast.success(`Invitation envoyée à ${inviteEmail}`);
       setInviteEmail("");
+      fetchPendingInvitations();
     } catch (error: any) {
       console.error("Error inviting tester:", error);
       toast.error(`Erreur lors de l'envoi: ${error.message}`);
     } finally {
       setInviting(false);
+    }
+  };
+
+  const cancelInvitation = async (invitationId: string, invitationEmail: string) => {
+    try {
+      const { error } = await supabase
+        .from("tester_invitations")
+        .delete()
+        .eq("id", invitationId);
+
+      if (error) throw error;
+
+      toast.success(`Invitation annulée pour ${invitationEmail}`);
+      fetchPendingInvitations();
+    } catch (error) {
+      console.error("Error canceling invitation:", error);
+      toast.error("Erreur lors de l'annulation");
     }
   };
 
@@ -196,7 +264,7 @@ const TesterManagement = () => {
           
           <TabsContent value="invite" className="space-y-3 mt-4">
             <p className="text-sm text-muted-foreground">
-              Envoyez une invitation par email. Le testeur recevra un lien pour créer son compte.
+              Envoyez une invitation par email. Le testeur recevra un lien pour créer son compte et sera <strong>automatiquement</strong> ajouté comme testeur.
             </p>
             <div className="flex gap-2">
               <Input
@@ -216,6 +284,39 @@ const TesterManagement = () => {
                 <span className="ml-2 hidden sm:inline">Envoyer</span>
               </Button>
             </div>
+
+            {/* Invitations en attente */}
+            {pendingInvitations.length > 0 && (
+              <div className="mt-4 pt-3 border-t">
+                <h5 className="text-sm font-medium mb-2 flex items-center gap-2">
+                  <Mail className="h-4 w-4" />
+                  Invitations en attente ({pendingInvitations.length})
+                </h5>
+                <div className="space-y-2">
+                  {pendingInvitations.map((inv) => (
+                    <div
+                      key={inv.id}
+                      className="flex items-center justify-between p-2 bg-yellow-500/10 rounded-lg text-sm"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span>{inv.email}</span>
+                        <Badge variant="outline" className="text-xs bg-yellow-500/20">
+                          En attente
+                        </Badge>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => cancelInvitation(inv.id, inv.email)}
+                        className="text-destructive hover:text-destructive hover:bg-destructive/10 h-7 px-2"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </TabsContent>
           
           <TabsContent value="add" className="space-y-3 mt-4">
