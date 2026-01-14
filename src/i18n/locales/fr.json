@@ -204,7 +204,24 @@
     "managementTools": "Outils de gestion",
     "managementToolsDescription": "Gestion des utilisateurs et abonnements",
     "comingSoon": "Fonctionnalités à venir : gestion des utilisateurs, abonnements Stripe, statistiques détaillées...",
-    "errorFetchingStats": "Erreur lors de la récupération des statistiques"
+    "errorFetchingStats": "Erreur lors de la récupération des statistiques",
+    "testers": {
+      "title": "Gestion des testeurs",
+      "description": "Les testeurs peuvent accéder à l'application pendant la maintenance",
+      "emailPlaceholder": "Email du testeur",
+      "add": "Ajouter",
+      "noTesters": "Aucun testeur pour le moment",
+      "tester": "Testeur",
+      "note": "Les testeurs ont accès à l'application même en mode maintenance, mais n'ont pas les droits d'administration.",
+      "errorFetching": "Erreur lors de la récupération des testeurs",
+      "enterEmail": "Veuillez entrer un email",
+      "userNotFound": "Aucun utilisateur trouvé avec cet email",
+      "alreadyTester": "Cet utilisateur est déjà testeur",
+      "addSuccess": "Testeur ajouté avec succès",
+      "errorAdding": "Erreur lors de l'ajout du testeur",
+      "removeSuccess": "{{email}} retiré des testeurs",
+      "errorRemoving": "Erreur lors de la suppression du testeur"
+    }
   },
   "gdpr": {
     "title": "Consentement et confidentialité",

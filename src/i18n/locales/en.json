@@ -199,7 +199,24 @@
     "managementTools": "Management Tools",
     "managementToolsDescription": "User and subscription management",
     "comingSoon": "Coming soon: user management, Stripe subscriptions, detailed statistics...",
-    "errorFetchingStats": "Error fetching statistics"
+    "errorFetchingStats": "Error fetching statistics",
+    "testers": {
+      "title": "Tester Management",
+      "description": "Testers can access the app during maintenance",
+      "emailPlaceholder": "Tester email",
+      "add": "Add",
+      "noTesters": "No testers yet",
+      "tester": "Tester",
+      "note": "Testers can access the app even in maintenance mode, but don't have admin privileges.",
+      "errorFetching": "Error fetching testers",
+      "enterEmail": "Please enter an email",
+      "userNotFound": "No user found with this email",
+      "alreadyTester": "This user is already a tester",
+      "addSuccess": "Tester added successfully",
+      "errorAdding": "Error adding tester",
+      "removeSuccess": "{{email}} removed from testers",
+      "errorRemoving": "Error removing tester"
+    }
   },
   "gdpr": {
     "title": "Consent and Privacy",
