@@ -40,7 +40,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 const formSchema = z.object({
-  type: z.enum(["rat", "mouse", "rabbit"], {
+  type: z.enum(["rat", "mouse", "rabbit", "insect", "vegetable", "fruit", "pellet"], {
     required_error: "Type requis",
   }),
   stage: z.string().min(1, "Stade requis"),
@@ -61,7 +61,7 @@ interface AddRodentDialogProps {
 const AddRodentDialog = ({ onRodentAdded }: AddRodentDialogProps = {}) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [selectedType, setSelectedType] = useState<"rat" | "mouse" | "rabbit" | null>(null);
+  const [selectedType, setSelectedType] = useState<"rat" | "mouse" | "rabbit" | "insect" | "vegetable" | "fruit" | "pellet" | null>(null);
   const [purchaseDateInput, setPurchaseDateInput] = useState("");
 
   const form = useForm<FormValues>({
@@ -132,7 +132,7 @@ const AddRodentDialog = ({ onRodentAdded }: AddRodentDialogProps = {}) => {
   const getStageOptions = () => {
     if (!selectedType) return [];
     
-    const stages = {
+    const stages: Record<string, { value: string; label: string }[]> = {
       rat: [
         { value: "pinky", label: t("feeding.rats.pinky") },
         { value: "fuzzy", label: t("feeding.rats.fuzzy") },
@@ -161,6 +161,44 @@ const AddRodentDialog = ({ onRodentAdded }: AddRodentDialogProps = {}) => {
         { value: "large", label: t("feeding.rabbits.large") },
         { value: "extraLarge", label: t("feeding.rabbits.extraLarge") },
       ],
+      insect: [
+        { value: "cricket", label: t("feeding.insects.cricket") },
+        { value: "dubia", label: t("feeding.insects.dubia") },
+        { value: "locust", label: t("feeding.insects.locust") },
+        { value: "mealworm", label: t("feeding.insects.mealworm") },
+        { value: "superworm", label: t("feeding.insects.superworm") },
+        { value: "waxworm", label: t("feeding.insects.waxworm") },
+        { value: "hornworm", label: t("feeding.insects.hornworm") },
+        { value: "silkworm", label: t("feeding.insects.silkworm") },
+        { value: "blackSoldierFly", label: t("feeding.insects.blackSoldierFly") },
+      ],
+      vegetable: [
+        { value: "leafyGreens", label: t("feeding.vegetables.leafyGreens") },
+        { value: "squash", label: t("feeding.vegetables.squash") },
+        { value: "carrot", label: t("feeding.vegetables.carrot") },
+        { value: "bellPepper", label: t("feeding.vegetables.bellPepper") },
+        { value: "cucumber", label: t("feeding.vegetables.cucumber") },
+        { value: "zucchini", label: t("feeding.vegetables.zucchini") },
+        { value: "greenBeans", label: t("feeding.vegetables.greenBeans") },
+        { value: "mixedVegetables", label: t("feeding.vegetables.mixedVegetables") },
+      ],
+      fruit: [
+        { value: "banana", label: t("feeding.fruits.banana") },
+        { value: "strawberry", label: t("feeding.fruits.strawberry") },
+        { value: "mango", label: t("feeding.fruits.mango") },
+        { value: "papaya", label: t("feeding.fruits.papaya") },
+        { value: "raspberry", label: t("feeding.fruits.raspberry") },
+        { value: "blueberry", label: t("feeding.fruits.blueberry") },
+        { value: "apple", label: t("feeding.fruits.apple") },
+        { value: "mixedFruits", label: t("feeding.fruits.mixedFruits") },
+      ],
+      pellet: [
+        { value: "turtlePellet", label: t("feeding.pellets.turtlePellet") },
+        { value: "lizardPellet", label: t("feeding.pellets.lizardPellet") },
+        { value: "omnivore", label: t("feeding.pellets.omnivore") },
+        { value: "herbivore", label: t("feeding.pellets.herbivore") },
+        { value: "carnivore", label: t("feeding.pellets.carnivore") },
+      ],
     };
 
     return stages[selectedType] || [];
@@ -185,11 +223,11 @@ const AddRodentDialog = ({ onRodentAdded }: AddRodentDialogProps = {}) => {
               name="type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Type de rongeur</FormLabel>
+                  <FormLabel>{t("feeding.foodType", "Type d'aliment")}</FormLabel>
                   <Select
                     onValueChange={(value) => {
                       field.onChange(value);
-                      setSelectedType(value as "rat" | "mouse" | "rabbit");
+                      setSelectedType(value as typeof selectedType);
                       form.setValue("stage", "");
                     }}
                     defaultValue={field.value}
@@ -199,10 +237,14 @@ const AddRodentDialog = ({ onRodentAdded }: AddRodentDialogProps = {}) => {
                         <SelectValue placeholder="Sélectionner le type" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="bg-card border-border">
+                    <SelectContent className="bg-card border-border max-h-[300px]">
                       <SelectItem value="rat">{t("feeding.rats.title")}</SelectItem>
                       <SelectItem value="mouse">{t("feeding.mice.title")}</SelectItem>
                       <SelectItem value="rabbit">{t("feeding.rabbits.title")}</SelectItem>
+                      <SelectItem value="insect">{t("feeding.insects.title")}</SelectItem>
+                      <SelectItem value="vegetable">{t("feeding.vegetables.title")}</SelectItem>
+                      <SelectItem value="fruit">{t("feeding.fruits.title")}</SelectItem>
+                      <SelectItem value="pellet">{t("feeding.pellets.title")}</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

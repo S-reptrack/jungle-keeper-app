@@ -102,19 +102,27 @@ const AddFeedingDialog = ({ reptileId, onFeedingAdded }: AddFeedingDialogProps) 
     }
   };
 
-  const rodentTypes = [
-    { value: "rat", label: t("feeding.rats.title") },
-    { value: "mouse", label: t("feeding.mice.title") },
-    { value: "rabbit", label: t("feeding.rabbits.title") },
+  const foodTypes = [
+    { value: "rat", label: t("feeding.rats.title"), category: "rodent" },
+    { value: "mouse", label: t("feeding.mice.title"), category: "rodent" },
+    { value: "rabbit", label: t("feeding.rabbits.title"), category: "rodent" },
+    { value: "insect", label: t("feeding.insects.title"), category: "insect" },
+    { value: "vegetable", label: t("feeding.vegetables.title"), category: "vegetable" },
+    { value: "fruit", label: t("feeding.fruits.title"), category: "fruit" },
+    { value: "pellet", label: t("feeding.pellets.title"), category: "pellet" },
   ];
 
   const getStagesForType = (type: string) => {
-    const stages = {
+    const stages: Record<string, string[]> = {
       rat: ["pinky", "fuzzy", "hopper", "weaner", "small", "medium", "large", "jumbo", "extraLarge"],
       mouse: ["pinky", "fuzzy", "hopper", "weaner", "small", "medium", "large", "jumbo"],
       rabbit: ["baby", "small", "medium", "large", "extraLarge"],
+      insect: ["cricket", "dubia", "locust", "mealworm", "superworm", "waxworm", "hornworm", "silkworm", "blackSoldierFly"],
+      vegetable: ["leafyGreens", "squash", "carrot", "bellPepper", "cucumber", "zucchini", "greenBeans", "mixedVegetables"],
+      fruit: ["banana", "strawberry", "mango", "papaya", "raspberry", "blueberry", "apple", "mixedFruits"],
+      pellet: ["turtlePellet", "lizardPellet", "omnivore", "herbivore", "carnivore"],
     };
-    return stages[type as keyof typeof stages] || [];
+    return stages[type] || [];
   };
 
   const selectedType = form.watch("rodentType");
@@ -138,7 +146,7 @@ const AddFeedingDialog = ({ reptileId, onFeedingAdded }: AddFeedingDialogProps) 
               name="rodentType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Type de rongeur</FormLabel>
+                  <FormLabel>{t("feeding.foodType", "Type d'aliment")}</FormLabel>
                   <Select
                     onValueChange={(value) => {
                       field.onChange(value);
@@ -148,11 +156,11 @@ const AddFeedingDialog = ({ reptileId, onFeedingAdded }: AddFeedingDialogProps) 
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Sélectionner un type" />
+                        <SelectValue placeholder={t("feeding.selectFoodType", "Sélectionner un type")} />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="bg-card border-border">
-                      {rodentTypes.map((type) => (
+                    <SelectContent className="bg-card border-border max-h-[300px]">
+                      {foodTypes.map((type) => (
                         <SelectItem key={type.value} value={type.value}>
                           {type.label}
                         </SelectItem>

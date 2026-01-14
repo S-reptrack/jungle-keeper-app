@@ -135,12 +135,27 @@ const FeedingTab = ({ reptileId, readOnly = false }: FeedingTabProps) => {
       rat: t("feeding.rats.title"),
       mouse: t("feeding.mice.title"),
       rabbit: t("feeding.rabbits.title"),
+      insect: t("feeding.insects.title"),
+      vegetable: t("feeding.vegetables.title"),
+      fruit: t("feeding.fruits.title"),
+      pellet: t("feeding.pellets.title"),
     };
     return labels[type] || type;
   };
 
   const getStageLabel = (type: string, stage: string) => {
-    return t(`feeding.${type}s.${stage}`) || stage;
+    // Map type to its plural form for translation keys
+    const typeToKey: Record<string, string> = {
+      rat: "rats",
+      mouse: "mice",
+      rabbit: "rabbits",
+      insect: "insects",
+      vegetable: "vegetables",
+      fruit: "fruits",
+      pellet: "pellets",
+    };
+    const key = typeToKey[type] || type;
+    return t(`feeding.${key}.${stage}`) || stage;
   };
 
   const rats = [
@@ -172,6 +187,18 @@ const FeedingTab = ({ reptileId, readOnly = false }: FeedingTabProps) => {
     { stage: t("feeding.rabbits.medium"), weight: "401-800g" },
     { stage: t("feeding.rabbits.large"), weight: "801-1200g" },
     { stage: t("feeding.rabbits.extraLarge"), weight: "1200g+" },
+  ];
+
+  const insects = [
+    { stage: t("feeding.insects.cricket"), weight: "0.3-0.5g" },
+    { stage: t("feeding.insects.dubia"), weight: "0.5-3g" },
+    { stage: t("feeding.insects.locust"), weight: "1-3g" },
+    { stage: t("feeding.insects.mealworm"), weight: "0.1-0.2g" },
+    { stage: t("feeding.insects.superworm"), weight: "0.5-1g" },
+    { stage: t("feeding.insects.waxworm"), weight: "0.2-0.3g" },
+    { stage: t("feeding.insects.hornworm"), weight: "3-10g" },
+    { stage: t("feeding.insects.silkworm"), weight: "1-3g" },
+    { stage: t("feeding.insects.blackSoldierFly"), weight: "0.1-0.2g" },
   ];
 
   // Pagination calculations
@@ -412,6 +439,30 @@ const FeedingTab = ({ reptileId, readOnly = false }: FeedingTabProps) => {
                 <TableRow key={index}>
                   <TableCell className="font-medium">{rabbit.stage}</TableCell>
                   <TableCell className="text-right">{rabbit.weight}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>{t("feeding.insects.title")}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t("feeding.stage")}</TableHead>
+                <TableHead className="text-right">{t("feeding.weight")}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {insects.map((insect, index) => (
+                <TableRow key={index}>
+                  <TableCell className="font-medium">{insect.stage}</TableCell>
+                  <TableCell className="text-right">{insect.weight}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

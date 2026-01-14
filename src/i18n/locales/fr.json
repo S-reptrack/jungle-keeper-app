@@ -104,7 +104,51 @@
       "medium": "Moyen",
       "large": "Grand",
       "extraLarge": "Très grand"
-    }
+    },
+    "insects": {
+      "title": "Insectes",
+      "cricket": "Grillons",
+      "dubia": "Blattes Dubia",
+      "locust": "Criquets",
+      "mealworm": "Vers de farine",
+      "superworm": "Vers Morio",
+      "waxworm": "Vers de cire (Teignes)",
+      "hornworm": "Vers à cornes",
+      "silkworm": "Vers à soie",
+      "blackSoldierFly": "Larves de mouche soldat"
+    },
+    "vegetables": {
+      "title": "Légumes",
+      "leafyGreens": "Légumes feuilles (mâche, endive, pissenlit)",
+      "squash": "Courge / Butternut",
+      "carrot": "Carotte",
+      "bellPepper": "Poivron",
+      "cucumber": "Concombre",
+      "zucchini": "Courgette",
+      "greenBeans": "Haricots verts",
+      "mixedVegetables": "Mélange de légumes"
+    },
+    "fruits": {
+      "title": "Fruits",
+      "banana": "Banane",
+      "strawberry": "Fraise",
+      "mango": "Mangue",
+      "papaya": "Papaye",
+      "raspberry": "Framboise",
+      "blueberry": "Myrtille",
+      "apple": "Pomme",
+      "mixedFruits": "Mélange de fruits"
+    },
+    "pellets": {
+      "title": "Granulés",
+      "turtlePellet": "Granulés tortue",
+      "lizardPellet": "Granulés lézard",
+      "omnivore": "Omnivore",
+      "herbivore": "Herbivore",
+      "carnivore": "Carnivore"
+    },
+    "foodType": "Type d'aliment",
+    "selectFoodType": "Sélectionner un type"
   },
   "validation": {
     "nameRequired": "Le nom est requis",

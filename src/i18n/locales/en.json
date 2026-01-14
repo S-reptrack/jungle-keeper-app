@@ -100,7 +100,51 @@
       "medium": "Medium",
       "large": "Large",
       "extraLarge": "Extra Large"
-    }
+    },
+    "insects": {
+      "title": "Insects",
+      "cricket": "Crickets",
+      "dubia": "Dubia Roaches",
+      "locust": "Locusts",
+      "mealworm": "Mealworms",
+      "superworm": "Superworms",
+      "waxworm": "Waxworms",
+      "hornworm": "Hornworms",
+      "silkworm": "Silkworms",
+      "blackSoldierFly": "Black Soldier Fly Larvae"
+    },
+    "vegetables": {
+      "title": "Vegetables",
+      "leafyGreens": "Leafy Greens (Endive, Dandelion, Collard)",
+      "squash": "Squash / Butternut",
+      "carrot": "Carrot",
+      "bellPepper": "Bell Pepper",
+      "cucumber": "Cucumber",
+      "zucchini": "Zucchini",
+      "greenBeans": "Green Beans",
+      "mixedVegetables": "Mixed Vegetables"
+    },
+    "fruits": {
+      "title": "Fruits",
+      "banana": "Banana",
+      "strawberry": "Strawberry",
+      "mango": "Mango",
+      "papaya": "Papaya",
+      "raspberry": "Raspberry",
+      "blueberry": "Blueberry",
+      "apple": "Apple",
+      "mixedFruits": "Mixed Fruits"
+    },
+    "pellets": {
+      "title": "Pellets",
+      "turtlePellet": "Turtle Pellets",
+      "lizardPellet": "Lizard Pellets",
+      "omnivore": "Omnivore",
+      "herbivore": "Herbivore",
+      "carnivore": "Carnivore"
+    },
+    "foodType": "Food Type",
+    "selectFoodType": "Select a type"
   },
   "validation": {
     "nameRequired": "Name is required",
