@@ -1,4 +1,4 @@
-import { Home, List, Tag, Settings, QrCode, Waves, User } from "lucide-react";
+import { Home, List, Tag, Settings, QrCode, Waves, User, Shield } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -11,6 +11,7 @@ import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { Badge } from "./ui/badge";
+import { useUserRole } from "@/hooks/useUserRole";
 
 const isIOS = (): boolean => {
   const userAgent = navigator.userAgent.toLowerCase();
@@ -24,6 +25,7 @@ const Navigation = () => {
   const isMobile = useIsMobile();
   const [scannerOpen, setScannerOpen] = useState(false);
   const { user } = useAuth();
+  const { isAdmin } = useUserRole();
 
   // Extraire le pseudo de l'email (partie avant @)
   const userDisplayName = user?.email?.split('@')[0] || null;
@@ -76,6 +78,19 @@ const Navigation = () => {
               <LanguageSelector />
             </div>
             <div className="flex items-center gap-2">
+              {isAdmin && !isMobile && (
+                <Link
+                  to="/admin"
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
+                    location.pathname === "/admin"
+                      ? "text-primary bg-primary/10"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                  }`}
+                >
+                  <Shield className="w-4 h-4" />
+                  <span className="text-sm font-medium">Admin</span>
+                </Link>
+              )}
               {userDisplayName && !isMobile && (
                 <Badge variant="outline" className="flex items-center gap-1.5 px-3 py-1.5">
                   <User className="w-3.5 h-3.5" />
