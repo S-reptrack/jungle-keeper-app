@@ -78,7 +78,7 @@ const Navigation = () => {
               <LanguageSelector />
             </div>
             <div className="flex items-center gap-2">
-              {isAdmin && !isMobile && (
+              {isAdmin && (
                 <Link
                   to="/admin"
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
@@ -88,7 +88,7 @@ const Navigation = () => {
                   }`}
                 >
                   <Shield className="w-4 h-4" />
-                  <span className="text-sm font-medium">Admin</span>
+                  <span className="text-sm font-medium hidden md:inline">Admin</span>
                 </Link>
               )}
               {userDisplayName && !isMobile && (
