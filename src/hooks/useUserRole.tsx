@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 
-export type UserRole = "admin" | "user" | null;
+export type UserRole = "admin" | "tester" | "user" | null;
 
 export const useUserRole = () => {
   const { user } = useAuth();
@@ -26,9 +26,17 @@ export const useUserRole = () => {
 
         if (error) throw error;
 
-        // Si l'utilisateur a le rôle admin, on retourne admin
+        // Vérifier les rôles par ordre de priorité
         const isAdmin = data?.some((r) => r.role === "admin");
-        setRole(isAdmin ? "admin" : "user");
+        const isTester = data?.some((r) => r.role === "tester");
+        
+        if (isAdmin) {
+          setRole("admin");
+        } else if (isTester) {
+          setRole("tester");
+        } else {
+          setRole("user");
+        }
       } catch (error) {
         console.error("Error fetching user role:", error);
         setRole("user"); // Par défaut, considérer comme user
@@ -40,5 +48,11 @@ export const useUserRole = () => {
     fetchUserRole();
   }, [user]);
 
-  return { role, loading, isAdmin: role === "admin" };
+  return { 
+    role, 
+    loading, 
+    isAdmin: role === "admin",
+    isTester: role === "tester",
+    canBypassMaintenance: role === "admin" || role === "tester"
+  };
 };
