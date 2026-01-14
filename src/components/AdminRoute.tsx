@@ -8,16 +8,24 @@ interface AdminRouteProps {
 }
 
 const AdminRoute = ({ children }: AdminRouteProps) => {
-  const { user } = useAuth();
-  const { isAdmin, loading } = useUserRole();
+  const { user, loading: authLoading } = useAuth();
+  const { isAdmin, loading: roleLoading } = useUserRole();
   const navigate = useNavigate();
 
+  const loading = authLoading || roleLoading;
+
   useEffect(() => {
+    console.log("[AdminRoute] Checking access:", { user: user?.email, isAdmin, loading });
+    
     if (!loading) {
       if (!user) {
+        console.log("[AdminRoute] No user, redirecting to /auth");
         navigate("/auth");
       } else if (!isAdmin) {
-        navigate("/");
+        console.log("[AdminRoute] Not admin, redirecting to /dashboard");
+        navigate("/dashboard");
+      } else {
+        console.log("[AdminRoute] Admin access granted");
       }
     }
   }, [user, isAdmin, loading, navigate]);
