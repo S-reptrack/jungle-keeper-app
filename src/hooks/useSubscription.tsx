@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
+import { useUserRole } from "./useUserRole";
 
 // Stripe LIVE price IDs
 export const SUBSCRIPTION_TIERS = {
@@ -25,10 +26,12 @@ interface SubscriptionState {
   subscriptionEnd: string | null;
   loading: boolean;
   error: string | null;
+  isTesterPremium: boolean;
 }
 
 export const useSubscription = () => {
   const { user } = useAuth();
+  const { isTester, isAdmin, loading: roleLoading } = useUserRole();
   const [state, setState] = useState<SubscriptionState>({
     subscribed: false,
     productId: null,
@@ -36,11 +39,26 @@ export const useSubscription = () => {
     subscriptionEnd: null,
     loading: true,
     error: null,
+    isTesterPremium: false,
   });
 
   const checkSubscription = useCallback(async () => {
     if (!user) {
-      setState(prev => ({ ...prev, subscribed: false, loading: false }));
+      setState(prev => ({ ...prev, subscribed: false, loading: false, isTesterPremium: false }));
+      return;
+    }
+
+    // Testeurs et admins ont accès Premium gratuit
+    if (isTester || isAdmin) {
+      setState({
+        subscribed: true,
+        productId: "tester_premium",
+        priceId: null,
+        subscriptionEnd: null,
+        loading: false,
+        error: null,
+        isTesterPremium: true,
+      });
       return;
     }
 
@@ -51,7 +69,7 @@ export const useSubscription = () => {
       const accessToken = sessionData.session?.access_token;
 
       if (!accessToken) {
-        setState(prev => ({ ...prev, subscribed: false, loading: false }));
+        setState(prev => ({ ...prev, subscribed: false, loading: false, isTesterPremium: false }));
         return;
       }
 
@@ -70,6 +88,7 @@ export const useSubscription = () => {
         subscriptionEnd: data.subscription_end || null,
         loading: false,
         error: null,
+        isTesterPremium: false,
       });
     } catch (error) {
       console.error("Error checking subscription:", error);
@@ -77,9 +96,10 @@ export const useSubscription = () => {
         ...prev,
         loading: false,
         error: error instanceof Error ? error.message : "Unknown error",
+        isTesterPremium: false,
       }));
     }
-  }, [user]);
+  }, [user, isTester, isAdmin]);
 
   const createCheckout = async (priceId: string) => {
     try {
@@ -143,8 +163,11 @@ export const useSubscription = () => {
   };
 
   useEffect(() => {
-    checkSubscription();
-  }, [checkSubscription]);
+    // Attendre que le rôle soit chargé avant de vérifier l'abonnement
+    if (!roleLoading) {
+      checkSubscription();
+    }
+  }, [checkSubscription, roleLoading]);
 
   // Auto-refresh every minute
   useEffect(() => {
@@ -154,6 +177,7 @@ export const useSubscription = () => {
 
   return {
     ...state,
+    loading: state.loading || roleLoading,
     checkSubscription,
     createCheckout,
     openCustomerPortal,
