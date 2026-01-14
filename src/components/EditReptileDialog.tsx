@@ -57,6 +57,7 @@ type FormValues = z.infer<typeof formSchema>;
 interface EditReptileDialogProps {
   reptileId: string;
   currentSpecies: string;
+  currentCategory: "snake" | "lizard" | "turtle";
   currentBirthDate?: string;
   currentPurchaseDate?: string;
   currentWeight?: number;
@@ -67,6 +68,7 @@ interface EditReptileDialogProps {
 const EditReptileDialog = ({ 
   reptileId, 
   currentSpecies,
+  currentCategory,
   currentBirthDate, 
   currentPurchaseDate,
   currentWeight,
@@ -123,7 +125,7 @@ const EditReptileDialog = ({
     setter(formatted);
   };
 
-  const filteredSpecies = getSpeciesByAnnex(selectedAnnex);
+  const filteredSpecies = getSpeciesByAnnex(selectedAnnex, currentCategory);
 
   useEffect(() => {
     if (open) {
