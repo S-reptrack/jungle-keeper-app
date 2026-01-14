@@ -421,6 +421,7 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: { check_user_id: string }; Returns: boolean }
+      is_tester: { Args: { check_user_id: string }; Returns: boolean }
       is_transfer_recipient: {
         Args: { transfer_to_email: string; transfer_to_user_id: string }
         Returns: boolean

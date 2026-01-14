@@ -34,7 +34,7 @@ const MaintenanceGuard = ({ children }: MaintenanceGuardProps) => {
 // Composant séparé pour la vérification du mode maintenance
 const MaintenanceCheck = ({ children }: MaintenanceGuardProps) => {
   const { user, loading: authLoading } = useAuth();
-  const { isAdmin, loading: roleLoading, role } = useUserRole();
+  const { isAdmin, isTester, canBypassMaintenance, loading: roleLoading, role } = useUserRole();
 
   // Debug logs
   useEffect(() => {
@@ -43,7 +43,9 @@ const MaintenanceCheck = ({ children }: MaintenanceGuardProps) => {
     console.log("MaintenanceCheck - user:", user?.email);
     console.log("MaintenanceCheck - role:", role);
     console.log("MaintenanceCheck - isAdmin:", isAdmin);
-  }, [authLoading, roleLoading, user, role, isAdmin]);
+    console.log("MaintenanceCheck - isTester:", isTester);
+    console.log("MaintenanceCheck - canBypassMaintenance:", canBypassMaintenance);
+  }, [authLoading, roleLoading, user, role, isAdmin, isTester, canBypassMaintenance]);
 
   // While loading, show spinner
   if (authLoading || roleLoading) {
@@ -54,14 +56,14 @@ const MaintenanceCheck = ({ children }: MaintenanceGuardProps) => {
     );
   }
 
-  // If not admin, show maintenance page
-  if (!isAdmin) {
-    console.log("MaintenanceCheck - Showing maintenance page (not admin)");
+  // If not admin or tester, show maintenance page
+  if (!canBypassMaintenance) {
+    console.log("MaintenanceCheck - Showing maintenance page (not admin or tester)");
     return <Maintenance />;
   }
 
-  // Admin user, render children
-  console.log("MaintenanceCheck - Admin access granted");
+  // Admin or tester user, render children
+  console.log("MaintenanceCheck - Access granted (admin or tester)");
   return <>{children}</>;
 };
 
