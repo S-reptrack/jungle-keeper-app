@@ -281,6 +281,231 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
     category: 'snake',
     citesAnnex: 'B',
   },
+  // Lézards (Lizards)
+  {
+    id: 'correlophus-ciliatus',
+    scientificName: 'Correlophus ciliatus',
+    commonNameKey: 'species.correlophus-ciliatus',
+    category: 'lizard',
+    citesAnnex: 'B',
+    morphs: ['Normal', 'Flame', 'Harlequin', 'Pinstripe', 'Dalmatian', 'Lilly White', 'Phantom', 'Tricolor', 'Cream', 'Red', 'Yellow', 'Orange', 'Bi-Color', 'Tiger'],
+  },
+  {
+    id: 'eublepharis-macularius',
+    scientificName: 'Eublepharis macularius',
+    commonNameKey: 'species.eublepharis-macularius',
+    category: 'lizard',
+    citesAnnex: 'B',
+    morphs: ['Normal', 'High Yellow', 'Super Hypo', 'Tangerine', 'Carrot Tail', 'RAPTOR', 'Mack Snow', 'Super Mack Snow', 'Blizzard', 'Eclipse', 'Enigma', 'Tremper Albino', 'Bell Albino', 'Rainwater Albino', 'Murphy Patternless', 'Giant', 'Super Giant', 'Black Night'],
+  },
+  {
+    id: 'pogona-vitticeps',
+    scientificName: 'Pogona vitticeps',
+    commonNameKey: 'species.pogona-vitticeps',
+    category: 'lizard',
+    citesAnnex: 'B',
+    morphs: ['Normal', 'Hypo', 'Trans (Translucent)', 'Leatherback', 'Silkback', 'Dunner', 'Zero', 'Witblits', 'Red', 'Orange', 'Yellow', 'Citrus', 'Paradox'],
+  },
+  {
+    id: 'chamaeleo-calyptratus',
+    scientificName: 'Chamaeleo calyptratus',
+    commonNameKey: 'species.chamaeleo-calyptratus',
+    category: 'lizard',
+    citesAnnex: 'B',
+    morphs: ['Normal', 'Translucent', 'Piebald', 'High Color'],
+  },
+  {
+    id: 'furcifer-pardalis',
+    scientificName: 'Furcifer pardalis',
+    commonNameKey: 'species.furcifer-pardalis',
+    category: 'lizard',
+    citesAnnex: 'B',
+    morphs: ['Ambilobe', 'Nosy Be', 'Nosy Faly', 'Sambava', 'Tamatave', 'Diego Suarez', 'Ankaramy'],
+  },
+  {
+    id: 'tiliqua-scincoides',
+    scientificName: 'Tiliqua scincoides',
+    commonNameKey: 'species.tiliqua-scincoides',
+    category: 'lizard',
+    citesAnnex: 'B',
+    morphs: ['Classic', 'Indonesian', 'Northern', 'Eastern', 'Merauke', 'Irian Jaya', 'Kei Island'],
+  },
+  {
+    id: 'tiliqua-gigas',
+    scientificName: 'Tiliqua gigas',
+    commonNameKey: 'species.tiliqua-gigas',
+    category: 'lizard',
+    citesAnnex: 'B',
+    morphs: ['Classic', 'Merauke', 'Kei Island', 'Halmahera'],
+  },
+  {
+    id: 'varanus-acanthurus',
+    scientificName: 'Varanus acanthurus',
+    commonNameKey: 'species.varanus-acanthurus',
+    category: 'lizard',
+    citesAnnex: 'B',
+    morphs: ['Normal', 'Red', 'Yellow', 'Banded'],
+  },
+  {
+    id: 'varanus-exanthematicus',
+    scientificName: 'Varanus exanthematicus',
+    commonNameKey: 'species.varanus-exanthematicus',
+    category: 'lizard',
+    citesAnnex: 'B',
+  },
+  {
+    id: 'phelsuma-grandis',
+    scientificName: 'Phelsuma grandis',
+    commonNameKey: 'species.phelsuma-grandis',
+    category: 'lizard',
+    citesAnnex: 'B',
+    morphs: ['Normal', 'High Red', 'Crimson'],
+  },
+  {
+    id: 'rhacodactylus-leachianus',
+    scientificName: 'Rhacodactylus leachianus',
+    commonNameKey: 'species.rhacodactylus-leachianus',
+    category: 'lizard',
+    citesAnnex: 'B',
+    morphs: ['Grande Terre', 'Pine Island', 'Nuu Ana', 'Nuu Ami', 'Yate', 'Moro', 'Bayonnaise', 'Poindimie'],
+  },
+  {
+    id: 'mniarogekko-chahoua',
+    scientificName: 'Mniarogekko chahoua',
+    commonNameKey: 'species.mniarogekko-chahoua',
+    category: 'lizard',
+    citesAnnex: 'B',
+    morphs: ['Mainland', 'Pine Island', 'Mossy'],
+  },
+  {
+    id: 'uromastyx-geyri',
+    scientificName: 'Uromastyx geyri',
+    commonNameKey: 'species.uromastyx-geyri',
+    category: 'lizard',
+    citesAnnex: 'B',
+    morphs: ['Normal', 'Red', 'Yellow', 'Orange'],
+  },
+  {
+    id: 'uromastyx-ornata',
+    scientificName: 'Uromastyx ornata',
+    commonNameKey: 'species.uromastyx-ornata',
+    category: 'lizard',
+    citesAnnex: 'B',
+  },
+  {
+    id: 'iguana-iguana',
+    scientificName: 'Iguana iguana',
+    commonNameKey: 'species.iguana-iguana',
+    category: 'lizard',
+    citesAnnex: 'B',
+    morphs: ['Normal', 'Red', 'Blue', 'Albino', 'Axanthic', 'Hypomelanistic', 'Snow'],
+  },
+  // Tortues (Turtles)
+  {
+    id: 'testudo-hermanni',
+    scientificName: 'Testudo hermanni',
+    commonNameKey: 'species.testudo-hermanni',
+    category: 'turtle',
+    citesAnnex: 'B',
+  },
+  {
+    id: 'testudo-graeca',
+    scientificName: 'Testudo graeca',
+    commonNameKey: 'species.testudo-graeca',
+    category: 'turtle',
+    citesAnnex: 'B',
+  },
+  {
+    id: 'testudo-marginata',
+    scientificName: 'Testudo marginata',
+    commonNameKey: 'species.testudo-marginata',
+    category: 'turtle',
+    citesAnnex: 'B',
+  },
+  {
+    id: 'testudo-horsfieldii',
+    scientificName: 'Testudo horsfieldii',
+    commonNameKey: 'species.testudo-horsfieldii',
+    category: 'turtle',
+    citesAnnex: 'B',
+  },
+  {
+    id: 'centrochelys-sulcata',
+    scientificName: 'Centrochelys sulcata',
+    commonNameKey: 'species.centrochelys-sulcata',
+    category: 'turtle',
+    citesAnnex: 'B',
+  },
+  {
+    id: 'stigmochelys-pardalis',
+    scientificName: 'Stigmochelys pardalis',
+    commonNameKey: 'species.stigmochelys-pardalis',
+    category: 'turtle',
+    citesAnnex: 'B',
+  },
+  {
+    id: 'geochelone-elegans',
+    scientificName: 'Geochelone elegans',
+    commonNameKey: 'species.geochelone-elegans',
+    category: 'turtle',
+    citesAnnex: 'B',
+  },
+  {
+    id: 'chelonoidis-carbonarius',
+    scientificName: 'Chelonoidis carbonarius',
+    commonNameKey: 'species.chelonoidis-carbonarius',
+    category: 'turtle',
+    citesAnnex: 'B',
+  },
+  {
+    id: 'chelonoidis-denticulatus',
+    scientificName: 'Chelonoidis denticulatus',
+    commonNameKey: 'species.chelonoidis-denticulatus',
+    category: 'turtle',
+    citesAnnex: 'B',
+  },
+  {
+    id: 'kinixys-belliana',
+    scientificName: 'Kinixys belliana',
+    commonNameKey: 'species.kinixys-belliana',
+    category: 'turtle',
+    citesAnnex: 'B',
+  },
+  {
+    id: 'trachemys-scripta',
+    scientificName: 'Trachemys scripta',
+    commonNameKey: 'species.trachemys-scripta',
+    category: 'turtle',
+    citesAnnex: 'B',
+  },
+  {
+    id: 'graptemys-pseudogeographica',
+    scientificName: 'Graptemys pseudogeographica',
+    commonNameKey: 'species.graptemys-pseudogeographica',
+    category: 'turtle',
+    citesAnnex: 'B',
+  },
+  {
+    id: 'sternotherus-odoratus',
+    scientificName: 'Sternotherus odoratus',
+    commonNameKey: 'species.sternotherus-odoratus',
+    category: 'turtle',
+    citesAnnex: 'B',
+  },
+  {
+    id: 'kinosternon-subrubrum',
+    scientificName: 'Kinosternon subrubrum',
+    commonNameKey: 'species.kinosternon-subrubrum',
+    category: 'turtle',
+    citesAnnex: 'B',
+  },
+  {
+    id: 'cuora-amboinensis',
+    scientificName: 'Cuora amboinensis',
+    commonNameKey: 'species.cuora-amboinensis',
+    category: 'turtle',
+    citesAnnex: 'B',
+  },
 ];
 
 // CITES Annexe C - Espèces listées par un pays demandeur (équivalent CITES Annexe III)
@@ -371,7 +596,10 @@ export const getSpeciesByCategory = (category: 'snake' | 'lizard' | 'turtle') =>
   return getAllSpecies().filter(species => species.category === category);
 };
 
-export const getSpeciesByAnnex = (annex: 'A' | 'B' | 'C' | 'D') => {
+export const getSpeciesByAnnex = (annex: 'A' | 'B' | 'C' | 'D', category?: 'snake' | 'lizard' | 'turtle') => {
   const allSpecies = getAllSpecies();
-  return allSpecies.filter(s => s.citesAnnex === annex && s.category === 'snake');
+  if (category) {
+    return allSpecies.filter(s => s.citesAnnex === annex && s.category === category);
+  }
+  return allSpecies.filter(s => s.citesAnnex === annex);
 };

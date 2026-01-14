@@ -386,6 +386,7 @@ const ReptileDetail = () => {
                     <EditReptileDialog
                       reptileId={reptile.id}
                       currentSpecies={reptile.species}
+                      currentCategory={reptile.category as "snake" | "lizard" | "turtle"}
                       currentBirthDate={reptile.birth_date}
                       currentPurchaseDate={reptile.purchase_date}
                       currentWeight={reptile.weight}
@@ -457,6 +458,7 @@ const ReptileDetail = () => {
                         <EditReptileDialog
                           reptileId={reptile.id}
                           currentSpecies={reptile.species}
+                          currentCategory={reptile.category as "snake" | "lizard" | "turtle"}
                           currentBirthDate={reptile.birth_date}
                           currentPurchaseDate={reptile.purchase_date}
                           currentWeight={reptile.weight}

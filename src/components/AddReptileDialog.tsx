@@ -47,7 +47,7 @@ import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
   name: z.string().min(2, "validation.nameMin"),
-  category: z.enum(["snake"], {
+  category: z.enum(["snake", "lizard", "turtle"], {
     required_error: "validation.categoryRequired",
   }),
   species: z.string().min(1, "validation.speciesRequired"),
@@ -163,7 +163,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
     }
   };
 
-  const filteredSpecies = getSpeciesByAnnex(selectedAnnex);
+  const filteredSpecies = getSpeciesByAnnex(selectedAnnex, selectedCategory || undefined);
 
   const selectedSpeciesData = getAllSpecies().find(
     (s) => s.id === form.watch("species")
@@ -300,17 +300,20 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                       field.onChange(value);
                       setSelectedCategory(value as "snake" | "lizard" | "turtle");
                       form.setValue("species", "");
+                      setSelectedMorphs([]);
                     }}
-                    defaultValue="snake"
-                    value="snake"
+                    defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder={t("reptile.snake")} />
+                        <SelectValue placeholder={t("reptile.selectCategory")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="bg-card border-border">
                       <SelectItem value="snake">{t("reptile.snake")}</SelectItem>
+                      <SelectItem value="lizard">{t("reptile.lizard")}</SelectItem>
+                      <SelectItem value="turtle">{t("reptile.turtle")}</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
