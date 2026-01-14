@@ -10,6 +10,7 @@ export interface ReptileSpecies {
 // CITES Annexe A - Espèces les plus menacées (équivalent CITES Annexe I)
 // Commerce strictement interdit sauf exceptions
 export const citesAnnexASpecies: ReptileSpecies[] = [
+  // Serpents (Snakes)
   {
     id: 'python-molurus-bivittatus',
     scientificName: 'Python molurus bivittatus',
@@ -57,6 +58,134 @@ export const citesAnnexASpecies: ReptileSpecies[] = [
     scientificName: 'Epicrates subflavus',
     commonNameKey: 'species.epicrates-subflavus',
     category: 'snake',
+    citesAnnex: 'A',
+  },
+  // Lézards (Lizards)
+  {
+    id: 'brookesia-perarmata',
+    scientificName: 'Brookesia perarmata',
+    commonNameKey: 'species.brookesia-perarmata',
+    category: 'lizard',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'chamaeleo-chamaeleon',
+    scientificName: 'Chamaeleo chamaeleon',
+    commonNameKey: 'species.chamaeleo-chamaeleon',
+    category: 'lizard',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'brachylophus-fasciatus',
+    scientificName: 'Brachylophus fasciatus',
+    commonNameKey: 'species.brachylophus-fasciatus',
+    category: 'lizard',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'cyclura-cornuta',
+    scientificName: 'Cyclura cornuta',
+    commonNameKey: 'species.cyclura-cornuta',
+    category: 'lizard',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'phelsuma-guentheri',
+    scientificName: 'Phelsuma guentheri',
+    commonNameKey: 'species.phelsuma-guentheri',
+    category: 'lizard',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'varanus-komodoensis',
+    scientificName: 'Varanus komodoensis',
+    commonNameKey: 'species.varanus-komodoensis',
+    category: 'lizard',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'varanus-griseus',
+    scientificName: 'Varanus griseus',
+    commonNameKey: 'species.varanus-griseus',
+    category: 'lizard',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'heloderma-horridum',
+    scientificName: 'Heloderma horridum',
+    commonNameKey: 'species.heloderma-horridum',
+    category: 'lizard',
+    citesAnnex: 'A',
+  },
+  // Tortues (Turtles)
+  {
+    id: 'testudo-kleinmanni',
+    scientificName: 'Testudo kleinmanni',
+    commonNameKey: 'species.testudo-kleinmanni',
+    category: 'turtle',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'geochelone-platynota',
+    scientificName: 'Geochelone platynota',
+    commonNameKey: 'species.geochelone-platynota',
+    category: 'turtle',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'geochelone-radiata',
+    scientificName: 'Astrochelys radiata',
+    commonNameKey: 'species.geochelone-radiata',
+    category: 'turtle',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'geochelone-yniphora',
+    scientificName: 'Astrochelys yniphora',
+    commonNameKey: 'species.geochelone-yniphora',
+    category: 'turtle',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'pyxis-arachnoides',
+    scientificName: 'Pyxis arachnoides',
+    commonNameKey: 'species.pyxis-arachnoides',
+    category: 'turtle',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'pyxis-planicauda',
+    scientificName: 'Pyxis planicauda',
+    commonNameKey: 'species.pyxis-planicauda',
+    category: 'turtle',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'chelonoidis-nigra',
+    scientificName: 'Chelonoidis nigra',
+    commonNameKey: 'species.chelonoidis-nigra',
+    category: 'turtle',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'mauremys-annamensis',
+    scientificName: 'Mauremys annamensis',
+    commonNameKey: 'species.mauremys-annamensis',
+    category: 'turtle',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'batagur-baska',
+    scientificName: 'Batagur baska',
+    commonNameKey: 'species.batagur-baska',
+    category: 'turtle',
+    citesAnnex: 'A',
+  },
+  {
+    id: 'cuora-galbinifrons',
+    scientificName: 'Cuora galbinifrons',
+    commonNameKey: 'species.cuora-galbinifrons',
+    category: 'turtle',
     citesAnnex: 'A',
   },
 ];
@@ -511,6 +640,7 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
 // CITES Annexe C - Espèces listées par un pays demandeur (équivalent CITES Annexe III)
 // Notification requise pour le commerce
 export const citesAnnexCSpecies: ReptileSpecies[] = [
+  // Serpents (Snakes)
   {
     id: 'elaphe-climacophora',
     scientificName: 'Elaphe climacophora',
@@ -542,11 +672,84 @@ export const citesAnnexCSpecies: ReptileSpecies[] = [
     citesAnnex: 'C',
     morphs: ['Normal', 'Albino T-', 'Anaconda', 'Arctic', 'Axanthic', 'Conda', 'Lavender', 'Snow', 'Toffee', 'Toxic'],
   },
+  // Lézards (Lizards)
+  {
+    id: 'anolis-carolinensis',
+    scientificName: 'Anolis carolinensis',
+    commonNameKey: 'species.anolis-carolinensis',
+    category: 'lizard',
+    citesAnnex: 'C',
+  },
+  {
+    id: 'sceloporus-malachiticus',
+    scientificName: 'Sceloporus malachiticus',
+    commonNameKey: 'species.sceloporus-malachiticus',
+    category: 'lizard',
+    citesAnnex: 'C',
+  },
+  {
+    id: 'takydromus-sexlineatus',
+    scientificName: 'Takydromus sexlineatus',
+    commonNameKey: 'species.takydromus-sexlineatus',
+    category: 'lizard',
+    citesAnnex: 'C',
+  },
+  {
+    id: 'basiliscus-vittatus',
+    scientificName: 'Basiliscus vittatus',
+    commonNameKey: 'species.basiliscus-vittatus',
+    category: 'lizard',
+    citesAnnex: 'C',
+  },
+  {
+    id: 'acanthosaura-armata',
+    scientificName: 'Acanthosaura armata',
+    commonNameKey: 'species.acanthosaura-armata',
+    category: 'lizard',
+    citesAnnex: 'C',
+  },
+  // Tortues (Turtles)
+  {
+    id: 'macrochelys-temminckii',
+    scientificName: 'Macrochelys temminckii',
+    commonNameKey: 'species.macrochelys-temminckii',
+    category: 'turtle',
+    citesAnnex: 'C',
+  },
+  {
+    id: 'chelydra-serpentina',
+    scientificName: 'Chelydra serpentina',
+    commonNameKey: 'species.chelydra-serpentina',
+    category: 'turtle',
+    citesAnnex: 'C',
+  },
+  {
+    id: 'chrysemys-picta',
+    scientificName: 'Chrysemys picta',
+    commonNameKey: 'species.chrysemys-picta',
+    category: 'turtle',
+    citesAnnex: 'C',
+  },
+  {
+    id: 'apalone-ferox',
+    scientificName: 'Apalone ferox',
+    commonNameKey: 'species.apalone-ferox',
+    category: 'turtle',
+    citesAnnex: 'C',
+  },
+  {
+    id: 'mauremys-reevesii',
+    scientificName: 'Mauremys reevesii',
+    commonNameKey: 'species.mauremys-reevesii',
+    category: 'turtle',
+    citesAnnex: 'C',
+  },
 ];
 
 // CITES Annexe D - Espèces non CITES mais sous surveillance
 // Déclaration requise pour les importations
 export const citesAnnexDSpecies: ReptileSpecies[] = [
+  // Serpents (Snakes)
   {
     id: 'lampropeltis-getula',
     scientificName: 'Lampropeltis getula',
@@ -569,6 +772,7 @@ export const citesAnnexDSpecies: ReptileSpecies[] = [
     commonNameKey: 'species.lampropeltis-californiae',
     category: 'snake',
     citesAnnex: 'D',
+    morphs: ['Normal', 'Albino T-', 'Banana', 'High White', 'Aberrant', 'Striped', 'Lavender'],
   },
   {
     id: 'thamnopis-proximus',
@@ -585,6 +789,78 @@ export const citesAnnexDSpecies: ReptileSpecies[] = [
     category: 'snake',
     citesAnnex: 'D',
     morphs: ['Normal', 'Albino T-', 'Blair\'s', 'Alterna'],
+  },
+  // Lézards (Lizards)
+  {
+    id: 'hemidactylus-frenatus',
+    scientificName: 'Hemidactylus frenatus',
+    commonNameKey: 'species.hemidactylus-frenatus',
+    category: 'lizard',
+    citesAnnex: 'D',
+  },
+  {
+    id: 'gehyra-mutilata',
+    scientificName: 'Gehyra mutilata',
+    commonNameKey: 'species.gehyra-mutilata',
+    category: 'lizard',
+    citesAnnex: 'D',
+  },
+  {
+    id: 'podarcis-muralis',
+    scientificName: 'Podarcis muralis',
+    commonNameKey: 'species.podarcis-muralis',
+    category: 'lizard',
+    citesAnnex: 'D',
+  },
+  {
+    id: 'lacerta-viridis',
+    scientificName: 'Lacerta viridis',
+    commonNameKey: 'species.lacerta-viridis',
+    category: 'lizard',
+    citesAnnex: 'D',
+  },
+  {
+    id: 'anguis-fragilis',
+    scientificName: 'Anguis fragilis',
+    commonNameKey: 'species.anguis-fragilis',
+    category: 'lizard',
+    citesAnnex: 'D',
+  },
+  // Tortues (Turtles)
+  {
+    id: 'emys-orbicularis',
+    scientificName: 'Emys orbicularis',
+    commonNameKey: 'species.emys-orbicularis',
+    category: 'turtle',
+    citesAnnex: 'D',
+  },
+  {
+    id: 'clemmys-guttata',
+    scientificName: 'Clemmys guttata',
+    commonNameKey: 'species.clemmys-guttata',
+    category: 'turtle',
+    citesAnnex: 'D',
+  },
+  {
+    id: 'terrapene-carolina',
+    scientificName: 'Terrapene carolina',
+    commonNameKey: 'species.terrapene-carolina',
+    category: 'turtle',
+    citesAnnex: 'D',
+  },
+  {
+    id: 'glyptemys-insculpta',
+    scientificName: 'Glyptemys insculpta',
+    commonNameKey: 'species.glyptemys-insculpta',
+    category: 'turtle',
+    citesAnnex: 'D',
+  },
+  {
+    id: 'mauremys-japonica',
+    scientificName: 'Mauremys japonica',
+    commonNameKey: 'species.mauremys-japonica',
+    category: 'turtle',
+    citesAnnex: 'D',
   },
 ];
 
