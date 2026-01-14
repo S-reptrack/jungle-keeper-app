@@ -12,33 +12,45 @@ export const useUserRole = () => {
   useEffect(() => {
     const fetchUserRole = async () => {
       if (!user) {
+        console.log("[useUserRole] No user, setting role to null");
         setRole(null);
         setLoading(false);
         return;
       }
 
+      console.log("[useUserRole] Fetching role for user:", user.id, user.email);
+
       try {
         const { data, error } = await supabase
           .from("user_roles")
           .select("role")
-          .eq("user_id", user.id)
-          .order("role", { ascending: false }); // admin avant user
+          .eq("user_id", user.id);
 
-        if (error) throw error;
+        console.log("[useUserRole] Query result:", { data, error });
+
+        if (error) {
+          console.error("[useUserRole] Error:", error);
+          throw error;
+        }
 
         // Vérifier les rôles par ordre de priorité
-        const isAdmin = data?.some((r) => r.role === "admin");
-        const isTester = data?.some((r) => r.role === "tester");
+        const hasAdminRole = data?.some((r) => r.role === "admin");
+        const hasTesterRole = data?.some((r) => r.role === "tester");
         
-        if (isAdmin) {
+        console.log("[useUserRole] Roles found:", { hasAdminRole, hasTesterRole, allRoles: data });
+        
+        if (hasAdminRole) {
+          console.log("[useUserRole] Setting role to admin");
           setRole("admin");
-        } else if (isTester) {
+        } else if (hasTesterRole) {
+          console.log("[useUserRole] Setting role to tester");
           setRole("tester");
         } else {
+          console.log("[useUserRole] Setting role to user (default)");
           setRole("user");
         }
       } catch (error) {
-        console.error("Error fetching user role:", error);
+        console.error("[useUserRole] Error fetching user role:", error);
         setRole("user"); // Par défaut, considérer comme user
       } finally {
         setLoading(false);
