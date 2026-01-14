@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { supabase } from "@/integrations/supabase/client";
 import { Users, Database, Activity, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
+import TesterManagement from "@/components/TesterManagement";
 
 interface AdminStats {
   totalUsers: number;
@@ -150,7 +151,9 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        <div className="mt-8">
+        <div className="mt-8 grid gap-6 lg:grid-cols-2">
+          <TesterManagement />
+          
           <Card>
             <CardHeader>
               <CardTitle>{t("admin.managementTools")}</CardTitle>
