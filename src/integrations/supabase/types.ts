@@ -349,6 +349,63 @@ export type Database = {
         }
         Relationships: []
       }
+      tester_activity: {
+        Row: {
+          action_details: Json | null
+          action_type: string
+          created_at: string
+          id: string
+          page_url: string | null
+          user_id: string
+        }
+        Insert: {
+          action_details?: Json | null
+          action_type: string
+          created_at?: string
+          id?: string
+          page_url?: string | null
+          user_id: string
+        }
+        Update: {
+          action_details?: Json | null
+          action_type?: string
+          created_at?: string
+          id?: string
+          page_url?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tester_feedback: {
+        Row: {
+          category: string
+          created_at: string
+          feedback: string
+          id: string
+          page_url: string | null
+          rating: number
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          feedback: string
+          id?: string
+          page_url?: string | null
+          rating: number
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          feedback?: string
+          id?: string
+          page_url?: string | null
+          rating?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       tester_invitations: {
         Row: {
           accepted_at: string | null

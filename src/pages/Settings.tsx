@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Globe, LogOut, User, Shield, Send, ArrowLeft } from "lucide-react";
+import { Moon, Sun, Globe, LogOut, User, Shield, Send, ArrowLeft, MessageSquare } from "lucide-react";
 import { useTheme } from "next-themes";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,6 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "sonner";
 import { languages } from "@/i18n/config";
@@ -17,11 +18,13 @@ import { useState, useEffect } from "react";
 import ExportDataDialog from "@/components/ExportDataDialog";
 import DeleteAccountDialog from "@/components/DeleteAccountDialog";
 import SubscriptionCard from "@/components/SubscriptionCard";
+import TesterFeedbackForm from "@/components/TesterFeedbackForm";
 
 const Settings = () => {
   const { t, i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
   const { user } = useAuth();
+  const { isTester } = useUserRole();
   const navigate = useNavigate();
   
   const [weightUnit, setWeightUnit] = useState(localStorage.getItem('weightUnit') || 'grams');
@@ -76,6 +79,9 @@ const Settings = () => {
         </div>
 
         <div className="space-y-6">
+          {/* Formulaire de feedback pour les testeurs */}
+          {isTester && <TesterFeedbackForm />}
+          
           {/* Abonnement Premium */}
           <SubscriptionCard />
           {/* Apparence */}
