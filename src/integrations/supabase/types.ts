@@ -497,6 +497,7 @@ export type Database = {
           id: string
           invited_by: string
           status: string
+          trial_end_date: string | null
         }
         Insert: {
           accepted_at?: string | null
@@ -505,6 +506,7 @@ export type Database = {
           id?: string
           invited_by: string
           status?: string
+          trial_end_date?: string | null
         }
         Update: {
           accepted_at?: string | null
@@ -513,6 +515,7 @@ export type Database = {
           id?: string
           invited_by?: string
           status?: string
+          trial_end_date?: string | null
         }
         Relationships: []
       }
@@ -594,6 +597,10 @@ export type Database = {
         Returns: boolean
       }
       mask_email: { Args: { email: string }; Returns: string }
+      remove_tester_role_on_subscribe: {
+        Args: { user_email: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "user" | "tester"

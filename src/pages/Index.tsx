@@ -7,6 +7,7 @@ import StatsCard from "@/components/StatsCard";
 import ReptileCard from "@/components/ReptileCard";
 import AddReptileDialog from "@/components/AddReptileDialog";
 import { HatchingCard } from "@/components/HatchingCard";
+import TesterTrialBanner from "@/components/TesterTrialBanner";
 import jungleHero from "@/assets/jungle-hero.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -322,6 +323,9 @@ const Index = () => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8 md:pb-8" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
+        {/* Tester Trial Banner */}
+        <TesterTrialBanner />
+        
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
           <StatsCard
