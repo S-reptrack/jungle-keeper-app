@@ -635,5 +635,26 @@
     "limitReachedDescription": "Upgrade to Premium to add unlimited reptiles.",
     "upgradeNow": "Upgrade to Premium",
     "reptilesUsed": "{{count}}/5 reptiles used"
+  },
+  "premium": {
+    "featureLockedDescription": "This feature is reserved for Premium subscribers.",
+    "upgradeToAccess": "Upgrade to Premium to unlock this feature.",
+    "upgradeToPremium": "Upgrade to Premium"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "description": "Advanced statistics and detailed charts of your breeding."
+  },
+  "genealogy": {
+    "title": "Genealogy",
+    "description": "Family tree to track your animals' lineages."
+  },
+  "marketplace": {
+    "title": "Marketplace",
+    "description": "Classifieds between breeders to sell or exchange reptiles."
+  },
+  "photoHistory": {
+    "title": "Photo History",
+    "premiumDescription": "Track your animals' evolution with a photo history."
   }
 }

@@ -139,6 +139,103 @@ export type Database = {
         }
         Relationships: []
       }
+      marketplace_images: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          image_url: string
+          listing_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url: string
+          listing_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url?: string
+          listing_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_images_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_listings: {
+        Row: {
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          description: string | null
+          expires_at: string
+          id: string
+          location: string | null
+          price: number | null
+          price_type: string
+          reptile_id: string | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+          views: number
+        }
+        Insert: {
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          description?: string | null
+          expires_at?: string
+          id?: string
+          location?: string | null
+          price?: number | null
+          price_type?: string
+          reptile_id?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+          views?: number
+        }
+        Update: {
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          description?: string | null
+          expires_at?: string
+          id?: string
+          location?: string | null
+          price?: number | null
+          price_type?: string
+          reptile_id?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+          views?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_listings_reptile_id_fkey"
+            columns: ["reptile_id"]
+            isOneToOne: false
+            referencedRelation: "reptiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -234,6 +331,89 @@ export type Database = {
           },
           {
             foreignKeyName: "reproduction_observations_reptile_id_fkey"
+            columns: ["reptile_id"]
+            isOneToOne: false
+            referencedRelation: "reptiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reptile_genealogy: {
+        Row: {
+          created_at: string
+          id: string
+          parent_id: string
+          parent_type: string
+          reptile_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          parent_id: string
+          parent_type: string
+          reptile_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          parent_id?: string
+          parent_type?: string
+          reptile_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reptile_genealogy_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "reptiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reptile_genealogy_reptile_id_fkey"
+            columns: ["reptile_id"]
+            isOneToOne: false
+            referencedRelation: "reptiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reptile_photos: {
+        Row: {
+          caption: string | null
+          created_at: string
+          id: string
+          image_url: string
+          reptile_id: string
+          taken_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url: string
+          reptile_id: string
+          taken_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string
+          reptile_id?: string
+          taken_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reptile_photos_reptile_id_fkey"
             columns: ["reptile_id"]
             isOneToOne: false
             referencedRelation: "reptiles"
