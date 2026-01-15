@@ -209,8 +209,8 @@ const TesterManagement = () => {
 
       if (insertError) throw insertError;
 
-      // Envoyer l'email d'invitation
-      const appUrl = window.location.origin;
+      // Envoyer l'email d'invitation - toujours utiliser l'URL publiée
+      const appUrl = "https://jungle-keeper-app.lovable.app";
       const response = await supabase.functions.invoke("invite-tester", {
         body: {
           email: emailLower,
