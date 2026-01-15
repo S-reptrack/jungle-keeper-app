@@ -32,12 +32,12 @@ echo //npm.registry.capawesome.io/:_authToken=%LICENSE_KEY%>> .npmrc
 
 echo.
 echo [5/7] Installation des dependances...
-call npm install
+call npm install --legacy-peer-deps
 
 echo.
-echo [6/7] Installation plugin NFC Premium et desinstallation ancien...
-call npm install @capawesome-team/capacitor-nfc
-call npm uninstall @exxili/capacitor-nfc
+echo [6/7] Installation plugin NFC Premium (compatible Capacitor 7)...
+call npm install @capawesome-team/capacitor-nfc --legacy-peer-deps
+call npm uninstall @exxili/capacitor-nfc --legacy-peer-deps
 
 echo.
 echo [7/7] Build et synchronisation Android...
