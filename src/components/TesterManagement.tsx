@@ -37,6 +37,7 @@ const TesterManagement = () => {
 
   const fetchTesters = async () => {
     try {
+      // Récupérer les testeurs
       const { data: roles, error } = await supabase
         .from("user_roles")
         .select("id, user_id, created_at")
@@ -44,21 +45,35 @@ const TesterManagement = () => {
 
       if (error) throw error;
 
-      const testersWithEmail: Tester[] = [];
-      for (const role of roles || []) {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("email")
-          .eq("user_id", role.user_id)
-          .maybeSingle();
-
-        testersWithEmail.push({
-          id: role.id,
-          user_id: role.user_id,
-          email: profile?.email || "Email inconnu",
-          created_at: role.created_at,
-        });
+      if (!roles || roles.length === 0) {
+        setTesters([]);
+        setLoading(false);
+        return;
       }
+
+      // Récupérer tous les profils en une seule requête
+      const userIds = roles.map(r => r.user_id);
+      const { data: profiles, error: profilesError } = await supabase
+        .from("profiles")
+        .select("user_id, email")
+        .in("user_id", userIds);
+
+      if (profilesError) {
+        console.error("Error fetching profiles:", profilesError);
+      }
+
+      // Créer un map pour accès rapide
+      const profileMap = new Map<string, string>();
+      (profiles || []).forEach(p => {
+        if (p.email) profileMap.set(p.user_id, p.email);
+      });
+
+      const testersWithEmail: Tester[] = roles.map((role) => ({
+        id: role.id,
+        user_id: role.user_id,
+        email: profileMap.get(role.user_id) || "Email inconnu",
+        created_at: role.created_at,
+      }));
 
       setTesters(testersWithEmail);
     } catch (error) {
