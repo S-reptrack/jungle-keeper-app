@@ -23,6 +23,35 @@ interface AnalyticsData {
 
 const COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))'];
 
+// Custom Tooltip Components
+const CustomTooltip = ({ active, payload, label, valueLabel, unit }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
+        <p className="font-medium text-foreground">{label}</p>
+        <p className="text-primary">
+          {valueLabel}: <span className="font-bold">{payload[0].value}{unit}</span>
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
+const CustomPieTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
+        <p className="font-medium text-foreground">{payload[0].name}</p>
+        <p className="text-primary">
+          Nombre: <span className="font-bold">{payload[0].value}</span>
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 const Analytics = () => {
   const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
@@ -189,7 +218,7 @@ const Analytics = () => {
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
                       </Pie>
-                      <Tooltip />
+                      <Tooltip content={<CustomPieTooltip />} />
                     </PieChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -207,7 +236,7 @@ const Analytics = () => {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis type="number" />
                       <YAxis dataKey="name" type="category" width={100} tick={{ fontSize: 12 }} />
-                      <Tooltip />
+                      <Tooltip content={<CustomTooltip valueLabel="Reptiles" unit="" />} />
                       <Bar dataKey="count" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
@@ -228,7 +257,7 @@ const Analytics = () => {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="month" tick={{ fontSize: 11 }} />
                       <YAxis />
-                      <Tooltip />
+                      <Tooltip content={<CustomTooltip valueLabel="Nourrissages" unit="" />} />
                       <Bar dataKey="count" fill="hsl(var(--chart-2))" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
@@ -249,7 +278,7 @@ const Analytics = () => {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="date" tick={{ fontSize: 11 }} />
                       <YAxis />
-                      <Tooltip />
+                      <Tooltip content={<CustomTooltip valueLabel="Poids moyen" unit=" g" />} />
                       <Line 
                         type="monotone" 
                         dataKey="avgWeight" 
@@ -285,7 +314,7 @@ const Analytics = () => {
                         <Cell fill="hsl(var(--chart-4))" />
                         <Cell fill="hsl(var(--destructive))" />
                       </Pie>
-                      <Tooltip />
+                      <Tooltip content={<CustomPieTooltip />} />
                       <Legend />
                     </PieChart>
                   </ResponsiveContainer>
@@ -312,7 +341,7 @@ const Analytics = () => {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="name" />
                       <YAxis />
-                      <Tooltip />
+                      <Tooltip content={<CustomTooltip valueLabel="Nombre" unit="" />} />
                       <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                         <Cell fill="hsl(var(--chart-4))" />
                         <Cell fill="hsl(var(--destructive))" />
