@@ -83,6 +83,6 @@ export const useUserRole = () => {
     loading: loading || authLoading, 
     isAdmin: role === "admin",
     isTester: role === "tester",
-    canBypassMaintenance: role === "admin" || role === "tester"
+    canBypassMaintenance: role === "admin" // Seuls les admins peuvent contourner la maintenance
   };
 };
