@@ -182,13 +182,14 @@ const TesterManagement = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Non authentifié");
 
-      // Créer l'invitation dans la base de données
+      // Créer l'invitation dans la base de données avec date limite au 15 février 2025
       const { error: insertError } = await supabase
         .from("tester_invitations")
         .insert({
           email: emailLower,
           invited_by: user.id,
           status: "pending",
+          trial_end_date: "2025-02-15",
         });
 
       if (insertError) throw insertError;

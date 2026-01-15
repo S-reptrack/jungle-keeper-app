@@ -27,6 +27,8 @@ interface SubscriptionState {
   loading: boolean;
   error: string | null;
   isTesterPremium: boolean;
+  testerTrialEnd: string | null;
+  testerTrialExpired: boolean;
 }
 
 export const useSubscription = () => {
@@ -40,16 +42,101 @@ export const useSubscription = () => {
     loading: true,
     error: null,
     isTesterPremium: false,
+    testerTrialEnd: null,
+    testerTrialExpired: false,
   });
 
   const checkSubscription = useCallback(async () => {
     if (!user) {
-      setState(prev => ({ ...prev, subscribed: false, loading: false, isTesterPremium: false }));
+      setState(prev => ({ ...prev, subscribed: false, loading: false, isTesterPremium: false, testerTrialEnd: null, testerTrialExpired: false }));
       return;
     }
 
-    // Testeurs et admins ont accès Premium gratuit
-    if (isTester || isAdmin) {
+    // Vérifier si testeur avec date limite
+    if (isTester) {
+      try {
+        // Récupérer l'email de l'utilisateur
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("email")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+        if (profile?.email) {
+          // Chercher l'invitation acceptée avec la date limite
+          const { data: invitation } = await supabase
+            .from("tester_invitations")
+            .select("trial_end_date")
+            .eq("email", profile.email)
+            .eq("status", "accepted")
+            .maybeSingle();
+
+          const trialEndDate = invitation?.trial_end_date;
+          const isExpired = trialEndDate ? new Date(trialEndDate) < new Date() : false;
+
+          if (isExpired) {
+            // Trial expiré - vérifier s'il a un vrai abonnement Stripe
+            const { data: sessionData } = await supabase.auth.getSession();
+            const accessToken = sessionData.session?.access_token;
+
+            if (accessToken) {
+              const { data, error } = await supabase.functions.invoke("check-subscription", {
+                headers: { Authorization: `Bearer ${accessToken}` },
+              });
+
+              if (!error && data?.subscribed) {
+                // A un abonnement payant - retirer le rôle testeur
+                await supabase.rpc("remove_tester_role_on_subscribe", { user_email: profile.email });
+                
+                setState({
+                  subscribed: true,
+                  productId: data.product_id || null,
+                  priceId: data.price_id || null,
+                  subscriptionEnd: data.subscription_end || null,
+                  loading: false,
+                  error: null,
+                  isTesterPremium: false,
+                  testerTrialEnd: null,
+                  testerTrialExpired: false,
+                });
+                return;
+              }
+            }
+
+            // Trial expiré et pas d'abonnement
+            setState({
+              subscribed: false,
+              productId: null,
+              priceId: null,
+              subscriptionEnd: null,
+              loading: false,
+              error: null,
+              isTesterPremium: false,
+              testerTrialEnd: trialEndDate,
+              testerTrialExpired: true,
+            });
+            return;
+          }
+
+          // Trial actif
+          setState({
+            subscribed: true,
+            productId: "tester_premium",
+            priceId: null,
+            subscriptionEnd: null,
+            loading: false,
+            error: null,
+            isTesterPremium: true,
+            testerTrialEnd: trialEndDate,
+            testerTrialExpired: false,
+          });
+          return;
+        }
+      } catch (error) {
+        console.error("Error checking tester trial:", error);
+      }
+
+      // Fallback pour testeur sans invitation trouvée
       setState({
         subscribed: true,
         productId: "tester_premium",
@@ -58,6 +145,24 @@ export const useSubscription = () => {
         loading: false,
         error: null,
         isTesterPremium: true,
+        testerTrialEnd: null,
+        testerTrialExpired: false,
+      });
+      return;
+    }
+
+    // Admin a accès Premium gratuit illimité
+    if (isAdmin) {
+      setState({
+        subscribed: true,
+        productId: "admin_premium",
+        priceId: null,
+        subscriptionEnd: null,
+        loading: false,
+        error: null,
+        isTesterPremium: true,
+        testerTrialEnd: null,
+        testerTrialExpired: false,
       });
       return;
     }
@@ -69,7 +174,7 @@ export const useSubscription = () => {
       const accessToken = sessionData.session?.access_token;
 
       if (!accessToken) {
-        setState(prev => ({ ...prev, subscribed: false, loading: false, isTesterPremium: false }));
+        setState(prev => ({ ...prev, subscribed: false, loading: false, isTesterPremium: false, testerTrialEnd: null, testerTrialExpired: false }));
         return;
       }
 
@@ -89,6 +194,8 @@ export const useSubscription = () => {
         loading: false,
         error: null,
         isTesterPremium: false,
+        testerTrialEnd: null,
+        testerTrialExpired: false,
       });
     } catch (error) {
       console.error("Error checking subscription:", error);
@@ -97,6 +204,8 @@ export const useSubscription = () => {
         loading: false,
         error: error instanceof Error ? error.message : "Unknown error",
         isTesterPremium: false,
+        testerTrialEnd: null,
+        testerTrialExpired: false,
       }));
     }
   }, [user, isTester, isAdmin]);
