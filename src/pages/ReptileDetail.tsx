@@ -382,7 +382,7 @@ const ReptileDetail = () => {
                   </div>
                 )}
                 {isCurrentOwner && (reptile.status === "active" || reptile.status === "for_sale") && (
-                  <div className="mt-4 flex gap-2">
+                  <div className="mt-4">
                     <EditReptileDialog
                       reptileId={reptile.id}
                       currentSpecies={reptile.species}
@@ -393,14 +393,6 @@ const ReptileDetail = () => {
                       currentSex={reptile.sex as "male" | "female" | "unknown"}
                       onUpdate={fetchReptile}
                     />
-                    <Button 
-                      variant="outline" 
-                      className="flex-1"
-                      onClick={() => setTransferDialogOpen(true)}
-                    >
-                      <Send className="w-4 h-4 mr-2" />
-                      {t("transfer.transferAnimal")}
-                    </Button>
                   </div>
                 )}
                 {isCurrentOwner && reptile.status === "sold" && (
