@@ -1,32 +1,33 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { LogIn } from "lucide-react";
 import sreptrackLogo from "@/assets/sreptrack-logo.png";
 import LanguageSelector from "@/components/LanguageSelector";
-import { Button } from "@/components/ui/button";
 
 const ComingSoon = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [clickCount, setClickCount] = useState(0);
+
+  const handleLogoClick = () => {
+    const newCount = clickCount + 1;
+    setClickCount(newCount);
+    
+    // Easter egg: 5 clics sur le logo = accès à la page de connexion
+    if (newCount >= 5) {
+      navigate("/auth");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex flex-col items-center justify-center p-6">
-      {/* Language Selector & Login Button */}
-      <div className="absolute top-4 right-4 flex items-center gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => navigate("/auth")}
-          className="flex items-center gap-2"
-        >
-          <LogIn className="h-4 w-4" />
-          {t("auth.login", "Connexion")}
-        </Button>
+      {/* Language Selector */}
+      <div className="absolute top-4 right-4">
         <LanguageSelector />
       </div>
 
-      {/* Logo */}
-      <div className="mb-8 animate-pulse">
+      {/* Logo - Easter egg: 5 clics pour accéder à /auth */}
+      <div className="mb-8 animate-pulse cursor-pointer" onClick={handleLogoClick}>
         <img 
           src={sreptrackLogo} 
           alt="S-reptrack" 
