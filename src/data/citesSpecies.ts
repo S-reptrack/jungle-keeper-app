@@ -249,6 +249,22 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
     citesAnnex: 'B',
   },
   {
+    id: 'morelia-viridis',
+    scientificName: 'Morelia viridis',
+    commonNameKey: 'species.morelia-viridis',
+    category: 'snake',
+    citesAnnex: 'B',
+    morphs: ['Normal', 'Biak', 'Aru', 'Sorong', 'Jayapura', 'Merauke', 'Wamena', 'High Yellow', 'Blue Line', 'Designer', 'Albino T-', 'Axanthic', 'Calico', 'Mite Phase'],
+  },
+  {
+    id: 'morelia-viridis-emerald',
+    scientificName: 'Morelia viridis',
+    commonNameKey: 'species.morelia-viridis-emerald',
+    category: 'snake',
+    citesAnnex: 'B',
+    morphs: ['Normal', 'Biak', 'Aru', 'Sorong', 'Jayapura', 'Merauke', 'Wamena', 'High Yellow', 'Blue Line', 'Designer', 'Albino T-', 'Axanthic', 'Calico', 'Mite Phase'],
+  },
+  {
     id: 'morelia-amethistina',
     scientificName: 'Morelia amethistina',
     commonNameKey: 'species.morelia-amethistina',
