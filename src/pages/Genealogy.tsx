@@ -196,8 +196,21 @@ const Genealogy = () => {
     return <Navigate to="/auth" replace />;
   }
 
-  const femaleReptiles = reptiles.filter(r => r.sex === "female");
-  const maleReptiles = reptiles.filter(r => r.sex === "male");
+  // Get selected child's species to filter parents
+  const selectedChildReptile = reptiles.find(r => r.id === selectedChild);
+  const childSpecies = selectedChildReptile?.species;
+
+  // Filter parents by same species as child (if child is selected)
+  const femaleReptiles = reptiles.filter(r => 
+    r.sex === "female" && 
+    r.id !== selectedChild &&
+    (!childSpecies || r.species === childSpecies)
+  );
+  const maleReptiles = reptiles.filter(r => 
+    r.sex === "male" && 
+    r.id !== selectedChild &&
+    (!childSpecies || r.species === childSpecies)
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -232,7 +245,15 @@ const Genealogy = () => {
                 <div className="space-y-4">
                   <div>
                     <Label>{t("genealogy.childReptile")}</Label>
-                    <Select value={selectedChild} onValueChange={setSelectedChild}>
+                    <Select 
+                      value={selectedChild} 
+                      onValueChange={(value) => {
+                        setSelectedChild(value);
+                        // Reset parent selections when child changes
+                        setSelectedMother("");
+                        setSelectedFather("");
+                      }}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder={t("genealogy.selectChild")} />
                       </SelectTrigger>
@@ -249,16 +270,17 @@ const Genealogy = () => {
                   <div>
                     <Label className="flex items-center gap-2">
                       <span className="text-pink-500">♀</span> {t("genealogy.mother")}
+                      {childSpecies && <span className="text-xs text-muted-foreground">({childSpecies})</span>}
                     </Label>
-                    <Select value={selectedMother} onValueChange={setSelectedMother}>
+                    <Select value={selectedMother} onValueChange={setSelectedMother} disabled={!selectedChild}>
                       <SelectTrigger>
-                        <SelectValue placeholder={t("genealogy.selectMother")} />
+                        <SelectValue placeholder={selectedChild ? t("genealogy.selectMother") : t("genealogy.selectChild")} />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="none">{t("genealogy.unknown")}</SelectItem>
-                        {femaleReptiles.filter(r => r.id !== selectedChild).map(r => (
+                        {femaleReptiles.map(r => (
                           <SelectItem key={r.id} value={r.id}>
-                            {r.name} ({r.species})
+                            {r.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -268,16 +290,17 @@ const Genealogy = () => {
                   <div>
                     <Label className="flex items-center gap-2">
                       <span className="text-blue-500">♂</span> {t("genealogy.father")}
+                      {childSpecies && <span className="text-xs text-muted-foreground">({childSpecies})</span>}
                     </Label>
-                    <Select value={selectedFather} onValueChange={setSelectedFather}>
+                    <Select value={selectedFather} onValueChange={setSelectedFather} disabled={!selectedChild}>
                       <SelectTrigger>
-                        <SelectValue placeholder={t("genealogy.selectFather")} />
+                        <SelectValue placeholder={selectedChild ? t("genealogy.selectFather") : t("genealogy.selectChild")} />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="none">{t("genealogy.unknown")}</SelectItem>
-                        {maleReptiles.filter(r => r.id !== selectedChild).map(r => (
+                        {maleReptiles.map(r => (
                           <SelectItem key={r.id} value={r.id}>
-                            {r.name} ({r.species})
+                            {r.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
