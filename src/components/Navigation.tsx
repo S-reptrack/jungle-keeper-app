@@ -1,4 +1,4 @@
-import { Home, List, Tag, Settings, QrCode, Waves, User, Shield, BarChart3, GitBranch, ShoppingBag } from "lucide-react";
+import { Home, List, Tag, Settings, QrCode, Waves, User, Shield, BarChart3, GitBranch } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -102,10 +102,6 @@ const Navigation = () => {
                     <DropdownMenuItem onClick={() => navigate("/genealogy")}>
                       <GitBranch className="w-4 h-4 mr-2" />
                       {t("genealogy.title")}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate("/marketplace")}>
-                      <ShoppingBag className="w-4 h-4 mr-2" />
-                      {t("marketplace.title")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
