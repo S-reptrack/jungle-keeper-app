@@ -1,14 +1,27 @@
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { LogIn } from "lucide-react";
 import sreptrackLogo from "@/assets/sreptrack-logo.png";
 import LanguageSelector from "@/components/LanguageSelector";
+import { Button } from "@/components/ui/button";
 
 const ComingSoon = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex flex-col items-center justify-center p-6">
-      {/* Language Selector */}
-      <div className="absolute top-4 right-4">
+      {/* Language Selector & Login Button */}
+      <div className="absolute top-4 right-4 flex items-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => navigate("/auth")}
+          className="flex items-center gap-2"
+        >
+          <LogIn className="h-4 w-4" />
+          {t("auth.login", "Connexion")}
+        </Button>
         <LanguageSelector />
       </div>
 
