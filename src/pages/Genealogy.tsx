@@ -46,8 +46,8 @@ const Genealogy = () => {
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedChild, setSelectedChild] = useState<string>("");
-  const [selectedParent, setSelectedParent] = useState<string>("");
-  const [parentType, setParentType] = useState<"mother" | "father">("mother");
+  const [selectedMother, setSelectedMother] = useState<string>("");
+  const [selectedFather, setSelectedFather] = useState<string>("");
 
   useEffect(() => {
     if (user) {
@@ -102,30 +102,54 @@ const Genealogy = () => {
   };
 
   const handleAddLink = async () => {
-    if (!selectedChild || !selectedParent) {
-      toast.error(t("genealogy.selectBoth"));
+    if (!selectedChild) {
+      toast.error(t("genealogy.selectChild"));
       return;
     }
 
-    if (selectedChild === selectedParent) {
+    const hasMother = selectedMother && selectedMother !== "none";
+    const hasFather = selectedFather && selectedFather !== "none";
+
+    if (!hasMother && !hasFather) {
+      toast.error(t("genealogy.selectAtLeastOneParent"));
+      return;
+    }
+
+    if (selectedChild === selectedMother || selectedChild === selectedFather) {
       toast.error(t("genealogy.cannotBeSameAnimal"));
       return;
     }
 
     try {
-      const { error } = await supabase.from("reptile_genealogy").insert({
-        reptile_id: selectedChild,
-        parent_id: selectedParent,
-        parent_type: parentType,
-        user_id: user!.id
-      });
+      const linksToInsert = [];
+      
+      if (hasMother) {
+        linksToInsert.push({
+          reptile_id: selectedChild,
+          parent_id: selectedMother,
+          parent_type: "mother",
+          user_id: user!.id
+        });
+      }
+      
+      if (hasFather) {
+        linksToInsert.push({
+          reptile_id: selectedChild,
+          parent_id: selectedFather,
+          parent_type: "father",
+          user_id: user!.id
+        });
+      }
+
+      const { error } = await supabase.from("reptile_genealogy").insert(linksToInsert);
 
       if (error) throw error;
 
       toast.success(t("genealogy.linkAdded"));
       setDialogOpen(false);
       setSelectedChild("");
-      setSelectedParent("");
+      setSelectedMother("");
+      setSelectedFather("");
       fetchData();
     } catch (error: any) {
       if (error.code === "23505") {
@@ -223,26 +247,35 @@ const Genealogy = () => {
                   </div>
 
                   <div>
-                    <Label>{t("genealogy.parentType")}</Label>
-                    <Select value={parentType} onValueChange={(v) => setParentType(v as "mother" | "father")}>
+                    <Label className="flex items-center gap-2">
+                      <span className="text-pink-500">♀</span> {t("genealogy.mother")}
+                    </Label>
+                    <Select value={selectedMother} onValueChange={setSelectedMother}>
                       <SelectTrigger>
-                        <SelectValue />
+                        <SelectValue placeholder={t("genealogy.selectMother")} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="mother">{t("genealogy.mother")}</SelectItem>
-                        <SelectItem value="father">{t("genealogy.father")}</SelectItem>
+                        <SelectItem value="none">{t("genealogy.unknown")}</SelectItem>
+                        {femaleReptiles.filter(r => r.id !== selectedChild).map(r => (
+                          <SelectItem key={r.id} value={r.id}>
+                            {r.name} ({r.species})
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div>
-                    <Label>{t("genealogy.parentReptile")}</Label>
-                    <Select value={selectedParent} onValueChange={setSelectedParent}>
+                    <Label className="flex items-center gap-2">
+                      <span className="text-blue-500">♂</span> {t("genealogy.father")}
+                    </Label>
+                    <Select value={selectedFather} onValueChange={setSelectedFather}>
                       <SelectTrigger>
-                        <SelectValue placeholder={t("genealogy.selectParent")} />
+                        <SelectValue placeholder={t("genealogy.selectFather")} />
                       </SelectTrigger>
                       <SelectContent>
-                        {(parentType === "mother" ? femaleReptiles : maleReptiles).map(r => (
+                        <SelectItem value="none">{t("genealogy.unknown")}</SelectItem>
+                        {maleReptiles.filter(r => r.id !== selectedChild).map(r => (
                           <SelectItem key={r.id} value={r.id}>
                             {r.name} ({r.species})
                           </SelectItem>

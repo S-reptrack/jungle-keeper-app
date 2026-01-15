@@ -647,7 +647,27 @@
   },
   "genealogy": {
     "title": "Genealogy",
-    "description": "Family tree to track your animals' lineages."
+    "description": "Family tree to track your animals' lineages.",
+    "addLink": "Add link",
+    "addParentLink": "Add parental link",
+    "addParentLinkDescription": "Define the parents of a reptile.",
+    "childReptile": "Reptile (child)",
+    "selectChild": "Select reptile",
+    "parentType": "Parent type",
+    "parentReptile": "Parent",
+    "selectParent": "Select parent",
+    "selectMother": "Select mother",
+    "selectFather": "Select father",
+    "mother": "Mother",
+    "father": "Father",
+    "unknown": "Unknown",
+    "noLinks": "No genealogy links recorded.",
+    "linkAdded": "Link added successfully",
+    "linkRemoved": "Link removed",
+    "selectBoth": "Please select a child and a parent",
+    "selectAtLeastOneParent": "Please select at least one parent (mother or father)",
+    "cannotBeSameAnimal": "An animal cannot be its own parent",
+    "parentAlreadySet": "This parent type is already defined for this reptile"
   },
   "marketplace": {
     "title": "Marketplace",
