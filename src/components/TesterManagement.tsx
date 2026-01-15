@@ -16,17 +16,19 @@ interface Tester {
   created_at: string;
 }
 
-interface PendingInvitation {
+interface Invitation {
   id: string;
   email: string;
   created_at: string;
   status: string;
+  accepted_at: string | null;
 }
 
 const TesterManagement = () => {
   const { t } = useTranslation();
   const [testers, setTesters] = useState<Tester[]>([]);
-  const [pendingInvitations, setPendingInvitations] = useState<PendingInvitation[]>([]);
+  const [pendingInvitations, setPendingInvitations] = useState<Invitation[]>([]);
+  const [acceptedInvitations, setAcceptedInvitations] = useState<Invitation[]>([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
   const [inviting, setInviting] = useState(false);
@@ -67,24 +69,35 @@ const TesterManagement = () => {
     }
   };
 
-  const fetchPendingInvitations = async () => {
+  const fetchInvitations = async () => {
     try {
-      const { data, error } = await supabase
+      // Fetch pending invitations
+      const { data: pending, error: pendingError } = await supabase
         .from("tester_invitations")
-        .select("id, email, created_at, status")
+        .select("id, email, created_at, status, accepted_at")
         .eq("status", "pending")
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      setPendingInvitations(data || []);
+      if (pendingError) throw pendingError;
+      setPendingInvitations(pending || []);
+
+      // Fetch accepted invitations
+      const { data: accepted, error: acceptedError } = await supabase
+        .from("tester_invitations")
+        .select("id, email, created_at, status, accepted_at")
+        .eq("status", "accepted")
+        .order("accepted_at", { ascending: false });
+
+      if (acceptedError) throw acceptedError;
+      setAcceptedInvitations(accepted || []);
     } catch (error) {
-      console.error("Error fetching pending invitations:", error);
+      console.error("Error fetching invitations:", error);
     }
   };
 
   useEffect(() => {
     fetchTesters();
-    fetchPendingInvitations();
+    fetchInvitations();
   }, []);
 
   const addTester = async () => {
@@ -197,7 +210,7 @@ const TesterManagement = () => {
 
       toast.success(`Invitation envoyée à ${inviteEmail}`);
       setInviteEmail("");
-      fetchPendingInvitations();
+      fetchInvitations();
     } catch (error: any) {
       console.error("Error inviting tester:", error);
       toast.error(`Erreur lors de l'envoi: ${error.message}`);
@@ -216,7 +229,7 @@ const TesterManagement = () => {
       if (error) throw error;
 
       toast.success(`Invitation annulée pour ${invitationEmail}`);
-      fetchPendingInvitations();
+      fetchInvitations();
     } catch (error) {
       console.error("Error canceling invitation:", error);
       toast.error("Erreur lors de l'annulation");
@@ -344,9 +357,42 @@ const TesterManagement = () => {
           </TabsContent>
         </Tabs>
 
+        {/* Invitations acceptées */}
+        {acceptedInvitations.length > 0 && (
+          <div className="pt-4 border-t">
+            <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+              <Mail className="h-4 w-4 text-green-500" />
+              Invitations acceptées ({acceptedInvitations.length})
+            </h4>
+            <div className="space-y-2">
+              {acceptedInvitations.map((inv) => (
+                <div
+                  key={inv.id}
+                  className="flex items-center justify-between p-2 bg-green-500/10 rounded-lg text-sm"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                    <span className="font-medium">{inv.email}</span>
+                    <Badge variant="outline" className="text-xs bg-green-500/20 text-green-600 w-fit">
+                      Acceptée
+                    </Badge>
+                    {inv.accepted_at && (
+                      <span className="text-xs text-muted-foreground">
+                        le {new Date(inv.accepted_at).toLocaleDateString("fr-FR")}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Liste des testeurs */}
         <div className="pt-4 border-t">
-          <h4 className="text-sm font-medium mb-3">Testeurs actuels</h4>
+          <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+            <Users className="h-4 w-4 text-primary" />
+            Testeurs actuels ({testers.length})
+          </h4>
           {loading ? (
             <div className="flex items-center justify-center py-8">
               <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -362,11 +408,14 @@ const TesterManagement = () => {
                   key={tester.id}
                   className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
                     <span className="text-sm font-medium">{tester.email}</span>
-                    <Badge variant="secondary" className="text-xs">
+                    <Badge variant="secondary" className="text-xs w-fit">
                       {t("admin.testers.tester")}
                     </Badge>
+                    <span className="text-xs text-muted-foreground">
+                      depuis le {new Date(tester.created_at).toLocaleDateString("fr-FR")}
+                    </span>
                   </div>
                   <Button
                     variant="ghost"
