@@ -113,6 +113,27 @@ const TesterManagement = () => {
   useEffect(() => {
     fetchTesters();
     fetchInvitations();
+
+    // Abonnement realtime pour les invitations
+    const channel = supabase
+      .channel('tester-invitations-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'tester_invitations',
+        },
+        (payload) => {
+          console.log('Realtime invitation update:', payload);
+          fetchInvitations();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const addTester = async () => {
