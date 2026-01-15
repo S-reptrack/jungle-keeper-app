@@ -34,7 +34,6 @@ import AdminRoute from "./components/AdminRoute";
 import MaintenanceGuard from "./components/MaintenanceGuard";
 import Analytics from "./pages/Analytics";
 import Genealogy from "./pages/Genealogy";
-import Marketplace from "./pages/Marketplace";
 
 const queryClient = new QueryClient();
 
@@ -75,7 +74,6 @@ const App = () => (
               <Route path="/qr-codes" element={<QRCodeBatch />} />
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/genealogy" element={<Genealogy />} />
-              <Route path="/marketplace" element={<Marketplace />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </MaintenanceGuard>
