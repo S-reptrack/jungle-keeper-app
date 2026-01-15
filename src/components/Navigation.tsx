@@ -1,4 +1,4 @@
-import { Home, List, Tag, Settings, QrCode, Waves, User, Shield } from "lucide-react";
+import { Home, List, Tag, Settings, QrCode, Waves, User, Shield, BarChart3, GitBranch, ShoppingBag } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -12,6 +12,13 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { Badge } from "./ui/badge";
 import { useUserRole } from "@/hooks/useUserRole";
+import { useSubscription } from "@/hooks/useSubscription";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const isIOS = (): boolean => {
   const userAgent = navigator.userAgent.toLowerCase();
@@ -26,6 +33,7 @@ const Navigation = () => {
   const [scannerOpen, setScannerOpen] = useState(false);
   const { user } = useAuth();
   const { isAdmin } = useUserRole();
+  const { subscribed } = useSubscription();
 
   // Extraire le pseudo de l'email (partie avant @)
   const userDisplayName = user?.email?.split('@')[0] || null;
@@ -78,6 +86,30 @@ const Navigation = () => {
               <LanguageSelector />
             </div>
             <div className="flex items-center gap-2">
+              {subscribed && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="gap-1.5 text-primary">
+                      <BarChart3 className="w-4 h-4" />
+                      <span className="hidden md:inline">Premium</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => navigate("/analytics")}>
+                      <BarChart3 className="w-4 h-4 mr-2" />
+                      {t("analytics.title")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/genealogy")}>
+                      <GitBranch className="w-4 h-4 mr-2" />
+                      {t("genealogy.title")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/marketplace")}>
+                      <ShoppingBag className="w-4 h-4 mr-2" />
+                      {t("marketplace.title")}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
               {isAdmin && (
                 <Link
                   to="/admin"
