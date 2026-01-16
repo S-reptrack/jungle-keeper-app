@@ -32,8 +32,17 @@ const Reptiles = () => {
   const [activePage, setActivePage] = useState(1);
   const [archivedPage, setArchivedPage] = useState(1);
   const [transferredPage, setTransferredPage] = useState(1);
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [viewMode, setViewMode] = useState<ViewMode>(() => {
+    const saved = localStorage.getItem("reptiles-view-mode");
+    return (saved as ViewMode) || "grid";
+  });
   const isMobile = useIsMobile();
+
+  // Sauvegarder le mode de vue dans localStorage
+  const handleViewModeChange = (mode: ViewMode) => {
+    setViewMode(mode);
+    localStorage.setItem("reptiles-view-mode", mode);
+  };
 
   useEffect(() => {
     if (user) {
@@ -299,9 +308,9 @@ const Reptiles = () => {
       
       <main className="max-w-7xl mx-auto px-4 py-8 pb-24 md:pb-8 md:pt-24">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-          <div className="flex items-center justify-between md:justify-start gap-4">
-            <h1 className="text-3xl font-bold text-foreground">{t("common.reptiles")}</h1>
-            <ViewModeSelector viewMode={viewMode} onViewModeChange={setViewMode} />
+          <div className="flex items-center justify-between md:justify-start gap-4 min-w-0">
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground shrink-0">{t("common.reptiles")}</h1>
+            <ViewModeSelector viewMode={viewMode} onViewModeChange={handleViewModeChange} className="shrink-0" />
           </div>
           <div className="flex flex-col sm:flex-row gap-2">
             <Button
