@@ -306,11 +306,11 @@ const Reptiles = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <main className="max-w-7xl mx-auto px-4 py-8 pb-24 md:pb-8 md:pt-24">
+      <main className="max-w-7xl mx-auto px-4 pt-[max(2rem,env(safe-area-inset-top))] pb-24 md:pb-8 md:pt-24">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-          <div className="flex items-center justify-between md:justify-start gap-4 min-w-0">
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground shrink-0">{t("common.reptiles")}</h1>
-            <ViewModeSelector viewMode={viewMode} onViewModeChange={handleViewModeChange} className="shrink-0" />
+          <div className="flex items-center justify-between md:justify-start gap-3 min-w-0 flex-wrap">
+            <h1 className="text-xl md:text-3xl font-bold text-foreground">{t("common.reptiles")}</h1>
+            <ViewModeSelector viewMode={viewMode} onViewModeChange={handleViewModeChange} />
           </div>
           <div className="flex flex-col sm:flex-row gap-2">
             <Button
