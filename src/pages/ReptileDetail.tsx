@@ -13,6 +13,7 @@ import ReproductionTab from "@/components/ReproductionTab";
 import FeedingTab from "@/components/FeedingTab";
 import HealthTab from "@/components/HealthTab";
 import EditReptileDialog from "@/components/EditReptileDialog";
+import DeleteReptileDialog from "@/components/DeleteReptileDialog";
 import WeightChart from "@/components/WeightChart";
 import QRCodeDialog from "@/components/QRCodeDialog";
 import ImageUploadDialog from "@/components/ImageUploadDialog";
@@ -42,6 +43,7 @@ interface Reptile {
   user_id: string;
   previous_owner_id: string | null;
   transferred_at: string | null;
+  created_at: string;
 }
 
 const ReptileDetail = () => {
@@ -382,7 +384,7 @@ const ReptileDetail = () => {
                   </div>
                 )}
                 {isCurrentOwner && (reptile.status === "active" || reptile.status === "for_sale") && (
-                  <div className="mt-4">
+                  <div className="mt-4 flex flex-col gap-2">
                     <EditReptileDialog
                       reptileId={reptile.id}
                       currentSpecies={reptile.species}
@@ -392,6 +394,11 @@ const ReptileDetail = () => {
                       currentWeight={reptile.weight}
                       currentSex={reptile.sex as "male" | "female" | "unknown"}
                       onUpdate={fetchReptile}
+                    />
+                    <DeleteReptileDialog
+                      reptileId={reptile.id}
+                      reptileName={reptile.name}
+                      createdAt={reptile.created_at}
                     />
                   </div>
                 )}
