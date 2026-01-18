@@ -35,6 +35,19 @@ const MaintenanceGuard = ({ children }: MaintenanceGuardProps) => {
 const MaintenanceCheck = ({ children }: MaintenanceGuardProps) => {
   const { user, loading: authLoading } = useAuth();
   const { isAdmin, isTester, canBypassMaintenance, loading: roleLoading, role } = useUserRole();
+  const [timedOut, setTimedOut] = useState(false);
+
+  // Timeout de sécurité pour éviter un spinner infini
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (authLoading || roleLoading) {
+        console.log("MaintenanceCheck - Loading timeout reached");
+        setTimedOut(true);
+      }
+    }, 5000); // 5 secondes max
+
+    return () => clearTimeout(timeout);
+  }, [authLoading, roleLoading]);
 
   // Debug logs
   useEffect(() => {
@@ -47,8 +60,8 @@ const MaintenanceCheck = ({ children }: MaintenanceGuardProps) => {
     console.log("MaintenanceCheck - canBypassMaintenance:", canBypassMaintenance);
   }, [authLoading, roleLoading, user, role, isAdmin, isTester, canBypassMaintenance]);
 
-  // While loading, show spinner
-  if (authLoading || roleLoading) {
+  // While loading (with timeout protection), show spinner
+  if ((authLoading || roleLoading) && !timedOut) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
@@ -56,9 +69,9 @@ const MaintenanceCheck = ({ children }: MaintenanceGuardProps) => {
     );
   }
 
-  // If not admin or tester, show maintenance page
-  if (!canBypassMaintenance) {
-    console.log("MaintenanceCheck - Showing maintenance page (not admin or tester)");
+  // If timed out or not admin/tester, show maintenance page
+  if (timedOut || !canBypassMaintenance) {
+    console.log("MaintenanceCheck - Showing maintenance page (timedOut:", timedOut, ", not admin or tester)");
     return <Maintenance />;
   }
 
