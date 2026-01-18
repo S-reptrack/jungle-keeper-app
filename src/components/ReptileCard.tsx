@@ -27,7 +27,7 @@ const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntil
   const { signedUrl, loading } = useSignedImageUrl(image);
 
   const handleCardClick = () => {
-    navigate(`/reptile/${id}`);
+    navigate(`/reptile/${id}`, { state: { from: window.location.pathname + window.location.search } });
   };
 
   return (
