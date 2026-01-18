@@ -13,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Printer, QrCode, ChevronLeft, ChevronRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const ITEMS_PER_PAGE = 10;
@@ -22,6 +22,7 @@ const Reptiles = () => {
   const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [reptiles, setReptiles] = useState<any[]>([]);
   const [archivedReptiles, setArchivedReptiles] = useState<any[]>([]);
   const [transferredReptiles, setTransferredReptiles] = useState<any[]>([]);
@@ -29,14 +30,43 @@ const Reptiles = () => {
   const [lastFeedings, setLastFeedings] = useState<Record<string, string>>({});
   const [showPrintDialog, setShowPrintDialog] = useState(false);
   const [daysUntilHatch, setDaysUntilHatch] = useState<Record<string, number | null>>({});
-  const [activePage, setActivePage] = useState(1);
-  const [archivedPage, setArchivedPage] = useState(1);
-  const [transferredPage, setTransferredPage] = useState(1);
+  
+  // Lire les pages depuis les paramètres URL
+  const activePage = parseInt(searchParams.get("activePage") || "1", 10);
+  const archivedPage = parseInt(searchParams.get("archivedPage") || "1", 10);
+  const transferredPage = parseInt(searchParams.get("transferredPage") || "1", 10);
+  const activeTab = searchParams.get("tab") || "active";
+  
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
     const saved = localStorage.getItem("reptiles-view-mode");
     return (saved as ViewMode) || "grid";
   });
   const isMobile = useIsMobile();
+
+  // Fonctions pour mettre à jour les pages via URL
+  const setActivePage = (page: number) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("activePage", page.toString());
+    setSearchParams(newParams, { replace: true });
+  };
+  
+  const setArchivedPage = (page: number) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("archivedPage", page.toString());
+    setSearchParams(newParams, { replace: true });
+  };
+  
+  const setTransferredPage = (page: number) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("transferredPage", page.toString());
+    setSearchParams(newParams, { replace: true });
+  };
+  
+  const handleTabChange = (tab: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("tab", tab);
+    setSearchParams(newParams, { replace: true });
+  };
 
   // Sauvegarder le mode de vue dans localStorage
   const handleViewModeChange = (mode: ViewMode) => {
@@ -337,7 +367,7 @@ const Reptiles = () => {
         {loading ? (
           <div className="text-center py-12">Chargement...</div>
         ) : (
-          <Tabs defaultValue="active" className="w-full">
+          <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
             <TabsList className="mb-6 w-full grid grid-cols-3">
               <TabsTrigger value="active" className="gap-2">
                 Actifs
