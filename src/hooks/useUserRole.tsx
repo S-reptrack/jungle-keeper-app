@@ -9,6 +9,7 @@ export const useUserRole = () => {
   const [role, setRole] = useState<UserRole>(null);
   const [loading, setLoading] = useState(true);
   const lastUserId = useRef<string | null>(null);
+  const hasChecked = useRef(false);
 
   useEffect(() => {
     // Attendre que l'auth soit prête
@@ -23,12 +24,13 @@ export const useUserRole = () => {
         setRole(null);
         setLoading(false);
         lastUserId.current = null;
+        hasChecked.current = true;
         return;
       }
 
-      // Éviter de recharger si c'est le même utilisateur et qu'on a déjà un rôle
-      if (lastUserId.current === user.id && role !== null) {
-        console.log("[useUserRole] Same user, keeping current role:", role);
+      // Éviter de recharger si c'est le même utilisateur et qu'on a déjà vérifié
+      if (lastUserId.current === user.id && hasChecked.current) {
+        console.log("[useUserRole] Same user already checked, keeping current role:", role);
         setLoading(false);
         return;
       }
@@ -50,6 +52,7 @@ export const useUserRole = () => {
         }
 
         lastUserId.current = user.id;
+        hasChecked.current = true;
 
         // Vérifier les rôles par ordre de priorité
         const hasAdminRole = data?.some((r) => r.role === "admin");
@@ -70,6 +73,7 @@ export const useUserRole = () => {
       } catch (error) {
         console.error("[useUserRole] Error fetching user role:", error);
         setRole("user"); // Par défaut, considérer comme user
+        hasChecked.current = true;
       } finally {
         setLoading(false);
       }
@@ -77,6 +81,13 @@ export const useUserRole = () => {
 
     fetchUserRole();
   }, [user, authLoading]);
+
+  // Reset hasChecked when user changes
+  useEffect(() => {
+    if (user?.id !== lastUserId.current) {
+      hasChecked.current = false;
+    }
+  }, [user?.id]);
 
   return { 
     role, 
