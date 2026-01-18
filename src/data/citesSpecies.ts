@@ -324,6 +324,13 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
     citesAnnex: 'B',
   },
   {
+    id: 'bothrochilus-boa',
+    scientificName: 'Bothrochilus boa',
+    commonNameKey: 'species.bothrochilus-boa',
+    category: 'snake',
+    citesAnnex: 'B',
+  },
+  {
     id: 'corallus-caninus',
     scientificName: 'Corallus caninus',
     commonNameKey: 'species.corallus-caninus',
