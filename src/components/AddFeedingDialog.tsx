@@ -112,6 +112,20 @@ const AddFeedingDialog = ({ reptileId, onFeedingAdded }: AddFeedingDialogProps) 
     { value: "pellet", label: t("feeding.pellets.title"), category: "pellet" },
   ];
 
+  // Map type to correct i18n key (mouse → mice, etc.)
+  const getTranslationKey = (type: string): string => {
+    const keyMap: Record<string, string> = {
+      rat: "rats",
+      mouse: "mice",
+      rabbit: "rabbits",
+      insect: "insects",
+      vegetable: "vegetables",
+      fruit: "fruits",
+      pellet: "pellets",
+    };
+    return keyMap[type] || type;
+  };
+
   const getStagesForType = (type: string) => {
     const stages: Record<string, string[]> = {
       rat: ["pinky", "fuzzy", "hopper", "weaner", "small", "medium", "large", "jumbo", "extraLarge"],
@@ -186,9 +200,9 @@ const AddFeedingDialog = ({ reptileId, onFeedingAdded }: AddFeedingDialogProps) 
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent className="bg-card border-border">
-                        {getStagesForType(selectedType).map((stage) => (
+                      {getStagesForType(selectedType).map((stage) => (
                           <SelectItem key={stage} value={stage}>
-                            {t(`feeding.${selectedType}s.${stage}`)}
+                            {t(`feeding.${getTranslationKey(selectedType)}.${stage}`)}
                           </SelectItem>
                         ))}
                       </SelectContent>
