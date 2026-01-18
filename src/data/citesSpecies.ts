@@ -310,6 +310,20 @@ export const citesAnnexBSpecies: ReptileSpecies[] = [
     citesAnnex: 'B',
   },
   {
+    id: 'epicrates-alvarezi',
+    scientificName: 'Epicrates alvarezi',
+    commonNameKey: 'species.epicrates-alvarezi',
+    category: 'snake',
+    citesAnnex: 'B',
+  },
+  {
+    id: 'leiopython-albertisii',
+    scientificName: 'Leiopython albertisii',
+    commonNameKey: 'species.leiopython-albertisii',
+    category: 'snake',
+    citesAnnex: 'B',
+  },
+  {
     id: 'corallus-caninus',
     scientificName: 'Corallus caninus',
     commonNameKey: 'species.corallus-caninus',
