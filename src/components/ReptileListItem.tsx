@@ -33,7 +33,7 @@ const ReptileListItem = ({
   const { signedUrl, loading } = useSignedImageUrl(showImage ? image : null);
 
   const handleClick = () => {
-    navigate(`/reptile/${id}`);
+    navigate(`/reptile/${id}`, { state: { from: window.location.pathname + window.location.search } });
   };
 
   return (

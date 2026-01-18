@@ -1,4 +1,4 @@
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send, Skull, CheckCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -49,6 +49,7 @@ interface Reptile {
 const ReptileDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const { t } = useTranslation();
   const [reptile, setReptile] = useState<Reptile | null>(null);
@@ -246,7 +247,14 @@ const ReptileDetail = () => {
       <main className="max-w-7xl mx-auto px-4 py-8 mt-16">
         <Button
           variant="ghost"
-          onClick={() => navigate(-1)}
+          onClick={() => {
+            const fromUrl = location.state?.from;
+            if (fromUrl) {
+              navigate(fromUrl);
+            } else {
+              navigate(-1);
+            }
+          }}
           className="mb-6"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
