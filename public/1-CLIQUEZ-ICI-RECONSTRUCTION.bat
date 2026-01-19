@@ -44,7 +44,7 @@ if errorlevel 1 (
 )
 
 echo 7/10 - Configuration du SDK Android...
-echo sdk.dir=C:\\Users\\berti\\AppData\\Local\\Android\\Sdk > android\local.properties
+(echo sdk.dir=C:\\Users\\berti\\AppData\\Local\\Android\\Sdk)>android\local.properties
 echo    SDK configure dans local.properties
 
 echo 8/10 - Correction du Manifest (CAMERA + NFC + ML Kit)...
