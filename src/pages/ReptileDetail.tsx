@@ -1,6 +1,6 @@
 import { useParams, useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send, Skull, CheckCircle } from "lucide-react";
+import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send, Skull, CheckCircle, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -204,6 +204,45 @@ const ReptileDetail = () => {
     toast.success("Photo mise à jour avec succès");
   };
 
+  const handleDeletePhoto = async () => {
+    if (!reptile || !reptile.image_url) return;
+    
+    const confirmDelete = window.confirm("Êtes-vous sûr de vouloir supprimer cette photo ?");
+    if (!confirmDelete) return;
+    
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error("Vous devez être connecté");
+        return;
+      }
+
+      // Supprimer le fichier du storage
+      const { error: storageError } = await supabase.storage
+        .from("reptile-images")
+        .remove([reptile.image_url]);
+
+      if (storageError) {
+        console.error("Erreur suppression storage:", storageError);
+        // Continuer même si la suppression du fichier échoue
+      }
+
+      // Mettre à jour le reptile pour supprimer la référence à l'image
+      const { error: updateError } = await supabase
+        .from("reptiles")
+        .update({ image_url: null })
+        .eq("id", reptile.id);
+
+      if (updateError) throw updateError;
+
+      toast.success("Photo supprimée avec succès");
+      await fetchReptile();
+    } catch (error) {
+      console.error("Erreur suppression photo:", error);
+      toast.error("Erreur lors de la suppression de la photo");
+    }
+  };
+
   const handleForSaleToggle = async (checked: boolean) => {
     if (!reptile) return;
     
@@ -283,6 +322,15 @@ const ReptileDetail = () => {
                 {(reptile.status === "active" || reptile.status === "for_sale") && (
                   <>
                     <div className="absolute top-3 right-3 flex gap-2">
+                      {reptile.image_url && (
+                        <button 
+                          className="p-2 bg-destructive/90 backdrop-blur-sm rounded-lg hover:bg-destructive transition-colors"
+                          onClick={handleDeletePhoto}
+                          title="Supprimer la photo"
+                        >
+                          <Trash2 className="w-5 h-5 text-destructive-foreground" />
+                        </button>
+                      )}
                       <button 
                         className="p-2 bg-card/90 backdrop-blur-sm rounded-lg hover:bg-accent transition-colors"
                         onClick={() => setImageUploadOpen(true)}
