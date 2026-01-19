@@ -23,17 +23,33 @@ const Auth = () => {
   const [passwordValidation, setPasswordValidation] = useState<PasswordValidationResult | null>(null);
   const [checkingBreach, setCheckingBreach] = useState(false);
 
+  const checkAndRedirect = async (userId: string) => {
+    // Vérifier si l'utilisateur est admin
+    const { data: roles } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId);
+    
+    const isAdmin = roles?.some(r => r.role === "admin");
+    
+    if (isAdmin) {
+      navigate("/admin");
+    } else {
+      navigate("/dashboard");
+    }
+  };
+
   useEffect(() => {
     // Check if user is already logged in
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        navigate("/dashboard");
+        checkAndRedirect(session.user.id);
       }
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
-        navigate("/dashboard");
+        checkAndRedirect(session.user.id);
       }
     });
 
