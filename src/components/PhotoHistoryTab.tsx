@@ -206,13 +206,41 @@ export const PhotoHistoryTab = ({ reptileId }: PhotoHistoryTabProps) => {
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
-              <div>
+              <div className="space-y-2">
                 <Label>{t("photoHistory.selectImage")}</Label>
-                <Input 
-                  type="file" 
-                  accept="image/*"
-                  onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                />
+                <div className="flex gap-2">
+                  <div className="flex-1">
+                    <Input 
+                      type="file" 
+                      accept="image/*"
+                      onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                      className="cursor-pointer"
+                    />
+                  </div>
+                  <Button 
+                    type="button" 
+                    variant="outline"
+                    onClick={() => {
+                      const input = document.createElement('input');
+                      input.type = 'file';
+                      input.accept = 'image/*';
+                      input.capture = 'environment';
+                      input.onchange = (e) => {
+                        const file = (e.target as HTMLInputElement).files?.[0];
+                        if (file) setSelectedFile(file);
+                      };
+                      input.click();
+                    }}
+                    title="Prendre une photo"
+                  >
+                    <Camera className="w-4 h-4" />
+                  </Button>
+                </div>
+                {selectedFile && (
+                  <p className="text-xs text-muted-foreground">
+                    📷 {selectedFile.name}
+                  </p>
+                )}
               </div>
               <div>
                 <Label>{t("photoHistory.date")}</Label>
