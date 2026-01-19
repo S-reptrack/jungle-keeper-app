@@ -288,6 +288,7 @@ export const PhotoHistoryTab = ({ reptileId }: PhotoHistoryTabProps) => {
               key={photo.id} 
               photo={photo} 
               onSelect={() => setSelectedPhoto(photo)}
+              onDelete={() => handleDelete(photo)}
             />
           ))}
         </div>
@@ -317,7 +318,7 @@ export const PhotoHistoryTab = ({ reptileId }: PhotoHistoryTabProps) => {
 };
 
 // Separate component to handle signed URL
-const PhotoCard = ({ photo, onSelect }: { photo: Photo; onSelect: () => void }) => {
+const PhotoCard = ({ photo, onSelect, onDelete }: { photo: Photo; onSelect: () => void; onDelete: () => void }) => {
   const [imageUrl, setImageUrl] = useState<string>("");
 
   useEffect(() => {
@@ -332,9 +333,20 @@ const PhotoCard = ({ photo, onSelect }: { photo: Photo; onSelect: () => void }) 
 
   return (
     <Card 
-      className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+      className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow relative group"
       onClick={onSelect}
     >
+      {/* Delete button - visible on mobile, hover on desktop */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete();
+        }}
+        className="absolute top-2 right-2 z-10 p-2 bg-destructive text-destructive-foreground rounded-full shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
+        aria-label="Supprimer la photo"
+      >
+        <Trash2 className="w-4 h-4" />
+      </button>
       <div className="aspect-square relative">
         {imageUrl ? (
           <img 
