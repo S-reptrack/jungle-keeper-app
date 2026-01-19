@@ -636,6 +636,8 @@ const ReptileDetail = () => {
           reptileId={reptile.id}
           reptileName={reptile.name}
           onUploadSuccess={handleImageUploadSuccess}
+          currentImageUrl={reptile.image_url}
+          onDeletePhoto={handleDeletePhoto}
         />
         
         <TransferAnimalDialog

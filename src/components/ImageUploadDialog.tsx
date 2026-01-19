@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Upload, Camera as CameraIcon } from "lucide-react";
+import { Upload, Camera as CameraIcon, Trash2 } from "lucide-react";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { Capacitor } from "@capacitor/core";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,9 +13,19 @@ interface ImageUploadDialogProps {
   reptileId: string;
   reptileName: string;
   onUploadSuccess: (url: string) => void;
+  currentImageUrl?: string | null;
+  onDeletePhoto?: () => void;
 }
 
-const ImageUploadDialog = ({ open, onOpenChange, reptileId, reptileName, onUploadSuccess }: ImageUploadDialogProps) => {
+const ImageUploadDialog = ({ 
+  open, 
+  onOpenChange, 
+  reptileId, 
+  reptileName, 
+  onUploadSuccess,
+  currentImageUrl,
+  onDeletePhoto
+}: ImageUploadDialogProps) => {
   const [uploading, setUploading] = useState(false);
 
   const uploadFile = async (file: File) => {
@@ -83,6 +93,7 @@ const ImageUploadDialog = ({ open, onOpenChange, reptileId, reptileName, onUploa
       toast.error("Accès à la caméra refusé ou indisponible");
     }
   };
+
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -150,15 +161,22 @@ const ImageUploadDialog = ({ open, onOpenChange, reptileId, reptileName, onUploa
     }
   };
 
+  const handleDeleteClick = () => {
+    if (onDeletePhoto) {
+      onDeletePhoto();
+      onOpenChange(false);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Ajouter une photo - {reptileName}</DialogTitle>
+          <DialogTitle>Photo - {reptileName}</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-4 py-4">
           <p className="text-sm text-muted-foreground">
-            Ajoutez une photo de votre reptile depuis votre appareil
+            Gérez la photo de votre reptile
           </p>
           
           <div className="flex flex-col gap-3">
@@ -200,6 +218,19 @@ const ImageUploadDialog = ({ open, onOpenChange, reptileId, reptileName, onUploa
               onChange={handleFileSelect}
               className="hidden"
             />
+
+            {currentImageUrl && onDeletePhoto && (
+              <Button
+                type="button"
+                variant="destructive"
+                className="w-full"
+                disabled={uploading}
+                onClick={handleDeleteClick}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Supprimer la photo
+              </Button>
+            )}
           </div>
 
           <p className="text-xs text-muted-foreground">
