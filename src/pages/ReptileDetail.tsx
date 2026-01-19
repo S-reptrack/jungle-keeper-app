@@ -1,6 +1,6 @@
 import { useParams, useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send, Skull, CheckCircle, Trash2 } from "lucide-react";
+import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send, Skull, CheckCircle, Trash2, Image } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ import WeightChart from "@/components/WeightChart";
 import QRCodeDialog from "@/components/QRCodeDialog";
 import ImageUploadDialog from "@/components/ImageUploadDialog";
 import { TransferAnimalDialog } from "@/components/TransferAnimalDialog";
-
+import { PhotoHistoryTab } from "@/components/PhotoHistoryTab";
 import SoldTab from "@/components/SoldTab";
 import DeathTab from "@/components/DeathTab";
 import { supabase } from "@/integrations/supabase/client";
@@ -478,30 +478,34 @@ const ReptileDetail = () => {
           <div className="lg:col-span-2">
             {(reptile.status === "active" || reptile.status === "for_sale") ? (
               <Tabs defaultValue={defaultTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-6">
-                  <TabsTrigger value="overview" className="flex items-center justify-center gap-1.5 px-2">
+                <TabsList className="grid w-full grid-cols-7">
+                  <TabsTrigger value="overview" className="flex items-center justify-center gap-1 px-1">
                     <Eye className="w-4 h-4 shrink-0" />
-                    <span className="truncate text-xs md:text-sm">{t("reptile.tabs.overview")}</span>
+                    <span className="truncate text-xs hidden md:inline">{t("reptile.tabs.overview")}</span>
                   </TabsTrigger>
-                  <TabsTrigger value="feeding" className="flex items-center justify-center gap-1.5 px-2">
+                  <TabsTrigger value="photos" className="flex items-center justify-center gap-1 px-1">
+                    <Image className="w-4 h-4 shrink-0" />
+                    <span className="truncate text-xs hidden md:inline">Photos</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="feeding" className="flex items-center justify-center gap-1 px-1">
                     <Utensils className="w-4 h-4 shrink-0" />
-                    <span className="truncate text-xs md:text-sm">{t("reptile.tabs.feeding")}</span>
+                    <span className="truncate text-xs hidden md:inline">{t("reptile.tabs.feeding")}</span>
                   </TabsTrigger>
-                  <TabsTrigger value="reproduction" className="flex items-center justify-center gap-1.5 px-2">
+                  <TabsTrigger value="reproduction" className="flex items-center justify-center gap-1 px-1">
                     <Heart className="w-4 h-4 shrink-0" />
-                    <span className="truncate text-xs md:text-sm">{t("reptile.tabs.reproduction")}</span>
+                    <span className="truncate text-xs hidden md:inline">{t("reptile.tabs.reproduction")}</span>
                   </TabsTrigger>
-                  <TabsTrigger value="health" className="flex items-center justify-center gap-1.5 px-2">
+                  <TabsTrigger value="health" className="flex items-center justify-center gap-1 px-1">
                     <Activity className="w-4 h-4 shrink-0" />
-                    <span className="truncate text-xs md:text-sm">{t("reptile.tabs.health")}</span>
+                    <span className="truncate text-xs hidden md:inline">{t("reptile.tabs.health")}</span>
                   </TabsTrigger>
-                  <TabsTrigger value="sold" className="flex items-center justify-center gap-1.5 px-2">
+                  <TabsTrigger value="sold" className="flex items-center justify-center gap-1 px-1">
                     <CheckCircle className="w-4 h-4 shrink-0" />
-                    <span className="truncate text-xs md:text-sm">Vendu</span>
+                    <span className="truncate text-xs hidden md:inline">Vendu</span>
                   </TabsTrigger>
-                  <TabsTrigger value="death" className="flex items-center justify-center gap-1.5 px-2">
+                  <TabsTrigger value="death" className="flex items-center justify-center gap-1 px-1">
                     <Skull className="w-4 h-4 shrink-0" />
-                    <span className="truncate text-xs md:text-sm">Décès</span>
+                    <span className="truncate text-xs hidden md:inline">Décès</span>
                   </TabsTrigger>
                 </TabsList>
                 
@@ -545,6 +549,10 @@ const ReptileDetail = () => {
                   </Card>
                   
                   <WeightChart reptileId={reptile.id} />
+                </TabsContent>
+                
+                <TabsContent value="photos">
+                  <PhotoHistoryTab reptileId={reptile.id} />
                 </TabsContent>
                 
                 <TabsContent value="feeding">
