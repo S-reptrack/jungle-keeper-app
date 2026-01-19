@@ -324,22 +324,25 @@ const ReptileDetail = () => {
                     <div className="absolute top-3 right-3 flex gap-2">
                       {reptile.image_url && (
                         <button 
-                          className="p-2 bg-destructive/90 backdrop-blur-sm rounded-lg hover:bg-destructive transition-colors"
+                          className="p-2.5 bg-destructive text-destructive-foreground rounded-lg shadow-lg active:scale-95 transition-transform"
                           onClick={handleDeletePhoto}
                           title="Supprimer la photo"
+                          aria-label="Supprimer la photo"
                         >
-                          <Trash2 className="w-5 h-5 text-destructive-foreground" />
+                          <Trash2 className="w-5 h-5" />
                         </button>
                       )}
                       <button 
-                        className="p-2 bg-card/90 backdrop-blur-sm rounded-lg hover:bg-accent transition-colors"
+                        className="p-2.5 bg-card/95 backdrop-blur-sm rounded-lg shadow-lg hover:bg-accent active:scale-95 transition-all"
                         onClick={() => setImageUploadOpen(true)}
+                        aria-label="Ajouter une photo"
                       >
                         <Camera className="w-5 h-5 text-foreground" />
                       </button>
                       <button 
-                        className="p-2 bg-card/90 backdrop-blur-sm rounded-lg hover:bg-accent transition-colors"
+                        className="p-2.5 bg-card/95 backdrop-blur-sm rounded-lg shadow-lg hover:bg-accent active:scale-95 transition-all"
                         onClick={() => setQrDialogOpen(true)}
+                        aria-label="Afficher QR code"
                       >
                         <QrCode className="w-5 h-5 text-foreground" />
                       </button>
