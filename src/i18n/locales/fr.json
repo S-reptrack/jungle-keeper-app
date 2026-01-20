@@ -972,5 +972,17 @@
     "photoAdded": "Photo ajoutée !",
     "photoDeleted": "Photo supprimée",
     "selectFile": "Veuillez sélectionner un fichier"
+  },
+  "installBanner": {
+    "title": "Installer S-reptrack",
+    "description": "Accédez rapidement à l'application depuis votre écran d'accueil",
+    "install": "Installer",
+    "howToInstall": "Comment installer",
+    "later": "Plus tard",
+    "notNow": "Pas maintenant",
+    "iosTitle": "Installation sur iPhone/iPad",
+    "iosStep1": "Appuyez sur le bouton Partager",
+    "iosStep2": "Faites défiler et appuyez sur « Sur l'écran d'accueil »",
+    "iosStep3": "Appuyez sur « Ajouter » en haut à droite"
   }
 }
