@@ -34,8 +34,9 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
         console.log("[AdminRoute] No user, redirecting to /auth");
         navigate("/auth", { replace: true });
       } else if (!isAdmin) {
-        console.log("[AdminRoute] Not admin (role:", role, "), redirecting to /dashboard");
-        navigate("/dashboard", { replace: true });
+        console.log("[AdminRoute] Not admin (role:", role, "), redirecting to landing");
+        // Rediriger vers la landing page (accessible en maintenance) au lieu de /dashboard (bloqué)
+        navigate("/", { replace: true });
       } else {
         console.log("[AdminRoute] Admin access granted!");
       }
