@@ -34,6 +34,7 @@ import AdminRoute from "./components/AdminRoute";
 import MaintenanceGuard from "./components/MaintenanceGuard";
 import Analytics from "./pages/Analytics";
 import Genealogy from "./pages/Genealogy";
+import TesterActivityTracker from "./components/TesterActivityTracker";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <MaintenanceGuard>
+            <TesterActivityTracker />
             <GDPRConsentDialog />
             <HatchingNotificationDialog />
             <Routes>
