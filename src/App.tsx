@@ -35,6 +35,7 @@ import MaintenanceGuard from "./components/MaintenanceGuard";
 import Analytics from "./pages/Analytics";
 import Genealogy from "./pages/Genealogy";
 import TesterActivityTracker from "./components/TesterActivityTracker";
+import InstallPromptBanner from "./components/InstallPromptBanner";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ const App = () => (
             <TesterActivityTracker />
             <GDPRConsentDialog />
             <HatchingNotificationDialog />
+            <InstallPromptBanner />
             <Routes>
               {/* ROUTES NORMALES - Landing page en racine pour la production */}
               <Route path="/" element={<Landing />} />

@@ -718,5 +718,17 @@
   "photoHistory": {
     "title": "Photo History",
     "premiumDescription": "Track your animals' evolution with a photo history."
+  },
+  "installBanner": {
+    "title": "Install S-reptrack",
+    "description": "Quick access to the app from your home screen",
+    "install": "Install",
+    "howToInstall": "How to install",
+    "later": "Later",
+    "notNow": "Not now",
+    "iosTitle": "Install on iPhone/iPad",
+    "iosStep1": "Tap the Share button",
+    "iosStep2": "Scroll and tap 'Add to Home Screen'",
+    "iosStep3": "Tap 'Add' in the top right"
   }
 }
