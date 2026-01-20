@@ -8,7 +8,7 @@ import Maintenance from "@/pages/Maintenance";
 const MAINTENANCE_MODE = true;
 
 // Routes accessibles même en mode maintenance
-const ALLOWED_ROUTES = ["/auth", "/privacy", "/terms", "/legal"];
+const ALLOWED_ROUTES = ["/auth", "/privacy", "/terms", "/legal", "/admin"];
 
 interface MaintenanceGuardProps {
   children: React.ReactNode;
