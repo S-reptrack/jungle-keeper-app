@@ -37,14 +37,14 @@ const MaintenanceCheck = ({ children }: MaintenanceGuardProps) => {
   const { isAdmin, isTester, canBypassMaintenance, loading: roleLoading, role } = useUserRole();
   const [timedOut, setTimedOut] = useState(false);
 
-  // Timeout de sécurité pour éviter un spinner infini
+  // Timeout de sécurité pour éviter un spinner infini - augmenté à 15s pour les connexions lentes
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (authLoading || roleLoading) {
-        console.log("MaintenanceCheck - Loading timeout reached");
+        console.log("MaintenanceCheck - Loading timeout reached after 15s");
         setTimedOut(true);
       }
-    }, 5000); // 5 secondes max
+    }, 15000); // 15 secondes max pour les connexions mobiles lentes
 
     return () => clearTimeout(timeout);
   }, [authLoading, roleLoading]);
