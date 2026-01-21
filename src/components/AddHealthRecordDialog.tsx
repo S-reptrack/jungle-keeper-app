@@ -41,6 +41,7 @@ const COMMON_CONDITIONS = [
   { value: "abces", label: "Abcès" },
   { value: "brulures", label: "Brûlures thermiques" },
   { value: "mue_difficile", label: "Mue difficile (Dysecdysis)" },
+  { value: "regurgitation", label: "Régurgitation" },
   { value: "autre", label: "Autre" },
 ];
 
