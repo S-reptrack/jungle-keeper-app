@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Activity, Star, MessageSquare, Clock, TrendingUp } from "lucide-react";
+import { Loader2, Activity, Star, MessageSquare, Clock, TrendingUp, Timer } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 
@@ -13,6 +13,7 @@ interface TesterStats {
   avg_rating: number;
   last_activity: string | null;
   activity_count: number;
+  total_time_seconds: number;
 }
 
 interface FeedbackItem {
@@ -42,6 +43,23 @@ const categoryColors: Record<string, string> = {
   general: "bg-gray-500/20 text-gray-400",
 };
 
+// Fonction pour formater le temps en heures, minutes, secondes
+const formatDuration = (seconds: number): string => {
+  if (seconds < 60) {
+    return `${seconds}s`;
+  }
+  
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+  
+  if (hours > 0) {
+    return `${hours}h ${minutes}m`;
+  }
+  
+  return `${minutes}m ${secs}s`;
+};
+
 const TesterActivityDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [testerStats, setTesterStats] = useState<TesterStats[]>([]);
@@ -50,6 +68,7 @@ const TesterActivityDashboard = () => {
     totalFeedback: 0,
     avgRating: 0,
     activeTesters: 0,
+    totalTimeSpent: 0,
   });
 
   const fetchData = async () => {
@@ -88,14 +107,15 @@ const TesterActivityDashboard = () => {
 
       if (feedbackError) throw feedbackError;
 
-      // Récupérer les activités
+      // Récupérer les activités avec la durée de session
       const { data: activityData } = await supabase
         .from("tester_activity")
-        .select("user_id, created_at")
+        .select("user_id, created_at, session_duration")
         .in("user_id", testerIds);
 
       // Calculer les stats par testeur
       const statsMap = new Map<string, TesterStats>();
+      let totalGlobalTime = 0;
 
       for (const testerId of testerIds) {
         const testerFeedback = feedbackData?.filter((f) => f.user_id === testerId) || [];
@@ -114,6 +134,13 @@ const TesterActivityDashboard = () => {
           ? new Date(lastFeedback) > new Date(lastActivityDate) ? lastFeedback : lastActivityDate
           : lastFeedback || lastActivityDate;
 
+        // Calculer le temps total passé
+        const totalTimeSeconds = testerActivity.reduce((sum, a) => {
+          return sum + ((a as any).session_duration || 0);
+        }, 0);
+
+        totalGlobalTime += totalTimeSeconds;
+
         statsMap.set(testerId, {
           user_id: testerId,
           email: profileMap.get(testerId) || "Email inconnu",
@@ -121,10 +148,15 @@ const TesterActivityDashboard = () => {
           avg_rating: avgRating,
           last_activity: lastActivity || null,
           activity_count: testerActivity.length + testerFeedback.length,
+          total_time_seconds: totalTimeSeconds,
         });
       }
 
-      setTesterStats(Array.from(statsMap.values()));
+      // Trier par temps passé décroissant
+      const sortedStats = Array.from(statsMap.values()).sort(
+        (a, b) => b.total_time_seconds - a.total_time_seconds
+      );
+      setTesterStats(sortedStats);
 
       // Ajouter l'email aux feedbacks récents
       const feedbackWithEmail = (feedbackData || []).slice(0, 10).map((f) => ({
@@ -144,6 +176,7 @@ const TesterActivityDashboard = () => {
         totalFeedback,
         avgRating,
         activeTesters,
+        totalTimeSpent: totalGlobalTime,
       });
     } catch (error) {
       console.error("Error fetching tester activity:", error);
@@ -167,7 +200,7 @@ const TesterActivityDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Stats globales */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
@@ -211,7 +244,89 @@ const TesterActivityDashboard = () => {
             </div>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-purple-500/10">
+                <Timer className="h-5 w-5 text-purple-500" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">
+                  {formatDuration(globalStats.totalTimeSpent)}
+                </p>
+                <p className="text-sm text-muted-foreground">Temps total</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
+
+      {/* Temps passé par utilisateur */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Timer className="h-5 w-5 text-primary" />
+            <CardTitle>Temps passé par utilisateur</CardTitle>
+          </div>
+          <CardDescription>
+            Suivi du temps d'utilisation de l'application par chaque testeur
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {testerStats.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-4">
+              Aucun testeur enregistré
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {testerStats.map((tester, index) => (
+                <div
+                  key={tester.user_id}
+                  className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-bold">
+                      {index + 1}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{tester.email}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-xs text-muted-foreground">
+                          {tester.activity_count} actions
+                        </span>
+                        {tester.avg_rating > 0 && (
+                          <span className="flex items-center gap-1 text-xs text-yellow-500">
+                            <Star className="h-3 w-3 fill-current" />
+                            {tester.avg_rating.toFixed(1)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="text-right">
+                      <div className="flex items-center gap-1 text-sm font-semibold text-primary">
+                        <Timer className="h-4 w-4" />
+                        {formatDuration(tester.total_time_seconds)}
+                      </div>
+                      {tester.last_activity && (
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+                          <Clock className="h-3 w-3" />
+                          {formatDistanceToNow(new Date(tester.last_activity), {
+                            addSuffix: true,
+                            locale: fr,
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Activité des testeurs */}
       <Card>
