@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useAuth } from "@/hooks/useAuth";
@@ -12,6 +12,7 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
   const { isAdmin, loading: roleLoading, role } = useUserRole();
   const navigate = useNavigate();
   const [hasChecked, setHasChecked] = useState(false);
+  const lastUserId = useRef<string | null>(null);
 
   const loading = authLoading || roleLoading;
 
@@ -26,16 +27,16 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
       hasChecked 
     });
     
-    // Ne rediriger que si le chargement est terminé ET qu'on n'a pas encore vérifié
+    // Ne rediriger que si le chargement est terminé ET qu'on n'a pas encore vérifié pour CET utilisateur
     if (!loading && !hasChecked) {
       setHasChecked(true);
+      lastUserId.current = user?.id || null;
       
       if (!user) {
         console.log("[AdminRoute] No user, redirecting to /auth");
         navigate("/auth", { replace: true });
       } else if (!isAdmin) {
         console.log("[AdminRoute] Not admin (role:", role, "), redirecting to landing");
-        // Rediriger vers la landing page (accessible en maintenance) au lieu de /dashboard (bloqué)
         navigate("/", { replace: true });
       } else {
         console.log("[AdminRoute] Admin access granted!");
@@ -43,9 +44,10 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
     }
   }, [user, isAdmin, role, loading, navigate, hasChecked]);
 
-  // Réinitialiser hasChecked si l'utilisateur change
+  // Réinitialiser hasChecked UNIQUEMENT si l'utilisateur change réellement
   useEffect(() => {
-    if (user?.id) {
+    if (user?.id && user.id !== lastUserId.current) {
+      console.log("[AdminRoute] User changed from", lastUserId.current, "to", user.id);
       setHasChecked(false);
     }
   }, [user?.id]);
@@ -61,11 +63,13 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
     );
   }
 
-  if (!user || !isAdmin) {
-    return null;
+  // IMPORTANT: Afficher les enfants si l'utilisateur est admin
+  if (user && isAdmin) {
+    return <>{children}</>;
   }
 
-  return <>{children}</>;
+  // Sinon, retourner null (la redirection est gérée dans useEffect)
+  return null;
 };
 
 export default AdminRoute;
