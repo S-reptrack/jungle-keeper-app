@@ -389,5 +389,11 @@
   "comingSoon": {
     "title": "Wkrótce",
     "description": "Nasza aplikacja do zarządzania hodowlą gadów będzie dostępna już wkrótce. Bądź na bieżąco!"
+  },
+  "installBanner": {
+    "title": "Zainstaluj aplikację",
+    "description": "Zainstaluj S-reptrack dla lepszych wrażeń",
+    "install": "Zainstaluj",
+    "iosInstructions": "Stuknij ikonę udostępniania, a następnie \"Dodaj do ekranu głównego\""
   }
 }

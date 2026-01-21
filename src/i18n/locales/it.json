@@ -399,5 +399,11 @@
   "comingSoon": {
     "title": "Prossimamente",
     "description": "La nostra applicazione di gestione dell'allevamento di rettili arriverà molto presto. Restate sintonizzati!"
+  },
+  "installBanner": {
+    "title": "Installa app",
+    "description": "Installa S-reptrack per un'esperienza migliore",
+    "install": "Installa",
+    "iosInstructions": "Tocca l'icona di condivisione e poi \"Aggiungi a schermata Home\""
   }
 }

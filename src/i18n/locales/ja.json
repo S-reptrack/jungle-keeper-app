@@ -386,5 +386,11 @@
   "comingSoon": {
     "title": "近日公開",
     "description": "爬虫類繁殖管理アプリケーションは間もなく登場します。お楽しみに！"
+  },
+  "installBanner": {
+    "title": "アプリをインストール",
+    "description": "S-reptrackをインストールしてより良い体験を",
+    "install": "インストール",
+    "iosInstructions": "共有アイコンをタップし、「ホーム画面に追加」を選択してください"
   }
 }

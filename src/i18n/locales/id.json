@@ -386,5 +386,11 @@
   "comingSoon": {
     "title": "Segera Hadir",
     "description": "Aplikasi manajemen penangkaran reptil kami akan segera hadir. Tetap terhubung!"
+  },
+  "installBanner": {
+    "title": "Instal Aplikasi",
+    "description": "Instal S-reptrack untuk pengalaman yang lebih baik",
+    "install": "Instal",
+    "iosInstructions": "Ketuk ikon bagikan lalu pilih \"Tambahkan ke Layar Utama\""
   }
 }
