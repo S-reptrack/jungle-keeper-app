@@ -401,5 +401,11 @@
   "comingSoon": {
     "title": "即将推出",
     "description": "我们的爬行动物繁殖管理应用程序即将推出。敬请期待！"
+  },
+  "installBanner": {
+    "title": "安装应用",
+    "description": "安装 S-reptrack 以获得更好的体验",
+    "install": "安装",
+    "iosInstructions": "点击分享图标，然后点击\"添加到主屏幕\""
   }
 }

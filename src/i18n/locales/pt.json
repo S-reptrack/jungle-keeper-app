@@ -389,5 +389,11 @@
   "comingSoon": {
     "title": "Em breve",
     "description": "Nossa aplicação de gestão de criação de répteis chegará muito em breve. Fique ligado!"
+  },
+  "installBanner": {
+    "title": "Instalar aplicativo",
+    "description": "Instale o S-reptrack para uma melhor experiência",
+    "install": "Instalar",
+    "iosInstructions": "Toque no ícone de compartilhar e depois em \"Adicionar à Tela de Início\""
   }
 }

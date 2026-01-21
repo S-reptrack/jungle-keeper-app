@@ -389,5 +389,11 @@
   "comingSoon": {
     "title": "Binnenkort beschikbaar",
     "description": "Onze applicatie voor het beheer van reptielenkweek komt zeer binnenkort. Blijf op de hoogte!"
+  },
+  "installBanner": {
+    "title": "App installeren",
+    "description": "Installeer S-reptrack voor een betere ervaring",
+    "install": "Installeren",
+    "iosInstructions": "Tik op het deelpictogram en dan op \"Zet op beginscherm\""
   }
 }

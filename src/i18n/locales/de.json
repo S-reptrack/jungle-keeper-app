@@ -401,5 +401,11 @@
   "comingSoon": {
     "title": "Demnächst verfügbar",
     "description": "Unsere Reptilienzucht-Management-Anwendung kommt sehr bald. Bleiben Sie dran!"
+  },
+  "installBanner": {
+    "title": "App installieren",
+    "description": "Installieren Sie S-reptrack für ein besseres Erlebnis",
+    "install": "Installieren",
+    "iosInstructions": "Tippen Sie auf das Teilen-Symbol und dann auf \"Zum Home-Bildschirm\""
   }
 }
