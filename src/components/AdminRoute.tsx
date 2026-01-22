@@ -12,6 +12,7 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
   const { isAdmin, loading: roleLoading, role } = useUserRole();
   const navigate = useNavigate();
   const [hasChecked, setHasChecked] = useState(false);
+  const [accessGranted, setAccessGranted] = useState(false);
   const lastUserId = useRef<string | null>(null);
 
   const loading = authLoading || roleLoading;
@@ -24,10 +25,11 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
       loading, 
       authLoading, 
       roleLoading,
-      hasChecked 
+      hasChecked,
+      accessGranted
     });
     
-    // Ne rediriger que si le chargement est terminé ET qu'on n'a pas encore vérifié pour CET utilisateur
+    // Ne faire la vérification que si le chargement est terminé ET qu'on n'a pas encore vérifié pour CET utilisateur
     if (!loading && !hasChecked) {
       setHasChecked(true);
       lastUserId.current = user?.id || null;
@@ -36,10 +38,11 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
         console.log("[AdminRoute] No user, redirecting to /auth");
         navigate("/auth", { replace: true });
       } else if (!isAdmin) {
-        console.log("[AdminRoute] Not admin (role:", role, "), redirecting to landing");
-        navigate("/", { replace: true });
+        console.log("[AdminRoute] Not admin (role:", role, "), redirecting to /landing");
+        navigate("/landing", { replace: true });
       } else {
         console.log("[AdminRoute] Admin access granted!");
+        setAccessGranted(true);
       }
     }
   }, [user, isAdmin, role, loading, navigate, hasChecked]);
@@ -49,10 +52,12 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
     if (user?.id && user.id !== lastUserId.current) {
       console.log("[AdminRoute] User changed from", lastUserId.current, "to", user.id);
       setHasChecked(false);
+      setAccessGranted(false);
     }
   }, [user?.id]);
 
-  if (loading) {
+  // Afficher le spinner pendant le chargement
+  if (loading || !hasChecked) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -63,8 +68,8 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
     );
   }
 
-  // IMPORTANT: Afficher les enfants si l'utilisateur est admin
-  if (user && isAdmin) {
+  // Afficher les enfants si l'accès est accordé
+  if (accessGranted && user && isAdmin) {
     return <>{children}</>;
   }
 
