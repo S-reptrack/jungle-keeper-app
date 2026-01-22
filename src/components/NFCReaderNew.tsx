@@ -91,24 +91,46 @@ const createTextRecord = (text: string): NdefRecord => {
 // Variable pour tracker les erreurs
 let nfcError: string | null = null;
 
-// Fonction pour vérifier si le plugin NFC est disponible
-const checkNfcAvailable = async (): Promise<boolean> => {
+// Message d'erreur personnalisé pour le plugin non installé
+const NFC_PLUGIN_NOT_INSTALLED_ERROR = `Le plugin NFC Premium n'est pas installé dans cette version de l'application.
+
+Pour utiliser le NFC, vous devez :
+1. Installer l'APK avec le plugin NFC Premium
+2. Utiliser le script "reinstall-android-nfc.bat"
+
+En attendant, utilisez les QR codes comme alternative.`;
+
+// Fonction pour vérifier si le plugin NFC est RÉELLEMENT disponible
+const checkNfcAvailable = async (): Promise<{ available: boolean; error?: string }> => {
   try {
     if (!Capacitor.isNativePlatform()) {
-      return false;
+      return { available: false, error: "NFC disponible uniquement sur mobile" };
     }
     
-    // Essayer d'appeler une méthode simple pour vérifier si le plugin répond
-    console.log('[NFC] Vérification du plugin...');
-    console.log('[NFC] Plugin Nfc:', Nfc);
+    console.log('[NFC] Vérification du plugin premium...');
     
-    // Sur plateforme native, on suppose que le plugin est disponible
-    // car il a été installé via npm
-    return true;
+    // Tenter d'appeler isSupported pour vérifier si le plugin répond vraiment
+    try {
+      const result = await Nfc.isSupported();
+      console.log('[NFC] isSupported result:', result);
+      return { available: result.isSupported };
+    } catch (err: any) {
+      const errorMsg = err?.message || String(err);
+      console.error('[NFC] Plugin check failed:', errorMsg);
+      
+      // Détecter l'erreur "not implemented"
+      if (errorMsg.includes('not implemented') || errorMsg.includes('not available')) {
+        nfcError = NFC_PLUGIN_NOT_INSTALLED_ERROR;
+        return { available: false, error: NFC_PLUGIN_NOT_INSTALLED_ERROR };
+      }
+      
+      nfcError = errorMsg;
+      return { available: false, error: errorMsg };
+    }
   } catch (err: any) {
     console.error('[NFC] Plugin non disponible:', err);
     nfcError = err?.message || 'Plugin non disponible';
-    return false;
+    return { available: false, error: nfcError };
   }
 };
 
@@ -156,9 +178,9 @@ export const NFCReader = () => {
         throw new Error("La lecture NFC n'est disponible que sur l'application mobile");
       }
 
-      const isAvailable = await checkNfcAvailable();
-      if (!isAvailable) {
-        throw new Error("Plugin NFC Premium non disponible. Vérifiez que le plugin est installé.");
+      const checkResult = await checkNfcAvailable();
+      if (!checkResult.available) {
+        throw new Error(checkResult.error || "Plugin NFC Premium non disponible");
       }
 
       console.log('[NFC] Configuration de l\'écouteur NFC Premium...');
@@ -172,9 +194,17 @@ export const NFCReader = () => {
       toast.success("✓ Lecteur NFC Premium activé - Approchez un tag");
     } catch (err: any) {
       console.error('[NFC] Erreur démarrage scan:', err);
-      setError(err.message || "Erreur lors du démarrage du scan NFC");
+      const errorMsg = err?.message || "Erreur lors du démarrage du scan NFC";
+      
+      // Détecter l'erreur "not implemented"
+      if (errorMsg.includes('not implemented') || errorMsg.includes('not available')) {
+        setError(NFC_PLUGIN_NOT_INSTALLED_ERROR);
+      } else {
+        setError(errorMsg);
+      }
+      
       setIsScanning(false);
-      toast.error("Impossible d'activer le NFC");
+      toast.error("Plugin NFC non disponible");
     }
   };
 
@@ -204,9 +234,9 @@ export const NFCReader = () => {
         throw new Error("L'écriture NFC n'est disponible que sur l'application mobile");
       }
 
-      const isAvailable = await checkNfcAvailable();
-      if (!isAvailable) {
-        throw new Error("Plugin NFC Premium non disponible");
+      const checkResult = await checkNfcAvailable();
+      if (!checkResult.available) {
+        throw new Error(checkResult.error || "Plugin NFC Premium non disponible");
       }
 
       setError(null);
@@ -433,10 +463,19 @@ export const NFCReader = () => {
       {error && (
         <Card className="p-4 mb-6 bg-destructive/10 border-destructive">
           <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-destructive mt-0.5" />
-            <div>
-              <p className="font-semibold text-destructive">Erreur</p>
-              <p className="text-sm text-destructive/90">{error}</p>
+            <AlertCircle className="w-5 h-5 text-destructive mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <p className="font-semibold text-destructive mb-2">Plugin NFC non disponible</p>
+              <div className="text-sm text-destructive/90 space-y-1">
+                {error.split('\n').map((line, i) => (
+                  <p key={i}>{line}</p>
+                ))}
+              </div>
+              <div className="mt-3 pt-3 border-t border-destructive/20">
+                <p className="text-sm text-muted-foreground">
+                  💡 <strong>Alternative :</strong> Utilisez les QR codes via le menu Paramètres → QR Code
+                </p>
+              </div>
             </div>
           </div>
         </Card>
