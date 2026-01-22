@@ -143,9 +143,34 @@ export const NFCReader = () => {
   const [reptiles, setReptiles] = useState<Reptile[]>([]);
   const [selectedReptileId, setSelectedReptileId] = useState<string>('');
   const nfcCallbackRef = useRef<any>(null);
+  
+  // États pour la détection automatique du plugin premium
+  const [isCheckingPlugin, setIsCheckingPlugin] = useState(true);
+  const [isPluginAvailable, setIsPluginAvailable] = useState(false);
 
   useEffect(() => {
     loadReptiles();
+    
+    // Vérifier si le plugin NFC premium est disponible au démarrage
+    const checkPlugin = async () => {
+      if (!Capacitor.isNativePlatform()) {
+        setIsCheckingPlugin(false);
+        setIsPluginAvailable(false);
+        return;
+      }
+      
+      console.log('[NFC] Vérification automatique du plugin premium...');
+      const result = await checkNfcAvailable();
+      console.log('[NFC] Résultat vérification:', result);
+      
+      setIsPluginAvailable(result.available);
+      if (!result.available && result.error) {
+        setError(result.error);
+      }
+      setIsCheckingPlugin(false);
+    };
+    
+    checkPlugin();
     
     return () => {
       if (nfcCallbackRef.current) {
@@ -434,6 +459,7 @@ export const NFCReader = () => {
     }
   };
 
+  // Affichage web (non-natif)
   if (!Capacitor.isNativePlatform()) {
     return (
       <div className="container max-w-2xl mx-auto p-6">
@@ -443,6 +469,57 @@ export const NFCReader = () => {
           <p className="text-muted-foreground">
             La fonctionnalité NFC n'est disponible que sur l'application mobile Android ou iOS.
           </p>
+        </Card>
+      </div>
+    );
+  }
+
+  // Écran de chargement pendant la vérification du plugin
+  if (isCheckingPlugin) {
+    return (
+      <div className="container max-w-2xl mx-auto p-6">
+        <Card className="p-8 text-center">
+          <Waves className="w-16 h-16 mx-auto mb-4 text-primary animate-pulse" />
+          <h2 className="text-2xl font-bold mb-2">Vérification NFC...</h2>
+          <p className="text-muted-foreground">
+            Détection du plugin NFC Premium en cours
+          </p>
+        </Card>
+      </div>
+    );
+  }
+
+  // Plugin NFC non disponible - proposer alternatives
+  if (!isPluginAvailable) {
+    return (
+      <div className="container max-w-2xl mx-auto p-6">
+        <Card className="p-8 text-center">
+          <AlertCircle className="w-16 h-16 mx-auto mb-4 text-amber-500" />
+          <h2 className="text-2xl font-bold mb-2">Plugin NFC Premium requis</h2>
+          <p className="text-muted-foreground mb-4">
+            Cette version de l'application ne dispose pas du plugin NFC Premium.
+          </p>
+          <div className="bg-muted p-4 rounded-lg text-left text-sm mb-4">
+            <p className="font-semibold mb-2">Pour activer le NFC :</p>
+            <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
+              <li>Ouvrez le projet localement (git pull)</li>
+              <li>Exécutez le script <code className="bg-background px-1 py-0.5 rounded">1-RECONSTRUCTION-COMPLETE-NFC.bat</code></li>
+              <li>Installez l'APK généré sur votre téléphone</li>
+            </ol>
+          </div>
+          <div className="border-t pt-4">
+            <p className="text-sm text-muted-foreground mb-3">
+              💡 En attendant, utilisez les <strong>QR codes</strong> comme alternative :
+            </p>
+            <Button 
+              variant="outline" 
+              onClick={() => navigate('/settings')}
+              className="gap-2"
+            >
+              <ScanLine className="w-4 h-4" />
+              Aller aux QR codes
+            </Button>
+          </div>
         </Card>
       </div>
     );
