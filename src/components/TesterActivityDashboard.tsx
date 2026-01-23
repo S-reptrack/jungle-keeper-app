@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Activity, Star, MessageSquare, Clock, TrendingUp, Egg, Scale, Heart, Utensils } from "lucide-react";
+import { Loader2, Activity, Star, MessageSquare, Clock, TrendingUp, Egg, Scale, Heart, Utensils, Eye, Navigation, MousePointer } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface TesterUsageStats {
   user_id: string;
@@ -31,6 +32,17 @@ interface FeedbackItem {
   email?: string;
 }
 
+interface ActivityLogItem {
+  id: string;
+  user_id: string;
+  action_type: string;
+  page_url: string | null;
+  action_details: Record<string, unknown> | null;
+  created_at: string;
+  session_duration: number | null;
+  email?: string;
+}
+
 const categoryLabels: Record<string, string> = {
   bug: "Bug",
   ui: "Interface",
@@ -47,10 +59,25 @@ const categoryColors: Record<string, string> = {
   general: "bg-gray-500/20 text-gray-400",
 };
 
+const actionTypeLabels: Record<string, string> = {
+  page_view: "Visite page",
+  click: "Clic",
+  form_submit: "Formulaire",
+  session_end: "Fin session",
+};
+
+const actionTypeIcons: Record<string, React.ReactNode> = {
+  page_view: <Eye className="h-3 w-3" />,
+  click: <MousePointer className="h-3 w-3" />,
+  form_submit: <Navigation className="h-3 w-3" />,
+  session_end: <Clock className="h-3 w-3" />,
+};
+
 const TesterActivityDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [testerStats, setTesterStats] = useState<TesterUsageStats[]>([]);
   const [recentFeedback, setRecentFeedback] = useState<FeedbackItem[]>([]);
+  const [activityLog, setActivityLog] = useState<ActivityLogItem[]>([]);
   const [globalStats, setGlobalStats] = useState({
     totalReptiles: 0,
     totalFeedings: 0,
@@ -97,7 +124,8 @@ const TesterActivityDashboard = () => {
         weightsResult,
         healthResult,
         reproductionResult,
-        feedbackResult
+        feedbackResult,
+        activityResult
       ] = await Promise.all([
         supabase.from("reptiles").select("id, user_id, created_at, updated_at").in("user_id", testerIds),
         supabase.from("feedings").select("id, user_id, created_at").in("user_id", testerIds),
@@ -105,6 +133,7 @@ const TesterActivityDashboard = () => {
         supabase.from("health_records").select("id, user_id, created_at").in("user_id", testerIds),
         supabase.from("reproduction_observations").select("id, user_id, created_at").in("user_id", testerIds),
         supabase.from("tester_feedback").select("*").order("created_at", { ascending: false }),
+        supabase.from("tester_activity").select("*").in("user_id", testerIds).order("created_at", { ascending: false }).limit(200),
       ]);
 
       const reptiles = reptilesResult.data || [];
@@ -113,6 +142,15 @@ const TesterActivityDashboard = () => {
       const health = healthResult.data || [];
       const reproduction = reproductionResult.data || [];
       const feedbacks = feedbackResult.data || [];
+      const activities = activityResult.data || [];
+
+      // Enrichir les activités avec les emails
+      const activitiesWithEmail = activities.map((a) => ({
+        ...a,
+        action_details: a.action_details as Record<string, unknown> | null,
+        email: profileMap.get(a.user_id) || "Email inconnu",
+      }));
+      setActivityLog(activitiesWithEmail);
 
       // Calculer les stats par testeur
       const statsMap = new Map<string, TesterUsageStats>();
@@ -472,6 +510,68 @@ const TesterActivityDashboard = () => {
                 </div>
               ))}
             </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Historique des activités */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Activity className="h-5 w-5 text-primary" />
+            <CardTitle>Historique des activités</CardTitle>
+          </div>
+          <CardDescription>
+            Toutes les actions effectuées par les testeurs (pages visitées, clics, etc.)
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {activityLog.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-4">
+              Aucune activité enregistrée
+            </p>
+          ) : (
+            <ScrollArea className="h-[400px] pr-4">
+              <div className="space-y-2">
+                {activityLog.map((activity) => (
+                  <div
+                    key={activity.id}
+                    className="flex items-start gap-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors"
+                  >
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary shrink-0">
+                      {actionTypeIcons[activity.action_type] || <Eye className="h-3 w-3" />}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-sm font-medium truncate">{activity.email}</span>
+                        <Badge variant="outline" className="text-xs">
+                          {actionTypeLabels[activity.action_type] || activity.action_type}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
+                        {activity.page_url && (
+                          <span className="text-primary font-mono truncate max-w-[200px]">
+                            {activity.page_url}
+                          </span>
+                        )}
+                        {activity.session_duration && (
+                          <span className="flex items-center gap-1">
+                            <Clock className="h-3 w-3" />
+                            {Math.round(activity.session_duration / 60)}min
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-xs text-muted-foreground whitespace-nowrap">
+                      {formatDistanceToNow(new Date(activity.created_at), {
+                        addSuffix: true,
+                        locale: fr,
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
           )}
         </CardContent>
       </Card>
