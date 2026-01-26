@@ -2,16 +2,14 @@ import { useEffect, useRef, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
 
 /**
- * Composant qui track automatiquement l'activité des testeurs et admins
+ * Composant qui track automatiquement l'activité de tous les utilisateurs
  * Inclut le suivi du temps passé sur chaque page
  * Doit être placé à l'intérieur du BrowserRouter
  */
 const TesterActivityTracker = () => {
   const { user } = useAuth();
-  const { isTester, isAdmin } = useUserRole();
   const location = useLocation();
   const lastTrackedPage = useRef<string | null>(null);
   const pageStartTime = useRef<number>(Date.now());
@@ -38,7 +36,7 @@ const TesterActivityTracker = () => {
 
   // Tracker une nouvelle page
   useEffect(() => {
-    if (!user || (!isTester && !isAdmin)) return;
+    if (!user) return;
 
     const trackPageView = async () => {
       const currentPath = location.pathname;
@@ -74,7 +72,7 @@ const TesterActivityTracker = () => {
     };
 
     trackPageView();
-  }, [user, isTester, isAdmin, location.pathname, updateSessionDuration]);
+  }, [user, location.pathname, updateSessionDuration]);
 
   // Mettre à jour la durée quand l'utilisateur quitte la page
   useEffect(() => {
@@ -107,14 +105,14 @@ const TesterActivityTracker = () => {
 
   // Mettre à jour périodiquement la durée (toutes les 30 secondes)
   useEffect(() => {
-    if (!user || (!isTester && !isAdmin)) return;
+    if (!user) return;
 
     const interval = setInterval(() => {
       updateSessionDuration();
     }, 30000);
 
     return () => clearInterval(interval);
-  }, [user, isTester, isAdmin, updateSessionDuration]);
+  }, [user, updateSessionDuration]);
 
   return null; // Ce composant ne rend rien visuellement
 };
