@@ -1,7 +1,7 @@
 @echo off
 chcp 65001 >nul
 echo ========================================
-echo   BUILD AAB VERSION 3 - FORCE UPDATE
+echo   BUILD AAB VERSION 4 - FORCE UPDATE
 echo ========================================
 echo.
 
@@ -18,14 +18,14 @@ if errorlevel 1 (
 
 echo.
 echo [2/8] Verification du versionCode...
-findstr /C:"versionCode: 3" capacitor.config.ts >nul
+findstr /C:"versionCode: 4" capacitor.config.ts >nul
 if errorlevel 1 (
-    echo ERREUR: versionCode 3 non trouve dans capacitor.config.ts
+    echo ERREUR: versionCode 4 non trouve dans capacitor.config.ts
     echo Le git pull n'a pas fonctionne correctement
     pause
     exit /b 1
 )
-echo    versionCode 3 confirme!
+echo    versionCode 4 confirme!
 
 echo.
 echo [3/8] Fermeture des processus...
@@ -85,7 +85,7 @@ if errorlevel 1 (
 cd ..
 echo.
 echo ========================================
-echo   AAB VERSION 3 GENERE AVEC SUCCES !
+echo   AAB VERSION 4 GENERE AVEC SUCCES !
 echo ========================================
 echo.
 explorer "C:\Users\berti\jungle-keeper-app\android\app\build\outputs\bundle\release"
