@@ -3,10 +3,11 @@ import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { Users, Database, Activity, TrendingUp, MessageSquare } from "lucide-react";
+import { Users, Database, Activity, TrendingUp, MessageSquare, FlaskConical } from "lucide-react";
 import { toast } from "sonner";
 import TesterManagement from "@/components/TesterManagement";
 import TesterActivityDashboard from "@/components/TesterActivityDashboard";
+import { BetaTesterManagement } from "@/components/BetaTesterManagement";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface AdminStats {
@@ -155,14 +156,18 @@ const AdminDashboard = () => {
 
         <div className="mt-8">
           <Tabs defaultValue="testers" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsList className="grid w-full grid-cols-3 mb-6">
               <TabsTrigger value="testers" className="flex items-center gap-2">
                 <Users className="h-4 w-4" />
-                Gestion des testeurs
+                Testeurs
+              </TabsTrigger>
+              <TabsTrigger value="beta" className="flex items-center gap-2">
+                <FlaskConical className="h-4 w-4" />
+                Beta Testers
               </TabsTrigger>
               <TabsTrigger value="activity" className="flex items-center gap-2">
                 <MessageSquare className="h-4 w-4" />
-                Feedbacks & Activité
+                Feedbacks
               </TabsTrigger>
             </TabsList>
 
@@ -182,6 +187,10 @@ const AdminDashboard = () => {
                   </CardContent>
                 </Card>
               </div>
+            </TabsContent>
+
+            <TabsContent value="beta">
+              <BetaTesterManagement />
             </TabsContent>
 
             <TabsContent value="activity">
