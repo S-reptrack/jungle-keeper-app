@@ -46,47 +46,40 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <TesterActivityTracker />
+          <GDPRConsentDialog />
+          <HatchingNotificationDialog />
+          <InstallPromptBanner />
           <Routes>
             {/* Route Admin EN DEHORS du MaintenanceGuard pour éviter les conflits */}
             <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
             
             {/* Toutes les autres routes passent par MaintenanceGuard */}
-            <Route path="/*" element={
-              <MaintenanceGuard>
-                <TesterActivityTracker />
-                <GDPRConsentDialog />
-                <HatchingNotificationDialog />
-                <InstallPromptBanner />
-                <Routes>
-                  {/* ROUTES NORMALES - Landing page en racine pour la production */}
-                  <Route path="/" element={<Landing />} />
-                  <Route path="/dashboard" element={<Index />} />
-                  <Route path="/welcome" element={<Landing />} />
-                  <Route path="/landing" element={<Landing />} />
-                  <Route path="/auth" element={<Auth />} />
-                  <Route path="/install" element={<Install />} />
-                  <Route path="/reptiles" element={<Reptiles />} />
-                  <Route path="/reptile/:id" element={<ReptileDetail />} />
-                  <Route path="/feeding" element={<Feeding />} />
-                  <Route path="/feedings-due" element={<FeedingsDue />} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="/health" element={<HealthReptilesList />} />
-                  <Route path="/reproduction" element={<ReproductionReptilesList />} />
-                  <Route path="/all-reptiles" element={<AllReptilesList />} />
-                  <Route path="/for-sale" element={<ForSale />} />
-                  <Route path="/transfers" element={<Transfers />} />
-                  <Route path="/privacy" element={<Privacy />} />
-                  <Route path="/terms" element={<Terms />} />
-                  <Route path="/legal" element={<Legal />} />
-                  <Route path="/nfc" element={<NFCReader />} />
-                  <Route path="/cost-breakdown" element={<CostBreakdown />} />
-                  <Route path="/qr-codes" element={<QRCodeBatch />} />
-                  <Route path="/analytics" element={<Analytics />} />
-                  <Route path="/genealogy" element={<Genealogy />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </MaintenanceGuard>
-            } />
+            <Route path="/" element={<MaintenanceGuard><Landing /></MaintenanceGuard>} />
+            <Route path="/dashboard" element={<MaintenanceGuard><Index /></MaintenanceGuard>} />
+            <Route path="/welcome" element={<MaintenanceGuard><Landing /></MaintenanceGuard>} />
+            <Route path="/landing" element={<MaintenanceGuard><Landing /></MaintenanceGuard>} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/install" element={<MaintenanceGuard><Install /></MaintenanceGuard>} />
+            <Route path="/reptiles" element={<MaintenanceGuard><Reptiles /></MaintenanceGuard>} />
+            <Route path="/reptile/:id" element={<MaintenanceGuard><ReptileDetail /></MaintenanceGuard>} />
+            <Route path="/feeding" element={<MaintenanceGuard><Feeding /></MaintenanceGuard>} />
+            <Route path="/feedings-due" element={<MaintenanceGuard><FeedingsDue /></MaintenanceGuard>} />
+            <Route path="/settings" element={<MaintenanceGuard><Settings /></MaintenanceGuard>} />
+            <Route path="/health" element={<MaintenanceGuard><HealthReptilesList /></MaintenanceGuard>} />
+            <Route path="/reproduction" element={<MaintenanceGuard><ReproductionReptilesList /></MaintenanceGuard>} />
+            <Route path="/all-reptiles" element={<MaintenanceGuard><AllReptilesList /></MaintenanceGuard>} />
+            <Route path="/for-sale" element={<MaintenanceGuard><ForSale /></MaintenanceGuard>} />
+            <Route path="/transfers" element={<MaintenanceGuard><Transfers /></MaintenanceGuard>} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/legal" element={<Legal />} />
+            <Route path="/nfc" element={<MaintenanceGuard><NFCReader /></MaintenanceGuard>} />
+            <Route path="/cost-breakdown" element={<MaintenanceGuard><CostBreakdown /></MaintenanceGuard>} />
+            <Route path="/qr-codes" element={<MaintenanceGuard><QRCodeBatch /></MaintenanceGuard>} />
+            <Route path="/analytics" element={<MaintenanceGuard><Analytics /></MaintenanceGuard>} />
+            <Route path="/genealogy" element={<MaintenanceGuard><Genealogy /></MaintenanceGuard>} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
