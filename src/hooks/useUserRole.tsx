@@ -2,11 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 
-export type UserRole = "admin" | "tester" | "user" | null;
+export type UserRole = "admin" | "tester" | "beta_tester" | "user" | null;
 
 export const useUserRole = () => {
   const { user, loading: authLoading } = useAuth();
   const [role, setRole] = useState<UserRole>(null);
+  const [isBetaTester, setIsBetaTester] = useState(false);
   const [loading, setLoading] = useState(true);
   const lastUserId = useRef<string | null>(null);
   const hasChecked = useRef(false);
@@ -22,6 +23,7 @@ export const useUserRole = () => {
       if (!user) {
         console.log("[useUserRole] No user, setting role to null");
         setRole(null);
+        setIsBetaTester(false);
         setLoading(false);
         lastUserId.current = null;
         hasChecked.current = true;
@@ -57,8 +59,11 @@ export const useUserRole = () => {
         // Vérifier les rôles par ordre de priorité
         const hasAdminRole = data?.some((r) => r.role === "admin");
         const hasTesterRole = data?.some((r) => r.role === "tester");
+        const hasBetaTesterRole = data?.some((r) => r.role === "beta_tester");
         
-        console.log("[useUserRole] Roles found:", { hasAdminRole, hasTesterRole, allRoles: data });
+        console.log("[useUserRole] Roles found:", { hasAdminRole, hasTesterRole, hasBetaTesterRole, allRoles: data });
+        
+        setIsBetaTester(hasBetaTesterRole);
         
         if (hasAdminRole) {
           console.log("[useUserRole] Setting role to admin");
@@ -94,6 +99,7 @@ export const useUserRole = () => {
     loading: loading || authLoading, 
     isAdmin: role === "admin",
     isTester: role === "tester",
+    isBetaTester,
     canBypassMaintenance: role === "admin" || role === "tester"
   };
 };
