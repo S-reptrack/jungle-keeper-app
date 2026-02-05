@@ -446,12 +446,14 @@ const ReptileDetail = () => {
                   <div className="mt-4 flex flex-col gap-2">
                     <EditReptileDialog
                       reptileId={reptile.id}
+                      currentName={reptile.name}
                       currentSpecies={reptile.species}
                       currentCategory={reptile.category as "snake" | "lizard" | "turtle"}
                       currentBirthDate={reptile.birth_date}
                       currentPurchaseDate={reptile.purchase_date}
                       currentWeight={reptile.weight}
                       currentSex={reptile.sex as "male" | "female" | "unknown"}
+                      createdAt={reptile.created_at}
                       onUpdate={fetchReptile}
                     />
                     <DeleteReptileDialog
@@ -519,12 +521,14 @@ const ReptileDetail = () => {
                       {isCurrentOwner && (
                         <EditReptileDialog
                           reptileId={reptile.id}
+                          currentName={reptile.name}
                           currentSpecies={reptile.species}
                           currentCategory={reptile.category as "snake" | "lizard" | "turtle"}
                           currentBirthDate={reptile.birth_date}
                           currentPurchaseDate={reptile.purchase_date}
                           currentWeight={reptile.weight}
                           currentSex={reptile.sex as "male" | "female" | "unknown"}
+                          createdAt={reptile.created_at}
                           onUpdate={fetchReptile}
                         />
                       )}

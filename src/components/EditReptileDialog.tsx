@@ -43,6 +43,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getAllSpecies, getSpeciesByAnnex } from "@/data/citesSpecies";
 
 const formSchema = z.object({
+  name: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
   species: z.string().min(1, "L'espèce est requise"),
   birthDate: z.date().optional(),
   purchaseDate: z.date().optional(),
@@ -56,23 +57,27 @@ type FormValues = z.infer<typeof formSchema>;
 
 interface EditReptileDialogProps {
   reptileId: string;
+  currentName: string;
   currentSpecies: string;
   currentCategory: "snake" | "lizard" | "turtle";
   currentBirthDate?: string;
   currentPurchaseDate?: string;
   currentWeight?: number;
   currentSex: "male" | "female" | "unknown";
+  createdAt: string;
   onUpdate?: () => void;
 }
 
 const EditReptileDialog = ({ 
-  reptileId, 
+  reptileId,
+  currentName,
   currentSpecies,
   currentCategory,
   currentBirthDate, 
   currentPurchaseDate,
   currentWeight,
   currentSex,
+  createdAt,
   onUpdate 
 }: EditReptileDialogProps) => {
   const { t } = useTranslation();
@@ -80,6 +85,17 @@ const EditReptileDialog = ({
   const [birthDateInput, setBirthDateInput] = useState("");
   const [purchaseDateInput, setPurchaseDateInput] = useState("");
   const [selectedAnnex, setSelectedAnnex] = useState<'A' | 'B' | 'C' | 'D'>('B');
+  
+  // Vérifier si le reptile a moins de 48h (modifiable)
+  const isWithin48Hours = () => {
+    const createdDate = new Date(createdAt);
+    const now = new Date();
+    const diffMs = now.getTime() - createdDate.getTime();
+    const diffHours = diffMs / (1000 * 60 * 60);
+    return diffHours <= 48;
+  };
+  
+  const canEditName = isWithin48Hours();
 
   const parseDateSafe = (dateStr?: string) => {
     if (!dateStr) return undefined;
@@ -90,6 +106,7 @@ const EditReptileDialog = ({
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: currentName,
       species: currentSpecies,
       birthDate: parseDateSafe(currentBirthDate),
       purchaseDate: parseDateSafe(currentPurchaseDate),
@@ -130,6 +147,7 @@ const EditReptileDialog = ({
   useEffect(() => {
     if (open) {
       form.reset({
+        name: currentName,
         species: currentSpecies,
         birthDate: parseDateSafe(currentBirthDate),
         purchaseDate: parseDateSafe(currentPurchaseDate),
@@ -139,7 +157,7 @@ const EditReptileDialog = ({
       setBirthDateInput(formatDateToInput(parseDateSafe(currentBirthDate)));
       setPurchaseDateInput(formatDateToInput(parseDateSafe(currentPurchaseDate)));
     }
-  }, [open, currentSpecies, currentBirthDate, currentPurchaseDate, currentWeight, currentSex]);
+  }, [open, currentName, currentSpecies, currentBirthDate, currentPurchaseDate, currentWeight, currentSex]);
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -147,6 +165,11 @@ const EditReptileDialog = ({
         species: data.species,
         sex: data.sex,
       };
+      
+      // Modifier le nom uniquement si autorisé (48h)
+      if (canEditName && data.name !== currentName) {
+        updateData.name = data.name;
+      }
 
       if (data.birthDate) {
         updateData.birth_date = `${data.birthDate.getFullYear()}-${String(data.birthDate.getMonth() + 1).padStart(2, '0')}-${String(data.birthDate.getDate()).padStart(2, '0')}`;
@@ -191,6 +214,37 @@ const EditReptileDialog = ({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {/* Champ Nom - modifiable uniquement dans les 48h */}
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center gap-2">
+                    {t("reptile.name")}
+                    {!canEditName && (
+                      <span className="text-xs text-muted-foreground font-normal">
+                        (48h dépassées)
+                      </span>
+                    )}
+                  </FormLabel>
+                  <FormControl>
+                    <Input 
+                      placeholder="Ex: Charlie" 
+                      {...field} 
+                      disabled={!canEditName}
+                      className={!canEditName ? "opacity-60 cursor-not-allowed" : ""}
+                    />
+                  </FormControl>
+                  {!canEditName && (
+                    <p className="text-xs text-muted-foreground">
+                      Le nom ne peut être modifié que dans les 48h suivant la création.
+                    </p>
+                  )}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="species"
