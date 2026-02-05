@@ -51,7 +51,13 @@ const App = () => (
           <HatchingNotificationDialog />
           <InstallPromptBanner />
           <Routes>
-            {/* Route Admin EN DEHORS du MaintenanceGuard pour éviter les conflits */}
+            {/* Routes publiques sans garde */}
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/legal" element={<Legal />} />
+            
+            {/* Route Admin EN DEHORS du MaintenanceGuard - priorité haute */}
             <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
             
             {/* Toutes les autres routes passent par MaintenanceGuard */}
@@ -59,7 +65,6 @@ const App = () => (
             <Route path="/dashboard" element={<MaintenanceGuard><Index /></MaintenanceGuard>} />
             <Route path="/welcome" element={<MaintenanceGuard><Landing /></MaintenanceGuard>} />
             <Route path="/landing" element={<MaintenanceGuard><Landing /></MaintenanceGuard>} />
-            <Route path="/auth" element={<Auth />} />
             <Route path="/install" element={<MaintenanceGuard><Install /></MaintenanceGuard>} />
             <Route path="/reptiles" element={<MaintenanceGuard><Reptiles /></MaintenanceGuard>} />
             <Route path="/reptile/:id" element={<MaintenanceGuard><ReptileDetail /></MaintenanceGuard>} />
@@ -71,14 +76,13 @@ const App = () => (
             <Route path="/all-reptiles" element={<MaintenanceGuard><AllReptilesList /></MaintenanceGuard>} />
             <Route path="/for-sale" element={<MaintenanceGuard><ForSale /></MaintenanceGuard>} />
             <Route path="/transfers" element={<MaintenanceGuard><Transfers /></MaintenanceGuard>} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/legal" element={<Legal />} />
             <Route path="/nfc" element={<MaintenanceGuard><NFCReader /></MaintenanceGuard>} />
             <Route path="/cost-breakdown" element={<MaintenanceGuard><CostBreakdown /></MaintenanceGuard>} />
             <Route path="/qr-codes" element={<MaintenanceGuard><QRCodeBatch /></MaintenanceGuard>} />
             <Route path="/analytics" element={<MaintenanceGuard><Analytics /></MaintenanceGuard>} />
             <Route path="/genealogy" element={<MaintenanceGuard><Genealogy /></MaintenanceGuard>} />
+            
+            {/* Catch-all - TOUJOURS en dernier */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
