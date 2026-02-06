@@ -92,7 +92,7 @@ const EditReptileDialog = ({
     const now = new Date();
     const diffMs = now.getTime() - createdDate.getTime();
     const diffHours = diffMs / (1000 * 60 * 60);
-    return diffHours <= 48;
+    return diffHours <= 96;
   };
   
   const canEditName = isWithin48Hours();
@@ -224,7 +224,7 @@ const EditReptileDialog = ({
                     {t("reptile.name")}
                     {!canEditName && (
                       <span className="text-xs text-muted-foreground font-normal">
-                        (48h dépassées)
+                        (96h dépassées)
                       </span>
                     )}
                   </FormLabel>
@@ -238,7 +238,7 @@ const EditReptileDialog = ({
                   </FormControl>
                   {!canEditName && (
                     <p className="text-xs text-muted-foreground">
-                      Le nom ne peut être modifié que dans les 48h suivant la création.
+                      Le nom ne peut être modifié que dans les 96h suivant la création.
                     </p>
                   )}
                   <FormMessage />
