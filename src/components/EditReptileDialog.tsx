@@ -86,16 +86,7 @@ const EditReptileDialog = ({
   const [purchaseDateInput, setPurchaseDateInput] = useState("");
   const [selectedAnnex, setSelectedAnnex] = useState<'A' | 'B' | 'C' | 'D'>('B');
   
-  // Vérifier si le reptile a moins de 48h (modifiable)
-  const isWithin48Hours = () => {
-    const createdDate = new Date(createdAt);
-    const now = new Date();
-    const diffMs = now.getTime() - createdDate.getTime();
-    const diffHours = diffMs / (1000 * 60 * 60);
-    return diffHours <= 96;
-  };
-  
-  const canEditName = isWithin48Hours();
+  const canEditName = true;
 
   const parseDateSafe = (dateStr?: string) => {
     if (!dateStr) return undefined;
