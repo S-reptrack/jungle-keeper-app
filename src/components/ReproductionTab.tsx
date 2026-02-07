@@ -84,7 +84,7 @@ interface Observation {
 }
 
 const observationSchema = z.object({
-  partnerId: z.string().min(1, "Partenaire requis"),
+  partnerIds: z.array(z.string()).min(1, "Au moins un partenaire requis"),
   date: z.date({
     required_error: "Date requise",
   }),
@@ -112,6 +112,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
   const [loading, setLoading] = useState(true);
   const [dateInput, setDateInput] = useState("");
   const [selectedAction, setSelectedAction] = useState<string>("");
+  const [selectedPartnerIds, setSelectedPartnerIds] = useState<string[]>([]);
   const [closeHatchingDialog, setCloseHatchingDialog] = useState<{
     open: boolean;
     observationId: string;
@@ -123,6 +124,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
     resolver: zodResolver(observationSchema),
     defaultValues: {
       observation: "",
+      partnerIds: [],
     },
   });
 
@@ -243,28 +245,32 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
         observationData.stillborn_juveniles = data.stillbornCount || 0;
       }
 
-      // Create observation for current reptile
-      const { error: error1 } = await supabase.from("reproduction_observations").insert({
-        reptile_id: reptileId,
-        partner_id: data.partnerId,
-        ...observationData,
-      });
+      // Create observations for each selected partner
+      for (const partnerId of data.partnerIds) {
+        // Create observation for current reptile
+        const { error: error1 } = await supabase.from("reproduction_observations").insert({
+          reptile_id: reptileId,
+          partner_id: partnerId,
+          ...observationData,
+        });
 
-      if (error1) throw error1;
+        if (error1) throw error1;
 
-      // Create mirrored observation for partner reptile
-      const { error: error2 } = await supabase.from("reproduction_observations").insert({
-        reptile_id: data.partnerId,
-        partner_id: reptileId,
-        ...observationData,
-      });
+        // Create mirrored observation for partner reptile
+        const { error: error2 } = await supabase.from("reproduction_observations").insert({
+          reptile_id: partnerId,
+          partner_id: reptileId,
+          ...observationData,
+        });
 
-      if (error2) throw error2;
+        if (error2) throw error2;
+      }
 
       toast.success(t("reptile.reproduction.observationAdded"));
       form.reset();
       setDateInput("");
       setSelectedAction("");
+      setSelectedPartnerIds([]);
       setOpen(false);
       fetchData();
     } catch (error) {
@@ -331,30 +337,96 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
               </DialogHeader>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="partnerId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t("reptile.reproduction.partner")}</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder={t("reptile.reproduction.selectPartner")} />
+                  {/* Multi-partner selector */}
+                  <div className="space-y-2">
+                    <FormLabel>{t("reptile.reproduction.partner")}</FormLabel>
+                    {selectedPartnerIds.map((pid, index) => {
+                      const partner = potentialPartners.find(p => p.id === pid);
+                      return (
+                        <div key={pid} className="flex items-center gap-2">
+                          <Select
+                            value={pid}
+                            onValueChange={(value) => {
+                              const updated = [...selectedPartnerIds];
+                              updated[index] = value;
+                              setSelectedPartnerIds(updated);
+                              form.setValue("partnerIds", updated);
+                            }}
+                          >
+                            <SelectTrigger className="flex-1">
+                              <SelectValue />
                             </SelectTrigger>
-                          </FormControl>
-                          <SelectContent className="bg-card border-border z-[100]">
-                            {potentialPartners.map((partner) => (
-                              <SelectItem key={partner.id} value={partner.id}>
-                                {partner.name} ({partner.sex === "male" ? "♂" : "♀"})
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
+                            <SelectContent className="bg-card border-border z-[100]">
+                              {potentialPartners
+                                .filter(p => p.id === pid || !selectedPartnerIds.includes(p.id))
+                                .map((p) => (
+                                  <SelectItem key={p.id} value={p.id}>
+                                    {p.name} ({p.sex === "male" ? "♂" : "♀"})
+                                  </SelectItem>
+                                ))}
+                            </SelectContent>
+                          </Select>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 shrink-0"
+                            onClick={() => {
+                              const updated = selectedPartnerIds.filter((_, i) => i !== index);
+                              setSelectedPartnerIds(updated);
+                              form.setValue("partnerIds", updated);
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      );
+                    })}
+                    {selectedPartnerIds.length === 0 && (
+                      <Select
+                        onValueChange={(value) => {
+                          const updated = [value];
+                          setSelectedPartnerIds(updated);
+                          form.setValue("partnerIds", updated);
+                        }}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={t("reptile.reproduction.selectPartner")} />
+                        </SelectTrigger>
+                        <SelectContent className="bg-card border-border z-[100]">
+                          {potentialPartners.map((p) => (
+                            <SelectItem key={p.id} value={p.id}>
+                              {p.name} ({p.sex === "male" ? "♂" : "♀"})
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     )}
-                  />
+                    {selectedPartnerIds.length > 0 && selectedPartnerIds.length < potentialPartners.length && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="w-full"
+                        onClick={() => {
+                          const available = potentialPartners.find(p => !selectedPartnerIds.includes(p.id));
+                          if (available) {
+                            const updated = [...selectedPartnerIds, available.id];
+                            setSelectedPartnerIds(updated);
+                            form.setValue("partnerIds", updated);
+                          }
+                        }}
+                      >
+                        <Plus className="h-4 w-4 mr-1" />
+                        Ajouter un partenaire
+                      </Button>
+                    )}
+                    {form.formState.errors.partnerIds && (
+                      <p className="text-sm font-medium text-destructive">
+                        {form.formState.errors.partnerIds.message}
+                      </p>
+                    )}
+                  </div>
 
                   <FormField
                     control={form.control}
