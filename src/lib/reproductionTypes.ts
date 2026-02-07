@@ -72,7 +72,7 @@ const VIVIPAROUS_SPECIES: string[] = [
 
 // Patterns to match viviparous species by partial name (case-insensitive)
 const VIVIPAROUS_PATTERNS: string[] = [
-  "boa ",
+  "boa",
   "boa constrictor",
   "boa imperator",
   "eunectes",
@@ -107,15 +107,16 @@ export type ReproductionType = "oviparous" | "viviparous";
  * Returns "viviparous" for live-bearing species, "oviparous" for egg-layers.
  */
 export function getReproductionType(species: string): ReproductionType {
-  const speciesLower = species.toLowerCase().trim();
+  // Normalize: lowercase, replace hyphens/underscores with spaces
+  const speciesNormalized = species.toLowerCase().trim().replace(/[-_]/g, " ");
 
   // Check exact match first
-  if (VIVIPAROUS_SPECIES.some(s => s.toLowerCase() === speciesLower)) {
+  if (VIVIPAROUS_SPECIES.some(s => s.toLowerCase() === speciesNormalized)) {
     return "viviparous";
   }
 
   // Check pattern match
-  if (VIVIPAROUS_PATTERNS.some(pattern => speciesLower.includes(pattern.toLowerCase()))) {
+  if (VIVIPAROUS_PATTERNS.some(pattern => speciesNormalized.includes(pattern.toLowerCase()))) {
     return "viviparous";
   }
 
