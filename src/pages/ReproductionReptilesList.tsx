@@ -87,6 +87,7 @@ const ReproductionReptilesList = () => {
       separation: "Séparation",
       prelaying_shed: "Mue pré-ponte",
       laying: "Ponte",
+      birth: "Mise bas",
       other: "Autre",
     };
     return labels[action] || action;
