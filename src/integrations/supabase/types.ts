@@ -60,6 +60,7 @@ export type Database = {
       }
       feedings: {
         Row: {
+          calcium: boolean
           created_at: string
           feeding_date: string
           id: string
@@ -71,8 +72,10 @@ export type Database = {
           rodent_weight: number | null
           updated_at: string
           user_id: string
+          vitamins: boolean
         }
         Insert: {
+          calcium?: boolean
           created_at?: string
           feeding_date: string
           id?: string
@@ -84,8 +87,10 @@ export type Database = {
           rodent_weight?: number | null
           updated_at?: string
           user_id: string
+          vitamins?: boolean
         }
         Update: {
+          calcium?: boolean
           created_at?: string
           feeding_date?: string
           id?: string
@@ -97,6 +102,7 @@ export type Database = {
           rodent_weight?: number | null
           updated_at?: string
           user_id?: string
+          vitamins?: boolean
         }
         Relationships: []
       }
