@@ -31,6 +31,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon, Plus } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -42,6 +43,8 @@ const formSchema = z.object({
   rodentStage: z.string().min(1, "Le stade est requis"),
   quantity: z.coerce.number().min(1, "La quantité doit être au moins 1"),
   feedingDate: z.date(),
+  calcium: z.boolean().default(false),
+  vitamins: z.boolean().default(false),
   notes: z.string().optional(),
 });
 
@@ -63,6 +66,8 @@ const AddFeedingDialog = ({ reptileId, onFeedingAdded }: AddFeedingDialogProps) 
       rodentStage: "",
       quantity: 1,
       feedingDate: new Date(),
+      calcium: false,
+      vitamins: false,
       notes: "",
     },
   });
@@ -83,6 +88,8 @@ const AddFeedingDialog = ({ reptileId, onFeedingAdded }: AddFeedingDialogProps) 
         rodent_stage: values.rodentStage,
         quantity: values.quantity,
         feeding_date: format(values.feedingDate, "yyyy-MM-dd"),
+        calcium: values.calcium,
+        vitamins: values.vitamins,
         notes: values.notes || null,
       };
 
@@ -267,6 +274,44 @@ const AddFeedingDialog = ({ reptileId, onFeedingAdded }: AddFeedingDialogProps) 
                 </FormItem>
               )}
             />
+
+            <div className="flex gap-6">
+              <FormField
+                control={form.control}
+                name="calcium"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel className="font-normal cursor-pointer">
+                      {t("feeding.calcium", "Calcium")}
+                    </FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="vitamins"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel className="font-normal cursor-pointer">
+                      {t("feeding.vitamins", "Vitamines")}
+                    </FormLabel>
+                  </FormItem>
+                )}
+              />
+            </div>
+
 
             <FormField
               control={form.control}
