@@ -567,7 +567,7 @@ const ReptileDetail = () => {
                 </TabsContent>
                 
                 <TabsContent value="reproduction">
-                  <ReproductionTab reptileId={reptile.id} reptileSex={reptile.sex} reptileSpecies={reptile.species} readOnly={isPreviousOwner || false} />
+                  <ReproductionTab reptileId={reptile.id} reptileSex={reptile.sex} reptileSpecies={reptile.species} reptileCategory={reptile.category} readOnly={isPreviousOwner || false} />
                 </TabsContent>
                 
                 <TabsContent value="health" className="space-y-4">
