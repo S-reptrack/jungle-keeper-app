@@ -1,4 +1,4 @@
-import { Home, List, Tag, Settings, QrCode, Waves, User, Shield, BarChart3, GitBranch } from "lucide-react";
+import { Home, List, Tag, Settings, QrCode, Waves, User, Shield, BarChart3, GitBranch, Bell } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -13,6 +13,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Badge } from "./ui/badge";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useSubscription } from "@/hooks/useSubscription";
+import { useFeedingNotifications } from "@/hooks/useFeedingNotifications";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +35,7 @@ const Navigation = () => {
   const { user } = useAuth();
   const { isAdmin } = useUserRole();
   const { subscribed } = useSubscription();
+  const { totalDueCount, overdueCount, feedingsDue } = useFeedingNotifications();
 
   // Extraire le pseudo de l'email (partie avant @)
   const userDisplayName = user?.email?.split('@')[0] || null;
@@ -86,6 +88,48 @@ const Navigation = () => {
               <LanguageSelector />
             </div>
             <div className="flex items-center gap-2">
+              {/* Feeding notifications bell */}
+              {totalDueCount > 0 && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="relative">
+                      <Bell className={`w-4 h-4 ${overdueCount > 0 ? 'text-destructive' : 'text-primary'}`} />
+                      <span className={`absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full text-[10px] font-bold flex items-center justify-center text-primary-foreground ${overdueCount > 0 ? 'bg-destructive' : 'bg-primary'}`}>
+                        {totalDueCount}
+                      </span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-72">
+                    <div className="px-3 py-2 border-b border-border">
+                      <p className="text-sm font-semibold">🍽️ Repas à prévoir</p>
+                    </div>
+                    {feedingsDue.slice(0, 5).map((item) => (
+                      <DropdownMenuItem
+                        key={item.reptileId}
+                        onClick={() => navigate(`/reptile/${item.reptileId}?tab=feeding`)}
+                        className="flex items-center justify-between"
+                      >
+                        <span className="text-sm truncate">{item.reptileName}</span>
+                        <Badge
+                          variant={item.daysUntil < 0 ? "destructive" : item.daysUntil === 0 ? "default" : "secondary"}
+                          className="ml-2 text-[10px] flex-shrink-0"
+                        >
+                          {item.daysUntil < 0
+                            ? `Retard ${Math.abs(item.daysUntil)}j`
+                            : item.daysUntil === 0
+                            ? "Aujourd'hui"
+                            : `Dans ${item.daysUntil}j`}
+                        </Badge>
+                      </DropdownMenuItem>
+                    ))}
+                    {feedingsDue.length > 5 && (
+                      <DropdownMenuItem onClick={() => navigate("/feedings-due")} className="text-primary text-sm justify-center">
+                        Voir tout ({feedingsDue.length})
+                      </DropdownMenuItem>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
               {subscribed && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
