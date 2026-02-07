@@ -85,11 +85,13 @@ const observationSchema = z.object({
     required_error: "Date requise",
   }),
   observation: z.string().optional(),
-  action: z.enum(["introduction", "mating", "separation", "prelaying_shed", "laying", "other"], {
+  action: z.enum(["introduction", "mating", "separation", "prelaying_shed", "laying", "birth", "other"], {
     required_error: "Action requise",
   }),
   incubationDays: z.number().optional(),
   notificationDaysBefore: z.number().optional(),
+  liveBornCount: z.number().optional(),
+  stillbornCount: z.number().optional(),
 });
 
 type ObservationValues = z.infer<typeof observationSchema>;
@@ -208,7 +210,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
         expectedHatchDate.setDate(layingDate.getDate() + data.incubationDays);
       }
 
-      const observationData = {
+      const observationData: any = {
         user_id: user.id,
         action: data.action,
         observation_date: data.date.toISOString().split('T')[0],
@@ -217,6 +219,15 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
         expected_hatch_date: expectedHatchDate ? expectedHatchDate.toISOString().split('T')[0] : null,
         notification_days_before: data.action === "laying" ? data.notificationDaysBefore : null,
       };
+
+      // Pour mise bas, clôturer directement avec les résultats
+      if (data.action === "birth") {
+        observationData.closed = true;
+        observationData.closed_at = data.date.toISOString().split('T')[0];
+        observationData.hatched_eggs = data.liveBornCount || 0;
+        observationData.unhatched_eggs = 0;
+        observationData.stillborn_juveniles = data.stillbornCount || 0;
+      }
 
       // Create observation for current reptile
       const { error: error1 } = await supabase.from("reproduction_observations").insert({
@@ -354,6 +365,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
                               <>
                                 <SelectItem value="prelaying_shed">{t("reptile.reproduction.actions.prelaying_shed")}</SelectItem>
                                 <SelectItem value="laying">{t("reptile.reproduction.actions.laying")}</SelectItem>
+                                <SelectItem value="birth">Mise bas</SelectItem>
                               </>
                             )}
                             <SelectItem value="other">{t("reptile.reproduction.actions.other")}</SelectItem>
@@ -468,6 +480,50 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
                     </>
                   )}
 
+                  {selectedAction === "birth" && (
+                    <>
+                      <FormField
+                        control={form.control}
+                        name="liveBornCount"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Nombre de juvéniles nés vivants</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                min="0"
+                                placeholder="Ex: 12"
+                                {...field}
+                                onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="stillbornCount"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Juvéniles mort-nés (facultatif)</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                min="0"
+                                placeholder="Ex: 0"
+                                {...field}
+                                onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </>
+                  )}
+
                   <FormField
                     control={form.control}
                     name="observation"
@@ -560,10 +616,27 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
                         </div>
                       </div>
                       <p className="text-sm text-muted-foreground mb-1">
-                        {t(`reptile.reproduction.actions.${obs.action}`)}
+                        {obs.action === "birth" ? "Mise bas" : t(`reptile.reproduction.actions.${obs.action}`)}
                       </p>
                       <p className="text-sm">{obs.notes}</p>
                       
+                      {obs.action === "birth" && obs.closed && (
+                        <div className="mt-3 pt-3 border-t border-border/50">
+                          <p className="text-sm font-medium text-green-600">
+                            ✓ Mise bas le {format(new Date(obs.closed_at!), "dd MMM yyyy", { locale: fr })}
+                          </p>
+                          <div className="text-xs text-muted-foreground space-y-0.5 mt-1">
+                            <p>👶 Nés vivants : {obs.hatched_eggs || 0}</p>
+                            {(obs.stillborn_juveniles || 0) > 0 && (
+                              <p>⚠️ Mort-nés : {obs.stillborn_juveniles}</p>
+                            )}
+                            {obs.outcome_notes && (
+                              <p className="mt-1 italic">{obs.outcome_notes}</p>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
                        {obs.action === "laying" && obs.expected_hatch_date && (
                         <div className="mt-3 pt-3 border-t border-border/50">
                           <div className="flex items-center justify-between">
@@ -592,7 +665,6 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
                                   </p>
                                   <div className="text-xs text-muted-foreground space-y-0.5">
                                     {obs.unhatched_eggs === 0 ? (
-                                      // Vivipare (boa, vipère)
                                       <>
                                         <p>👶 Nés vivants : {obs.hatched_eggs || 0}</p>
                                         {(obs.stillborn_juveniles || 0) > 0 && (
@@ -600,7 +672,6 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
                                         )}
                                       </>
                                     ) : (
-                                      // Ovipare (python, lézard)
                                       <>
                                         <p>🥚 Éclos : {obs.hatched_eggs || 0}</p>
                                         <p>❌ Non éclos : {obs.unhatched_eggs || 0}</p>
