@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { 
@@ -24,10 +25,21 @@ import LanguageSelector from "@/components/LanguageSelector";
 import sreptrackLogo from "@/assets/sreptrack-logo.png";
 import { QRCodeSVG } from "qrcode.react";
 import PromoSlideshow from "@/components/PromoSlideshow";
+import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 
 const Landing = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
+  const { isAdmin, loading: roleLoading } = useUserRole();
+
+  // Redirection automatique des admins vers /admin
+  useEffect(() => {
+    if (!authLoading && !roleLoading && user && isAdmin) {
+      navigate("/admin", { replace: true });
+    }
+  }, [user, isAdmin, authLoading, roleLoading, navigate]);
   
   // Production URL for QR code
   const productionUrl = "https://s-reptrack.app";
