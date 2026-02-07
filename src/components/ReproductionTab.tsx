@@ -49,6 +49,7 @@ interface ReproductionTabProps {
   reptileId: string;
   reptileSex: string;
   reptileSpecies: string;
+  reptileCategory: string;
   readOnly?: boolean;
 }
 
@@ -104,7 +105,7 @@ const observationSchema = z.object({
 
 type ObservationValues = z.infer<typeof observationSchema>;
 
-const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = false }: ReproductionTabProps) => {
+const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, reptileCategory, readOnly = false }: ReproductionTabProps) => {
   const { t } = useTranslation();
   const reproductionType = getReproductionType(reptileSpecies);
   const [open, setOpen] = useState(false);
@@ -119,7 +120,8 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
     observationId: string;
     reptileName: string;
     expectedHatchDate: string;
-  }>({ open: false, observationId: "", reptileName: "", expectedHatchDate: "" });
+    partnerId: string;
+  }>({ open: false, observationId: "", reptileName: "", expectedHatchDate: "", partnerId: "" });
 
   const form = useForm<ObservationValues>({
     resolver: zodResolver(observationSchema),
@@ -895,6 +897,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
                                     observationId: obs.id,
                                     reptileName: partnerData?.name || "Partenaire",
                                     expectedHatchDate: obs.expected_hatch_date,
+                                    partnerId: obs.partner_id,
                                   });
                                 }}
                                 className="ml-2 text-green-600 hover:text-green-700 border-green-600 hover:border-green-700"
@@ -921,6 +924,10 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
         observationId={closeHatchingDialog.observationId}
         reptileName={closeHatchingDialog.reptileName}
         expectedHatchDate={closeHatchingDialog.expectedHatchDate}
+        motherId={reptileSex === "female" ? reptileId : closeHatchingDialog.partnerId}
+        fatherId={reptileSex === "male" ? reptileId : closeHatchingDialog.partnerId}
+        species={reptileSpecies}
+        category={reptileCategory}
         onSuccess={fetchData}
       />
     </div>
