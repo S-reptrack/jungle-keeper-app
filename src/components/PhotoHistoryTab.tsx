@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
+import { PhotoLightbox } from "@/components/PhotoLightbox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -45,7 +46,7 @@ export const PhotoHistoryTab = ({ reptileId }: PhotoHistoryTabProps) => {
   const [caption, setCaption] = useState("");
   const [takenAt, setTakenAt] = useState(new Date().toISOString().split('T')[0]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (user && subscribed) {
@@ -139,7 +140,7 @@ export const PhotoHistoryTab = ({ reptileId }: PhotoHistoryTabProps) => {
       if (error) throw error;
       
       toast.success(t("photoHistory.photoDeleted"));
-      setSelectedPhoto(null);
+      setSelectedPhotoIndex(null);
       fetchPhotos();
     } catch (error) {
       toast.error(t("common.error"));
@@ -283,36 +284,25 @@ export const PhotoHistoryTab = ({ reptileId }: PhotoHistoryTabProps) => {
         </Card>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {photos.map(photo => (
-            <PhotoCard 
-              key={photo.id} 
-              photo={photo} 
-              onSelect={() => setSelectedPhoto(photo)}
-              onDelete={() => handleDelete(photo)}
-            />
-          ))}
-        </div>
-      )}
+            {photos.map((photo, index) => (
+              <PhotoCard 
+                key={photo.id} 
+                photo={photo} 
+                onSelect={() => setSelectedPhotoIndex(index)}
+                onDelete={() => handleDelete(photo)}
+              />
+            ))}
+          </div>
+        )}
 
-      {/* Photo detail dialog */}
-      <Dialog open={!!selectedPhoto} onOpenChange={() => setSelectedPhoto(null)}>
-        <DialogContent className="max-w-2xl">
-          {selectedPhoto && (
-            <>
-              <PhotoDetail photo={selectedPhoto} />
-              <div className="flex justify-end gap-2">
-                <Button 
-                  variant="destructive" 
-                  onClick={() => handleDelete(selectedPhoto)}
-                >
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  {t("common.delete")}
-                </Button>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+        {/* Photo lightbox */}
+        <PhotoLightbox
+          photos={photos}
+          initialIndex={selectedPhotoIndex ?? 0}
+          open={selectedPhotoIndex !== null}
+          onClose={() => setSelectedPhotoIndex(null)}
+          onDelete={(photo) => handleDelete(photo)}
+        />
     </div>
   );
 };
@@ -373,41 +363,3 @@ const PhotoCard = ({ photo, onSelect, onDelete }: { photo: Photo; onSelect: () =
   );
 };
 
-const PhotoDetail = ({ photo }: { photo: Photo }) => {
-  const [imageUrl, setImageUrl] = useState<string>("");
-
-  useEffect(() => {
-    const loadUrl = async () => {
-      const { data } = await supabase.storage
-        .from("reptile-images")
-        .createSignedUrl(photo.image_url, 60 * 60);
-      if (data?.signedUrl) setImageUrl(data.signedUrl);
-    };
-    loadUrl();
-  }, [photo.image_url]);
-
-  return (
-    <div className="space-y-4">
-      <div className="aspect-video relative rounded-lg overflow-hidden bg-muted">
-        {imageUrl ? (
-          <img 
-            src={imageUrl} 
-            alt={photo.caption || "Photo"} 
-            className="w-full h-full object-contain"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <Camera className="w-12 h-12 text-muted-foreground" />
-          </div>
-        )}
-      </div>
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        <Calendar className="w-4 h-4" />
-        {format(new Date(photo.taken_at), "d MMMM yyyy", { locale: fr })}
-      </div>
-      {photo.caption && (
-        <p className="text-sm">{photo.caption}</p>
-      )}
-    </div>
-  );
-};
