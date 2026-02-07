@@ -506,6 +506,7 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
                   )}
 
                   <FormField
+                    control={form.control}
                     name="date"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
