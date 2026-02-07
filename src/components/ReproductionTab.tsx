@@ -43,6 +43,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { CloseHatchingDialog } from "./CloseHatchingDialog";
+import { getReproductionType } from "@/lib/reproductionTypes";
 
 interface ReproductionTabProps {
   reptileId: string;
@@ -98,6 +99,7 @@ type ObservationValues = z.infer<typeof observationSchema>;
 
 const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = false }: ReproductionTabProps) => {
   const { t } = useTranslation();
+  const reproductionType = getReproductionType(reptileSpecies);
   const [open, setOpen] = useState(false);
   const [potentialPartners, setPotentialPartners] = useState<Partner[]>([]);
   const [observations, setObservations] = useState<Observation[]>([]);
@@ -361,12 +363,14 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
                             <SelectItem value="introduction">{t("reptile.reproduction.actions.introduction")}</SelectItem>
                             <SelectItem value="mating">{t("reptile.reproduction.actions.mating")}</SelectItem>
                             <SelectItem value="separation">{t("reptile.reproduction.actions.separation")}</SelectItem>
-                            {reptileSex === "female" && (
+                            {reptileSex === "female" && reproductionType === "oviparous" && (
                               <>
                                 <SelectItem value="prelaying_shed">{t("reptile.reproduction.actions.prelaying_shed")}</SelectItem>
                                 <SelectItem value="laying">{t("reptile.reproduction.actions.laying")}</SelectItem>
-                                <SelectItem value="birth">Mise bas</SelectItem>
                               </>
+                            )}
+                            {reptileSex === "female" && reproductionType === "viviparous" && (
+                              <SelectItem value="birth">Mise bas</SelectItem>
                             )}
                             <SelectItem value="other">{t("reptile.reproduction.actions.other")}</SelectItem>
                           </SelectContent>
