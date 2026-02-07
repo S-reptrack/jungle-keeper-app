@@ -93,7 +93,7 @@ export const PhotoLightbox = ({ photos, initialIndex, open, onClose, onDelete }:
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/95 flex flex-col"
+      className="fixed inset-0 z-[100] bg-black flex flex-col"
       onClick={onClose}
     >
       {/* Header */}
