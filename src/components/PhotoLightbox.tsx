@@ -145,7 +145,7 @@ export const PhotoLightbox = ({ photos, initialIndex, open, onClose, onDelete }:
 
         {/* Image */}
         <div
-          className="w-full h-full flex items-center justify-center transition-transform duration-200 ease-out"
+          className="w-full h-full flex items-center justify-center transition-transform duration-200 ease-out p-2"
           style={{ transform: `translateX(${touchDelta}px)` }}
         >
           {loading ? (
@@ -154,7 +154,7 @@ export const PhotoLightbox = ({ photos, initialIndex, open, onClose, onDelete }:
             <img
               src={imageUrl}
               alt={currentPhoto.caption || "Photo"}
-              className="max-w-full max-h-full object-contain select-none"
+              className="w-full h-full object-contain select-none"
               draggable={false}
             />
           )}
