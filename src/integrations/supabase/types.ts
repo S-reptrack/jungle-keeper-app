@@ -170,6 +170,7 @@ export type Database = {
           closed_at: string | null
           created_at: string
           expected_hatch_date: string | null
+          fertilized_eggs: number | null
           hatched_eggs: number | null
           id: string
           incubation_days: number | null
@@ -179,7 +180,9 @@ export type Database = {
           outcome_notes: string | null
           partner_id: string
           reptile_id: string
+          slugs: number | null
           stillborn_juveniles: number | null
+          unfertilized_eggs: number | null
           unhatched_eggs: number | null
           updated_at: string
           user_id: string
@@ -190,6 +193,7 @@ export type Database = {
           closed_at?: string | null
           created_at?: string
           expected_hatch_date?: string | null
+          fertilized_eggs?: number | null
           hatched_eggs?: number | null
           id?: string
           incubation_days?: number | null
@@ -199,7 +203,9 @@ export type Database = {
           outcome_notes?: string | null
           partner_id: string
           reptile_id: string
+          slugs?: number | null
           stillborn_juveniles?: number | null
+          unfertilized_eggs?: number | null
           unhatched_eggs?: number | null
           updated_at?: string
           user_id: string
@@ -210,6 +216,7 @@ export type Database = {
           closed_at?: string | null
           created_at?: string
           expected_hatch_date?: string | null
+          fertilized_eggs?: number | null
           hatched_eggs?: number | null
           id?: string
           incubation_days?: number | null
@@ -219,7 +226,9 @@ export type Database = {
           outcome_notes?: string | null
           partner_id?: string
           reptile_id?: string
+          slugs?: number | null
           stillborn_juveniles?: number | null
+          unfertilized_eggs?: number | null
           unhatched_eggs?: number | null
           updated_at?: string
           user_id?: string

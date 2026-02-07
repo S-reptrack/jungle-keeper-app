@@ -74,6 +74,9 @@ interface Observation {
   unhatched_eggs?: number;
   stillborn_juveniles?: number;
   outcome_notes?: string;
+  fertilized_eggs?: number;
+  unfertilized_eggs?: number;
+  slugs?: number;
   partner?: {
     name: string;
     sex: string;
@@ -93,6 +96,9 @@ const observationSchema = z.object({
   notificationDaysBefore: z.number().optional(),
   liveBornCount: z.number().optional(),
   stillbornCount: z.number().optional(),
+  fertilizedEggs: z.number().optional(),
+  unfertilizedEggs: z.number().optional(),
+  slugs: z.number().optional(),
 });
 
 type ObservationValues = z.infer<typeof observationSchema>;
@@ -181,6 +187,9 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
           unhatched_eggs,
           stillborn_juveniles,
           outcome_notes,
+          fertilized_eggs,
+          unfertilized_eggs,
+          slugs,
           partner:reptiles!partner_id(name, sex)
         `)
         .eq("reptile_id", reptileId)
@@ -220,6 +229,9 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
         incubation_days: data.action === "laying" ? data.incubationDays : null,
         expected_hatch_date: expectedHatchDate ? expectedHatchDate.toISOString().split('T')[0] : null,
         notification_days_before: data.action === "laying" ? data.notificationDaysBefore : null,
+        fertilized_eggs: data.action === "laying" ? (data.fertilizedEggs || 0) : 0,
+        unfertilized_eggs: data.action === "laying" ? (data.unfertilizedEggs || 0) : 0,
+        slugs: data.action === "laying" ? (data.slugs || 0) : 0,
       };
 
       // Pour mise bas, clôturer directement avec les résultats
@@ -443,6 +455,66 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
                     <>
                       <FormField
                         control={form.control}
+                        name="fertilizedEggs"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Œufs fécondés</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                min="0"
+                                placeholder="Ex: 6"
+                                {...field}
+                                onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="unfertilizedEggs"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Œufs non fécondés</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                min="0"
+                                placeholder="Ex: 2"
+                                {...field}
+                                onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="slugs"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Slugs</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                min="0"
+                                placeholder="Ex: 1"
+                                {...field}
+                                onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
                         name="incubationDays"
                         render={({ field }) => (
                           <FormItem>
@@ -640,6 +712,14 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
                           </div>
                         </div>
                       )}
+
+                       {obs.action === "laying" && (
+                        <div className="mt-2 text-xs text-muted-foreground space-y-0.5">
+                          {(obs.fertilized_eggs || 0) > 0 && <p>🥚 Œufs fécondés : {obs.fertilized_eggs}</p>}
+                          {(obs.unfertilized_eggs || 0) > 0 && <p>🥚 Œufs non fécondés : {obs.unfertilized_eggs}</p>}
+                          {(obs.slugs || 0) > 0 && <p>🥚 Slugs : {obs.slugs}</p>}
+                        </div>
+                       )}
 
                        {obs.action === "laying" && obs.expected_hatch_date && (
                         <div className="mt-3 pt-3 border-t border-border/50">
