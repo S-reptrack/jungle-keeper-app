@@ -92,6 +92,7 @@ const observationSchema = z.object({
   action: z.enum(["introduction", "mating", "separation", "prelaying_shed", "laying", "birth", "other"], {
     required_error: "Action requise",
   }),
+  matingPartnerId: z.string().optional(),
   incubationDays: z.number().optional(),
   notificationDaysBefore: z.number().optional(),
   liveBornCount: z.number().optional(),
@@ -223,11 +224,21 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
         expectedHatchDate.setDate(layingDate.getDate() + data.incubationDays);
       }
 
+      // Si accouplement observé avec un partenaire précis, ajouter la précision dans les notes
+      let notes = data.observation || null;
+      if (data.action === "mating" && data.matingPartnerId && selectedPartnerIds.length > 1) {
+        const matingPartner = potentialPartners.find(p => p.id === data.matingPartnerId);
+        if (matingPartner) {
+          const matingNote = `Accouplement observé avec ${matingPartner.name}`;
+          notes = notes ? `${matingNote} — ${notes}` : matingNote;
+        }
+      }
+
       const observationData: any = {
         user_id: user.id,
         action: data.action,
         observation_date: data.date.toISOString().split('T')[0],
-        notes: data.observation || null,
+        notes,
         incubation_days: data.action === "laying" ? data.incubationDays : null,
         expected_hatch_date: expectedHatchDate ? expectedHatchDate.toISOString().split('T')[0] : null,
         notification_days_before: data.action === "laying" ? data.notificationDaysBefore : null,
@@ -464,8 +475,37 @@ const ReproductionTab = ({ reptileId, reptileSex, reptileSpecies, readOnly = fal
                     )}
                   />
 
+                  {selectedAction === "mating" && selectedPartnerIds.length > 1 && (
+                    <FormField
+                      control={form.control}
+                      name="matingPartnerId"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Accouplement observé avec</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value || ""}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Sélectionner le partenaire observé" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="bg-card border-border z-[100]">
+                              {selectedPartnerIds.map((pid) => {
+                                const partner = potentialPartners.find(p => p.id === pid);
+                                return partner ? (
+                                  <SelectItem key={partner.id} value={partner.id}>
+                                    {partner.name} ({partner.sex === "male" ? "♂" : "♀"})
+                                  </SelectItem>
+                                ) : null;
+                              })}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+
                   <FormField
-                    control={form.control}
                     name="date"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
