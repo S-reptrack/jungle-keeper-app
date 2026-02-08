@@ -37,9 +37,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { getAllowedFoodTypes, type FoodType } from "@/data/speciesDiets";
 
 const formSchema = z.object({
-  rodentType: z.string().min(1, "Le type de rongeur est requis"),
+  rodentType: z.string().min(1, "Le type d'aliment est requis"),
   rodentStage: z.string().min(1, "Le stade est requis"),
   quantity: z.coerce.number().min(1, "La quantité doit être au moins 1"),
   feedingDate: z.date(),
@@ -52,10 +53,59 @@ type FormValues = z.infer<typeof formSchema>;
 
 interface AddFeedingDialogProps {
   reptileId: string;
+  species?: string;
   onFeedingAdded: () => void;
 }
 
-const AddFeedingDialog = ({ reptileId, onFeedingAdded }: AddFeedingDialogProps) => {
+// All possible food types with their translation keys and categories
+const allFoodTypes: { value: FoodType; labelKey: string }[] = [
+  { value: "rat", labelKey: "feeding.rats.title" },
+  { value: "mouse", labelKey: "feeding.mice.title" },
+  { value: "rabbit", labelKey: "feeding.rabbits.title" },
+  { value: "insect", labelKey: "feeding.insects.title" },
+  { value: "vegetable", labelKey: "feeding.vegetables.title" },
+  { value: "fruit", labelKey: "feeding.fruits.title" },
+  { value: "pellet", labelKey: "feeding.pellets.title" },
+  { value: "fish", labelKey: "feeding.fish.title" },
+  { value: "crustacean", labelKey: "feeding.crustaceans.title" },
+  { value: "wholePrey", labelKey: "feeding.wholePrey.title" },
+];
+
+// Map food type value to i18n translation key prefix
+const getTranslationKey = (type: string): string => {
+  const keyMap: Record<string, string> = {
+    rat: "rats",
+    mouse: "mice",
+    rabbit: "rabbits",
+    insect: "insects",
+    vegetable: "vegetables",
+    fruit: "fruits",
+    pellet: "pellets",
+    fish: "fish",
+    crustacean: "crustaceans",
+    wholePrey: "wholePrey",
+  };
+  return keyMap[type] || type;
+};
+
+// Stages available for each food type
+const getStagesForType = (type: string): string[] => {
+  const stages: Record<string, string[]> = {
+    rat: ["pinky", "fuzzy", "hopper", "weaner", "small", "medium", "large", "jumbo", "extraLarge"],
+    mouse: ["pinky", "fuzzy", "hopper", "weaner", "small", "medium", "large", "jumbo"],
+    rabbit: ["baby", "small", "medium", "large", "extraLarge"],
+    insect: ["cricket", "dubia", "locust", "mealworm", "superworm", "waxworm", "hornworm", "silkworm", "blackSoldierFly"],
+    vegetable: ["leafyGreens", "squash", "carrot", "bellPepper", "cucumber", "zucchini", "greenBeans", "mixedVegetables"],
+    fruit: ["banana", "strawberry", "mango", "papaya", "raspberry", "blueberry", "apple", "mixedFruits"],
+    pellet: ["turtlePellet", "lizardPellet", "omnivore", "herbivore", "carnivore"],
+    fish: ["guppy", "goldfish", "tilapia", "trout", "smelt", "shrimp", "silverside", "wholefish"],
+    crustacean: ["crayfish", "shrimp", "crab", "snail"],
+    wholePrey: ["chick", "quail", "egg", "frog", "fish"],
+  };
+  return stages[type] || [];
+};
+
+const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDialogProps) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
@@ -71,6 +121,10 @@ const AddFeedingDialog = ({ reptileId, onFeedingAdded }: AddFeedingDialogProps) 
       notes: "",
     },
   });
+
+  // Get allowed food types based on species
+  const allowedFoods = species ? getAllowedFoodTypes(species) : allFoodTypes.map(f => f.value);
+  const filteredFoodTypes = allFoodTypes.filter(f => allowedFoods.includes(f.value));
 
   const onSubmit = async (values: FormValues) => {
     try {
@@ -109,43 +163,6 @@ const AddFeedingDialog = ({ reptileId, onFeedingAdded }: AddFeedingDialogProps) 
     }
   };
 
-  const foodTypes = [
-    { value: "rat", label: t("feeding.rats.title"), category: "rodent" },
-    { value: "mouse", label: t("feeding.mice.title"), category: "rodent" },
-    { value: "rabbit", label: t("feeding.rabbits.title"), category: "rodent" },
-    { value: "insect", label: t("feeding.insects.title"), category: "insect" },
-    { value: "vegetable", label: t("feeding.vegetables.title"), category: "vegetable" },
-    { value: "fruit", label: t("feeding.fruits.title"), category: "fruit" },
-    { value: "pellet", label: t("feeding.pellets.title"), category: "pellet" },
-  ];
-
-  // Map type to correct i18n key (mouse → mice, etc.)
-  const getTranslationKey = (type: string): string => {
-    const keyMap: Record<string, string> = {
-      rat: "rats",
-      mouse: "mice",
-      rabbit: "rabbits",
-      insect: "insects",
-      vegetable: "vegetables",
-      fruit: "fruits",
-      pellet: "pellets",
-    };
-    return keyMap[type] || type;
-  };
-
-  const getStagesForType = (type: string) => {
-    const stages: Record<string, string[]> = {
-      rat: ["pinky", "fuzzy", "hopper", "weaner", "small", "medium", "large", "jumbo", "extraLarge"],
-      mouse: ["pinky", "fuzzy", "hopper", "weaner", "small", "medium", "large", "jumbo"],
-      rabbit: ["baby", "small", "medium", "large", "extraLarge"],
-      insect: ["cricket", "dubia", "locust", "mealworm", "superworm", "waxworm", "hornworm", "silkworm", "blackSoldierFly"],
-      vegetable: ["leafyGreens", "squash", "carrot", "bellPepper", "cucumber", "zucchini", "greenBeans", "mixedVegetables"],
-      fruit: ["banana", "strawberry", "mango", "papaya", "raspberry", "blueberry", "apple", "mixedFruits"],
-      pellet: ["turtlePellet", "lizardPellet", "omnivore", "herbivore", "carnivore"],
-    };
-    return stages[type] || [];
-  };
-
   const selectedType = form.watch("rodentType");
 
   return (
@@ -181,9 +198,9 @@ const AddFeedingDialog = ({ reptileId, onFeedingAdded }: AddFeedingDialogProps) 
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="bg-card border-border max-h-[300px]">
-                      {foodTypes.map((type) => (
+                      {filteredFoodTypes.map((type) => (
                         <SelectItem key={type.value} value={type.value}>
-                          {type.label}
+                          {t(type.labelKey)}
                         </SelectItem>
                       ))}
                     </SelectContent>

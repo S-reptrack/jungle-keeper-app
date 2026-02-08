@@ -147,6 +147,32 @@
       "herbivore": "Herbivore",
       "carnivore": "Carnivore"
     },
+    "fish": {
+      "title": "Poissons",
+      "guppy": "Guppys",
+      "goldfish": "Poissons rouges",
+      "tilapia": "Tilapia",
+      "trout": "Truite",
+      "smelt": "Éperlan",
+      "shrimp": "Crevettes (entières)",
+      "silverside": "Athérines",
+      "wholefish": "Poisson entier"
+    },
+    "crustaceans": {
+      "title": "Crustacés",
+      "crayfish": "Écrevisses",
+      "shrimp": "Crevettes",
+      "crab": "Crabes",
+      "snail": "Escargots aquatiques"
+    },
+    "wholePrey": {
+      "title": "Proies entières",
+      "chick": "Poussins",
+      "quail": "Cailles",
+      "egg": "Œufs",
+      "frog": "Grenouilles",
+      "fish": "Poisson entier"
+    },
     "foodType": "Type d'aliment",
     "selectFoodType": "Sélectionner un type"
   },
