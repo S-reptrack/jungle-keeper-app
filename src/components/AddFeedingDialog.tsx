@@ -19,13 +19,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
@@ -38,6 +31,7 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { getAllowedFoodTypes, type FoodType } from "@/data/speciesDiets";
+import FoodTypePicker, { allFoodTypes } from "@/components/FoodTypePicker";
 
 const formSchema = z.object({
   rodentType: z.string().min(1, "Le type d'aliment est requis"),
@@ -57,54 +51,6 @@ interface AddFeedingDialogProps {
   species?: string;
   onFeedingAdded: () => void;
 }
-
-// All possible food types with their translation keys and categories
-const allFoodTypes: { value: FoodType; labelKey: string }[] = [
-  { value: "rat", labelKey: "feeding.rats.title" },
-  { value: "mouse", labelKey: "feeding.mice.title" },
-  { value: "rabbit", labelKey: "feeding.rabbits.title" },
-  { value: "insect", labelKey: "feeding.insects.title" },
-  { value: "vegetable", labelKey: "feeding.vegetables.title" },
-  { value: "fruit", labelKey: "feeding.fruits.title" },
-  { value: "pellet", labelKey: "feeding.pellets.title" },
-  { value: "fish", labelKey: "feeding.fish.title" },
-  { value: "crustacean", labelKey: "feeding.crustaceans.title" },
-  { value: "wholePrey", labelKey: "feeding.wholePrey.title" },
-];
-
-// Map food type value to i18n translation key prefix
-const getTranslationKey = (type: string): string => {
-  const keyMap: Record<string, string> = {
-    rat: "rats",
-    mouse: "mice",
-    rabbit: "rabbits",
-    insect: "insects",
-    vegetable: "vegetables",
-    fruit: "fruits",
-    pellet: "pellets",
-    fish: "fish",
-    crustacean: "crustaceans",
-    wholePrey: "wholePrey",
-  };
-  return keyMap[type] || type;
-};
-
-// Stages available for each food type
-const getStagesForType = (type: string): string[] => {
-  const stages: Record<string, string[]> = {
-    rat: ["pinky", "fuzzy", "hopper", "weaner", "small", "medium", "large", "jumbo", "extraLarge"],
-    mouse: ["pinky", "fuzzy", "hopper", "weaner", "small", "medium", "large", "jumbo"],
-    rabbit: ["baby", "small", "medium", "large", "extraLarge"],
-    insect: ["cricket", "dubia", "locust", "mealworm", "superworm", "waxworm", "hornworm", "silkworm", "blackSoldierFly"],
-    vegetable: ["leafyGreens", "squash", "carrot", "bellPepper", "cucumber", "zucchini", "greenBeans", "mixedVegetables"],
-    fruit: ["banana", "strawberry", "mango", "papaya", "raspberry", "blueberry", "apple", "mixedFruits"],
-    pellet: ["turtlePellet", "lizardPellet", "omnivore", "herbivore", "carnivore"],
-    fish: ["guppy", "goldfish", "tilapia", "trout", "smelt", "shrimp", "silverside", "wholefish"],
-    crustacean: ["crayfish", "shrimp", "crab", "snail"],
-    wholePrey: ["chick", "quail", "egg", "frog", "fish"],
-  };
-  return stages[type] || [];
-};
 
 const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDialogProps) => {
   const { t } = useTranslation();
@@ -126,7 +72,7 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
 
   // Get allowed food types based on species
   const allowedFoods = species ? getAllowedFoodTypes(species) : allFoodTypes.map(f => f.value);
-  const filteredFoodTypes = allFoodTypes.filter(f => allowedFoods.includes(f.value));
+  
 
   const onSubmit = async (values: FormValues) => {
     try {
@@ -182,64 +128,24 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="rodentType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("feeding.foodType", "Type d'aliment")}</FormLabel>
-                  <Select
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                      form.setValue("rodentStage", "");
-                    }}
-                    value={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder={t("feeding.selectFoodType", "Sélectionner un type")} />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="bg-card border-border max-h-[300px]">
-                      {filteredFoodTypes.map((type) => (
-                        <SelectItem key={type.value} value={type.value}>
-                          {t(type.labelKey)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {selectedType && (
-              <FormField
-                control={form.control}
-                name="rodentStage"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Stade</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Sélectionner un stade" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="bg-card border-border">
-                      {getStagesForType(selectedType).map((stage) => (
-                          <SelectItem key={stage} value={stage}>
-                            {t(`feeding.${getTranslationKey(selectedType)}.${stage}`)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
+            <FormItem>
+              <FormLabel>{t("feeding.foodType", "Type d'aliment")}</FormLabel>
+              <FoodTypePicker
+                allowedFoods={allowedFoods}
+                selectedType={form.watch("rodentType")}
+                selectedStage={form.watch("rodentStage")}
+                onSelect={(type, stage) => {
+                  form.setValue("rodentType", type);
+                  form.setValue("rodentStage", stage);
+                }}
               />
-            )}
-
+              {form.formState.errors.rodentType && (
+                <p className="text-sm font-medium text-destructive">{form.formState.errors.rodentType.message}</p>
+              )}
+              {form.formState.errors.rodentStage && (
+                <p className="text-sm font-medium text-destructive">{form.formState.errors.rodentStage.message}</p>
+              )}
+            </FormItem>
             <FormField
               control={form.control}
               name="quantity"
