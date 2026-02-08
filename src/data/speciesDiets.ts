@@ -43,7 +43,7 @@ export const dietProfiles: DietProfile[] = [
       "candoia", "lichanura", "eryx", "gongylophis", "calabaria",
       "chilabothrus", "python timoriensis",
     ],
-    allowedFoods: ["rat", "mouse"],
+    allowedFoods: ["rat", "mouse", "rabbit"],
   },
   // Serpents colubridés et petits serpents
   {
