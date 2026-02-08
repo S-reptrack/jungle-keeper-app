@@ -183,7 +183,82 @@
       "medium": "Mediano",
       "large": "Grande",
       "extraLarge": "Extra Grande"
-    }
+    },
+    "insects": {
+      "title": "Insectos",
+      "cricket": "Grillos",
+      "dubia": "Cucarachas Dubia",
+      "locust": "Langostas",
+      "mealworm": "Gusanos de harina",
+      "superworm": "Supergusanos",
+      "waxworm": "Gusanos de cera",
+      "hornworm": "Gusanos cornudos",
+      "silkworm": "Gusanos de seda",
+      "blackSoldierFly": "Larvas de mosca soldado"
+    },
+    "vegetables": {
+      "title": "Verduras",
+      "leafyGreens": "Hojas verdes (canónigos, endivia, diente de león)",
+      "squash": "Calabaza / Butternut",
+      "carrot": "Zanahoria",
+      "bellPepper": "Pimiento",
+      "cucumber": "Pepino",
+      "zucchini": "Calabacín",
+      "greenBeans": "Judías verdes",
+      "mixedVegetables": "Mezcla de verduras"
+    },
+    "fruits": {
+      "title": "Frutas",
+      "banana": "Plátano",
+      "strawberry": "Fresa",
+      "mango": "Mango",
+      "papaya": "Papaya",
+      "raspberry": "Frambuesa",
+      "blueberry": "Arándano",
+      "apple": "Manzana",
+      "mixedFruits": "Mezcla de frutas"
+    },
+    "pellets": {
+      "title": "Pellets",
+      "turtlePellet": "Pellets para tortuga",
+      "lizardPellet": "Pellets para lagarto",
+      "omnivore": "Omnívoro",
+      "herbivore": "Herbívoro",
+      "carnivore": "Carnívoro"
+    },
+    "fish": {
+      "title": "Peces",
+      "guppy": "Guppys",
+      "goldfish": "Peces dorados",
+      "tilapia": "Tilapia",
+      "trout": "Trucha",
+      "smelt": "Eperlano",
+      "shrimp": "Camarones (enteros)",
+      "silverside": "Pejerreyes",
+      "wholefish": "Pescado entero"
+    },
+    "crustaceans": {
+      "title": "Crustáceos",
+      "crayfish": "Cangrejos de río",
+      "shrimp": "Camarones",
+      "crab": "Cangrejos",
+      "snail": "Caracoles acuáticos"
+    },
+    "wholePrey": {
+      "title": "Presas enteras",
+      "chick": "Pollitos",
+      "quail": "Codornices",
+      "egg": "Huevos",
+      "frog": "Ranas",
+      "fish": "Pescado entero"
+    },
+    "foodType": "Tipo de alimento",
+    "selectFoodType": "Seleccionar un tipo",
+    "preyState": "Estado de la presa",
+    "live": "Vivo",
+    "dead": "Muerto / Descongelado",
+    "calcium": "Calcio",
+    "vitamins": "Vitaminas"
   },
   "validation": {
     "nameRequired": "El nombre es obligatorio",

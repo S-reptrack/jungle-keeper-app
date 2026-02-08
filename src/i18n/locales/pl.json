@@ -65,33 +65,119 @@
     "preyType": "Typ zdobyczy",
     "preyStage": "Etap zdobyczy",
     "preyWeight": "Waga zdobyczy",
+    "stage": "Etap",
+    "weight": "Waga",
     "stages": {
       "rats": "Szczury",
       "mice": "Myszy",
       "rabbits": "Króliki"
     },
     "rats": {
+      "title": "Szczury",
       "pinky": "Pinky (nowo narodzony)",
       "fuzzy": "Fuzzy (z futrem)",
       "hopper": "Hopper (skaczący)",
       "weaner": "Weaner (odsadzony)",
-      "small_adult": "Mały dorosły",
-      "medium_adult": "Średni dorosły",
-      "large_adult": "Duży dorosły",
-      "jumbo": "Jumbo"
+      "small": "Mały dorosły",
+      "medium": "Średni dorosły",
+      "large": "Duży dorosły",
+      "jumbo": "Jumbo",
+      "extraLarge": "Bardzo duży"
     },
     "mice": {
+      "title": "Myszy",
       "pinky": "Pinky (nowo narodzony)",
       "fuzzy": "Fuzzy (z futrem)",
       "hopper": "Hopper (skaczący)",
       "weaner": "Weaner (odsadzony)",
-      "adult": "Dorosły"
+      "small": "Mały dorosły",
+      "medium": "Średni dorosły",
+      "large": "Duży dorosły",
+      "jumbo": "Jumbo"
     },
     "rabbits": {
+      "title": "Króliki",
+      "baby": "Młode",
       "small": "Mały",
       "medium": "Średni",
-      "large": "Duży"
-    }
+      "large": "Duży",
+      "extraLarge": "Bardzo duży"
+    },
+    "insects": {
+      "title": "Owady",
+      "cricket": "Świerszcze",
+      "dubia": "Karaczan dubia",
+      "locust": "Szarańcza",
+      "mealworm": "Mączniki",
+      "superworm": "Zophobas",
+      "waxworm": "Barciaki",
+      "hornworm": "Rogate gąsienice",
+      "silkworm": "Jedwabniki",
+      "blackSoldierFly": "Larwy czarnej muchy żołnierza"
+    },
+    "vegetables": {
+      "title": "Warzywa",
+      "leafyGreens": "Warzywa liściaste (roszponka, endywia, mniszek)",
+      "squash": "Dynia / Butternut",
+      "carrot": "Marchew",
+      "bellPepper": "Papryka",
+      "cucumber": "Ogórek",
+      "zucchini": "Cukinia",
+      "greenBeans": "Fasolka szparagowa",
+      "mixedVegetables": "Mieszanka warzyw"
+    },
+    "fruits": {
+      "title": "Owoce",
+      "banana": "Banan",
+      "strawberry": "Truskawka",
+      "mango": "Mango",
+      "papaya": "Papaja",
+      "raspberry": "Malina",
+      "blueberry": "Borówka",
+      "apple": "Jabłko",
+      "mixedFruits": "Mieszanka owoców"
+    },
+    "pellets": {
+      "title": "Granulat",
+      "turtlePellet": "Granulat dla żółwi",
+      "lizardPellet": "Granulat dla jaszczurek",
+      "omnivore": "Wszystkożerny",
+      "herbivore": "Roślinożerny",
+      "carnivore": "Mięsożerny"
+    },
+    "fish": {
+      "title": "Ryby",
+      "guppy": "Gupiki",
+      "goldfish": "Złote rybki",
+      "tilapia": "Tilapia",
+      "trout": "Pstrąg",
+      "smelt": "Stynka",
+      "shrimp": "Krewetki (całe)",
+      "silverside": "Ateriny",
+      "wholefish": "Cała ryba"
+    },
+    "crustaceans": {
+      "title": "Skorupiaki",
+      "crayfish": "Raki",
+      "shrimp": "Krewetki",
+      "crab": "Kraby",
+      "snail": "Ślimaki wodne"
+    },
+    "wholePrey": {
+      "title": "Całe zdobycze",
+      "chick": "Pisklęta",
+      "quail": "Przepiórki",
+      "egg": "Jaja",
+      "frog": "Żaby",
+      "fish": "Cała ryba"
+    },
+    "foodType": "Typ pokarmu",
+    "selectFoodType": "Wybierz typ",
+    "preyState": "Stan zdobyczy",
+    "live": "Żywy",
+    "dead": "Martwy / Rozmrożony",
+    "calcium": "Wapń",
+    "vitamins": "Witaminy"
   },
   "validation": {
     "nameRequired": "Imię jest wymagane",

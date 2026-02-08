@@ -65,33 +65,119 @@
     "preyType": "Prooisoort",
     "preyStage": "Prooistadium",
     "preyWeight": "Prooigewicht",
+    "stage": "Stadium",
+    "weight": "Gewicht",
     "stages": {
       "rats": "Ratten",
       "mice": "Muizen",
       "rabbits": "Konijnen"
     },
     "rats": {
+      "title": "Ratten",
       "pinky": "Pinky (pasgeboren)",
       "fuzzy": "Fuzzy (met vacht)",
       "hopper": "Hopper (springend)",
       "weaner": "Weaner (gespeend)",
-      "small_adult": "Kleine volwassene",
-      "medium_adult": "Middelgrote volwassene",
-      "large_adult": "Grote volwassene",
-      "jumbo": "Jumbo"
+      "small": "Kleine volwassene",
+      "medium": "Middelgrote volwassene",
+      "large": "Grote volwassene",
+      "jumbo": "Jumbo",
+      "extraLarge": "Extra groot"
     },
     "mice": {
+      "title": "Muizen",
       "pinky": "Pinky (pasgeboren)",
       "fuzzy": "Fuzzy (met vacht)",
       "hopper": "Hopper (springend)",
       "weaner": "Weaner (gespeend)",
-      "adult": "Volwassen"
+      "small": "Kleine volwassene",
+      "medium": "Middelgrote volwassene",
+      "large": "Grote volwassene",
+      "jumbo": "Jumbo"
     },
     "rabbits": {
+      "title": "Konijnen",
+      "baby": "Baby",
       "small": "Klein",
       "medium": "Middel",
-      "large": "Groot"
-    }
+      "large": "Groot",
+      "extraLarge": "Extra groot"
+    },
+    "insects": {
+      "title": "Insecten",
+      "cricket": "Krekels",
+      "dubia": "Dubia kakkerlakken",
+      "locust": "Sprinkhanen",
+      "mealworm": "Meelwormen",
+      "superworm": "Superwormen",
+      "waxworm": "Wasmotten",
+      "hornworm": "Hoornwormen",
+      "silkworm": "Zijderupsen",
+      "blackSoldierFly": "Zwarte soldaatvlieglarven"
+    },
+    "vegetables": {
+      "title": "Groenten",
+      "leafyGreens": "Bladgroenten (veldsla, andijvie, paardenbloem)",
+      "squash": "Pompoen / Butternut",
+      "carrot": "Wortel",
+      "bellPepper": "Paprika",
+      "cucumber": "Komkommer",
+      "zucchini": "Courgette",
+      "greenBeans": "Sperziebonen",
+      "mixedVegetables": "Gemengde groenten"
+    },
+    "fruits": {
+      "title": "Fruit",
+      "banana": "Banaan",
+      "strawberry": "Aardbei",
+      "mango": "Mango",
+      "papaya": "Papaja",
+      "raspberry": "Framboos",
+      "blueberry": "Blauwe bes",
+      "apple": "Appel",
+      "mixedFruits": "Gemengd fruit"
+    },
+    "pellets": {
+      "title": "Pellets",
+      "turtlePellet": "Schildpadpellets",
+      "lizardPellet": "Hagedispellets",
+      "omnivore": "Omnivoor",
+      "herbivore": "Herbivoor",
+      "carnivore": "Carnivoor"
+    },
+    "fish": {
+      "title": "Vissen",
+      "guppy": "Guppy's",
+      "goldfish": "Goudvissen",
+      "tilapia": "Tilapia",
+      "trout": "Forel",
+      "smelt": "Spiering",
+      "shrimp": "Garnalen (heel)",
+      "silverside": "Koornaarvis",
+      "wholefish": "Hele vis"
+    },
+    "crustaceans": {
+      "title": "Schaaldieren",
+      "crayfish": "Rivierkreeften",
+      "shrimp": "Garnalen",
+      "crab": "Krabben",
+      "snail": "Waterslakken"
+    },
+    "wholePrey": {
+      "title": "Hele prooien",
+      "chick": "Kuikens",
+      "quail": "Kwartels",
+      "egg": "Eieren",
+      "frog": "Kikkers",
+      "fish": "Hele vis"
+    },
+    "foodType": "Voedseltype",
+    "selectFoodType": "Selecteer een type",
+    "preyState": "Staat van de prooi",
+    "live": "Levend",
+    "dead": "Dood / Ontdooid",
+    "calcium": "Calcium",
+    "vitamins": "Vitaminen"
   },
   "validation": {
     "nameRequired": "Naam is verplicht",

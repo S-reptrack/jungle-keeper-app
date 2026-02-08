@@ -65,33 +65,119 @@
     "preyType": "Tipo de presa",
     "preyStage": "Estágio da presa",
     "preyWeight": "Peso da presa",
+    "stage": "Estágio",
+    "weight": "Peso",
     "stages": {
       "rats": "Ratos",
       "mice": "Camundongos",
       "rabbits": "Coelhos"
     },
     "rats": {
+      "title": "Ratos",
       "pinky": "Pinky (recém-nascido)",
       "fuzzy": "Fuzzy (com pelo)",
       "hopper": "Hopper (saltador)",
       "weaner": "Weaner (desmamado)",
-      "small_adult": "Adulto pequeno",
-      "medium_adult": "Adulto médio",
-      "large_adult": "Adulto grande",
-      "jumbo": "Jumbo"
+      "small": "Adulto pequeno",
+      "medium": "Adulto médio",
+      "large": "Adulto grande",
+      "jumbo": "Jumbo",
+      "extraLarge": "Extra grande"
     },
     "mice": {
+      "title": "Camundongos",
       "pinky": "Pinky (recém-nascido)",
       "fuzzy": "Fuzzy (com pelo)",
       "hopper": "Hopper (saltador)",
       "weaner": "Weaner (desmamado)",
-      "adult": "Adulto"
+      "small": "Adulto pequeno",
+      "medium": "Adulto médio",
+      "large": "Adulto grande",
+      "jumbo": "Jumbo"
     },
     "rabbits": {
+      "title": "Coelhos",
+      "baby": "Bebê",
       "small": "Pequeno",
       "medium": "Médio",
-      "large": "Grande"
-    }
+      "large": "Grande",
+      "extraLarge": "Extra grande"
+    },
+    "insects": {
+      "title": "Insetos",
+      "cricket": "Grilos",
+      "dubia": "Baratas Dubia",
+      "locust": "Gafanhotos",
+      "mealworm": "Larvas de farinha",
+      "superworm": "Superworms",
+      "waxworm": "Larvas de cera",
+      "hornworm": "Larvas-cornudas",
+      "silkworm": "Bichos-da-seda",
+      "blackSoldierFly": "Larvas de mosca-soldado"
+    },
+    "vegetables": {
+      "title": "Vegetais",
+      "leafyGreens": "Folhas verdes (endívia, dente-de-leão, alface)",
+      "squash": "Abóbora / Butternut",
+      "carrot": "Cenoura",
+      "bellPepper": "Pimentão",
+      "cucumber": "Pepino",
+      "zucchini": "Abobrinha",
+      "greenBeans": "Feijão verde",
+      "mixedVegetables": "Mistura de vegetais"
+    },
+    "fruits": {
+      "title": "Frutas",
+      "banana": "Banana",
+      "strawberry": "Morango",
+      "mango": "Manga",
+      "papaya": "Mamão",
+      "raspberry": "Framboesa",
+      "blueberry": "Mirtilo",
+      "apple": "Maçã",
+      "mixedFruits": "Mistura de frutas"
+    },
+    "pellets": {
+      "title": "Ração",
+      "turtlePellet": "Ração para tartaruga",
+      "lizardPellet": "Ração para lagarto",
+      "omnivore": "Onívoro",
+      "herbivore": "Herbívoro",
+      "carnivore": "Carnívoro"
+    },
+    "fish": {
+      "title": "Peixes",
+      "guppy": "Guppies",
+      "goldfish": "Peixe dourado",
+      "tilapia": "Tilápia",
+      "trout": "Truta",
+      "smelt": "Eperlano",
+      "shrimp": "Camarões (inteiros)",
+      "silverside": "Peixes-rei",
+      "wholefish": "Peixe inteiro"
+    },
+    "crustaceans": {
+      "title": "Crustáceos",
+      "crayfish": "Lagostins",
+      "shrimp": "Camarões",
+      "crab": "Caranguejos",
+      "snail": "Caracóis aquáticos"
+    },
+    "wholePrey": {
+      "title": "Presas inteiras",
+      "chick": "Pintinhos",
+      "quail": "Codornas",
+      "egg": "Ovos",
+      "frog": "Rãs",
+      "fish": "Peixe inteiro"
+    },
+    "foodType": "Tipo de alimento",
+    "selectFoodType": "Selecionar um tipo",
+    "preyState": "Estado da presa",
+    "live": "Vivo",
+    "dead": "Morto / Descongelado",
+    "calcium": "Cálcio",
+    "vitamins": "Vitaminas"
   },
   "validation": {
     "nameRequired": "O nome é obrigatório",

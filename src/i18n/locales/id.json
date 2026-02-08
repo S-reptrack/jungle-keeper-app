@@ -104,7 +104,82 @@
       "medium": "Sedang",
       "large": "Besar",
       "extraLarge": "Sangat besar"
-    }
+    },
+    "insects": {
+      "title": "Serangga",
+      "cricket": "Jangkrik",
+      "dubia": "Kecoak Dubia",
+      "locust": "Belalang",
+      "mealworm": "Ulat hongkong",
+      "superworm": "Superworm",
+      "waxworm": "Ulat lilin",
+      "hornworm": "Hornworm",
+      "silkworm": "Ulat sutra",
+      "blackSoldierFly": "Larva lalat tentara hitam"
+    },
+    "vegetables": {
+      "title": "Sayuran",
+      "leafyGreens": "Sayuran berdaun hijau",
+      "squash": "Labu / Butternut",
+      "carrot": "Wortel",
+      "bellPepper": "Paprika",
+      "cucumber": "Timun",
+      "zucchini": "Zukini",
+      "greenBeans": "Buncis",
+      "mixedVegetables": "Campuran sayuran"
+    },
+    "fruits": {
+      "title": "Buah-buahan",
+      "banana": "Pisang",
+      "strawberry": "Stroberi",
+      "mango": "Mangga",
+      "papaya": "Pepaya",
+      "raspberry": "Raspberry",
+      "blueberry": "Blueberry",
+      "apple": "Apel",
+      "mixedFruits": "Campuran buah"
+    },
+    "pellets": {
+      "title": "Pelet",
+      "turtlePellet": "Pelet kura-kura",
+      "lizardPellet": "Pelet kadal",
+      "omnivore": "Omnivora",
+      "herbivore": "Herbivora",
+      "carnivore": "Karnivora"
+    },
+    "fish": {
+      "title": "Ikan",
+      "guppy": "Ikan guppy",
+      "goldfish": "Ikan mas koki",
+      "tilapia": "Ikan nila",
+      "trout": "Ikan trout",
+      "smelt": "Ikan smelt",
+      "shrimp": "Udang (utuh)",
+      "silverside": "Ikan silverside",
+      "wholefish": "Ikan utuh"
+    },
+    "crustaceans": {
+      "title": "Krustasea",
+      "crayfish": "Lobster air tawar",
+      "shrimp": "Udang",
+      "crab": "Kepiting",
+      "snail": "Siput air"
+    },
+    "wholePrey": {
+      "title": "Mangsa utuh",
+      "chick": "Anak ayam",
+      "quail": "Burung puyuh",
+      "egg": "Telur",
+      "frog": "Katak",
+      "fish": "Ikan utuh"
+    },
+    "foodType": "Jenis makanan",
+    "selectFoodType": "Pilih jenis",
+    "preyState": "Kondisi mangsa",
+    "live": "Hidup",
+    "dead": "Mati / Dicairkan",
+    "calcium": "Kalsium",
+    "vitamins": "Vitamin"
   },
   "validation": {
     "nameRequired": "Nama wajib diisi",

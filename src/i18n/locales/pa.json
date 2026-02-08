@@ -75,7 +75,7 @@
     "stage": "ਪੜਾਅ",
     "weight": "ਭਾਰ",
     "rats": {
-      "title": "ਚੂਹੇ",
+      "title": "ਚੂਹੇ (ਵੱਡੇ)",
       "pinky": "ਪਿੰਕੀ",
       "fuzzy": "ਫਜ਼ੀ",
       "hopper": "ਹੌਪਰ",
@@ -87,7 +87,7 @@
       "extraLarge": "ਬਹੁਤ ਵੱਡਾ"
     },
     "mice": {
-      "title": "ਚੂਹੇ",
+      "title": "ਚੂਹੇ (ਛੋਟੇ)",
       "pinky": "ਪਿੰਕੀ",
       "fuzzy": "ਫਜ਼ੀ",
       "hopper": "ਹੌਪਰ",
@@ -104,7 +104,82 @@
       "medium": "ਮੱਧਮ",
       "large": "ਵੱਡਾ",
       "extraLarge": "ਬਹੁਤ ਵੱਡਾ"
-    }
+    },
+    "insects": {
+      "title": "ਕੀੜੇ",
+      "cricket": "ਝੀਂਗੁਰ",
+      "dubia": "ਡੂਬੀਆ ਤਿਲਚੱਟੇ",
+      "locust": "ਟਿੱਡੀ",
+      "mealworm": "ਮੀਲ ਵਰਮ",
+      "superworm": "ਸੁਪਰਵਰਮ",
+      "waxworm": "ਵੈਕਸ ਵਰਮ",
+      "hornworm": "ਹੌਰਨਵਰਮ",
+      "silkworm": "ਰੇਸ਼ਮ ਕੀੜਾ",
+      "blackSoldierFly": "ਬਲੈਕ ਸੋਲਜਰ ਫਲਾਈ ਲਾਰਵਾ"
+    },
+    "vegetables": {
+      "title": "ਸਬਜ਼ੀਆਂ",
+      "leafyGreens": "ਪੱਤੇਦਾਰ ਸਬਜ਼ੀਆਂ",
+      "squash": "ਕੱਦੂ / ਬਟਰਨਟ",
+      "carrot": "ਗਾਜਰ",
+      "bellPepper": "ਸ਼ਿਮਲਾ ਮਿਰਚ",
+      "cucumber": "ਖੀਰਾ",
+      "zucchini": "ਤੋਰੀ",
+      "greenBeans": "ਹਰੀਆਂ ਫਲੀਆਂ",
+      "mixedVegetables": "ਮਿਸ਼ਰਤ ਸਬਜ਼ੀਆਂ"
+    },
+    "fruits": {
+      "title": "ਫਲ",
+      "banana": "ਕੇਲਾ",
+      "strawberry": "ਸਟ੍ਰਾਬੇਰੀ",
+      "mango": "ਅੰਬ",
+      "papaya": "ਪਪੀਤਾ",
+      "raspberry": "ਰਾਸਬੇਰੀ",
+      "blueberry": "ਬਲੂਬੇਰੀ",
+      "apple": "ਸੇਬ",
+      "mixedFruits": "ਮਿਸ਼ਰਤ ਫਲ"
+    },
+    "pellets": {
+      "title": "ਪੈਲੇਟਸ",
+      "turtlePellet": "ਕੱਛੂ ਪੈਲੇਟਸ",
+      "lizardPellet": "ਛਿਪਕਲੀ ਪੈਲੇਟਸ",
+      "omnivore": "ਸਰਵਾਹਾਰੀ",
+      "herbivore": "ਸ਼ਾਕਾਹਾਰੀ",
+      "carnivore": "ਮਾਸਾਹਾਰੀ"
+    },
+    "fish": {
+      "title": "ਮੱਛੀ",
+      "guppy": "ਗੱਪੀ",
+      "goldfish": "ਸੋਨੇਰੀ ਮੱਛੀ",
+      "tilapia": "ਤਿਲਾਪੀਆ",
+      "trout": "ਟ੍ਰਾਊਟ",
+      "smelt": "ਸਮੈਲਟ",
+      "shrimp": "ਝੀਂਗਾ (ਪੂਰਾ)",
+      "silverside": "ਸਿਲਵਰਸਾਈਡ",
+      "wholefish": "ਪੂਰੀ ਮੱਛੀ"
+    },
+    "crustaceans": {
+      "title": "ਕ੍ਰਸਟੇਸ਼ੀਅਨ",
+      "crayfish": "ਕ੍ਰੇਫ਼ਿਸ਼",
+      "shrimp": "ਝੀਂਗਾ",
+      "crab": "ਕੇਕੜਾ",
+      "snail": "ਜਲੀ ਘੋਂਘੇ"
+    },
+    "wholePrey": {
+      "title": "ਸੰਪੂਰਨ ਸ਼ਿਕਾਰ",
+      "chick": "ਚੂਜ਼ੇ",
+      "quail": "ਬਟੇਰ",
+      "egg": "ਅੰਡੇ",
+      "frog": "ਡੱਡੂ",
+      "fish": "ਪੂਰੀ ਮੱਛੀ"
+    },
+    "foodType": "ਖੁਰਾਕ ਦੀ ਕਿਸਮ",
+    "selectFoodType": "ਕਿਸਮ ਚੁਣੋ",
+    "preyState": "ਸ਼ਿਕਾਰ ਦੀ ਸਥਿਤੀ",
+    "live": "ਜ਼ਿੰਦਾ",
+    "dead": "ਮਰਿਆ / ਪਿਘਲਿਆ",
+    "calcium": "ਕੈਲਸ਼ੀਅਮ",
+    "vitamins": "ਵਿਟਾਮਿਨ"
   },
   "validation": {
     "nameRequired": "ਨਾਮ ਜ਼ਰੂਰੀ ਹੈ",
