@@ -40,10 +40,11 @@ interface Feeding {
 
 interface FeedingTabProps {
   reptileId: string;
+  species?: string;
   readOnly?: boolean;
 }
 
-const FeedingTab = ({ reptileId, readOnly = false }: FeedingTabProps) => {
+const FeedingTab = ({ reptileId, species, readOnly = false }: FeedingTabProps) => {
   const { t } = useTranslation();
   const [rodents, setRodents] = useState<Rodent[]>([]);
   const [feedings, setFeedings] = useState<Feeding[]>([]);
@@ -222,7 +223,8 @@ const FeedingTab = ({ reptileId, readOnly = false }: FeedingTabProps) => {
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Historique des repas</h2>
         {!readOnly && <AddFeedingDialog 
-          reptileId={reptileId} 
+          reptileId={reptileId}
+          species={species}
           onFeedingAdded={() => {
             setCurrentPage(1);
             fetchFeedings();

@@ -560,7 +560,7 @@ const ReptileDetail = () => {
                 </TabsContent>
                 
                 <TabsContent value="feeding">
-                  <FeedingTab reptileId={reptile.id} readOnly={isPreviousOwner || false} />
+                  <FeedingTab reptileId={reptile.id} species={reptile.species} readOnly={isPreviousOwner || false} />
                 </TabsContent>
                 
                 <TabsContent value="reproduction">

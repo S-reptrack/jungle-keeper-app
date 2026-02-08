@@ -143,6 +143,32 @@
       "herbivore": "Herbivore",
       "carnivore": "Carnivore"
     },
+    "fish": {
+      "title": "Fish",
+      "guppy": "Guppies",
+      "goldfish": "Goldfish",
+      "tilapia": "Tilapia",
+      "trout": "Trout",
+      "smelt": "Smelt",
+      "shrimp": "Whole Shrimp",
+      "silverside": "Silversides",
+      "wholefish": "Whole Fish"
+    },
+    "crustaceans": {
+      "title": "Crustaceans",
+      "crayfish": "Crayfish",
+      "shrimp": "Shrimp",
+      "crab": "Crabs",
+      "snail": "Aquatic Snails"
+    },
+    "wholePrey": {
+      "title": "Whole Prey",
+      "chick": "Chicks",
+      "quail": "Quail",
+      "egg": "Eggs",
+      "frog": "Frogs",
+      "fish": "Whole Fish"
+    },
     "foodType": "Food Type",
     "selectFoodType": "Select a type"
   },
