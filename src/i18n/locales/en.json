@@ -170,7 +170,10 @@
       "fish": "Whole Fish"
     },
     "foodType": "Food Type",
-    "selectFoodType": "Select a type"
+    "selectFoodType": "Select a type",
+    "preyState": "Prey State",
+    "live": "Live",
+    "dead": "Dead / Thawed"
   },
   "validation": {
     "nameRequired": "Name is required",

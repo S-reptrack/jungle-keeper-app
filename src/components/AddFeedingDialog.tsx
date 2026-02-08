@@ -44,6 +44,7 @@ const formSchema = z.object({
   rodentStage: z.string().min(1, "Le stade est requis"),
   quantity: z.coerce.number().min(1, "La quantité doit être au moins 1"),
   feedingDate: z.date(),
+  preyState: z.enum(["live", "dead"]).default("dead"),
   calcium: z.boolean().default(false),
   vitamins: z.boolean().default(false),
   notes: z.string().optional(),
@@ -116,6 +117,7 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
       rodentStage: "",
       quantity: 1,
       feedingDate: new Date(),
+      preyState: "dead" as const,
       calcium: false,
       vitamins: false,
       notes: "",
@@ -142,6 +144,7 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
         rodent_stage: values.rodentStage,
         quantity: values.quantity,
         feeding_date: format(values.feedingDate, "yyyy-MM-dd"),
+        prey_state: values.preyState,
         calcium: values.calcium,
         vitamins: values.vitamins,
         notes: values.notes || null,
@@ -291,6 +294,42 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
                 </FormItem>
               )}
             />
+
+            {selectedType && ["rat", "mouse", "rabbit", "insect", "fish", "crustacean", "wholePrey"].includes(selectedType) && (
+              <FormField
+                control={form.control}
+                name="preyState"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("feeding.preyState", "État de la proie")}</FormLabel>
+                    <div className="flex gap-4">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="preyState"
+                          value="dead"
+                          checked={field.value === "dead"}
+                          onChange={() => field.onChange("dead")}
+                          className="accent-primary"
+                        />
+                        <span className="text-sm">{t("feeding.dead", "Mort / Décongelé")}</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="preyState"
+                          value="live"
+                          checked={field.value === "live"}
+                          onChange={() => field.onChange("live")}
+                          className="accent-primary"
+                        />
+                        <span className="text-sm">{t("feeding.live", "Vivant")}</span>
+                      </label>
+                    </div>
+                  </FormItem>
+                )}
+              />
+            )}
 
             <div className="flex gap-6">
               <FormField
