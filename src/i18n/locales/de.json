@@ -185,7 +185,82 @@
       "medium": "Mittel",
       "large": "Groß",
       "extraLarge": "Extra Groß"
-    }
+    },
+    "insects": {
+      "title": "Insekten",
+      "cricket": "Grillen",
+      "dubia": "Dubia-Schaben",
+      "locust": "Heuschrecken",
+      "mealworm": "Mehlwürmer",
+      "superworm": "Zophobas",
+      "waxworm": "Wachsmotten",
+      "hornworm": "Hornwürmer",
+      "silkworm": "Seidenraupen",
+      "blackSoldierFly": "Soldatenfliegenlarven"
+    },
+    "vegetables": {
+      "title": "Gemüse",
+      "leafyGreens": "Blattgemüse (Endivie, Löwenzahn, Feldsalat)",
+      "squash": "Kürbis / Butternut",
+      "carrot": "Karotte",
+      "bellPepper": "Paprika",
+      "cucumber": "Gurke",
+      "zucchini": "Zucchini",
+      "greenBeans": "Grüne Bohnen",
+      "mixedVegetables": "Gemüsemischung"
+    },
+    "fruits": {
+      "title": "Obst",
+      "banana": "Banane",
+      "strawberry": "Erdbeere",
+      "mango": "Mango",
+      "papaya": "Papaya",
+      "raspberry": "Himbeere",
+      "blueberry": "Blaubeere",
+      "apple": "Apfel",
+      "mixedFruits": "Obstmischung"
+    },
+    "pellets": {
+      "title": "Pellets",
+      "turtlePellet": "Schildkröten-Pellets",
+      "lizardPellet": "Eidechsen-Pellets",
+      "omnivore": "Allesfresser",
+      "herbivore": "Pflanzenfresser",
+      "carnivore": "Fleischfresser"
+    },
+    "fish": {
+      "title": "Fische",
+      "guppy": "Guppys",
+      "goldfish": "Goldfische",
+      "tilapia": "Tilapia",
+      "trout": "Forelle",
+      "smelt": "Stint",
+      "shrimp": "Garnelen (ganz)",
+      "silverside": "Ährenfische",
+      "wholefish": "Ganzer Fisch"
+    },
+    "crustaceans": {
+      "title": "Krebstiere",
+      "crayfish": "Flusskrebse",
+      "shrimp": "Garnelen",
+      "crab": "Krabben",
+      "snail": "Wasserschnecken"
+    },
+    "wholePrey": {
+      "title": "Ganze Beute",
+      "chick": "Küken",
+      "quail": "Wachteln",
+      "egg": "Eier",
+      "frog": "Frösche",
+      "fish": "Ganzer Fisch"
+    },
+    "foodType": "Futterart",
+    "selectFoodType": "Art auswählen",
+    "preyState": "Zustand der Beute",
+    "live": "Lebend",
+    "dead": "Tot / Aufgetaut",
+    "calcium": "Kalzium",
+    "vitamins": "Vitamine"
   },
   "validation": {
     "nameRequired": "Name ist erforderlich",

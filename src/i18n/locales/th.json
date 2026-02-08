@@ -75,7 +75,7 @@
     "stage": "ขั้นตอน",
     "weight": "น้ำหนัก",
     "rats": {
-      "title": "หนู",
+      "title": "หนูใหญ่",
       "pinky": "พิงกี้",
       "fuzzy": "ฟัซซี่",
       "hopper": "ฮอปเปอร์",
@@ -87,7 +87,7 @@
       "extraLarge": "ใหญ่พิเศษ"
     },
     "mice": {
-      "title": "หนู",
+      "title": "หนูเล็ก",
       "pinky": "พิงกี้",
       "fuzzy": "ฟัซซี่",
       "hopper": "ฮอปเปอร์",
@@ -104,7 +104,82 @@
       "medium": "กลาง",
       "large": "ใหญ่",
       "extraLarge": "ใหญ่พิเศษ"
-    }
+    },
+    "insects": {
+      "title": "แมลง",
+      "cricket": "จิ้งหรีด",
+      "dubia": "แมลงสาบดูเบีย",
+      "locust": "ตั๊กแตน",
+      "mealworm": "หนอนนก",
+      "superworm": "ซุปเปอร์เวิร์ม",
+      "waxworm": "หนอนขี้ผึ้ง",
+      "hornworm": "หนอนเขา",
+      "silkworm": "หนอนไหม",
+      "blackSoldierFly": "หนอนแมลงวันลาย"
+    },
+    "vegetables": {
+      "title": "ผัก",
+      "leafyGreens": "ผักใบเขียว",
+      "squash": "ฟักทอง / บัตเตอร์นัท",
+      "carrot": "แครอท",
+      "bellPepper": "พริกหวาน",
+      "cucumber": "แตงกวา",
+      "zucchini": "ซูกินี",
+      "greenBeans": "ถั่วเขียว",
+      "mixedVegetables": "ผักรวม"
+    },
+    "fruits": {
+      "title": "ผลไม้",
+      "banana": "กล้วย",
+      "strawberry": "สตรอว์เบอร์รี่",
+      "mango": "มะม่วง",
+      "papaya": "มะละกอ",
+      "raspberry": "ราสเบอร์รี่",
+      "blueberry": "บลูเบอร์รี่",
+      "apple": "แอปเปิ้ล",
+      "mixedFruits": "ผลไม้รวม"
+    },
+    "pellets": {
+      "title": "เม็ดอาหาร",
+      "turtlePellet": "เม็ดอาหารเต่า",
+      "lizardPellet": "เม็ดอาหารกิ้งก่า",
+      "omnivore": "กินทุกอย่าง",
+      "herbivore": "กินพืช",
+      "carnivore": "กินเนื้อ"
+    },
+    "fish": {
+      "title": "ปลา",
+      "guppy": "ปลาหางนกยูง",
+      "goldfish": "ปลาทอง",
+      "tilapia": "ปลานิล",
+      "trout": "ปลาเทราท์",
+      "smelt": "ปลาสเมลท์",
+      "shrimp": "กุ้ง (ทั้งตัว)",
+      "silverside": "ปลาซิลเวอร์ไซด์",
+      "wholefish": "ปลาทั้งตัว"
+    },
+    "crustaceans": {
+      "title": "สัตว์น้ำเปลือกแข็ง",
+      "crayfish": "กุ้งเครย์ฟิช",
+      "shrimp": "กุ้ง",
+      "crab": "ปู",
+      "snail": "หอยน้ำจืด"
+    },
+    "wholePrey": {
+      "title": "เหยื่อทั้งตัว",
+      "chick": "ลูกไก่",
+      "quail": "นกกระทา",
+      "egg": "ไข่",
+      "frog": "กบ",
+      "fish": "ปลาทั้งตัว"
+    },
+    "foodType": "ประเภทอาหาร",
+    "selectFoodType": "เลือกประเภท",
+    "preyState": "สถานะเหยื่อ",
+    "live": "มีชีวิต",
+    "dead": "ตาย / ละลาย",
+    "calcium": "แคลเซียม",
+    "vitamins": "วิตามิน"
   },
   "validation": {
     "nameRequired": "ต้องระบุชื่อ",

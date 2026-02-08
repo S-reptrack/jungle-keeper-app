@@ -104,7 +104,82 @@
       "medium": "中",
       "large": "大",
       "extraLarge": "特大"
-    }
+    },
+    "insects": {
+      "title": "昆虫",
+      "cricket": "コオロギ",
+      "dubia": "デュビアローチ",
+      "locust": "バッタ",
+      "mealworm": "ミルワーム",
+      "superworm": "スーパーワーム",
+      "waxworm": "ハニーワーム",
+      "hornworm": "ホーンワーム",
+      "silkworm": "カイコ",
+      "blackSoldierFly": "アメリカミズアブの幼虫"
+    },
+    "vegetables": {
+      "title": "野菜",
+      "leafyGreens": "葉物野菜（チコリ、タンポポ、小松菜）",
+      "squash": "カボチャ / バターナッツ",
+      "carrot": "ニンジン",
+      "bellPepper": "パプリカ",
+      "cucumber": "キュウリ",
+      "zucchini": "ズッキーニ",
+      "greenBeans": "インゲン",
+      "mixedVegetables": "ミックス野菜"
+    },
+    "fruits": {
+      "title": "果物",
+      "banana": "バナナ",
+      "strawberry": "イチゴ",
+      "mango": "マンゴー",
+      "papaya": "パパイヤ",
+      "raspberry": "ラズベリー",
+      "blueberry": "ブルーベリー",
+      "apple": "リンゴ",
+      "mixedFruits": "ミックスフルーツ"
+    },
+    "pellets": {
+      "title": "ペレット",
+      "turtlePellet": "カメ用ペレット",
+      "lizardPellet": "トカゲ用ペレット",
+      "omnivore": "雑食性",
+      "herbivore": "草食性",
+      "carnivore": "肉食性"
+    },
+    "fish": {
+      "title": "魚",
+      "guppy": "グッピー",
+      "goldfish": "金魚",
+      "tilapia": "ティラピア",
+      "trout": "マス",
+      "smelt": "ワカサギ",
+      "shrimp": "エビ（丸ごと）",
+      "silverside": "トウゴロウイワシ",
+      "wholefish": "丸ごと魚"
+    },
+    "crustaceans": {
+      "title": "甲殻類",
+      "crayfish": "ザリガニ",
+      "shrimp": "エビ",
+      "crab": "カニ",
+      "snail": "水生巻貝"
+    },
+    "wholePrey": {
+      "title": "ホールプレイ",
+      "chick": "ヒヨコ",
+      "quail": "ウズラ",
+      "egg": "卵",
+      "frog": "カエル",
+      "fish": "丸ごと魚"
+    },
+    "foodType": "餌の種類",
+    "selectFoodType": "種類を選択",
+    "preyState": "餌の状態",
+    "live": "生き餌",
+    "dead": "死餌 / 解凍",
+    "calcium": "カルシウム",
+    "vitamins": "ビタミン"
   },
   "validation": {
     "nameRequired": "名前は必須です",

@@ -75,7 +75,7 @@
     "stage": "चरण",
     "weight": "वजन",
     "rats": {
-      "title": "चूहे",
+      "title": "चूहे (बड़े)",
       "pinky": "पिंकी",
       "fuzzy": "फज़ी",
       "hopper": "हॉपर",
@@ -87,7 +87,7 @@
       "extraLarge": "अतिरिक्त बड़ा"
     },
     "mice": {
-      "title": "चूहे",
+      "title": "चूहे (छोटे)",
       "pinky": "पिंकी",
       "fuzzy": "फज़ी",
       "hopper": "हॉपर",
@@ -104,7 +104,82 @@
       "medium": "मध्यम",
       "large": "बड़ा",
       "extraLarge": "अतिरिक्त बड़ा"
-    }
+    },
+    "insects": {
+      "title": "कीड़े",
+      "cricket": "झींगुर",
+      "dubia": "डूबिया तिलचट्टे",
+      "locust": "टिड्डी",
+      "mealworm": "मील वर्म",
+      "superworm": "सुपरवर्म",
+      "waxworm": "वैक्स वर्म",
+      "hornworm": "हॉर्नवर्म",
+      "silkworm": "रेशम कीट",
+      "blackSoldierFly": "ब्लैक सोल्जर फ्लाई लार्वा"
+    },
+    "vegetables": {
+      "title": "सब्जियाँ",
+      "leafyGreens": "पत्तेदार सब्जियाँ",
+      "squash": "कद्दू / बटरनट",
+      "carrot": "गाजर",
+      "bellPepper": "शिमला मिर्च",
+      "cucumber": "खीरा",
+      "zucchini": "तोरी",
+      "greenBeans": "हरी फलियाँ",
+      "mixedVegetables": "मिश्रित सब्जियाँ"
+    },
+    "fruits": {
+      "title": "फल",
+      "banana": "केला",
+      "strawberry": "स्ट्रॉबेरी",
+      "mango": "आम",
+      "papaya": "पपीता",
+      "raspberry": "रास्पबेरी",
+      "blueberry": "ब्लूबेरी",
+      "apple": "सेब",
+      "mixedFruits": "मिश्रित फल"
+    },
+    "pellets": {
+      "title": "पेलेट्स",
+      "turtlePellet": "कछुआ पेलेट्स",
+      "lizardPellet": "छिपकली पेलेट्स",
+      "omnivore": "सर्वाहारी",
+      "herbivore": "शाकाहारी",
+      "carnivore": "मांसाहारी"
+    },
+    "fish": {
+      "title": "मछली",
+      "guppy": "गप्पी",
+      "goldfish": "सुनहरी मछली",
+      "tilapia": "तिलापिया",
+      "trout": "ट्राउट",
+      "smelt": "स्मेल्ट",
+      "shrimp": "झींगा (पूरा)",
+      "silverside": "सिल्वरसाइड",
+      "wholefish": "पूरी मछली"
+    },
+    "crustaceans": {
+      "title": "क्रस्टेशियन",
+      "crayfish": "क्रेफ़िश",
+      "shrimp": "झींगा",
+      "crab": "केकड़ा",
+      "snail": "जलीय घोंघे"
+    },
+    "wholePrey": {
+      "title": "संपूर्ण शिकार",
+      "chick": "चूजे",
+      "quail": "बटेर",
+      "egg": "अंडे",
+      "frog": "मेंढक",
+      "fish": "पूरी मछली"
+    },
+    "foodType": "खाद्य प्रकार",
+    "selectFoodType": "प्रकार चुनें",
+    "preyState": "शिकार की स्थिति",
+    "live": "जीवित",
+    "dead": "मृत / पिघला हुआ",
+    "calcium": "कैल्शियम",
+    "vitamins": "विटामिन"
   },
   "validation": {
     "nameRequired": "नाम आवश्यक है",

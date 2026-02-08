@@ -183,7 +183,82 @@
       "medium": "Medio",
       "large": "Grande",
       "extraLarge": "Extra Grande"
-    }
+    },
+    "insects": {
+      "title": "Insetti",
+      "cricket": "Grilli",
+      "dubia": "Blatte Dubia",
+      "locust": "Locuste",
+      "mealworm": "Tarme della farina",
+      "superworm": "Superworm",
+      "waxworm": "Tarme della cera",
+      "hornworm": "Vermi cornuti",
+      "silkworm": "Bachi da seta",
+      "blackSoldierFly": "Larve di mosca soldato"
+    },
+    "vegetables": {
+      "title": "Verdure",
+      "leafyGreens": "Verdure a foglia (indivia, tarassaco, valeriana)",
+      "squash": "Zucca / Butternut",
+      "carrot": "Carota",
+      "bellPepper": "Peperone",
+      "cucumber": "Cetriolo",
+      "zucchini": "Zucchina",
+      "greenBeans": "Fagiolini",
+      "mixedVegetables": "Misto di verdure"
+    },
+    "fruits": {
+      "title": "Frutta",
+      "banana": "Banana",
+      "strawberry": "Fragola",
+      "mango": "Mango",
+      "papaya": "Papaya",
+      "raspberry": "Lampone",
+      "blueberry": "Mirtillo",
+      "apple": "Mela",
+      "mixedFruits": "Misto di frutta"
+    },
+    "pellets": {
+      "title": "Pellet",
+      "turtlePellet": "Pellet per tartarughe",
+      "lizardPellet": "Pellet per lucertole",
+      "omnivore": "Onnivoro",
+      "herbivore": "Erbivoro",
+      "carnivore": "Carnivoro"
+    },
+    "fish": {
+      "title": "Pesci",
+      "guppy": "Guppy",
+      "goldfish": "Pesci rossi",
+      "tilapia": "Tilapia",
+      "trout": "Trota",
+      "smelt": "Sperlano",
+      "shrimp": "Gamberetti (interi)",
+      "silverside": "Aterine",
+      "wholefish": "Pesce intero"
+    },
+    "crustaceans": {
+      "title": "Crostacei",
+      "crayfish": "Gamberi di fiume",
+      "shrimp": "Gamberetti",
+      "crab": "Granchi",
+      "snail": "Lumache acquatiche"
+    },
+    "wholePrey": {
+      "title": "Prede intere",
+      "chick": "Pulcini",
+      "quail": "Quaglie",
+      "egg": "Uova",
+      "frog": "Rane",
+      "fish": "Pesce intero"
+    },
+    "foodType": "Tipo di alimento",
+    "selectFoodType": "Seleziona un tipo",
+    "preyState": "Stato della preda",
+    "live": "Vivo",
+    "dead": "Morto / Scongelato",
+    "calcium": "Calcio",
+    "vitamins": "Vitamine"
   },
   "validation": {
     "nameRequired": "Il nome è obbligatorio",

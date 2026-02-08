@@ -104,7 +104,82 @@
       "medium": "Средний",
       "large": "Большой",
       "extraLarge": "Очень большой"
-    }
+    },
+    "insects": {
+      "title": "Насекомые",
+      "cricket": "Сверчки",
+      "dubia": "Тараканы дубия",
+      "locust": "Саранча",
+      "mealworm": "Мучные черви",
+      "superworm": "Зофобас",
+      "waxworm": "Восковая моль",
+      "hornworm": "Рогатые черви",
+      "silkworm": "Шелкопряды",
+      "blackSoldierFly": "Личинки чёрной львинки"
+    },
+    "vegetables": {
+      "title": "Овощи",
+      "leafyGreens": "Листовая зелень (эндивий, одуванчик, валериана)",
+      "squash": "Тыква / Баттернат",
+      "carrot": "Морковь",
+      "bellPepper": "Болгарский перец",
+      "cucumber": "Огурец",
+      "zucchini": "Кабачок",
+      "greenBeans": "Стручковая фасоль",
+      "mixedVegetables": "Овощная смесь"
+    },
+    "fruits": {
+      "title": "Фрукты",
+      "banana": "Банан",
+      "strawberry": "Клубника",
+      "mango": "Манго",
+      "papaya": "Папайя",
+      "raspberry": "Малина",
+      "blueberry": "Голубика",
+      "apple": "Яблоко",
+      "mixedFruits": "Фруктовая смесь"
+    },
+    "pellets": {
+      "title": "Гранулы",
+      "turtlePellet": "Гранулы для черепах",
+      "lizardPellet": "Гранулы для ящериц",
+      "omnivore": "Всеядный",
+      "herbivore": "Травоядный",
+      "carnivore": "Плотоядный"
+    },
+    "fish": {
+      "title": "Рыба",
+      "guppy": "Гуппи",
+      "goldfish": "Золотые рыбки",
+      "tilapia": "Тилапия",
+      "trout": "Форель",
+      "smelt": "Корюшка",
+      "shrimp": "Креветки (целые)",
+      "silverside": "Атерины",
+      "wholefish": "Целая рыба"
+    },
+    "crustaceans": {
+      "title": "Ракообразные",
+      "crayfish": "Раки",
+      "shrimp": "Креветки",
+      "crab": "Крабы",
+      "snail": "Водные улитки"
+    },
+    "wholePrey": {
+      "title": "Целые кормовые объекты",
+      "chick": "Цыплята",
+      "quail": "Перепела",
+      "egg": "Яйца",
+      "frog": "Лягушки",
+      "fish": "Целая рыба"
+    },
+    "foodType": "Тип корма",
+    "selectFoodType": "Выбрать тип",
+    "preyState": "Состояние добычи",
+    "live": "Живой",
+    "dead": "Мёртвый / Размороженный",
+    "calcium": "Кальций",
+    "vitamins": "Витамины"
   },
   "validation": {
     "nameRequired": "Имя обязательно",

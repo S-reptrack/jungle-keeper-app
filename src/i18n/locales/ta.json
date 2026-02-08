@@ -104,7 +104,82 @@
       "medium": "நடுத்தர",
       "large": "பெரிய",
       "extraLarge": "மிகப்பெரிய"
-    }
+    },
+    "insects": {
+      "title": "பூச்சிகள்",
+      "cricket": "சீவல்கள்",
+      "dubia": "டூபியா கரப்பான்கள்",
+      "locust": "வெட்டுக்கிளிகள்",
+      "mealworm": "மாவுப் புழுக்கள்",
+      "superworm": "சூப்பர்வர்ம்",
+      "waxworm": "மெழுகுப் புழுக்கள்",
+      "hornworm": "கொம்புப் புழுக்கள்",
+      "silkworm": "பட்டுப்புழுக்கள்",
+      "blackSoldierFly": "கருப்பு சிப்பாய் ஈ லார்வா"
+    },
+    "vegetables": {
+      "title": "காய்கறிகள்",
+      "leafyGreens": "இலைக் காய்கறிகள்",
+      "squash": "பூசணி / பட்டர்நட்",
+      "carrot": "கேரட்",
+      "bellPepper": "குடைமிளகாய்",
+      "cucumber": "வெள்ளரிக்காய்",
+      "zucchini": "சுகினி",
+      "greenBeans": "பச்சை பீன்ஸ்",
+      "mixedVegetables": "கலப்பு காய்கறிகள்"
+    },
+    "fruits": {
+      "title": "பழங்கள்",
+      "banana": "வாழைப்பழம்",
+      "strawberry": "ஸ்ட்ராபெர்ரி",
+      "mango": "மாம்பழம்",
+      "papaya": "பப்பாளி",
+      "raspberry": "ராஸ்பெர்ரி",
+      "blueberry": "ப்ளூபெர்ரி",
+      "apple": "ஆப்பிள்",
+      "mixedFruits": "கலப்பு பழங்கள்"
+    },
+    "pellets": {
+      "title": "பெல்லட்கள்",
+      "turtlePellet": "ஆமை பெல்லட்கள்",
+      "lizardPellet": "பல்லி பெல்லட்கள்",
+      "omnivore": "அனைத்துண்ணி",
+      "herbivore": "தாவரவுண்ணி",
+      "carnivore": "ஊனுண்ணி"
+    },
+    "fish": {
+      "title": "மீன்கள்",
+      "guppy": "கப்பி",
+      "goldfish": "தங்க மீன்",
+      "tilapia": "திலாப்பியா",
+      "trout": "ட்ரவுட்",
+      "smelt": "ஸ்மெல்ட்",
+      "shrimp": "இறால் (முழு)",
+      "silverside": "சில்வர்சைட்",
+      "wholefish": "முழு மீன்"
+    },
+    "crustaceans": {
+      "title": "ஓட்டுயிரிகள்",
+      "crayfish": "நண்டுமீன்",
+      "shrimp": "இறால்",
+      "crab": "நண்டு",
+      "snail": "நீர் நத்தைகள்"
+    },
+    "wholePrey": {
+      "title": "முழு இரை",
+      "chick": "குஞ்சுகள்",
+      "quail": "காடை",
+      "egg": "முட்டைகள்",
+      "frog": "தவளைகள்",
+      "fish": "முழு மீன்"
+    },
+    "foodType": "உணவு வகை",
+    "selectFoodType": "வகையைத் தேர்வுசெய்க",
+    "preyState": "இரையின் நிலை",
+    "live": "உயிருள்ள",
+    "dead": "இறந்த / உருகிய",
+    "calcium": "கால்சியம்",
+    "vitamins": "வைட்டமின்கள்"
   },
   "validation": {
     "nameRequired": "பெயர் தேவை",

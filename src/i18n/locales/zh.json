@@ -104,7 +104,82 @@
       "medium": "中",
       "large": "大",
       "extraLarge": "超大"
-    }
+    },
+    "insects": {
+      "title": "昆虫",
+      "cricket": "蟋蟀",
+      "dubia": "杜比亚蟑螂",
+      "locust": "蝗虫",
+      "mealworm": "面包虫",
+      "superworm": "超级面包虫",
+      "waxworm": "蜡虫",
+      "hornworm": "角虫",
+      "silkworm": "蚕",
+      "blackSoldierFly": "黑水虻幼虫"
+    },
+    "vegetables": {
+      "title": "蔬菜",
+      "leafyGreens": "叶菜类（菊苣、蒲公英、油麦菜）",
+      "squash": "南瓜 / 奶油南瓜",
+      "carrot": "胡萝卜",
+      "bellPepper": "甜椒",
+      "cucumber": "黄瓜",
+      "zucchini": "西葫芦",
+      "greenBeans": "四季豆",
+      "mixedVegetables": "混合蔬菜"
+    },
+    "fruits": {
+      "title": "水果",
+      "banana": "香蕉",
+      "strawberry": "草莓",
+      "mango": "芒果",
+      "papaya": "木瓜",
+      "raspberry": "覆盆子",
+      "blueberry": "蓝莓",
+      "apple": "苹果",
+      "mixedFruits": "混合水果"
+    },
+    "pellets": {
+      "title": "颗粒饲料",
+      "turtlePellet": "龟粮",
+      "lizardPellet": "蜥蜴粮",
+      "omnivore": "杂食性",
+      "herbivore": "草食性",
+      "carnivore": "肉食性"
+    },
+    "fish": {
+      "title": "鱼类",
+      "guppy": "孔雀鱼",
+      "goldfish": "金鱼",
+      "tilapia": "罗非鱼",
+      "trout": "鳟鱼",
+      "smelt": "胡瓜鱼",
+      "shrimp": "虾（整只）",
+      "silverside": "银鱼",
+      "wholefish": "整鱼"
+    },
+    "crustaceans": {
+      "title": "甲壳类",
+      "crayfish": "小龙虾",
+      "shrimp": "虾",
+      "crab": "螃蟹",
+      "snail": "水生蜗牛"
+    },
+    "wholePrey": {
+      "title": "完整猎物",
+      "chick": "雏鸡",
+      "quail": "鹌鹑",
+      "egg": "蛋",
+      "frog": "蛙",
+      "fish": "整鱼"
+    },
+    "foodType": "食物类型",
+    "selectFoodType": "选择类型",
+    "preyState": "猎物状态",
+    "live": "活体",
+    "dead": "冻体 / 解冻",
+    "calcium": "钙",
+    "vitamins": "维生素"
   },
   "validation": {
     "nameRequired": "名称为必填项",
