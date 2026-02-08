@@ -174,7 +174,10 @@
       "fish": "Poisson entier"
     },
     "foodType": "Type d'aliment",
-    "selectFoodType": "Sélectionner un type"
+    "selectFoodType": "Sélectionner un type",
+    "preyState": "État de la proie",
+    "live": "Vivant",
+    "dead": "Mort / Décongelé"
   },
   "validation": {
     "nameRequired": "Le nom est requis",

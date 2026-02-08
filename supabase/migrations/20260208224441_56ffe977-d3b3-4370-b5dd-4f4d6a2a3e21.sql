@@ -1,0 +1,1 @@
+ALTER TABLE public.feedings ADD COLUMN prey_state text DEFAULT 'dead';

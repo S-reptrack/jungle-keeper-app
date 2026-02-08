@@ -65,6 +65,7 @@ export type Database = {
           feeding_date: string
           id: string
           notes: string | null
+          prey_state: string | null
           quantity: number
           reptile_id: string
           rodent_stage: string
@@ -80,6 +81,7 @@ export type Database = {
           feeding_date: string
           id?: string
           notes?: string | null
+          prey_state?: string | null
           quantity?: number
           reptile_id: string
           rodent_stage: string
@@ -95,6 +97,7 @@ export type Database = {
           feeding_date?: string
           id?: string
           notes?: string | null
+          prey_state?: string | null
           quantity?: number
           reptile_id?: string
           rodent_stage?: string
