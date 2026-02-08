@@ -95,7 +95,6 @@ const ReptileDetail = () => {
       }
 
       console.log("✅ Session active:", session.user.id.substring(0, 8));
-      toast.info(`🟢 Session OK: ${session.user.id.substring(0, 8)}... | Recherche: ${id.substring(0, 8)}...`, { duration: 3000 });
       
       // Requête avec le token de session explicite
       const { data, error } = await supabase
@@ -134,8 +133,6 @@ const ReptileDetail = () => {
         return;
       }
       
-      toast.success(`🟢 Reptile trouvé: ${data.name}`);
-
       setReptile(data);
 
       // Fetch reproduction observations to check for expected hatch dates
