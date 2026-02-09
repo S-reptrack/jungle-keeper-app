@@ -2,7 +2,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, HashRouter, Routes, Route } from "react-router-dom";
+import { Capacitor } from "@capacitor/core";
 import { ThemeProvider } from "next-themes";
 import "./i18n/config";
 import Index from "./pages/Index";
@@ -39,13 +40,15 @@ import InstallPromptBanner from "./components/InstallPromptBanner";
 
 const queryClient = new QueryClient();
 
+const Router = Capacitor.isNativePlatform() ? HashRouter : BrowserRouter;
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <Router>
           <TesterActivityTracker />
           <GDPRConsentDialog />
           <HatchingNotificationDialog />
@@ -85,7 +88,7 @@ const App = () => (
             {/* Catch-all - TOUJOURS en dernier */}
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </BrowserRouter>
+        </Router>
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
