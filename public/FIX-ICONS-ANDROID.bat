@@ -1,33 +1,26 @@
 @echo off
 echo ========================================
-echo    Correction des icones Android
+echo    Fix icones Android - S-reptrack
 echo ========================================
 echo.
 
 cd /d "C:\Users\berti\jungle-keeper-app"
 
-echo [1/4] Suppression des icones corrompues...
-rmdir /s /q "android\app\src\main\res\mipmap-hdpi" 2>nul
-rmdir /s /q "android\app\src\main\res\mipmap-ldpi" 2>nul
-rmdir /s /q "android\app\src\main\res\mipmap-mdpi" 2>nul
-rmdir /s /q "android\app\src\main\res\mipmap-xhdpi" 2>nul
-rmdir /s /q "android\app\src\main\res\mipmap-xxhdpi" 2>nul
-rmdir /s /q "android\app\src\main\res\mipmap-xxxhdpi" 2>nul
-rmdir /s /q "android\app\src\main\res\mipmap-anydpi-v26" 2>nul
+set LOGO=src\assets\sreptrack-logo.png
+set RES=android\app\src\main\res
 
-echo.
-echo [2/4] Regeneration de la plateforme Android...
-call npx cap update android
+echo Copie du logo dans tous les dossiers mipmap...
+for %%D in (mipmap-mdpi mipmap-hdpi mipmap-xhdpi mipmap-xxhdpi mipmap-xxxhdpi) do (
+    if not exist "%RES%\%%D" mkdir "%RES%\%%D"
+    copy /Y "%LOGO%" "%RES%\%%D\ic_launcher.png" >nul
+    copy /Y "%LOGO%" "%RES%\%%D\ic_launcher_round.png" >nul
+    copy /Y "%LOGO%" "%RES%\%%D\ic_launcher_foreground.png" >nul
+    echo   %%D : OK
+)
 
-echo.
-echo [3/4] Synchronisation...
-call npx cap sync android
-
-echo.
-echo [4/4] Termine!
 echo.
 echo ========================================
-echo    Maintenant, rouvre Android Studio
-echo    et relance Build > Generate Signed Bundle
+echo    Icones restaurees !
+echo    Relancez: npx cap run android
 echo ========================================
 pause
