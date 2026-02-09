@@ -19,7 +19,6 @@
     "@capacitor/core": "^8.0.1",
     "@capacitor/ios": "^8.0.1",
     "@capacitor/local-notifications": "^8.0.0",
-    "@exxili/capacitor-nfc": "^0.0.12",
     "@ffmpeg/ffmpeg": "^0.12.10",
     "@ffmpeg/util": "^0.12.1",
     "@hookform/resolvers": "^3.10.0",
