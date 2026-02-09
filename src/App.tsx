@@ -85,7 +85,7 @@ const App = () => (
             <Route path="/analytics" element={<MaintenanceGuard><Analytics /></MaintenanceGuard>} />
             <Route path="/genealogy" element={<MaintenanceGuard><Genealogy /></MaintenanceGuard>} />
             
-            {/* Catch-all - TOUJOURS en dernier */}
+            {/* Catch-all route - TOUJOURS en dernier */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
