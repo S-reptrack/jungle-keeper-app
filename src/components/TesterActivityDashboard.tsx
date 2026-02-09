@@ -554,10 +554,12 @@ const TesterActivityDashboard = () => {
                             {activity.page_url}
                           </span>
                         )}
-                        {activity.session_duration && (
+                        {activity.session_duration != null && activity.session_duration > 0 && (
                           <span className="flex items-center gap-1">
                             <Clock className="h-3 w-3" />
-                            {Math.round(activity.session_duration / 60)}min
+                            {activity.session_duration >= 3600
+                              ? `${Math.floor(activity.session_duration / 3600)}h${String(Math.floor((activity.session_duration % 3600) / 60)).padStart(2, '0')}min`
+                              : `${Math.round(activity.session_duration / 60)}min`}
                           </span>
                         )}
                       </div>
