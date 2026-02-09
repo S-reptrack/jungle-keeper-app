@@ -36,6 +36,9 @@ interface Feeding {
   quantity: number;
   feeding_date: string;
   notes: string | null;
+  prey_state: string | null;
+  calcium: boolean;
+  vitamins: boolean;
 }
 
 interface FeedingTabProps {
@@ -250,7 +253,8 @@ const FeedingTab = ({ reptileId, species, readOnly = false }: FeedingTabProps) =
                   <TableHead>Date</TableHead>
                   <TableHead>Type</TableHead>
                   <TableHead>Stade</TableHead>
-                  <TableHead>Quantité</TableHead>
+                  <TableHead>Qté</TableHead>
+                  <TableHead>État</TableHead>
                   <TableHead>Notes</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -264,6 +268,17 @@ const FeedingTab = ({ reptileId, species, readOnly = false }: FeedingTabProps) =
                     <TableCell className="font-medium">{getTypeLabel(feeding.rodent_type)}</TableCell>
                     <TableCell>{getStageLabel(feeding.rodent_type, feeding.rodent_stage)}</TableCell>
                     <TableCell>{feeding.quantity}</TableCell>
+                    <TableCell>
+                      {feeding.prey_state ? (
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${
+                          feeding.prey_state === 'alive' 
+                            ? 'bg-green-500/15 text-green-600 dark:text-green-400' 
+                            : 'bg-muted text-muted-foreground'
+                        }`}>
+                          {feeding.prey_state === 'alive' ? '🟢 Vivant' : '⚫ Mort/Décongelé'}
+                        </span>
+                      ) : "-"}
+                    </TableCell>
                     <TableCell className="max-w-[200px] truncate">{feeding.notes || "-"}</TableCell>
                     <TableCell className="text-right">
                       {!readOnly && (
