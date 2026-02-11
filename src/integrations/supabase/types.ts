@@ -517,7 +517,10 @@ export type Database = {
           email: string
           id: string
           invited_by: string
+          reactivated_at: string | null
           status: string
+          suspended: boolean
+          suspended_at: string | null
           trial_end_date: string | null
         }
         Insert: {
@@ -526,7 +529,10 @@ export type Database = {
           email: string
           id?: string
           invited_by: string
+          reactivated_at?: string | null
           status?: string
+          suspended?: boolean
+          suspended_at?: string | null
           trial_end_date?: string | null
         }
         Update: {
@@ -535,7 +541,10 @@ export type Database = {
           email?: string
           id?: string
           invited_by?: string
+          reactivated_at?: string | null
           status?: string
+          suspended?: boolean
+          suspended_at?: string | null
           trial_end_date?: string | null
         }
         Relationships: []

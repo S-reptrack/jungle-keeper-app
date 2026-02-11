@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { UserPlus, Trash2, Users, Loader2, Mail, Send } from "lucide-react";
+import { UserPlus, Trash2, Users, Loader2, Mail, Send, Ban, RefreshCw } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Tester {
@@ -14,6 +14,7 @@ interface Tester {
   user_id: string;
   email: string;
   created_at: string;
+  suspended?: boolean;
 }
 
 interface Invitation {
@@ -68,12 +69,30 @@ const TesterManagement = () => {
         if (p.email) profileMap.set(p.user_id, p.email);
       });
 
-      const testersWithEmail: Tester[] = roles.map((role) => ({
-        id: role.id,
-        user_id: role.user_id,
-        email: profileMap.get(role.user_id) || "Email inconnu",
-        created_at: role.created_at,
-      }));
+      // Récupérer le statut de suspension des invitations
+      const emails = (profiles || []).map(p => p.email).filter(Boolean) as string[];
+      const { data: invitations } = emails.length > 0
+        ? await supabase
+            .from("tester_invitations")
+            .select("email, suspended")
+            .in("email", emails)
+        : { data: [] };
+
+      const suspendedMap = new Map<string, boolean>();
+      (invitations || []).forEach(inv => {
+        suspendedMap.set(inv.email, inv.suspended || false);
+      });
+
+      const testersWithEmail: Tester[] = roles.map((role) => {
+        const email = profileMap.get(role.user_id) || "Email inconnu";
+        return {
+          id: role.id,
+          user_id: role.user_id,
+          email,
+          created_at: role.created_at,
+          suspended: suspendedMap.get(email) || false,
+        };
+      });
 
       setTesters(testersWithEmail);
     } catch (error) {
@@ -290,6 +309,44 @@ const TesterManagement = () => {
     }
   };
 
+  const suspendTester = async (email: string) => {
+    try {
+      const { error } = await supabase
+        .from("tester_invitations")
+        .update({ suspended: true, suspended_at: new Date().toISOString() })
+        .eq("email", email)
+        .eq("status", "accepted");
+
+      if (error) throw error;
+      toast.success(`Testeur ${email} suspendu`);
+      fetchTesters();
+    } catch (error) {
+      console.error("Error suspending tester:", error);
+      toast.error("Erreur lors de la suspension");
+    }
+  };
+
+  const reactivateTester = async (email: string) => {
+    try {
+      const { error } = await supabase
+        .from("tester_invitations")
+        .update({ 
+          suspended: false, 
+          suspended_at: null, 
+          reactivated_at: new Date().toISOString() 
+        })
+        .eq("email", email)
+        .eq("status", "accepted");
+
+      if (error) throw error;
+      toast.success(`Testeur ${email} réactivé`);
+      fetchTesters();
+    } catch (error) {
+      console.error("Error reactivating tester:", error);
+      toast.error("Erreur lors de la réactivation");
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -443,25 +500,55 @@ const TesterManagement = () => {
               {testers.map((tester) => (
                 <div
                   key={tester.id}
-                  className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+                  className={`flex items-center justify-between p-3 rounded-lg ${tester.suspended ? 'bg-destructive/10 border border-destructive/20' : 'bg-muted/50'}`}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
                     <span className="text-sm font-medium">{tester.email}</span>
-                    <Badge variant="secondary" className="text-xs w-fit">
-                      {t("admin.testers.tester")}
-                    </Badge>
+                    {tester.suspended ? (
+                      <Badge variant="destructive" className="text-xs w-fit">
+                        <Ban className="h-3 w-3 mr-1" />
+                        Suspendu
+                      </Badge>
+                    ) : (
+                      <Badge variant="secondary" className="text-xs w-fit">
+                        {t("admin.testers.tester")}
+                      </Badge>
+                    )}
                     <span className="text-xs text-muted-foreground">
                       depuis le {new Date(tester.created_at).toLocaleDateString("fr-FR")}
                     </span>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => removeTester(tester.id, tester.email)}
-                    className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <div className="flex items-center gap-1">
+                    {tester.suspended ? (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => reactivateTester(tester.email)}
+                        className="text-primary hover:bg-primary/10"
+                        title="Réactiver"
+                      >
+                        <RefreshCw className="h-4 w-4" />
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => suspendTester(tester.email)}
+                        className="text-amber-600 hover:bg-amber-500/10"
+                        title="Suspendre"
+                      >
+                        <Ban className="h-4 w-4" />
+                      </Button>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeTester(tester.id, tester.email)}
+                      className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>
