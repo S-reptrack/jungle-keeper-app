@@ -15,6 +15,7 @@ interface Tester {
   email: string;
   created_at: string;
   suspended?: boolean;
+  inactiveDays?: number | null;
 }
 
 interface Invitation {
@@ -83,14 +84,35 @@ const TesterManagement = () => {
         suspendedMap.set(inv.email, inv.suspended || false);
       });
 
+      // Récupérer la dernière activité de chaque testeur
+      const { data: activities } = await supabase
+        .from("tester_activity")
+        .select("user_id, created_at")
+        .in("user_id", userIds)
+        .order("created_at", { ascending: false });
+
+      const lastActivityMap = new Map<string, string>();
+      (activities || []).forEach(a => {
+        if (!lastActivityMap.has(a.user_id)) {
+          lastActivityMap.set(a.user_id, a.created_at);
+        }
+      });
+
       const testersWithEmail: Tester[] = roles.map((role) => {
         const email = profileMap.get(role.user_id) || "Email inconnu";
+        const lastActivity = lastActivityMap.get(role.user_id);
+        let inactiveDays: number | null = null;
+        if (lastActivity) {
+          const diff = Math.floor((Date.now() - new Date(lastActivity).getTime()) / (1000 * 60 * 60 * 24));
+          inactiveDays = diff;
+        }
         return {
           id: role.id,
           user_id: role.user_id,
           email,
           created_at: role.created_at,
           suspended: suspendedMap.get(email) || false,
+          inactiveDays,
         };
       });
 
@@ -519,12 +541,21 @@ const TesterManagement = () => {
                     </span>
                   </div>
                   <div className="flex items-center gap-1">
+                    {tester.inactiveDays !== null && tester.inactiveDays >= 30 && !tester.suspended && (
+                      <Badge variant="outline" className="text-xs text-destructive border-destructive/50 mr-1">
+                        ⚠️ Inactif {tester.inactiveDays}j
+                      </Badge>
+                    )}
+                    {tester.inactiveDays !== null && tester.inactiveDays > 0 && tester.inactiveDays < 30 && !tester.suspended && (
+                      <span className="text-xs text-muted-foreground mr-1">
+                        {tester.inactiveDays}j
+                      </span>
+                    )}
                     {tester.suspended ? (
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => reactivateTester(tester.email)}
-                        className="text-primary hover:bg-primary/10"
                         title="Réactiver"
                       >
                         <RefreshCw className="h-4 w-4" />
