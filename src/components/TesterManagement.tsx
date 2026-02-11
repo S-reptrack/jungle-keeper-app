@@ -329,13 +329,34 @@ const TesterManagement = () => {
 
   const suspendTester = async (email: string) => {
     try {
-      const { error } = await supabase
+      const { data: existing } = await supabase
         .from("tester_invitations")
-        .update({ suspended: true, suspended_at: new Date().toISOString() })
+        .select("id")
         .eq("email", email)
-        .eq("status", "accepted");
+        .maybeSingle();
 
-      if (error) throw error;
+      if (existing) {
+        const { error } = await supabase
+          .from("tester_invitations")
+          .update({ suspended: true, suspended_at: new Date().toISOString() })
+          .eq("email", email);
+        if (error) throw error;
+      } else {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) throw new Error("Non authentifié");
+        const { error } = await supabase
+          .from("tester_invitations")
+          .insert({
+            email,
+            invited_by: user.id,
+            status: "accepted",
+            accepted_at: new Date().toISOString(),
+            suspended: true,
+            suspended_at: new Date().toISOString(),
+          });
+        if (error) throw error;
+      }
+
       toast.success(`Testeur ${email} suspendu`);
       fetchTesters();
     } catch (error) {
