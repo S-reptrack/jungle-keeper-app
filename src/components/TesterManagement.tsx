@@ -541,12 +541,17 @@ const TesterManagement = () => {
                     </span>
                   </div>
                   <div className="flex items-center gap-1">
-                    {tester.inactiveDays !== null && tester.inactiveDays >= 30 && !tester.suspended && (
+                    {!tester.suspended && tester.inactiveDays === null && (
+                      <Badge variant="outline" className="text-xs text-destructive border-destructive/50 mr-1">
+                        ⚠️ Aucune activité
+                      </Badge>
+                    )}
+                    {!tester.suspended && tester.inactiveDays !== null && tester.inactiveDays >= 30 && (
                       <Badge variant="outline" className="text-xs text-destructive border-destructive/50 mr-1">
                         ⚠️ Inactif {tester.inactiveDays}j
                       </Badge>
                     )}
-                    {tester.inactiveDays !== null && tester.inactiveDays > 0 && tester.inactiveDays < 30 && !tester.suspended && (
+                    {!tester.suspended && tester.inactiveDays !== null && tester.inactiveDays > 0 && tester.inactiveDays < 30 && (
                       <span className="text-xs text-muted-foreground mr-1">
                         {tester.inactiveDays}j
                       </span>
