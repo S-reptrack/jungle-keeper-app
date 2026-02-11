@@ -37,6 +37,7 @@ import Analytics from "./pages/Analytics";
 import Genealogy from "./pages/Genealogy";
 import TesterActivityTracker from "./components/TesterActivityTracker";
 import InstallPromptBanner from "./components/InstallPromptBanner";
+import TesterSuspensionGuard from "./components/TesterSuspensionGuard";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +54,7 @@ const App = () => (
           <GDPRConsentDialog />
           <HatchingNotificationDialog />
           <InstallPromptBanner />
+          <TesterSuspensionGuard>
           <Routes>
             {/* Routes publiques sans garde */}
             <Route path="/auth" element={<Auth />} />
@@ -88,6 +90,7 @@ const App = () => (
             {/* Catch-all route - TOUJOURS en dernier */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </TesterSuspensionGuard>
         </Router>
       </TooltipProvider>
     </ThemeProvider>
