@@ -38,19 +38,28 @@ export const useTesterSuspension = () => {
           return;
         }
 
-        // 2. Check last activity
-        const { data: lastActivity } = await supabase
-          .from("tester_activity")
-          .select("created_at")
-          .eq("user_id", user.id)
-          .order("created_at", { ascending: false })
-          .limit(1)
-          .maybeSingle();
+        // 2. Check last activity across all tables
+        const [{ data: lastActivity }, { data: lastReptile }, { data: lastFeeding }, { data: lastWeight }, { data: lastHealth }] = await Promise.all([
+          supabase.from("tester_activity").select("created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+          supabase.from("reptiles").select("updated_at").eq("user_id", user.id).order("updated_at", { ascending: false }).limit(1).maybeSingle(),
+          supabase.from("feedings").select("created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+          supabase.from("weight_records").select("created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+          supabase.from("health_records").select("created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+        ]);
 
-        if (lastActivity) {
-          const lastDate = new Date(lastActivity.created_at);
+        const dates = [
+          lastActivity?.created_at,
+          lastReptile?.updated_at,
+          lastFeeding?.created_at,
+          lastWeight?.created_at,
+          lastHealth?.created_at,
+        ].filter(Boolean).map(d => new Date(d as string));
+
+        const mostRecent = dates.length > 0 ? new Date(Math.max(...dates.map(d => d.getTime()))) : null;
+
+        if (mostRecent) {
           const now = new Date();
-          const diffDays = Math.floor((now.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+          const diffDays = Math.floor((now.getTime() - mostRecent.getTime()) / (1000 * 60 * 60 * 24));
 
           if (diffDays >= INACTIVITY_DAYS) {
             // Auto-suspend
