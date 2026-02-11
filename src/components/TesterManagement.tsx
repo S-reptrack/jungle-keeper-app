@@ -112,6 +112,14 @@ const TesterManagement = () => {
         };
       });
 
+      // Trier par dernière activité (plus récent en premier, sans activité en dernier)
+      testersWithEmail.sort((a, b) => {
+        if (a.inactiveDays === null && b.inactiveDays === null) return 0;
+        if (a.inactiveDays === null) return 1;
+        if (b.inactiveDays === null) return -1;
+        return a.inactiveDays - b.inactiveDays;
+      });
+
       setTesters(testersWithEmail);
     } catch (error) {
       console.error("Error fetching testers:", error);
