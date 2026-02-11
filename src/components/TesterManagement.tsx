@@ -84,27 +84,15 @@ const TesterManagement = () => {
         suspendedMap.set(inv.email, inv.suspended || false);
       });
 
-      // Récupérer la dernière activité de chaque testeur (toutes sources)
-      const [{ data: activities }, { data: reptileActivity }, { data: feedingActivity }, { data: weightActivity }, { data: healthActivity }] = await Promise.all([
-        supabase.from("tester_activity").select("user_id, created_at").in("user_id", userIds).order("created_at", { ascending: false }),
-        supabase.from("reptiles").select("user_id, updated_at").in("user_id", userIds).order("updated_at", { ascending: false }),
-        supabase.from("feedings").select("user_id, created_at").in("user_id", userIds).order("created_at", { ascending: false }),
-        supabase.from("weight_records").select("user_id, created_at").in("user_id", userIds).order("created_at", { ascending: false }),
-        supabase.from("health_records").select("user_id, created_at").in("user_id", userIds).order("created_at", { ascending: false }),
-      ]);
+      // Récupérer la dernière activité via fonction SECURITY DEFINER (contourne RLS)
+      const { data: activityData } = await supabase.rpc("get_tester_last_activity", {
+        tester_user_ids: userIds,
+      });
 
       const lastActivityMap = new Map<string, string>();
-      const updateMap = (userId: string, date: string) => {
-        const existing = lastActivityMap.get(userId);
-        if (!existing || new Date(date) > new Date(existing)) {
-          lastActivityMap.set(userId, date);
-        }
-      };
-      (activities || []).forEach(a => updateMap(a.user_id, a.created_at));
-      (reptileActivity || []).forEach(a => updateMap(a.user_id, a.updated_at));
-      (feedingActivity || []).forEach(a => updateMap(a.user_id, a.created_at));
-      (weightActivity || []).forEach(a => updateMap(a.user_id, a.created_at));
-      (healthActivity || []).forEach(a => updateMap(a.user_id, a.created_at));
+      (activityData || []).forEach((a: { user_id: string; last_activity: string }) => {
+        lastActivityMap.set(a.user_id, a.last_activity);
+      });
 
       const testersWithEmail: Tester[] = roles.map((role) => {
         const email = profileMap.get(role.user_id) || "Email inconnu";

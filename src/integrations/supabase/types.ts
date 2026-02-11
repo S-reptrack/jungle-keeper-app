@@ -613,6 +613,13 @@ export type Database = {
         Returns: boolean
       }
       check_email_exists: { Args: { check_email: string }; Returns: boolean }
+      get_tester_last_activity: {
+        Args: { tester_user_ids: string[] }
+        Returns: {
+          last_activity: string
+          user_id: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
