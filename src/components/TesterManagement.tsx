@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { UserPlus, Trash2, Users, Loader2, Mail, Send, Ban, RefreshCw } from "lucide-react";
+import { UserPlus, Trash2, Users, Loader2, Mail, Send, Ban, RefreshCw, Clock, AlertTriangle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Tester {
@@ -526,75 +526,92 @@ const TesterManagement = () => {
               {t("admin.testers.noTesters")}
             </p>
           ) : (
-            <div className="space-y-2">
-              {testers.map((tester) => (
-                <div
-                  key={tester.id}
-                  className={`flex items-center justify-between p-3 rounded-lg ${tester.suspended ? 'bg-destructive/10 border border-destructive/20' : 'bg-muted/50'}`}
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                    <span className="text-sm font-medium">{tester.email}</span>
-                    {tester.suspended ? (
-                      <Badge variant="destructive" className="text-xs w-fit">
-                        <Ban className="h-3 w-3 mr-1" />
-                        Suspendu
-                      </Badge>
-                    ) : (
-                      <Badge variant="secondary" className="text-xs w-fit">
-                        {t("admin.testers.tester")}
-                      </Badge>
-                    )}
-                    <span className="text-xs text-muted-foreground">
-                      depuis le {new Date(tester.created_at).toLocaleDateString("fr-FR")}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    {!tester.suspended && tester.inactiveDays === null && (
-                      <Badge variant="outline" className="text-xs text-destructive border-destructive/50 mr-1">
-                        ⚠️ Aucune activité
-                      </Badge>
-                    )}
-                    {!tester.suspended && tester.inactiveDays !== null && tester.inactiveDays >= 30 && (
-                      <Badge variant="outline" className="text-xs text-destructive border-destructive/50 mr-1">
-                        ⚠️ Inactif {tester.inactiveDays}j
-                      </Badge>
-                    )}
-                    {!tester.suspended && tester.inactiveDays !== null && tester.inactiveDays > 0 && tester.inactiveDays < 30 && (
-                      <span className="text-xs text-muted-foreground mr-1">
-                        {tester.inactiveDays}j
+             <div className="space-y-3">
+              {testers.map((tester) => {
+                const isInactive = tester.inactiveDays === null || tester.inactiveDays >= 30;
+                const activityColor = tester.suspended
+                  ? "text-destructive"
+                  : isInactive
+                    ? "text-destructive"
+                    : tester.inactiveDays! >= 20
+                      ? "text-amber-500"
+                      : "text-muted-foreground";
+
+                return (
+                  <div
+                    key={tester.id}
+                    className={`rounded-lg border p-4 ${
+                      tester.suspended
+                        ? "border-destructive/30 bg-destructive/5"
+                        : isInactive
+                          ? "border-destructive/20 bg-destructive/5"
+                          : "border-border bg-muted/30"
+                    }`}
+                  >
+                    {/* Ligne 1 : Email + Badge statut */}
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-sm font-semibold truncate">{tester.email}</span>
+                        {tester.suspended ? (
+                          <Badge variant="destructive" className="text-xs shrink-0">
+                            <Ban className="h-3 w-3 mr-1" />
+                            Suspendu
+                          </Badge>
+                        ) : (
+                          <Badge variant="secondary" className="text-xs shrink-0">
+                            {t("admin.testers.tester")}
+                          </Badge>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        {tester.suspended ? (
+                          <Button variant="outline" size="sm" onClick={() => reactivateTester(tester.email)} title="Réactiver" className="h-8 px-2">
+                            <RefreshCw className="h-3.5 w-3.5 mr-1" />
+                            <span className="hidden sm:inline text-xs">Réactiver</span>
+                          </Button>
+                        ) : (
+                          <Button variant="outline" size="sm" onClick={() => suspendTester(tester.email)} title="Suspendre" className="h-8 px-2 border-amber-500/30 text-amber-600 hover:bg-amber-500/10">
+                            <Ban className="h-3.5 w-3.5 mr-1" />
+                            <span className="hidden sm:inline text-xs">Suspendre</span>
+                          </Button>
+                        )}
+                        <Button variant="ghost" size="sm" onClick={() => removeTester(tester.id, tester.email)} className="text-destructive hover:text-destructive hover:bg-destructive/10 h-8 px-2">
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Ligne 2 : Infos date + activité */}
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-muted-foreground">
+                        Inscrit le {new Date(tester.created_at).toLocaleDateString("fr-FR")}
                       </span>
-                    )}
-                    {tester.suspended ? (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => reactivateTester(tester.email)}
-                        title="Réactiver"
-                      >
-                        <RefreshCw className="h-4 w-4" />
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => suspendTester(tester.email)}
-                        className="text-amber-600 hover:bg-amber-500/10"
-                        title="Suspendre"
-                      >
-                        <Ban className="h-4 w-4" />
-                      </Button>
-                    )}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeTester(tester.id, tester.email)}
-                      className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                      <div className={`flex items-center gap-1 font-medium ${activityColor}`}>
+                        {!tester.suspended && (
+                          <>
+                            {tester.inactiveDays === null ? (
+                              <>
+                                <AlertTriangle className="h-3.5 w-3.5" />
+                                <span>Aucune activité</span>
+                              </>
+                            ) : tester.inactiveDays >= 30 ? (
+                              <>
+                                <AlertTriangle className="h-3.5 w-3.5" />
+                                <span>Inactif depuis {tester.inactiveDays}j</span>
+                              </>
+                            ) : (
+                              <>
+                                <Clock className="h-3.5 w-3.5" />
+                                <span>Dernière activité il y a {tester.inactiveDays}j</span>
+                              </>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
