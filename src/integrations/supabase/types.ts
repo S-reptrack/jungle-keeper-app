@@ -58,6 +58,47 @@ export type Database = {
           },
         ]
       }
+      bowel_records: {
+        Row: {
+          bowel_date: string
+          consistency: string
+          created_at: string
+          id: string
+          notes: string | null
+          reptile_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bowel_date: string
+          consistency?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          reptile_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bowel_date?: string
+          consistency?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          reptile_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bowel_records_reptile_id_fkey"
+            columns: ["reptile_id"]
+            isOneToOne: false
+            referencedRelation: "reptiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       feedings: {
         Row: {
           calcium: boolean

@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from "@/components/ui/badge";
 import { Plus, Trash2, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import BowelSection from "./BowelSection";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -279,6 +280,7 @@ const SheddingTab = ({ reptileId, readOnly = false }: SheddingTabProps) => {
           )}
         </CardContent>
       </Card>
+      <BowelSection reptileId={reptileId} readOnly={readOnly} />
     </div>
   );
 };
