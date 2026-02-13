@@ -450,6 +450,47 @@ export type Database = {
         }
         Relationships: []
       }
+      shedding_records: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          quality: string
+          reptile_id: string
+          shedding_date: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          quality?: string
+          reptile_id: string
+          shedding_date: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          quality?: string
+          reptile_id?: string
+          shedding_date?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shedding_records_reptile_id_fkey"
+            columns: ["reptile_id"]
+            isOneToOne: false
+            referencedRelation: "reptiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tester_activity: {
         Row: {
           action_details: Json | null
