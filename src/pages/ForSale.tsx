@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
+import { PremiumFeatureGate } from "@/components/PremiumFeatureGate";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -114,6 +115,10 @@ const ForSale = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       <main className="max-w-7xl mx-auto px-4 py-8 md:mt-16" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
+        <PremiumFeatureGate
+          featureName={t("forSale.title") || "Mise en vente"}
+          featureDescription={t("premium.forSaleDescription") || "Gérez la mise en vente de vos reptiles avec la version Premium."}
+        >
         <div className="mb-8">
           <Button
             variant="ghost"
@@ -146,6 +151,7 @@ const ForSale = () => {
             ))}
           </div>
         )}
+        </PremiumFeatureGate>
       </main>
     </div>
   );

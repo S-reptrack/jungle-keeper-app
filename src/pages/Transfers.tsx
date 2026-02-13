@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import Navigation from "@/components/Navigation";
+import { PremiumFeatureGate } from "@/components/PremiumFeatureGate";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -178,6 +179,11 @@ export default function Transfers() {
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">{t("transfer.pageTitle")}</h1>
 
+        <PremiumFeatureGate
+          featureName={t("transfer.pageTitle")}
+          featureDescription={t("premium.transferDescription") || "Transférez vos animaux à d'autres utilisateurs avec la version Premium."}
+        >
+
         <Tabs defaultValue="received" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="received">
@@ -272,6 +278,7 @@ export default function Transfers() {
             )}
           </TabsContent>
         </Tabs>
+        </PremiumFeatureGate>
       </main>
     </div>
   );
