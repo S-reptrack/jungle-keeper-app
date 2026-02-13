@@ -1,6 +1,6 @@
 import { useParams, useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send, Skull, CheckCircle, Trash2, Image } from "lucide-react";
+import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send, Skull, CheckCircle, Trash2, Image, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,7 @@ import { TransferAnimalDialog } from "@/components/TransferAnimalDialog";
 import { PhotoHistoryTab } from "@/components/PhotoHistoryTab";
 import SoldTab from "@/components/SoldTab";
 import DeathTab from "@/components/DeathTab";
+import SheddingTab from "@/components/SheddingTab";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { differenceInYears, differenceInMonths } from "date-fns";
@@ -480,7 +481,7 @@ const ReptileDetail = () => {
           <div className="lg:col-span-2">
             {(reptile.status === "active" || reptile.status === "for_sale") ? (
               <Tabs defaultValue={defaultTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-7">
+                <TabsList className="grid w-full grid-cols-8">
                   <TabsTrigger value="overview" className="flex items-center justify-center gap-1 px-1">
                     <Eye className="w-4 h-4 shrink-0" />
                     <span className="truncate text-xs hidden md:inline">{t("reptile.tabs.overview")}</span>
@@ -492,6 +493,10 @@ const ReptileDetail = () => {
                   <TabsTrigger value="feeding" className="flex items-center justify-center gap-1 px-1">
                     <Utensils className="w-4 h-4 shrink-0" />
                     <span className="truncate text-xs hidden md:inline">{t("reptile.tabs.feeding")}</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="shedding" className="flex items-center justify-center gap-1 px-1">
+                    <Sparkles className="w-4 h-4 shrink-0" />
+                    <span className="truncate text-xs hidden md:inline">Mues</span>
                   </TabsTrigger>
                   <TabsTrigger value="reproduction" className="flex items-center justify-center gap-1 px-1">
                     <Heart className="w-4 h-4 shrink-0" />
@@ -561,6 +566,10 @@ const ReptileDetail = () => {
                 
                 <TabsContent value="feeding">
                   <FeedingTab reptileId={reptile.id} species={reptile.species} readOnly={isPreviousOwner || false} />
+                </TabsContent>
+                
+                <TabsContent value="shedding">
+                  <SheddingTab reptileId={reptile.id} readOnly={isPreviousOwner || false} />
                 </TabsContent>
                 
                 <TabsContent value="reproduction">
