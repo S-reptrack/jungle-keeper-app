@@ -10,10 +10,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from "@/components/ui/badge";
 import { Plus, Trash2, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import BowelSection from "./BowelSection";
 import { toast } from "sonner";
-import { format } from "date-fns";
-import { fr } from "date-fns/locale";
+import { format, type Locale } from "date-fns";
+import { fr, enUS, de, es, it, pt, nl, pl, ru, ja, zhCN, hi, th, id } from "date-fns/locale";
+import BowelSection from "./BowelSection";
 
 interface SheddingRecord {
   id: string;
@@ -28,14 +28,12 @@ interface SheddingTabProps {
   readOnly?: boolean;
 }
 
-const qualityOptions = [
-  { value: "complete", label: "Complète", color: "bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30" },
-  { value: "partial", label: "Partielle", color: "bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border-yellow-500/30" },
-  { value: "problematic", label: "Problématique", color: "bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30" },
-];
+const localeMap: Record<string, Locale> = {
+  fr, en: enUS, de, es, it, pt, nl, pl, ru, ja, zh: zhCN, hi, th, id,
+};
 
 const SheddingTab = ({ reptileId, readOnly = false }: SheddingTabProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [records, setRecords] = useState<SheddingRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -43,6 +41,12 @@ const SheddingTab = ({ reptileId, readOnly = false }: SheddingTabProps) => {
   const [quality, setQuality] = useState("complete");
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  const qualityOptions = [
+    { value: "complete", label: t("shedding.complete"), color: "bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30" },
+    { value: "partial", label: t("shedding.partial"), color: "bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border-yellow-500/30" },
+    { value: "problematic", label: t("shedding.problematic"), color: "bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30" },
+  ];
 
   const fetchRecords = async () => {
     try {
@@ -67,7 +71,7 @@ const SheddingTab = ({ reptileId, readOnly = false }: SheddingTabProps) => {
 
   const handleSubmit = async () => {
     if (!sheddingDate) {
-      toast.error("Veuillez sélectionner une date");
+      toast.error(t("shedding.dateRequired"));
       return;
     }
 
@@ -75,7 +79,7 @@ const SheddingTab = ({ reptileId, readOnly = false }: SheddingTabProps) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        toast.error("Vous devez être connecté");
+        toast.error(t("shedding.loginRequired"));
         return;
       }
 
@@ -91,7 +95,7 @@ const SheddingTab = ({ reptileId, readOnly = false }: SheddingTabProps) => {
 
       if (error) throw error;
 
-      toast.success("Mue enregistrée avec succès");
+      toast.success(t("shedding.success"));
       setDialogOpen(false);
       setSheddingDate(new Date().toISOString().split("T")[0]);
       setQuality("complete");
@@ -99,14 +103,14 @@ const SheddingTab = ({ reptileId, readOnly = false }: SheddingTabProps) => {
       fetchRecords();
     } catch (error) {
       console.error("Error adding shedding record:", error);
-      toast.error("Erreur lors de l'enregistrement de la mue");
+      toast.error(t("shedding.error"));
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleDelete = async (recordId: string) => {
-    const confirmDelete = window.confirm("Supprimer cet enregistrement de mue ?");
+    const confirmDelete = window.confirm(t("shedding.deleteConfirm"));
     if (!confirmDelete) return;
 
     try {
@@ -117,11 +121,11 @@ const SheddingTab = ({ reptileId, readOnly = false }: SheddingTabProps) => {
 
       if (error) throw error;
 
-      toast.success("Enregistrement supprimé");
+      toast.success(t("shedding.deleted"));
       fetchRecords();
     } catch (error) {
       console.error("Error deleting shedding record:", error);
-      toast.error("Erreur lors de la suppression");
+      toast.error(t("shedding.deleteError"));
     }
   };
 
@@ -137,16 +141,16 @@ const SheddingTab = ({ reptileId, readOnly = false }: SheddingTabProps) => {
 
   const formatDate = (dateString: string) => {
     const [year, month, day] = dateString.split("-").map(Number);
-    return format(new Date(year, month - 1, day), "d MMMM yyyy", { locale: fr });
+    const locale = localeMap[i18n.language] || enUS;
+    return format(new Date(year, month - 1, day), "d MMMM yyyy", { locale });
   };
 
-  // Calculate interval between sheds
   const getInterval = (index: number): string | null => {
     if (index >= records.length - 1) return null;
     const current = new Date(records[index].shedding_date);
     const previous = new Date(records[index + 1].shedding_date);
     const diffDays = Math.floor((current.getTime() - previous.getTime()) / (1000 * 60 * 60 * 24));
-    return `${diffDays} jours`;
+    return `${diffDays} ${t("shedding.days")}`;
   };
 
   if (loading) {
@@ -165,23 +169,23 @@ const SheddingTab = ({ reptileId, readOnly = false }: SheddingTabProps) => {
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <CardTitle className="flex items-center gap-2">
             <Sparkles className="w-5 h-5" />
-            Historique des mues
+            {t("shedding.title")}
           </CardTitle>
           {!readOnly && (
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
                 <Button size="sm" className="gap-1">
                   <Plus className="w-4 h-4" />
-                  Ajouter une mue
+                  {t("shedding.add")}
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Enregistrer une mue</DialogTitle>
+                  <DialogTitle>{t("shedding.record")}</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4 pt-2">
                   <div>
-                    <Label htmlFor="shedding-date">Date de la mue</Label>
+                    <Label htmlFor="shedding-date">{t("shedding.date")}</Label>
                     <Input
                       id="shedding-date"
                       type="date"
@@ -191,7 +195,7 @@ const SheddingTab = ({ reptileId, readOnly = false }: SheddingTabProps) => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="quality">Qualité de la mue</Label>
+                    <Label htmlFor="quality">{t("shedding.quality")}</Label>
                     <Select value={quality} onValueChange={setQuality}>
                       <SelectTrigger>
                         <SelectValue />
@@ -206,10 +210,10 @@ const SheddingTab = ({ reptileId, readOnly = false }: SheddingTabProps) => {
                     </Select>
                   </div>
                   <div>
-                    <Label htmlFor="notes">Notes (optionnel)</Label>
+                    <Label htmlFor="notes">{t("shedding.notes")}</Label>
                     <Textarea
                       id="notes"
-                      placeholder="Ex: Mue en un seul morceau, pas de rétention..."
+                      placeholder={t("shedding.notesPlaceholder")}
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       rows={3}
@@ -220,7 +224,7 @@ const SheddingTab = ({ reptileId, readOnly = false }: SheddingTabProps) => {
                     disabled={submitting}
                     className="w-full"
                   >
-                    {submitting ? "Enregistrement..." : "Enregistrer la mue"}
+                    {submitting ? t("shedding.saving") : t("shedding.save")}
                   </Button>
                 </div>
               </DialogContent>
@@ -231,10 +235,10 @@ const SheddingTab = ({ reptileId, readOnly = false }: SheddingTabProps) => {
           {records.length === 0 ? (
             <div className="text-center py-8">
               <Sparkles className="w-12 h-12 mx-auto text-muted-foreground/30 mb-3" />
-              <p className="text-muted-foreground">Aucune mue enregistrée</p>
+              <p className="text-muted-foreground">{t("shedding.empty")}</p>
               {!readOnly && (
                 <p className="text-sm text-muted-foreground mt-1">
-                  Cliquez sur "Ajouter une mue" pour commencer le suivi
+                  {t("shedding.emptyHint")}
                 </p>
               )}
             </div>
@@ -280,6 +284,7 @@ const SheddingTab = ({ reptileId, readOnly = false }: SheddingTabProps) => {
           )}
         </CardContent>
       </Card>
+
       <BowelSection reptileId={reptileId} readOnly={readOnly} />
     </div>
   );
