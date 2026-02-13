@@ -1,6 +1,6 @@
 import { useParams, useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send, Skull, CheckCircle, Trash2, Image, Sparkles } from "lucide-react";
+import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send, Skull, CheckCircle, Trash2, Image, Sparkles, Crown, Lock } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { differenceInYears, differenceInMonths } from "date-fns";
 import { useSignedImageUrl } from "@/lib/storageUtils";
+import { useSubscription } from "@/hooks/useSubscription";
 
 interface Reptile {
   id: string;
@@ -53,6 +54,7 @@ const ReptileDetail = () => {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const { t } = useTranslation();
+  const { subscribed } = useSubscription();
   const [reptile, setReptile] = useState<Reptile | null>(null);
   const [loading, setLoading] = useState(true);
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
@@ -428,7 +430,7 @@ const ReptileDetail = () => {
                   </span>
                   <span className="font-medium text-foreground">{reptile.weight}g</span>
                 </div>
-                {isCurrentOwner && (reptile.status === "active" || reptile.status === "for_sale") && (
+                {isCurrentOwner && subscribed && (reptile.status === "active" || reptile.status === "for_sale") && (
                   <div className="flex items-center justify-between py-3 border-t border-border">
                     <Label htmlFor="for-sale-switch" className="text-sm text-muted-foreground cursor-pointer">
                       À vendre
@@ -461,7 +463,7 @@ const ReptileDetail = () => {
                     />
                   </div>
                 )}
-                {isCurrentOwner && reptile.status === "sold" && (
+                {isCurrentOwner && subscribed && reptile.status === "sold" && (
                   <div className="mt-4">
                     <Button 
                       variant="outline" 
@@ -556,8 +558,22 @@ const ReptileDetail = () => {
                       </div>
                     </CardContent>
                   </Card>
-                  
-                  <WeightChart reptileId={reptile.id} />
+                  {subscribed ? (
+                    <WeightChart reptileId={reptile.id} />
+                  ) : (
+                    <Card>
+                      <CardContent className="py-8 text-center space-y-3">
+                        <Lock className="w-8 h-8 mx-auto text-muted-foreground" />
+                        <p className="text-sm text-muted-foreground">
+                          {t("premium.weightHistoryLocked") || "L'historique de poids est réservé aux abonnés Premium."}
+                        </p>
+                        <Button size="sm" onClick={() => navigate("/settings?tab=subscription")}>
+                          <Crown className="w-4 h-4 mr-2" />
+                          {t("premium.upgradeToPremium") || "Passer à Premium"}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  )}
                 </TabsContent>
                 
                 <TabsContent value="photos">
@@ -569,15 +585,81 @@ const ReptileDetail = () => {
                 </TabsContent>
                 
                 <TabsContent value="shedding">
-                  <SheddingTab reptileId={reptile.id} readOnly={isPreviousOwner || false} />
+                  {subscribed ? (
+                    <SheddingTab reptileId={reptile.id} readOnly={isPreviousOwner || false} />
+                  ) : (
+                    <Card>
+                      <CardContent className="py-12 text-center space-y-4">
+                        <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+                          <Lock className="w-8 h-8 text-primary" />
+                        </div>
+                        <h3 className="font-semibold flex items-center justify-center gap-2">
+                          <Crown className="w-5 h-5 text-amber-500" />
+                          {t("shedding.title") || "Mues & Selles"}
+                        </h3>
+                        <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                          {t("premium.sheddingLocked") || "Le suivi des mues et selles est réservé aux abonnés Premium."}
+                        </p>
+                        <Button onClick={() => navigate("/settings?tab=subscription")}>
+                          <Crown className="w-4 h-4 mr-2" />
+                          {t("premium.upgradeToPremium") || "Passer à Premium"}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  )}
                 </TabsContent>
                 
+                
                 <TabsContent value="reproduction">
-                  <ReproductionTab reptileId={reptile.id} reptileSex={reptile.sex} reptileSpecies={reptile.species} reptileCategory={reptile.category} readOnly={isPreviousOwner || false} />
+                  {subscribed ? (
+                    <ReproductionTab reptileId={reptile.id} reptileSex={reptile.sex} reptileSpecies={reptile.species} reptileCategory={reptile.category} readOnly={isPreviousOwner || false} />
+                  ) : (
+                    <Card>
+                      <CardContent className="py-12 text-center space-y-4">
+                        <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+                          <Lock className="w-8 h-8 text-primary" />
+                        </div>
+                        <h3 className="font-semibold flex items-center justify-center gap-2">
+                          <Crown className="w-5 h-5 text-amber-500" />
+                          {t("reptile.tabs.reproduction")}
+                        </h3>
+                        <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                          {t("premium.reproductionLocked") || "Le suivi de reproduction est réservé aux abonnés Premium."}
+                        </p>
+                        <Button onClick={() => navigate("/settings?tab=subscription")}>
+                          <Crown className="w-4 h-4 mr-2" />
+                          {t("premium.upgradeToPremium") || "Passer à Premium"}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  )}
+                
                 </TabsContent>
                 
                 <TabsContent value="health" className="space-y-4">
-                  <HealthTab reptileId={reptile.id} reptileStatus={reptile.status} readOnly={isPreviousOwner || false} />
+                  {subscribed ? (
+                    <HealthTab reptileId={reptile.id} reptileStatus={reptile.status} readOnly={isPreviousOwner || false} />
+                  ) : (
+                    <Card>
+                      <CardContent className="py-12 text-center space-y-4">
+                        <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+                          <Lock className="w-8 h-8 text-primary" />
+                        </div>
+                        <h3 className="font-semibold flex items-center justify-center gap-2">
+                          <Crown className="w-5 h-5 text-amber-500" />
+                          {t("reptile.tabs.health")}
+                        </h3>
+                        <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                          {t("premium.healthLocked") || "Le suivi santé est réservé aux abonnés Premium."}
+                        </p>
+                        <Button onClick={() => navigate("/settings?tab=subscription")}>
+                          <Crown className="w-4 h-4 mr-2" />
+                          {t("premium.upgradeToPremium") || "Passer à Premium"}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  )}
+                
                 </TabsContent>
                 
                 
