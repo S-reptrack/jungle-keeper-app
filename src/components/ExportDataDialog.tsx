@@ -11,14 +11,31 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
+import { Download, Crown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useSubscription } from "@/hooks/useSubscription";
+import { useNavigate } from "react-router-dom";
 
 const ExportDataDialog = () => {
   const { t } = useTranslation();
+  const { subscribed } = useSubscription();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  if (!subscribed) {
+    return (
+      <Button
+        variant="outline"
+        className="w-full"
+        onClick={() => navigate("/settings?tab=subscription")}
+      >
+        <Crown className="w-4 h-4 mr-2 text-amber-500" />
+        {t("gdpr.exportData")} — Premium
+      </Button>
+    );
+  }
 
   const handleExport = async () => {
     setLoading(true);
