@@ -10,6 +10,8 @@ import {
   Shield, 
   ChevronRight,
   Check,
+  X,
+  Crown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -142,6 +144,81 @@ const Landing = () => {
               {t("landing.tryFree")}
             </Button>
             <p className="text-xs text-muted-foreground">{t("landing.securePayment")}</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Table */}
+      <section className="py-16 px-4">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground text-center mb-2">
+            {t("landing.comparisonTitle") || "Gratuit vs Premium"}
+          </h2>
+          <p className="text-center text-muted-foreground mb-8">
+            {t("landing.comparisonSubtitle") || "Comparez les deux offres et choisissez celle qui vous convient"}
+          </p>
+          <div className="rounded-xl border border-border overflow-hidden">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-muted/50">
+                  <th className="text-left p-4 font-semibold text-foreground">{t("landing.feature") || "Fonctionnalité"}</th>
+                  <th className="text-center p-4 font-semibold text-foreground">{t("landing.free") || "🆓 Gratuit"}</th>
+                  <th className="text-center p-4 font-semibold text-foreground">
+                    <span className="inline-flex items-center gap-1">
+                      <Crown className="w-4 h-4 text-amber-500" />
+                      Premium
+                    </span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {[
+                  { feature: t("landing.compareReptiles") || "Nombre de reptiles", free: "5 max", premium: "♾️" },
+                  { feature: t("landing.compareFeeding") || "Suivi alimentation", free: true, premium: true },
+                  { feature: t("landing.compareWeight") || "Poids actuel", free: true, premium: true },
+                  { feature: t("landing.compareWeightHistory") || "Historique de poids", free: false, premium: true },
+                  { feature: t("landing.compareQR") || "Scanner QR Code", free: true, premium: true },
+                  { feature: t("landing.compareProfilePhoto") || "Photo de profil", free: true, premium: true },
+                  { feature: t("landing.comparePhotoHistory") || "Historique photos", free: false, premium: true },
+                  { feature: t("landing.compareShedding") || "Suivi mues & selles", free: false, premium: true },
+                  { feature: t("landing.compareReproduction") || "Suivi reproduction", free: false, premium: true },
+                  { feature: t("landing.compareHealth") || "Suivi santé", free: false, premium: true },
+                  { feature: t("landing.compareGenealogy") || "Généalogie", free: false, premium: true },
+                  { feature: t("landing.compareAnalytics") || "Analytiques avancées", free: false, premium: true },
+                  { feature: t("landing.compareExport") || "Export de données", free: false, premium: true },
+                  { feature: t("landing.compareTransfer") || "Transfert d'animaux", free: false, premium: true },
+                  { feature: t("landing.compareSale") || "Mise en vente", free: false, premium: true },
+                ].map((row, i) => (
+                  <tr key={i} className="hover:bg-muted/30 transition-colors">
+                    <td className="p-4 text-foreground">{row.feature}</td>
+                    <td className="p-4 text-center">
+                      {typeof row.free === "string" ? (
+                        <span className="text-muted-foreground font-medium">{row.free}</span>
+                      ) : row.free ? (
+                        <Check className="w-5 h-5 text-primary mx-auto" />
+                      ) : (
+                        <X className="w-5 h-5 text-muted-foreground/40 mx-auto" />
+                      )}
+                    </td>
+                    <td className="p-4 text-center">
+                      {typeof row.premium === "string" ? (
+                        <span className="text-primary font-bold">{row.premium}</span>
+                      ) : row.premium ? (
+                        <Check className="w-5 h-5 text-primary mx-auto" />
+                      ) : (
+                        <X className="w-5 h-5 text-muted-foreground/40 mx-auto" />
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-6 text-center">
+            <Button size="lg" onClick={() => navigate("/auth")} className="text-base px-8">
+              <Crown className="w-5 h-5 mr-2" />
+              {t("landing.startFree") || "Commencer gratuitement"}
+            </Button>
           </div>
         </div>
       </section>
