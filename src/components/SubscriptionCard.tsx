@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { supabase } from "@/integrations/supabase/client";
 import { CreditCard, Check, Crown, Loader2, ExternalLink, User } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -33,9 +34,31 @@ const SubscriptionCard = () => {
   // Handle subscription success/cancel URL params
   useEffect(() => {
     const subscriptionStatus = searchParams.get("subscription");
+    const refCode = searchParams.get("ref");
+    
     if (subscriptionStatus === "success") {
       toast.success(t("subscription.successMessage") || "Abonnement activé avec succès !");
       checkSubscription();
+      
+      // Apply referral reward if a referral code was used
+      if (refCode) {
+        const applyReferral = async () => {
+          try {
+            const { data: sessionData } = await supabase.auth.getSession();
+            const accessToken = sessionData.session?.access_token;
+            if (accessToken) {
+              await supabase.functions.invoke("apply-referral-reward", {
+                headers: { Authorization: `Bearer ${accessToken}` },
+                body: { referral_code: refCode },
+              });
+            }
+          } catch (error) {
+            console.error("Error applying referral reward:", error);
+          }
+        };
+        applyReferral();
+      }
+      
       setSearchParams({});
     } else if (subscriptionStatus === "cancelled") {
       toast.info(t("subscription.cancelledMessage") || "Paiement annulé");

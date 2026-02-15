@@ -194,6 +194,7 @@ export type Database = {
           created_at: string
           email: string | null
           id: string
+          referral_code_used: string | null
           updated_at: string
           user_id: string
         }
@@ -201,6 +202,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: string
+          referral_code_used?: string | null
           updated_at?: string
           user_id: string
         }
@@ -208,10 +210,79 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: string
+          referral_code_used?: string | null
           updated_at?: string
           user_id?: string
         }
         Relationships: []
+      }
+      referral_codes: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          is_active: boolean
+          user_id: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          user_id: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
+      referral_conversions: {
+        Row: {
+          created_at: string
+          id: string
+          referral_code_id: string
+          referred_user_id: string
+          referrer_user_id: string
+          reward_applied: boolean
+          reward_applied_at: string | null
+          stripe_coupon_id: string | null
+          subscription_type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          referral_code_id: string
+          referred_user_id: string
+          referrer_user_id: string
+          reward_applied?: boolean
+          reward_applied_at?: string | null
+          stripe_coupon_id?: string | null
+          subscription_type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          referral_code_id?: string
+          referred_user_id?: string
+          referrer_user_id?: string
+          reward_applied?: boolean
+          reward_applied_at?: string | null
+          stripe_coupon_id?: string | null
+          subscription_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_conversions_referral_code_id_fkey"
+            columns: ["referral_code_id"]
+            isOneToOne: false
+            referencedRelation: "referral_codes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       reproduction_observations: {
         Row: {
@@ -695,6 +766,11 @@ export type Database = {
         Returns: boolean
       }
       check_email_exists: { Args: { check_email: string }; Returns: boolean }
+      generate_referral_code: { Args: never; Returns: string }
+      get_referral_reward_count: {
+        Args: { p_user_id: string }
+        Returns: number
+      }
       get_tester_last_activity: {
         Args: { tester_user_ids: string[] }
         Returns: {
@@ -721,6 +797,7 @@ export type Database = {
         Args: { user_email: string }
         Returns: undefined
       }
+      validate_referral_code: { Args: { p_code: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "user" | "tester" | "beta_tester"

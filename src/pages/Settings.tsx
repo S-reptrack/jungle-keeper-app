@@ -19,6 +19,7 @@ import ExportDataDialog from "@/components/ExportDataDialog";
 import DeleteAccountDialog from "@/components/DeleteAccountDialog";
 import SubscriptionCard from "@/components/SubscriptionCard";
 import TesterFeedbackForm from "@/components/TesterFeedbackForm";
+import ReferralCard from "@/components/ReferralCard";
 
 const Settings = () => {
   const { t, i18n } = useTranslation();
@@ -84,6 +85,9 @@ const Settings = () => {
           
           {/* Abonnement Premium */}
           <SubscriptionCard />
+
+          {/* Parrainage */}
+          <ReferralCard />
           {/* Apparence */}
           <Card>
             <CardHeader>

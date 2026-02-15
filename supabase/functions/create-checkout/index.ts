@@ -25,9 +25,9 @@ serve(async (req) => {
   try {
     logStep("Function started");
 
-    const { priceId } = await req.json();
+    const { priceId, referralCode } = await req.json();
     if (!priceId) throw new Error("Price ID is required");
-    logStep("Price ID received", { priceId });
+    logStep("Price ID received", { priceId, referralCode });
 
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) throw new Error("Authorization header required - please log in first");
@@ -46,6 +46,13 @@ serve(async (req) => {
     }
 
     const origin = req.headers.get("origin") || "http://localhost:3000";
+    
+    // Build metadata with referral code if present
+    const metadata: Record<string, string> = {};
+    if (referralCode) {
+      metadata.referral_code = referralCode;
+    }
+
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
@@ -56,8 +63,9 @@ serve(async (req) => {
         },
       ],
       mode: "subscription",
-      success_url: `${origin}/settings?subscription=success`,
+      success_url: `${origin}/settings?subscription=success${referralCode ? `&ref=${referralCode}` : ''}`,
       cancel_url: `${origin}/settings?subscription=cancelled`,
+      metadata,
     });
 
     logStep("Checkout session created", { sessionId: session.id, url: session.url });
