@@ -1,1 +1,4 @@
 project_id = "bwjuuubedlxnpgbojwdn"
+
+[functions.apply-referral-reward]
+verify_jwt = false

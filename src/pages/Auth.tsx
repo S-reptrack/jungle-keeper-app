@@ -12,6 +12,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import jungleHero from "@/assets/jungle-hero.jpg";
 import { validatePassword, validatePasswordComplete, type PasswordValidationResult } from "@/lib/passwordValidation";
 import LanguageSelector from "@/components/LanguageSelector";
+import ReferralCodeInput from "@/components/ReferralCodeInput";
 
 const Auth = () => {
   const { t } = useTranslation();
@@ -22,6 +23,8 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [passwordValidation, setPasswordValidation] = useState<PasswordValidationResult | null>(null);
   const [checkingBreach, setCheckingBreach] = useState(false);
+  const [referralCode, setReferralCode] = useState("");
+  const [referralValid, setReferralValid] = useState(false);
 
   const checkAndRedirect = async (userId: string) => {
     // Vérifier si l'utilisateur est admin
@@ -99,6 +102,7 @@ const Auth = () => {
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/`,
+            data: referralCode ? { referral_code: referralCode } : undefined,
           },
         });
         if (error) throw error;
@@ -233,6 +237,15 @@ const Auth = () => {
                   </div>
                 )}
               </div>
+
+              {/* Code de parrainage */}
+              {!isLogin && (
+                <ReferralCodeInput
+                  value={referralCode}
+                  onChange={setReferralCode}
+                  onValidated={setReferralValid}
+                />
+              )}
 
               {/* Avertissement de vérification */}
               {!isLogin && checkingBreach && (
