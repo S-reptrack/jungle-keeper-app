@@ -157,35 +157,8 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     }
   };
 
-  // Vérifie et demande les permissions caméra pour les plugins natifs
-  const ensureNativePermissions = async (): Promise<boolean> => {
-    try {
-      // Capacitor Camera
-      const camPerm = await (Camera as any)?.checkPermissions?.();
-      if (camPerm?.camera !== 'granted') {
-        const camReq = await (Camera as any)?.requestPermissions?.({ permissions: ['camera'] });
-        if (camReq?.camera !== 'granted') {
-          toast.error("Accès caméra refusé. Autorisez-la dans les réglages.");
-          setError("Accès caméra refusé");
-          return false;
-        }
-      }
-    } catch {}
-
-    try {
-      // ML Kit Barcode Scanner
-      const res = await (BarcodeScanner as any)?.checkPermissions?.();
-      if (res?.camera && res.camera !== 'granted') {
-        const req = await (BarcodeScanner as any)?.requestPermissions?.();
-        if (req?.camera !== 'granted') {
-          toast.error("Accès caméra refusé pour le scanner. Activez-le dans les réglages.");
-          setError("Accès caméra refusé pour le scanner");
-          return false;
-        }
-      }
-    } catch {}
-    return true;
-  };
+  // Sur Capacitor natif, Camera.getPhoto() gère ses propres permissions.
+  // Ne pas pré-vérifier les permissions car cela peut bloquer l'accès.
 
   const startScanning = async () => {
     try {
@@ -194,9 +167,6 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
       // Native (Capacitor) - Use Camera API like ImageUploadDialog
       if (Capacitor.isNativePlatform() && !forceWeb) {
         try {
-          // Vérifie les permissions caméra
-          const permOk = await ensureNativePermissions();
-          if (!permOk) return;
 
           // Vérifie la disponibilité du plugin natif ML Kit
           const hasMLKit = (Capacitor as any)?.isPluginAvailable?.('BarcodeScanner') && typeof (BarcodeScanner as any)?.scan === 'function';
