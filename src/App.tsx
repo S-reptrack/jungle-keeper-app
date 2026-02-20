@@ -62,7 +62,7 @@ const App = () => (
             <Route path="/terms" element={<Terms />} />
             <Route path="/legal" element={<Legal />} />
             
-            {/* Route Admin EN DEHORS du MaintenanceGuard - priorité haute */}
+            {/* Route Admin - priorité haute, en dehors du MaintenanceGuard */}
             <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
             
             {/* Toutes les autres routes passent par MaintenanceGuard */}
