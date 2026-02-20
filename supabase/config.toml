@@ -2,3 +2,6 @@ project_id = "bwjuuubedlxnpgbojwdn"
 
 [functions.apply-referral-reward]
 verify_jwt = false
+
+[functions.invite-tester]
+verify_jwt = false
