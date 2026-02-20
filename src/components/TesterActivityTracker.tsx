@@ -76,13 +76,26 @@ const TesterActivityTracker = () => {
 
   // Mettre à jour la durée quand l'utilisateur quitte la page
   useEffect(() => {
-    const handleBeforeUnload = () => {
+    const handleBeforeUnload = async () => {
       if (currentActivityId.current && user) {
         const duration = Math.floor((Date.now() - pageStartTime.current) / 1000);
-        // Utiliser sendBeacon pour une mise à jour fiable avant la fermeture
-        const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/tester_activity?id=eq.${currentActivityId.current}`;
-        const payload = JSON.stringify({ session_duration: duration });
-        navigator.sendBeacon(url, new Blob([payload], { type: 'application/json' }));
+        // Utiliser fetch keepalive avec authentification au lieu de sendBeacon sans auth
+        const { data: sessionData } = await supabase.auth.getSession();
+        const accessToken = sessionData?.session?.access_token;
+        if (accessToken) {
+          const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/tester_activity?id=eq.${currentActivityId.current}`;
+          fetch(url, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+              'Authorization': `Bearer ${accessToken}`,
+              'Prefer': 'return=minimal',
+            },
+            body: JSON.stringify({ session_duration: duration }),
+            keepalive: true,
+          }).catch(() => {});
+        }
       }
     };
 
