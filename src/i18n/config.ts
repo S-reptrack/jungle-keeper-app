@@ -36,8 +36,10 @@ export const languages = [
   { code: 'zh', name: '简体中文', flag: '🇨🇳' },
 ];
 
-// Get saved language from localStorage or default to 'fr'
-const savedLanguage = localStorage.getItem('language') || 'fr';
+import { detectLanguageFromIP } from './detectLanguage';
+
+// Get saved language from localStorage
+const savedLanguage = localStorage.getItem('language');
 
 i18n
   .use(initReactI18next)
@@ -60,7 +62,7 @@ i18n
       ja: { translation: ja },
       zh: { translation: zh },
     },
-    lng: savedLanguage,
+    lng: savedLanguage || 'en',
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false,
@@ -71,5 +73,14 @@ i18n
 i18n.on('languageChanged', (lng) => {
   localStorage.setItem('language', lng);
 });
+
+// Auto-detect language from IP on first visit only
+if (!savedLanguage) {
+  detectLanguageFromIP().then((lang) => {
+    if (lang && lang !== i18n.language) {
+      i18n.changeLanguage(lang);
+    }
+  });
+}
 
 export default i18n;
