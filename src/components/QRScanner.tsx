@@ -37,12 +37,9 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     };
   }, []);
 
-  // Démarrage auto sur mobile natif quand le dialogue s'ouvre
-  useEffect(() => {
-    if (open && Capacitor.isNativePlatform() && !scanning) {
-      startScanning();
-    }
-  }, [open]);
+  // Ne PAS démarrer automatiquement la caméra dans useEffect
+  // Sur Android, l'accès caméra DOIT être déclenché par un geste utilisateur (clic)
+  // Sinon le navigateur refuse l'accès avec "NotAllowedError"
 
   const scanFromGallery = async () => {
     try {
