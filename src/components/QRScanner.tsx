@@ -655,7 +655,7 @@ const handleScanSuccess = async (decodedText: string) => {
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <span className="flex items-center gap-2">
@@ -663,12 +663,13 @@ const handleScanSuccess = async (decodedText: string) => {
               Scanner un QR Code
             </span>
             <Button
-              variant="ghost"
-              size="icon"
+              variant="outline"
+              size="sm"
               onClick={handleClose}
-              className="h-6 w-6"
+              className="h-8 px-3 gap-1"
             >
               <X className="h-4 w-4" />
+              <span className="text-xs">Fermer</span>
             </Button>
           </DialogTitle>
           <DialogDescription className="sr-only">
