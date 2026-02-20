@@ -1,14 +1,15 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Download, Instagram, ArrowLeft, Share2 } from "lucide-react";
+import { Download, Instagram, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import storyBg from "@/assets/instagram-story-bg.jpg";
+import storyBg from "@/assets/instagram-story-bg-v2.jpg";
 import sreptrackLogo from "@/assets/sreptrack-logo.png";
+
+const APP_URL = "https://s-reptrack.app";
 
 const InstagramPromo = () => {
   const navigate = useNavigate();
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [downloading, setDownloading] = useState(false);
 
   const handleDownload = async () => {
@@ -19,7 +20,7 @@ const InstagramPromo = () => {
       canvas.height = 1920;
       const ctx = canvas.getContext("2d")!;
 
-      // Load background image
+      // Load background
       const bgImg = new Image();
       bgImg.crossOrigin = "anonymous";
       await new Promise<void>((resolve, reject) => {
@@ -29,49 +30,62 @@ const InstagramPromo = () => {
       });
       ctx.drawImage(bgImg, 0, 0, 1080, 1920);
 
-      // Dark overlay gradient (top and bottom)
-      const topGrad = ctx.createLinearGradient(0, 0, 0, 500);
-      topGrad.addColorStop(0, "rgba(0,0,0,0.85)");
+      // Dark overlay for readability
+      ctx.fillStyle = "rgba(0,0,0,0.35)";
+      ctx.fillRect(0, 0, 1080, 1920);
+
+      // Top gradient
+      const topGrad = ctx.createLinearGradient(0, 0, 0, 400);
+      topGrad.addColorStop(0, "rgba(0,0,0,0.7)");
       topGrad.addColorStop(1, "rgba(0,0,0,0)");
       ctx.fillStyle = topGrad;
-      ctx.fillRect(0, 0, 1080, 500);
+      ctx.fillRect(0, 0, 1080, 400);
 
-      const botGrad = ctx.createLinearGradient(0, 1400, 0, 1920);
+      // Bottom gradient
+      const botGrad = ctx.createLinearGradient(0, 1300, 0, 1920);
       botGrad.addColorStop(0, "rgba(0,0,0,0)");
-      botGrad.addColorStop(1, "rgba(0,0,0,0.9)");
+      botGrad.addColorStop(1, "rgba(0,0,0,0.85)");
       ctx.fillStyle = botGrad;
-      ctx.fillRect(0, 1400, 1080, 520);
+      ctx.fillRect(0, 1300, 1080, 620);
 
-      // Logo area - emoji + text
+      // Load and draw logo centered
+      const logoImg = new Image();
+      logoImg.crossOrigin = "anonymous";
+      await new Promise<void>((resolve, reject) => {
+        logoImg.onload = () => resolve();
+        logoImg.onerror = reject;
+        logoImg.src = sreptrackLogo;
+      });
+      const logoSize = 320;
+      const logoX = (1080 - logoSize) / 2;
+      const logoY = 580;
+      ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
+
+      // App name under logo
       ctx.textAlign = "center";
       ctx.fillStyle = "#4ade80";
-      ctx.font = "bold 52px -apple-system, BlinkMacSystemFont, sans-serif";
-      ctx.fillText("🦎 S-RepTrack", 540, 120);
+      ctx.font = "bold 72px -apple-system, BlinkMacSystemFont, sans-serif";
+      ctx.fillText("S-RepTrack", 540, logoY + logoSize + 70);
 
-      // Subtitle
-      ctx.fillStyle = "rgba(255,255,255,0.7)";
-      ctx.font = "28px -apple-system, BlinkMacSystemFont, sans-serif";
-      ctx.fillText("Gestion de reptiles", 540, 170);
+      // Tagline
+      ctx.fillStyle = "rgba(255,255,255,0.8)";
+      ctx.font = "32px -apple-system, BlinkMacSystemFont, sans-serif";
+      ctx.fillText("Gestion de reptiles professionnelle", 540, logoY + logoSize + 120);
 
-      // Main headline - "GRATUIT" badge
+      // GRATUIT badge
       ctx.fillStyle = "#4ade80";
-      const badgeWidth = 300;
-      const badgeHeight = 65;
-      const badgeX = 540 - badgeWidth / 2;
-      const badgeY = 1520;
+      const badgeW = 340;
+      const badgeH = 70;
+      const badgeX = (1080 - badgeW) / 2;
+      const badgeY = 1420;
       ctx.beginPath();
-      ctx.roundRect(badgeX, badgeY, badgeWidth, badgeHeight, 16);
+      ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 16);
       ctx.fill();
-
       ctx.fillStyle = "#000000";
-      ctx.font = "bold 40px -apple-system, BlinkMacSystemFont, sans-serif";
-      ctx.fillText("100% GRATUIT", 540, 1565);
+      ctx.font = "bold 42px -apple-system, BlinkMacSystemFont, sans-serif";
+      ctx.fillText("100% GRATUIT", 540, 1468);
 
-      // Feature list
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 36px -apple-system, BlinkMacSystemFont, sans-serif";
-      ctx.textAlign = "center";
-      
+      // Features
       const features = [
         "📊 Suivi poids & croissance",
         "🍽️ Gestion des nourrissages",
@@ -79,19 +93,18 @@ const InstagramPromo = () => {
         "🏥 Carnet de santé",
         "🥚 Reproduction & généalogie",
       ];
-      
-      let y = 1630;
-      ctx.font = "28px -apple-system, BlinkMacSystemFont, sans-serif";
+      ctx.font = "30px -apple-system, BlinkMacSystemFont, sans-serif";
+      let y = 1540;
       features.forEach((feat) => {
         ctx.fillStyle = "rgba(255,255,255,0.9)";
         ctx.fillText(feat, 540, y);
-        y += 42;
+        y += 46;
       });
 
-      // CTA
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 30px -apple-system, BlinkMacSystemFont, sans-serif";
-      ctx.fillText("🔗 jungle-keeper-app.lovable.app", 540, y + 30);
+      // URL CTA
+      ctx.fillStyle = "#4ade80";
+      ctx.font = "bold 34px -apple-system, BlinkMacSystemFont, sans-serif";
+      ctx.fillText("🔗 s-reptrack.app", 540, y + 40);
 
       // Download
       const link = document.createElement("a");
@@ -131,44 +144,58 @@ const InstagramPromo = () => {
                 alt="Instagram Story Background"
                 className="w-full h-full object-cover"
               />
-              {/* Top overlay */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-transparent to-transparent" style={{ height: "30%" }} />
-              {/* Bottom overlay */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent" style={{ height: "45%" }} />
+              {/* Dark overlay */}
+              <div className="absolute inset-0 bg-black/35" />
+              {/* Top gradient */}
+              <div className="absolute top-0 left-0 right-0 h-[25%] bg-gradient-to-b from-black/70 to-transparent" />
+              {/* Bottom gradient */}
+              <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-black/85 to-transparent" />
 
-              {/* Logo */}
-              <div className="absolute top-6 left-0 right-0 text-center">
-                <p className="text-2xl font-bold text-green-400">🦎 S-RepTrack</p>
-                <p className="text-xs text-white/70 mt-1">Gestion de reptiles</p>
+              {/* Logo centered */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center -mt-10">
+                <img
+                  src={sreptrackLogo}
+                  alt="S-RepTrack Logo"
+                  className="w-28 h-28 md:w-36 md:h-36 drop-shadow-2xl"
+                />
+                <h2 className="text-3xl font-bold text-green-400 mt-4 drop-shadow-lg">S-RepTrack</h2>
+                <p className="text-white/80 text-sm mt-1">Gestion de reptiles professionnelle</p>
               </div>
 
-              {/* Content */}
+              {/* Bottom content */}
               <div className="absolute bottom-4 left-4 right-4 text-center space-y-3">
-                <div className="inline-block bg-green-400 text-black font-bold text-lg px-6 py-2 rounded-xl">
+                <div className="inline-block bg-green-400 text-black font-bold text-base px-6 py-2 rounded-xl">
                   100% GRATUIT
                 </div>
-                <div className="space-y-1 text-white/90 text-sm">
+                <div className="space-y-1 text-white/90 text-xs">
                   <p>📊 Suivi poids & croissance</p>
                   <p>🍽️ Gestion des nourrissages</p>
                   <p>🐍 Suivi des mues</p>
                   <p>🏥 Carnet de santé</p>
                   <p>🥚 Reproduction & généalogie</p>
                 </div>
-                <p className="text-white font-semibold text-xs mt-2">
-                  🔗 jungle-keeper-app.lovable.app
-                </p>
+                <a
+                  href={APP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block text-green-400 font-bold text-sm mt-2 underline underline-offset-4"
+                >
+                  🔗 s-reptrack.app
+                </a>
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* Actions */}
-        <div className="flex gap-3">
-          <Button onClick={handleDownload} disabled={downloading} className="flex-1 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700">
-            <Download className="w-4 h-4 mr-2" />
-            {downloading ? "Génération..." : "Télécharger (1080x1920)"}
-          </Button>
-        </div>
+        <Button
+          onClick={handleDownload}
+          disabled={downloading}
+          className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
+        >
+          <Download className="w-4 h-4 mr-2" />
+          {downloading ? "Génération..." : "Télécharger (1080x1920)"}
+        </Button>
 
         <p className="text-xs text-muted-foreground text-center">
           📱 Image optimisée pour les Stories et Reels Instagram
