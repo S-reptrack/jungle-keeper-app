@@ -209,28 +209,30 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
                   <FormItem>
                     <FormLabel>{t("feeding.preyState", "État de la proie")}</FormLabel>
                     <div className="flex gap-4">
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="preyState"
-                          value="dead"
-                          checked={field.value === "dead"}
-                          onChange={() => field.onChange("dead")}
-                          className="accent-primary"
-                        />
-                        <span className="text-sm">{t("feeding.dead", "Mort / Décongelé")}</span>
-                      </label>
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="preyState"
-                          value="live"
-                          checked={field.value === "live"}
-                          onChange={() => field.onChange("live")}
-                          className="accent-primary"
-                        />
-                        <span className="text-sm">{t("feeding.live", "Vivant")}</span>
-                      </label>
+                      <button
+                        type="button"
+                        onClick={() => field.onChange("dead")}
+                        className={cn(
+                          "flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-colors",
+                          field.value === "dead"
+                            ? "border-primary bg-primary/10 text-primary font-medium"
+                            : "border-border text-muted-foreground hover:border-primary/50"
+                        )}
+                      >
+                        ⚫ {t("feeding.dead", "Mort / Décongelé")}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => field.onChange("live")}
+                        className={cn(
+                          "flex items-center gap-2 px-3 py-2 rounded-md border text-sm transition-colors",
+                          field.value === "live"
+                            ? "border-green-500 bg-green-500/10 text-green-600 font-medium"
+                            : "border-border text-muted-foreground hover:border-green-500/50"
+                        )}
+                      >
+                        🟢 {t("feeding.live", "Vivant")}
+                      </button>
                     </div>
                   </FormItem>
                 )}
