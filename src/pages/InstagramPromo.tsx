@@ -17,7 +17,7 @@ const InstagramPromo = () => {
     try {
       const canvas = document.createElement("canvas");
       canvas.width = 1080;
-      canvas.height = 1920;
+      canvas.height = 1350;
       const ctx = canvas.getContext("2d")!;
 
       // Load background
@@ -28,25 +28,25 @@ const InstagramPromo = () => {
         bgImg.onerror = reject;
         bgImg.src = storyBg;
       });
-      ctx.drawImage(bgImg, 0, 0, 1080, 1920);
+      ctx.drawImage(bgImg, 0, 0, 1080, 1350);
 
       // Dark overlay for readability
       ctx.fillStyle = "rgba(0,0,0,0.35)";
-      ctx.fillRect(0, 0, 1080, 1920);
+      ctx.fillRect(0, 0, 1080, 1350);
 
       // Top gradient
-      const topGrad = ctx.createLinearGradient(0, 0, 0, 400);
+      const topGrad = ctx.createLinearGradient(0, 0, 0, 300);
       topGrad.addColorStop(0, "rgba(0,0,0,0.7)");
       topGrad.addColorStop(1, "rgba(0,0,0,0)");
       ctx.fillStyle = topGrad;
-      ctx.fillRect(0, 0, 1080, 400);
+      ctx.fillRect(0, 0, 1080, 300);
 
       // Bottom gradient
-      const botGrad = ctx.createLinearGradient(0, 1300, 0, 1920);
+      const botGrad = ctx.createLinearGradient(0, 900, 0, 1350);
       botGrad.addColorStop(0, "rgba(0,0,0,0)");
       botGrad.addColorStop(1, "rgba(0,0,0,0.85)");
       ctx.fillStyle = botGrad;
-      ctx.fillRect(0, 1300, 1080, 620);
+      ctx.fillRect(0, 900, 1080, 450);
 
       // Load and draw logo centered
       const logoImg = new Image();
@@ -56,9 +56,9 @@ const InstagramPromo = () => {
         logoImg.onerror = reject;
         logoImg.src = sreptrackLogo;
       });
-      const logoSize = 320;
+      const logoSize = 280;
       const logoX = (1080 - logoSize) / 2;
-      const logoY = 580;
+      const logoY = 320;
       ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
 
       // App name under logo
@@ -75,15 +75,15 @@ const InstagramPromo = () => {
       // GRATUIT badge
       ctx.fillStyle = "#4ade80";
       const badgeW = 340;
-      const badgeH = 70;
+      const badgeH = 65;
       const badgeX = (1080 - badgeW) / 2;
-      const badgeY = 1420;
+      const badgeY = 940;
       ctx.beginPath();
       ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 16);
       ctx.fill();
       ctx.fillStyle = "#000000";
-      ctx.font = "bold 42px -apple-system, BlinkMacSystemFont, sans-serif";
-      ctx.fillText("100% GRATUIT", 540, 1468);
+      ctx.font = "bold 40px -apple-system, BlinkMacSystemFont, sans-serif";
+      ctx.fillText("100% GRATUIT", 540, 984);
 
       // Features
       const features = [
@@ -93,22 +93,22 @@ const InstagramPromo = () => {
         "🏥 Carnet de santé",
         "🥚 Reproduction & généalogie",
       ];
-      ctx.font = "30px -apple-system, BlinkMacSystemFont, sans-serif";
-      let y = 1540;
+      ctx.font = "28px -apple-system, BlinkMacSystemFont, sans-serif";
+      let y = 1060;
       features.forEach((feat) => {
         ctx.fillStyle = "rgba(255,255,255,0.9)";
         ctx.fillText(feat, 540, y);
-        y += 46;
+        y += 42;
       });
 
       // URL CTA
       ctx.fillStyle = "#4ade80";
-      ctx.font = "bold 34px -apple-system, BlinkMacSystemFont, sans-serif";
-      ctx.fillText("🔗 s-reptrack.app", 540, y + 40);
+      ctx.font = "bold 32px -apple-system, BlinkMacSystemFont, sans-serif";
+      ctx.fillText("🔗 s-reptrack.app", 540, y + 30);
 
       // Download
       const link = document.createElement("a");
-      link.download = "sreptrack-instagram-story.png";
+      link.download = "sreptrack-instagram-post.png";
       link.href = canvas.toDataURL("image/png");
       link.click();
     } catch (error) {
@@ -131,14 +131,14 @@ const InstagramPromo = () => {
               <Instagram className="w-5 h-5 text-pink-500" />
               Promo Instagram
             </h1>
-            <p className="text-sm text-muted-foreground">Story / Reel vertical (9:16)</p>
+            <p className="text-sm text-muted-foreground">Post Instagram (4:5)</p>
           </div>
         </div>
 
         {/* Preview */}
         <Card className="overflow-hidden">
           <CardContent className="p-0">
-            <div className="relative aspect-[9/16] max-h-[70vh] overflow-hidden rounded-lg">
+            <div className="relative aspect-[4/5] max-h-[70vh] overflow-hidden rounded-lg">
               <img
                 src={storyBg}
                 alt="Instagram Story Background"
@@ -194,11 +194,11 @@ const InstagramPromo = () => {
           className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
         >
           <Download className="w-4 h-4 mr-2" />
-          {downloading ? "Génération..." : "Télécharger (1080x1920)"}
+          {downloading ? "Génération..." : "Télécharger (1080x1350)"}
         </Button>
 
         <p className="text-xs text-muted-foreground text-center">
-          📱 Image optimisée pour les Stories et Reels Instagram
+          📱 Image optimisée pour les posts Instagram (format 4:5)
         </p>
       </div>
     </div>
