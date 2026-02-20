@@ -36,6 +36,7 @@ import MaintenanceGuard from "./components/MaintenanceGuard";
 import Analytics from "./pages/Analytics";
 import Genealogy from "./pages/Genealogy";
 import TesterActivityTracker from "./components/TesterActivityTracker";
+import InstagramPromo from "./pages/InstagramPromo";
 import InstallPromptBanner from "./components/InstallPromptBanner";
 import TesterSuspensionGuard from "./components/TesterSuspensionGuard";
 
@@ -64,6 +65,7 @@ const App = () => (
             
             {/* Route Admin - priorité haute, en dehors du MaintenanceGuard */}
             <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+            <Route path="/instagram-promo" element={<AdminRoute><InstagramPromo /></AdminRoute>} />
             
             {/* Toutes les autres routes passent par MaintenanceGuard */}
             <Route path="/" element={<MaintenanceGuard><Landing /></MaintenanceGuard>} />
