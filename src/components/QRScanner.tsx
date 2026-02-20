@@ -655,22 +655,24 @@ const handleScanSuccess = async (decodedText: string) => {
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-md max-h-[100dvh] overflow-y-auto pt-[env(safe-area-inset-top,16px)]">
+        {/* Bouton Fermer bien visible en haut */}
+        <div className="sticky top-0 z-10 pb-2">
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={handleClose}
+            className="w-full h-10 gap-2 text-sm font-medium"
+          >
+            <X className="h-4 w-4" />
+            Fermer le scanner
+          </Button>
+        </div>
+
         <DialogHeader>
-          <DialogTitle className="flex items-center justify-between">
-            <span className="flex items-center gap-2">
-              <CameraIcon className="h-5 w-5" />
-              Scanner un QR Code
-            </span>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleClose}
-              className="h-8 px-3 gap-1"
-            >
-              <X className="h-4 w-4" />
-              <span className="text-xs">Fermer</span>
-            </Button>
+          <DialogTitle className="flex items-center gap-2 justify-center">
+            <CameraIcon className="h-5 w-5" />
+            Scanner un QR Code
           </DialogTitle>
           <DialogDescription className="sr-only">
             Scannez un QR code pour ouvrir la fiche de l'animal
@@ -699,10 +701,13 @@ const handleScanSuccess = async (decodedText: string) => {
             </div>
           ) : (
             <div className="text-center space-y-4">
-              <div className="flex justify-center">
-                <div className="rounded-full bg-primary/10 p-4">
-                  <CameraIcon className="h-12 w-12 text-primary" />
-                </div>
+              <div className="space-y-2">
+                <p className="text-sm font-medium">
+                  Scanner un QR Code
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Prenez une photo du QR code pour accéder rapidement à la fiche de l'animal.
+                </p>
               </div>
               <div className="space-y-2">
                 <p className="text-sm font-medium">
