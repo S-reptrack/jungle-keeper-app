@@ -15,15 +15,15 @@ import {
 // Stripe LIVE price IDs
 export const SUBSCRIPTION_TIERS = {
   monthly: {
-    priceId: "price_1SjkYyBpVrf7V1XbsPWXwUIc",
-    productId: "prod_Th8qQ66ByaGeZa",
-    price: 4.99,
+    priceId: "price_1T8QmuBpVrf7V1XbxPqwnald",
+    productId: "prod_U6e5gpDvGNmPGR",
+    price: 5.99,
     interval: "month" as const,
   },
   yearly: {
-    priceId: "price_1SjkZEBpVrf7V1Xbd1DD1Ems",
-    productId: "prod_Th8qGp0s3PNarf",
-    price: 39.99,
+    priceId: "price_1T8Qo3BpVrf7V1XbtNBklIDu",
+    productId: "prod_U6e6twDbrf5BlB",
+    price: 49.99,
     interval: "year" as const,
   },
 };
