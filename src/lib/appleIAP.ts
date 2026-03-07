@@ -1,6 +1,13 @@
 /**
  * Service Apple In-App Purchase pour iOS natif
- * Utilise le plugin Capacitor capacitor-purchases (cordova-plugin-purchase)
+ * 
+ * Ce module utilise l'API globale CdvPurchase injectée par le plugin Cordova
+ * dans l'environnement natif. Sur le web, toutes les fonctions retournent
+ * des valeurs par défaut (pas de crash).
+ * 
+ * Plugin requis (à installer dans le projet natif):
+ *   cordova-plugin-purchase
+ *   ou via: npx cap sync après ajout dans package.json
  * 
  * IMPORTANT: Les Product IDs doivent correspondre à ceux créés dans App Store Connect
  */
@@ -23,18 +30,40 @@ export interface AppleProduct {
 export interface ApplePurchaseResult {
   success: boolean;
   transactionId?: string;
-  receipt?: string;
   error?: string;
 }
+
+// Accès au store global CdvPurchase (injecté par le plugin natif)
+const getStore = (): any => {
+  const win = window as any;
+  return win?.CdvPurchase?.store;
+};
+
+const getCdvPurchase = (): any => {
+  const win = window as any;
+  return win?.CdvPurchase;
+};
+
+/**
+ * Vérifie si le plugin IAP est disponible
+ */
+export const isAppleIAPAvailable = (): boolean => {
+  return !!getStore();
+};
 
 /**
  * Initialise le store IAP et charge les produits
  */
 export const initializeAppleIAP = async (): Promise<void> => {
-  try {
-    const { CdvPurchase } = await import("cordova-plugin-purchase");
-    const store = CdvPurchase.store;
+  const store = getStore();
+  const CdvPurchase = getCdvPurchase();
+  
+  if (!store || !CdvPurchase) {
+    console.warn("[Apple IAP] Plugin not available - running on web?");
+    return;
+  }
 
+  try {
     // Enregistrer les produits
     store.register([
       {
@@ -62,10 +91,12 @@ export const initializeAppleIAP = async (): Promise<void> => {
  * Récupère les infos des produits depuis App Store Connect
  */
 export const getAppleProducts = async (): Promise<AppleProduct[]> => {
-  try {
-    const { CdvPurchase } = await import("cordova-plugin-purchase");
-    const store = CdvPurchase.store;
+  const store = getStore();
+  const CdvPurchase = getCdvPurchase();
+  
+  if (!store || !CdvPurchase) return [];
 
+  try {
     const products: AppleProduct[] = [];
 
     for (const [, productId] of Object.entries(APPLE_PRODUCT_IDS)) {
@@ -77,8 +108,8 @@ export const getAppleProducts = async (): Promise<AppleProduct[]> => {
           title: product.title,
           description: product.description,
           price: offer?.pricingPhases?.[0]?.price || "",
-          priceAmount: offer?.pricingPhases?.[0]?.priceMicros 
-            ? offer.pricingPhases[0].priceMicros / 1_000_000 
+          priceAmount: offer?.pricingPhases?.[0]?.priceMicros
+            ? offer.pricingPhases[0].priceMicros / 1_000_000
             : 0,
           currency: offer?.pricingPhases?.[0]?.currency || "EUR",
         });
@@ -98,18 +129,21 @@ export const getAppleProducts = async (): Promise<AppleProduct[]> => {
 export const purchaseAppleProduct = async (
   productId: string
 ): Promise<ApplePurchaseResult> => {
-  try {
-    const { CdvPurchase } = await import("cordova-plugin-purchase");
-    const store = CdvPurchase.store;
+  const store = getStore();
+  const CdvPurchase = getCdvPurchase();
+  
+  if (!store || !CdvPurchase) {
+    return { success: false, error: "IAP plugin not available" };
+  }
 
+  try {
     const offer = store.get(productId, CdvPurchase.Platform.APPLE_APPSTORE)?.getOffer();
     if (!offer) {
       return { success: false, error: "Product not found" };
     }
 
-    // Lancer l'achat - retourne une promesse
     const result = await store.order(offer);
-    
+
     if (result && result.isError) {
       return { success: false, error: result.message || "Purchase failed" };
     }
@@ -129,9 +163,10 @@ export const purchaseAppleProduct = async (
  * Restaure les achats précédents (requis par Apple)
  */
 export const restoreApplePurchases = async (): Promise<boolean> => {
+  const store = getStore();
+  if (!store) return false;
+
   try {
-    const { CdvPurchase } = await import("cordova-plugin-purchase");
-    const store = CdvPurchase.store;
     await store.restorePurchases();
     console.log("[Apple IAP] Purchases restored");
     return true;
@@ -148,12 +183,13 @@ export const checkAppleSubscriptionStatus = async (): Promise<{
   subscribed: boolean;
   productId?: string;
 }> => {
-  try {
-    const { CdvPurchase } = await import("cordova-plugin-purchase");
-    const store = CdvPurchase.store;
+  const store = getStore();
+  const CdvPurchase = getCdvPurchase();
+  
+  if (!store || !CdvPurchase) return { subscribed: false };
 
-    // Vérifier chaque produit
-    for (const [tier, productId] of Object.entries(APPLE_PRODUCT_IDS)) {
+  try {
+    for (const [, productId] of Object.entries(APPLE_PRODUCT_IDS)) {
       const product = store.get(productId, CdvPurchase.Platform.APPLE_APPSTORE);
       if (product?.owned) {
         return { subscribed: true, productId };
