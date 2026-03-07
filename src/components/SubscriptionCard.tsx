@@ -297,12 +297,47 @@ const SubscriptionCard = () => {
 
             <Separator />
 
+            {/* Bouton Restaurer les achats (requis par Apple) */}
+            {isApple && (
+              <Button
+                variant="ghost"
+                className="w-full text-sm"
+                onClick={async () => {
+                  setRestoreLoading(true);
+                  try {
+                    const restored = await restorePurchases();
+                    if (restored) {
+                      toast.success(t("subscription.restoreSuccess") || "Achats restaurés avec succès");
+                    } else {
+                      toast.info(t("subscription.restoreNone") || "Aucun achat à restaurer");
+                    }
+                  } catch {
+                    toast.error(t("subscription.restoreError") || "Erreur lors de la restauration");
+                  } finally {
+                    setRestoreLoading(false);
+                  }
+                }}
+                disabled={restoreLoading}
+              >
+                {restoreLoading ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <RotateCcw className="w-4 h-4 mr-2" />
+                )}
+                {t("subscription.restorePurchases") || "Restaurer mes achats"}
+              </Button>
+            )}
+
             <div className="text-xs text-center text-muted-foreground space-y-1">
+              {!isApple && (
+                <p>
+                  {t("subscription.nfcNote") || "⚠️ NFC non compatible avec iOS/Apple. Utilisez les QR codes sur iPhone."}
+                </p>
+              )}
               <p>
-                {t("subscription.nfcNote") || "⚠️ NFC non compatible avec iOS/Apple. Utilisez les QR codes sur iPhone."}
-              </p>
-              <p>
-                {t("subscription.securePayment") || "Paiement sécurisé. Annulez à tout moment."}
+                {isApple
+                  ? (t("subscription.applePaymentNote") || "Paiement géré par Apple. Annulez à tout moment via Réglages > Abonnements.")
+                  : (t("subscription.securePayment") || "Paiement sécurisé. Annulez à tout moment.")}
               </p>
             </div>
           </>
