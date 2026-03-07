@@ -2,6 +2,15 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 import { useUserRole } from "./useUserRole";
+import { getPaymentProvider, type PaymentProvider } from "@/lib/platformUtils";
+import {
+  initializeAppleIAP,
+  checkAppleSubscriptionStatus,
+  purchaseAppleProduct,
+  restoreApplePurchases,
+  isAppleIAPAvailable,
+  APPLE_PRODUCT_IDS,
+} from "@/lib/appleIAP";
 
 // Stripe LIVE price IDs
 export const SUBSCRIPTION_TIERS = {
