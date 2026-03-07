@@ -871,7 +871,7 @@
       "intro": "L'Application propose une offre gratuite et une offre premium :",
       "items": {
         "free": "Version gratuite : accès à toutes les fonctionnalités pour 5 reptiles maximum",
-        "premium": "Version Premium : accès illimité au nombre de reptiles (4,99€/mois ou 39,99€/an)",
+        "premium": "Version Premium : accès illimité au nombre de reptiles (5,99€/mois ou 49,99€/an)",
         "payment": "Les paiements sont traités de manière sécurisée par notre prestataire de paiement",
         "cancel": "L'abonnement peut être résilié à tout moment depuis les paramètres. L'accès premium reste actif jusqu'à la fin de la période payée"
       }
