@@ -38,6 +38,7 @@ interface SubscriptionState {
   isTesterPremium: boolean;
   testerTrialEnd: string | null;
   testerTrialExpired: boolean;
+  paymentProvider: PaymentProvider;
 }
 
 export const useSubscription = () => {
