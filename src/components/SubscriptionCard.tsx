@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
-import { CreditCard, Check, Crown, Loader2, ExternalLink, User } from "lucide-react";
+import { CreditCard, Check, Crown, Loader2, ExternalLink, User, RotateCcw } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +9,8 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { useSubscription, SUBSCRIPTION_TIERS } from "@/hooks/useSubscription";
 import { useReptileCount } from "@/hooks/useReptileCount";
+import { useSearchParams } from "react-router-dom";
+import { getPaymentProvider } from "@/lib/platformUtils";
 import { useSearchParams } from "react-router-dom";
 
 const SubscriptionCard = () => {
