@@ -136,7 +136,7 @@ const Landing = () => {
           <div className="bg-gradient-to-br from-primary/15 to-primary/5 rounded-2xl p-8 text-center space-y-4">
             <p className="text-sm text-muted-foreground">{t("landing.premiumSubscription")}</p>
             <div className="flex items-baseline justify-center gap-1">
-              <span className="text-4xl font-bold text-foreground">4,99€</span>
+              <span className="text-4xl font-bold text-foreground">5,99€</span>
               <span className="text-muted-foreground">{t("landing.perMonth")}</span>
             </div>
             <p className="text-sm text-muted-foreground">{t("landing.yearlyOffer")}</p>
