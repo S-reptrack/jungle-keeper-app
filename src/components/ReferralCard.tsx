@@ -132,7 +132,7 @@ const ReferralCard = () => {
 
             {rewardCount > 0 && (
               <p className="text-xs text-muted-foreground">
-                🎉 Vous avez économisé {(rewardCount * 4.99).toFixed(2)}€ grâce au parrainage !
+                🎉 Vous avez économisé {(rewardCount * 5.99).toFixed(2)}€ grâce au parrainage !
               </p>
             )}
           </>
