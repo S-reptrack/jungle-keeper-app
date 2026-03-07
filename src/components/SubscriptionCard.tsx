@@ -11,7 +11,6 @@ import { useSubscription, SUBSCRIPTION_TIERS } from "@/hooks/useSubscription";
 import { useReptileCount } from "@/hooks/useReptileCount";
 import { useSearchParams } from "react-router-dom";
 import { getPaymentProvider } from "@/lib/platformUtils";
-import { useSearchParams } from "react-router-dom";
 
 const SubscriptionCard = () => {
   const { t } = useTranslation();
