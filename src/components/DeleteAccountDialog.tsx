@@ -19,37 +19,44 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
+const CONFIRM_KEYWORDS = ["SUPPRIMER", "DELETE"];
+
 const DeleteAccountDialog = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [confirmText, setConfirmText] = useState("");
 
+  const isConfirmed = CONFIRM_KEYWORDS.includes(confirmText.trim().toUpperCase());
+
   const handleDelete = async () => {
-    if (confirmText !== "SUPPRIMER") {
+    if (!isConfirmed) {
       toast.error(t("gdpr.deleteConfirmError"));
       return;
     }
 
     setLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Non authentifié");
+      const { data: sessionData } = await supabase.auth.getSession();
+      const accessToken = sessionData.session?.access_token;
 
-      // Supprimer toutes les données de l'utilisateur
-      await Promise.all([
-        supabase.from("reproduction_observations").delete().eq("user_id", user.id),
-        supabase.from("weight_records").delete().eq("user_id", user.id),
-        supabase.from("health_records").delete().eq("user_id", user.id),
-        supabase.from("feedings").delete().eq("user_id", user.id),
-        supabase.from("rodents").delete().eq("user_id", user.id),
-        supabase.from("reptiles").delete().eq("user_id", user.id),
-        supabase.from("profiles").delete().eq("user_id", user.id),
-      ]);
+      if (!accessToken) {
+        throw new Error("Not authenticated");
+      }
 
-      // Déconnexion
+      const { data, error } = await supabase.functions.invoke("delete-account", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+
+      if (error) throw error;
+
+      if (!data?.success) {
+        throw new Error("Deletion failed");
+      }
+
+      // Sign out locally
       await supabase.auth.signOut();
-      
+
       toast.success(t("gdpr.deleteSuccess"));
       navigate("/");
     } catch (error) {
@@ -79,7 +86,7 @@ const DeleteAccountDialog = () => {
               <Label htmlFor="confirm">{t("gdpr.deleteAccountConfirm")}</Label>
               <Input
                 id="confirm"
-                placeholder="SUPPRIMER"
+                placeholder="SUPPRIMER / DELETE"
                 value={confirmText}
                 onChange={(e) => setConfirmText(e.target.value)}
                 className="font-mono"
@@ -89,9 +96,9 @@ const DeleteAccountDialog = () => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
-          <AlertDialogAction 
-            onClick={handleDelete} 
-            disabled={loading || confirmText !== "SUPPRIMER"}
+          <AlertDialogAction
+            onClick={handleDelete}
+            disabled={loading || !isConfirmed}
             className="bg-destructive hover:bg-destructive/90"
           >
             {loading ? t("common.loading") : t("gdpr.confirmDelete")}
