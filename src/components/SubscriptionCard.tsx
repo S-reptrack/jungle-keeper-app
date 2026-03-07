@@ -21,14 +21,17 @@ const SubscriptionCard = () => {
     loading,
     createCheckout,
     openCustomerPortal,
+    restorePurchases,
     getCurrentTier,
     checkSubscription,
   } = useSubscription();
 
   const { count, FREE_TIER_LIMIT } = useReptileCount();
+  const isApple = getPaymentProvider() === "apple";
 
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [restoreLoading, setRestoreLoading] = useState(false);
 
   const currentTier = getCurrentTier();
 
