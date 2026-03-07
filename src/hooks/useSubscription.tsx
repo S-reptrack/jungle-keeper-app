@@ -2,6 +2,15 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 import { useUserRole } from "./useUserRole";
+import { getPaymentProvider, type PaymentProvider } from "@/lib/platformUtils";
+import {
+  initializeAppleIAP,
+  checkAppleSubscriptionStatus,
+  purchaseAppleProduct,
+  restoreApplePurchases,
+  isAppleIAPAvailable,
+  APPLE_PRODUCT_IDS,
+} from "@/lib/appleIAP";
 
 // Stripe LIVE price IDs
 export const SUBSCRIPTION_TIERS = {
@@ -29,33 +38,48 @@ interface SubscriptionState {
   isTesterPremium: boolean;
   testerTrialEnd: string | null;
   testerTrialExpired: boolean;
+  paymentProvider: PaymentProvider;
 }
+
+const paymentProvider = getPaymentProvider();
+
+const defaultState: SubscriptionState = {
+  subscribed: false,
+  productId: null,
+  priceId: null,
+  subscriptionEnd: null,
+  loading: true,
+  error: null,
+  isTesterPremium: false,
+  testerTrialEnd: null,
+  testerTrialExpired: false,
+  paymentProvider,
+};
 
 export const useSubscription = () => {
   const { user } = useAuth();
   const { isTester, isAdmin, loading: roleLoading } = useUserRole();
-  const [state, setState] = useState<SubscriptionState>({
-    subscribed: false,
-    productId: null,
-    priceId: null,
-    subscriptionEnd: null,
-    loading: true,
-    error: null,
-    isTesterPremium: false,
-    testerTrialEnd: null,
-    testerTrialExpired: false,
-  });
+  const [state, setState] = useState<SubscriptionState>(defaultState);
+  const [appleIAPInitialized, setAppleIAPInitialized] = useState(false);
+
+  // Initialize Apple IAP on iOS
+  useEffect(() => {
+    if (paymentProvider === "apple" && !appleIAPInitialized) {
+      initializeAppleIAP()
+        .then(() => setAppleIAPInitialized(true))
+        .catch((err) => console.error("[Apple IAP] Init failed:", err));
+    }
+  }, [appleIAPInitialized]);
 
   const checkSubscription = useCallback(async () => {
     if (!user) {
-      setState(prev => ({ ...prev, subscribed: false, loading: false, isTesterPremium: false, testerTrialEnd: null, testerTrialExpired: false }));
+      setState((prev) => ({ ...prev, subscribed: false, loading: false, isTesterPremium: false, testerTrialEnd: null, testerTrialExpired: false }));
       return;
     }
 
     // Vérifier si testeur avec date limite
     if (isTester) {
       try {
-        // Récupérer l'email de l'utilisateur
         const { data: profile } = await supabase
           .from("profiles")
           .select("email")
@@ -63,7 +87,6 @@ export const useSubscription = () => {
           .maybeSingle();
 
         if (profile?.email) {
-          // Chercher l'invitation acceptée avec la date limite
           const { data: invitation } = await supabase
             .from("tester_invitations")
             .select("trial_end_date")
@@ -75,43 +98,26 @@ export const useSubscription = () => {
           const isExpired = trialEndDate ? new Date(trialEndDate) < new Date() : false;
 
           if (isExpired) {
-            // Trial expiré - vérifier s'il a un vrai abonnement Stripe
-            const { data: sessionData } = await supabase.auth.getSession();
-            const accessToken = sessionData.session?.access_token;
-
-            if (accessToken) {
-              const { data, error } = await supabase.functions.invoke("check-subscription", {
-                headers: { Authorization: `Bearer ${accessToken}` },
+            // Check for real subscription (Stripe or Apple)
+            const hasRealSub = await checkRealSubscription();
+            if (hasRealSub.subscribed) {
+              await supabase.rpc("remove_tester_role_on_subscribe", { user_email: profile.email });
+              setState({
+                ...defaultState,
+                subscribed: true,
+                productId: hasRealSub.productId,
+                priceId: hasRealSub.priceId,
+                subscriptionEnd: hasRealSub.subscriptionEnd,
+                loading: false,
+                isTesterPremium: false,
               });
-
-              if (!error && data?.subscribed) {
-                // A un abonnement payant - retirer le rôle testeur
-                await supabase.rpc("remove_tester_role_on_subscribe", { user_email: profile.email });
-                
-                setState({
-                  subscribed: true,
-                  productId: data.product_id || null,
-                  priceId: data.price_id || null,
-                  subscriptionEnd: data.subscription_end || null,
-                  loading: false,
-                  error: null,
-                  isTesterPremium: false,
-                  testerTrialEnd: null,
-                  testerTrialExpired: false,
-                });
-                return;
-              }
+              return;
             }
 
-            // Trial expiré et pas d'abonnement
             setState({
+              ...defaultState,
               subscribed: false,
-              productId: null,
-              priceId: null,
-              subscriptionEnd: null,
               loading: false,
-              error: null,
-              isTesterPremium: false,
               testerTrialEnd: trialEndDate,
               testerTrialExpired: true,
             });
@@ -120,15 +126,12 @@ export const useSubscription = () => {
 
           // Trial actif
           setState({
+            ...defaultState,
             subscribed: true,
             productId: "tester_premium",
-            priceId: null,
-            subscriptionEnd: null,
             loading: false,
-            error: null,
             isTesterPremium: true,
             testerTrialEnd: trialEndDate,
-            testerTrialExpired: false,
           });
           return;
         }
@@ -136,17 +139,12 @@ export const useSubscription = () => {
         console.error("Error checking tester trial:", error);
       }
 
-      // Fallback pour testeur sans invitation trouvée
       setState({
+        ...defaultState,
         subscribed: true,
         productId: "tester_premium",
-        priceId: null,
-        subscriptionEnd: null,
         loading: false,
-        error: null,
         isTesterPremium: true,
-        testerTrialEnd: null,
-        testerTrialExpired: false,
       });
       return;
     }
@@ -154,63 +152,98 @@ export const useSubscription = () => {
     // Admin a accès Premium gratuit illimité
     if (isAdmin) {
       setState({
+        ...defaultState,
         subscribed: true,
         productId: "admin_premium",
-        priceId: null,
-        subscriptionEnd: null,
         loading: false,
-        error: null,
         isTesterPremium: true,
-        testerTrialEnd: null,
-        testerTrialExpired: false,
       });
       return;
     }
 
+    // Check real subscription based on platform
     try {
-      setState(prev => ({ ...prev, loading: true, error: null }));
-
-      const { data: sessionData } = await supabase.auth.getSession();
-      const accessToken = sessionData.session?.access_token;
-
-      if (!accessToken) {
-        setState(prev => ({ ...prev, subscribed: false, loading: false, isTesterPremium: false, testerTrialEnd: null, testerTrialExpired: false }));
-        return;
-      }
-
-      const { data, error } = await supabase.functions.invoke("check-subscription", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (error) throw error;
-
+      setState((prev) => ({ ...prev, loading: true, error: null }));
+      const result = await checkRealSubscription();
       setState({
-        subscribed: data.subscribed || false,
-        productId: data.product_id || null,
-        priceId: data.price_id || null,
-        subscriptionEnd: data.subscription_end || null,
+        ...defaultState,
+        subscribed: result.subscribed,
+        productId: result.productId,
+        priceId: result.priceId,
+        subscriptionEnd: result.subscriptionEnd,
         loading: false,
-        error: null,
-        isTesterPremium: false,
-        testerTrialEnd: null,
-        testerTrialExpired: false,
       });
     } catch (error) {
       console.error("Error checking subscription:", error);
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         loading: false,
         error: error instanceof Error ? error.message : "Unknown error",
-        isTesterPremium: false,
-        testerTrialEnd: null,
-        testerTrialExpired: false,
       }));
     }
   }, [user, isTester, isAdmin]);
 
+  /**
+   * Vérifie l'abonnement réel (Stripe ou Apple IAP selon la plateforme)
+   */
+  const checkRealSubscription = async (): Promise<{
+    subscribed: boolean;
+    productId: string | null;
+    priceId: string | null;
+    subscriptionEnd: string | null;
+  }> => {
+    // Sur iOS natif, vérifier Apple IAP d'abord
+    if (paymentProvider === "apple" && isAppleIAPAvailable()) {
+      const appleStatus = await checkAppleSubscriptionStatus();
+      if (appleStatus.subscribed) {
+        return {
+          subscribed: true,
+          productId: appleStatus.productId || "apple_premium",
+          priceId: null,
+          subscriptionEnd: null,
+        };
+      }
+    }
+
+    // Fallback ou plateforme non-iOS : vérifier Stripe
+    const { data: sessionData } = await supabase.auth.getSession();
+    const accessToken = sessionData.session?.access_token;
+
+    if (!accessToken) {
+      return { subscribed: false, productId: null, priceId: null, subscriptionEnd: null };
+    }
+
+    const { data, error } = await supabase.functions.invoke("check-subscription", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+
+    if (error) throw error;
+
+    return {
+      subscribed: data.subscribed || false,
+      productId: data.product_id || null,
+      priceId: data.price_id || null,
+      subscriptionEnd: data.subscription_end || null,
+    };
+  };
+
   const createCheckout = async (priceId: string) => {
+    // Sur iOS natif, utiliser Apple IAP
+    if (paymentProvider === "apple") {
+      const appleProductId = priceId === SUBSCRIPTION_TIERS.monthly.priceId
+        ? APPLE_PRODUCT_IDS.monthly
+        : APPLE_PRODUCT_IDS.yearly;
+
+      const result = await purchaseAppleProduct(appleProductId);
+      if (!result.success) {
+        throw new Error(result.error || "Apple purchase failed");
+      }
+      // Rafraîchir le statut après achat
+      await checkSubscription();
+      return;
+    }
+
+    // Stripe checkout (Android/Web)
     try {
       const { data: sessionData } = await supabase.auth.getSession();
       const accessToken = sessionData.session?.access_token;
@@ -220,9 +253,7 @@ export const useSubscription = () => {
       }
 
       const { data, error } = await supabase.functions.invoke("create-checkout", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+        headers: { Authorization: `Bearer ${accessToken}` },
         body: { priceId },
       });
 
@@ -238,6 +269,13 @@ export const useSubscription = () => {
   };
 
   const openCustomerPortal = async () => {
+    // Sur iOS, pas de portail Stripe - utiliser la gestion Apple
+    if (paymentProvider === "apple") {
+      // Ouvre les paramètres d'abonnement iOS
+      window.open("https://apps.apple.com/account/subscriptions", "_blank");
+      return;
+    }
+
     try {
       const { data: sessionData } = await supabase.auth.getSession();
       const accessToken = sessionData.session?.access_token;
@@ -247,9 +285,7 @@ export const useSubscription = () => {
       }
 
       const { data, error } = await supabase.functions.invoke("customer-portal", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+        headers: { Authorization: `Bearer ${accessToken}` },
       });
 
       if (error) throw error;
@@ -263,16 +299,26 @@ export const useSubscription = () => {
     }
   };
 
+  const restorePurchases = async () => {
+    if (paymentProvider === "apple") {
+      const restored = await restoreApplePurchases();
+      if (restored) {
+        await checkSubscription();
+      }
+      return restored;
+    }
+    return false;
+  };
+
   const getCurrentTier = () => {
     if (!state.subscribed || !state.priceId) return null;
-    
+
     if (state.priceId === SUBSCRIPTION_TIERS.monthly.priceId) return "monthly";
     if (state.priceId === SUBSCRIPTION_TIERS.yearly.priceId) return "yearly";
     return null;
   };
 
   useEffect(() => {
-    // Attendre que le rôle soit chargé avant de vérifier l'abonnement
     if (!roleLoading) {
       checkSubscription();
     }
@@ -290,6 +336,7 @@ export const useSubscription = () => {
     checkSubscription,
     createCheckout,
     openCustomerPortal,
+    restorePurchases,
     getCurrentTier,
   };
 };
