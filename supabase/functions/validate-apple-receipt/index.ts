@@ -11,9 +11,9 @@ const logStep = (step: string, details?: any) => {
   console.log(`[VALIDATE-APPLE-RECEIPT] ${step}${detailsStr}`);
 };
 
-// Apple App Store Server API v2
-const APPLE_PRODUCTION_URL = "https://api.storekit.itunes.apple.com/inApps/v1";
-const APPLE_SANDBOX_URL = "https://api.storekit-sandbox.itunes.apple.com/inApps/v1";
+// Apple verifyReceipt endpoints
+const APPLE_PRODUCTION_URL = "https://buy.itunes.apple.com/verifyReceipt";
+const APPLE_SANDBOX_URL = "https://sandbox.itunes.apple.com/verifyReceipt";
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -40,100 +40,81 @@ serve(async (req) => {
     if (!user?.email) throw new Error("User not authenticated");
     logStep("User authenticated", { userId: user.id, email: user.email });
 
-    const { transactionId, originalTransactionId } = await req.json();
-    if (!transactionId && !originalTransactionId) {
-      throw new Error("Transaction ID required");
+    const { receiptData, transactionId } = await req.json();
+    if (!receiptData) {
+      throw new Error("Receipt data required");
     }
-    logStep("Transaction ID received", { transactionId, originalTransactionId });
+    logStep("Receipt received", { hasReceipt: !!receiptData, transactionId });
 
-    // For App Store Server API v2, we need the App Store Server API Key
-    // This validates the transaction directly with Apple
-    const appStoreApiKey = Deno.env.get("APPLE_APP_STORE_API_KEY");
-    const appStoreIssuerId = Deno.env.get("APPLE_APP_STORE_ISSUER_ID");
-    const appStoreKeyId = Deno.env.get("APPLE_APP_STORE_KEY_ID");
-    const appStoreBundleId = Deno.env.get("APPLE_BUNDLE_ID") || "com.sreptrack.app";
-
-    if (!appStoreApiKey || !appStoreIssuerId || !appStoreKeyId) {
-      // Fallback: trust the client-side verification for now
-      // In production, you MUST set up App Store Server API keys
-      logStep("WARNING: App Store Server API keys not configured, using client-side trust");
-      
-      return new Response(JSON.stringify({
-        valid: true,
-        subscribed: true,
-        warning: "Server-side validation not fully configured",
-      }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 200,
-      });
+    const sharedSecret = Deno.env.get("APPLE_SHARED_SECRET");
+    if (!sharedSecret) {
+      throw new Error("APPLE_SHARED_SECRET not configured");
     }
 
-    // Generate JWT for App Store Server API
-    const header = btoa(JSON.stringify({ alg: "ES256", kid: appStoreKeyId, typ: "JWT" }));
-    const now = Math.floor(Date.now() / 1000);
-    const payload = btoa(JSON.stringify({
-      iss: appStoreIssuerId,
-      iat: now,
-      exp: now + 3600,
-      aud: "appstoreconnect-v1",
-      bid: appStoreBundleId,
-    }));
+    // Validate with Apple Production first
+    const requestBody = {
+      "receipt-data": receiptData,
+      password: sharedSecret,
+      "exclude-old-transactions": true,
+    };
 
-    // Note: Full ES256 signing requires the private key - simplified here
-    // In production, use a proper JWT library with the .p8 key
-    logStep("Validating with Apple App Store Server API");
-
-    const txId = originalTransactionId || transactionId;
-    const appleUrl = `${APPLE_PRODUCTION_URL}/subscriptions/${txId}`;
-
-    const appleResponse = await fetch(appleUrl, {
-      headers: {
-        Authorization: `Bearer ${header}.${payload}`, // Simplified - needs proper signing
-      },
+    logStep("Validating with Apple Production");
+    let appleResponse = await fetch(APPLE_PRODUCTION_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestBody),
     });
 
-    if (!appleResponse.ok) {
-      // Try sandbox
-      const sandboxResponse = await fetch(
-        `${APPLE_SANDBOX_URL}/subscriptions/${txId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${header}.${payload}`,
-          },
-        }
-      );
+    let appleData = await appleResponse.json();
+    logStep("Production response", { status: appleData.status });
 
-      if (!sandboxResponse.ok) {
-        throw new Error("Apple validation failed for both production and sandbox");
-      }
+    // Status 21007 means sandbox receipt sent to production - retry with sandbox
+    if (appleData.status === 21007) {
+      logStep("Sandbox receipt detected, retrying with sandbox endpoint");
+      appleResponse = await fetch(APPLE_SANDBOX_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      });
+      appleData = await appleResponse.json();
+      logStep("Sandbox response", { status: appleData.status });
+    }
 
-      const sandboxData = await sandboxResponse.json();
-      logStep("Validated via sandbox", sandboxData);
-
+    // Status 0 = valid receipt
+    if (appleData.status !== 0) {
+      logStep("Invalid receipt", { status: appleData.status });
       return new Response(JSON.stringify({
-        valid: true,
-        subscribed: true,
-        environment: "sandbox",
+        valid: false,
+        subscribed: false,
+        error: `Apple validation failed with status ${appleData.status}`,
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,
       });
     }
 
-    const appleData = await appleResponse.json();
-    logStep("Validated via production", { status: appleResponse.status });
+    // Check for active subscription in latest_receipt_info
+    const latestReceiptInfo = appleData.latest_receipt_info || [];
+    const now = Date.now();
 
-    // Check subscription status from Apple's response
-    const isActive = appleData?.data?.some((sub: any) => 
-      sub.lastTransactions?.some((tx: any) => 
-        tx.status === 1 || tx.status === 3 // 1=active, 3=in billing retry
-      )
-    );
+    const activeSubscription = latestReceiptInfo.find((receipt: any) => {
+      const expiresDateMs = parseInt(receipt.expires_date_ms, 10);
+      return expiresDateMs > now;
+    });
+
+    const isSubscribed = !!activeSubscription;
+    logStep("Subscription check", {
+      isSubscribed,
+      activeProductId: activeSubscription?.product_id,
+      expiresDate: activeSubscription?.expires_date,
+    });
 
     return new Response(JSON.stringify({
       valid: true,
-      subscribed: isActive ?? false,
-      environment: "production",
+      subscribed: isSubscribed,
+      productId: activeSubscription?.product_id || null,
+      expiresDate: activeSubscription?.expires_date || null,
+      environment: appleData.environment || "unknown",
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
