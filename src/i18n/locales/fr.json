@@ -333,7 +333,7 @@
     },
     "dataController": {
       "title": "Responsable du traitement",
-      "content": "Le responsable du traitement des données personnelles est S-reptrack, exploité en tant qu'auto-entrepreneur enregistré en France. Pour toute question relative à vos données personnelles, contactez-nous à l'adresse : contact@s-reptrack.app"
+      "content": "Le responsable du traitement des données personnelles est F.M. BERTIN, auto-entrepreneur enregistré en France, exploitant l'application S-reptrack. E-mail : contact@s-reptrack.app | Site web : https://s-reptrack.app"
     },
     "dataCollection": {
       "title": "Données collectées",
@@ -919,7 +919,29 @@
     },
     "contact": {
       "title": "Contact",
-      "content": "Pour toute question relative aux présentes CGU, vous pouvez nous contacter à l'adresse : contact@s-reptrack.app"
+      "content": "Pour toute question, réclamation ou demande relative aux présentes CGU ou à l'Application, vous pouvez nous contacter :",
+      "publisher": "Éditeur",
+      "emailLabel": "E-mail",
+      "website": "Site web"
+    },
+    "appStore": {
+      "title": "Dispositions relatives à l'App Store (Apple)",
+      "intro": "Si vous avez téléchargé l'Application via l'App Store d'Apple, les dispositions suivantes s'appliquent :",
+      "items": {
+        "agreement": "Les présentes CGU constituent un accord entre vous et F.M. BERTIN (l'éditeur), et non avec Apple Inc. Apple n'est pas partie à ce contrat.",
+        "license": "La licence accordée est une licence non-transférable, limitée à l'utilisation de l'Application sur tout appareil Apple que vous possédez ou contrôlez, conformément aux Conditions d'utilisation des Apple Media Services.",
+        "maintenance": "F.M. BERTIN est seul responsable de la fourniture de tout service de maintenance et d'assistance technique. Apple n'a aucune obligation de fournir un quelconque service de maintenance ou d'assistance.",
+        "warranty": "En cas de non-conformité de l'Application à une garantie applicable, vous pouvez en informer Apple qui vous remboursera le prix d'achat. Dans les limites maximales autorisées par la loi applicable, Apple n'a aucune autre obligation de garantie. Toute autre réclamation liée à une non-conformité relève de la seule responsabilité de F.M. BERTIN.",
+        "claims": "F.M. BERTIN, et non Apple, est responsable de toute réclamation liée à l'Application, incluant : (i) les réclamations relatives à la responsabilité du fait des produits ; (ii) toute réclamation de non-conformité légale ou réglementaire ; (iii) les réclamations au titre de la protection des consommateurs ou de la vie privée.",
+        "ip": "En cas de réclamation d'un tiers alléguant que l'Application porte atteinte à ses droits de propriété intellectuelle, F.M. BERTIN, et non Apple, sera seul responsable de l'enquête, de la défense, du règlement et de la résolution de cette réclamation.",
+        "compliance": "Vous déclarez et garantissez que (i) vous ne vous trouvez pas dans un pays soumis à un embargo du gouvernement des États-Unis ou désigné comme pays « soutenant le terrorisme » ; et (ii) vous ne figurez sur aucune liste de parties interdites ou restreintes du gouvernement des États-Unis.",
+        "thirdParty": "Vous devez respecter les conditions applicables des services tiers lors de l'utilisation de l'Application.",
+        "beneficiary": "Vous reconnaissez et acceptez qu'Apple et ses filiales sont des tiers bénéficiaires des présentes CGU. Dès votre acceptation des CGU, Apple aura le droit de les faire appliquer à votre encontre en tant que tiers bénéficiaire."
+      }
+    },
+    "autoRenewal": {
+      "title": "Renouvellement automatique des abonnements",
+      "content": "Les abonnements Premium (mensuel à 5,99€/mois et annuel à 49,99€/an) se renouvellent automatiquement à la fin de chaque période, sauf annulation au moins 24 heures avant la fin de la période en cours. Sur iOS, le renouvellement est géré par Apple via les réglages de votre compte Apple. Sur les autres plateformes, le paiement est géré par Stripe. Vous pouvez annuler à tout moment depuis les paramètres de l'Application ou les réglages de votre appareil."
     }
   },
   "comingSoon": {

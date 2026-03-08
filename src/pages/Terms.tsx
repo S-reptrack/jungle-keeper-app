@@ -128,11 +128,38 @@ const Terms = () => {
             <section>
               <h2 className="text-xl font-semibold mb-3">{t("terms.contact.title")}</h2>
               <p className="text-muted-foreground">{t("terms.contact.content")}</p>
+              <div className="mt-3 text-muted-foreground">
+                <p><strong>{t("terms.contact.publisher")}:</strong> F.M. BERTIN</p>
+                <p><strong>{t("terms.contact.emailLabel")}:</strong> contact@s-reptrack.app</p>
+                <p><strong>{t("terms.contact.website")}:</strong> https://s-reptrack.app</p>
+              </div>
+            </section>
+
+            {/* Apple App Store specific sections - Exhibit D compliance */}
+            <section>
+              <h2 className="text-xl font-semibold mb-3">{t("terms.appStore.title")}</h2>
+              <p className="text-muted-foreground mb-2">{t("terms.appStore.intro")}</p>
+              <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4">
+                <li>{t("terms.appStore.items.agreement")}</li>
+                <li>{t("terms.appStore.items.license")}</li>
+                <li>{t("terms.appStore.items.maintenance")}</li>
+                <li>{t("terms.appStore.items.warranty")}</li>
+                <li>{t("terms.appStore.items.claims")}</li>
+                <li>{t("terms.appStore.items.ip")}</li>
+                <li>{t("terms.appStore.items.compliance")}</li>
+                <li>{t("terms.appStore.items.thirdParty")}</li>
+                <li>{t("terms.appStore.items.beneficiary")}</li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-semibold mb-3">{t("terms.autoRenewal.title")}</h2>
+              <p className="text-muted-foreground">{t("terms.autoRenewal.content")}</p>
             </section>
 
             <section className="pt-4 border-t">
               <p className="text-sm text-muted-foreground">
-                {t("terms.lastUpdated")}: 3 janvier 2026
+                {t("terms.lastUpdated")}: 8 mars 2026
               </p>
             </section>
           </CardContent>
