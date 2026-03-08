@@ -34,7 +34,7 @@ const Legal = () => {
 
             <section>
               <h2 className="text-xl font-semibold mb-3">{t("legal.director.title")}</h2>
-              <p className="text-muted-foreground">F.M. BERTIN</p>
+              <p className="text-muted-foreground">S-reptrack</p>
             </section>
 
             <section>
