@@ -129,7 +129,7 @@ const Terms = () => {
               <h2 className="text-xl font-semibold mb-3">{t("terms.contact.title")}</h2>
               <p className="text-muted-foreground">{t("terms.contact.content")}</p>
               <div className="mt-3 text-muted-foreground">
-                <p><strong>{t("terms.contact.publisher")}:</strong> F.M. BERTIN</p>
+                <p><strong>{t("terms.contact.publisher")}:</strong> S-reptrack</p>
                 <p><strong>{t("terms.contact.emailLabel")}:</strong> contact@s-reptrack.app</p>
                 <p><strong>{t("terms.contact.website")}:</strong> https://s-reptrack.app</p>
               </div>

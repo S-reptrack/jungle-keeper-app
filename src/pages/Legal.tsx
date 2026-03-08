@@ -25,17 +25,16 @@ const Legal = () => {
             <section>
               <h2 className="text-xl font-semibold mb-3">{t("legal.editor.title")}</h2>
               <div className="text-muted-foreground space-y-2">
-                <p><strong>{t("legal.editor.name")}:</strong> F.M. BERTIN</p>
+                <p><strong>{t("legal.editor.name")}:</strong> S-reptrack</p>
                 <p><strong>{t("legal.editor.status")}:</strong> {t("legal.editor.statusValue")}</p>
-                <p><strong>{t("legal.editor.siret")}:</strong> 99500161700019</p>
-                <p><strong>{t("legal.editor.address")}:</strong> Nogent-sur-Seine, France</p>
+                <p><strong>{t("legal.editor.address")}:</strong> France</p>
                 <p><strong>{t("legal.editor.email")}:</strong> contact@s-reptrack.app</p>
               </div>
             </section>
 
             <section>
               <h2 className="text-xl font-semibold mb-3">{t("legal.director.title")}</h2>
-              <p className="text-muted-foreground">F.M. BERTIN</p>
+              <p className="text-muted-foreground">S-reptrack</p>
             </section>
 
             <section>
