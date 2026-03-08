@@ -339,6 +339,18 @@ const SubscriptionCard = () => {
                   ? (t("subscription.applePaymentNote") || "Paiement géré par Apple. Annulez à tout moment via Réglages > Abonnements.")
                   : (t("subscription.securePayment") || "Paiement sécurisé. Annulez à tout moment.")}
               </p>
+              <p>
+                {t("subscription.autoRenewDisclosure") || "L'abonnement se renouvelle automatiquement à la fin de chaque période sauf annulation au moins 24h avant."}
+              </p>
+              <div className="flex justify-center gap-3 mt-2">
+                <a href="/terms" className="underline hover:text-foreground">
+                  {t("subscription.termsLink") || "Conditions d'utilisation"}
+                </a>
+                <span>•</span>
+                <a href="/privacy" className="underline hover:text-foreground">
+                  {t("subscription.privacyLink") || "Politique de confidentialité"}
+                </a>
+              </div>
             </div>
           </>
         )}

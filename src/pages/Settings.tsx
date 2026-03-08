@@ -262,6 +262,14 @@ const Settings = () => {
                 </Link>
               </div>
 
+              <div className="space-y-2">
+                <Link to="/terms">
+                  <Button variant="outline" className="w-full">
+                    {t("settings.viewTerms") || "Conditions Générales d'Utilisation"}
+                  </Button>
+                </Link>
+              </div>
+
               <Separator />
 
               <div className="space-y-2">
