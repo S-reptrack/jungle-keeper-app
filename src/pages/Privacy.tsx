@@ -145,7 +145,7 @@ const Privacy = () => {
 
             <section className="pt-4 border-t">
               <p className="text-sm text-muted-foreground">
-                {t("privacy.lastUpdated")}: 3 janvier 2026
+                {t("privacy.lastUpdated")}: 8 mars 2026
               </p>
             </section>
           </CardContent>
