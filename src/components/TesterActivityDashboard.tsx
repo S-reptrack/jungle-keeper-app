@@ -117,32 +117,27 @@ const TesterActivityDashboard = () => {
         profilesData?.map((p) => [p.user_id, p.email]) || []
       );
 
-      // Récupérer les données d'utilisation réelle en parallèle
+      // Récupérer les données via RPC (SECURITY DEFINER) + feedback/activity en parallèle
       const [
-        reptilesResult,
-        feedingsResult,
-        weightsResult,
-        healthResult,
-        reproductionResult,
+        usageStatsResult,
+        lastActivityResult,
         feedbackResult,
         activityResult
       ] = await Promise.all([
-        supabase.from("reptiles").select("id, user_id, created_at, updated_at").in("user_id", testerIds),
-        supabase.from("feedings").select("id, user_id, created_at").in("user_id", testerIds),
-        supabase.from("weight_records").select("id, user_id, created_at").in("user_id", testerIds),
-        supabase.from("health_records").select("id, user_id, created_at").in("user_id", testerIds),
-        supabase.from("reproduction_observations").select("id, user_id, created_at").in("user_id", testerIds),
+        supabase.rpc("get_tester_usage_stats", { tester_user_ids: testerIds }),
+        supabase.rpc("get_tester_last_activity", { tester_user_ids: testerIds }),
         supabase.from("tester_feedback").select("*").order("created_at", { ascending: false }),
         supabase.from("tester_activity").select("*").in("user_id", testerIds).order("created_at", { ascending: false }).limit(200),
       ]);
 
-      const reptiles = reptilesResult.data || [];
-      const feedings = feedingsResult.data || [];
-      const weights = weightsResult.data || [];
-      const health = healthResult.data || [];
-      const reproduction = reproductionResult.data || [];
+      const usageStats = usageStatsResult.data || [];
+      const lastActivities = lastActivityResult.data || [];
       const feedbacks = feedbackResult.data || [];
       const activities = activityResult.data || [];
+
+      // Créer des maps pour accès rapide
+      const usageMap = new Map(usageStats.map((s: any) => [s.user_id, s]));
+      const lastActivityMap = new Map(lastActivities.map((a: any) => [a.user_id, a.last_activity]));
 
       // Enrichir les activités avec les emails
       const activitiesWithEmail = activities.map((a) => ({
@@ -156,41 +151,26 @@ const TesterActivityDashboard = () => {
       const statsMap = new Map<string, TesterUsageStats>();
 
       for (const testerId of testerIds) {
-        const testerReptiles = reptiles.filter((r) => r.user_id === testerId);
-        const testerFeedings = feedings.filter((f) => f.user_id === testerId);
-        const testerWeights = weights.filter((w) => w.user_id === testerId);
-        const testerHealth = health.filter((h) => h.user_id === testerId);
-        const testerRepro = reproduction.filter((r) => r.user_id === testerId);
+        const usage = usageMap.get(testerId) || { reptiles_count: 0, feedings_count: 0, weights_count: 0, health_count: 0, reproduction_count: 0 };
         const testerFeedback = feedbacks.filter((f) => f.user_id === testerId);
 
         const avgRating = testerFeedback.length > 0
           ? testerFeedback.reduce((sum, f) => sum + f.rating, 0) / testerFeedback.length
           : 0;
 
-        // Trouver la dernière activité
-        const allDates = [
-          ...testerReptiles.map(r => r.updated_at || r.created_at),
-          ...testerFeedings.map(f => f.created_at),
-          ...testerWeights.map(w => w.created_at),
-          ...testerHealth.map(h => h.created_at),
-          ...testerRepro.map(r => r.created_at),
-        ].filter(Boolean).map(d => new Date(d).getTime());
+        const lastActivity = lastActivityMap.get(testerId) || null;
 
-        const lastActivity = allDates.length > 0 
-          ? new Date(Math.max(...allDates)).toISOString() 
-          : null;
-
-        const totalActions = testerReptiles.length + testerFeedings.length + 
-          testerWeights.length + testerHealth.length + testerRepro.length;
+        const totalActions = Number(usage.reptiles_count) + Number(usage.feedings_count) + 
+          Number(usage.weights_count) + Number(usage.health_count) + Number(usage.reproduction_count);
 
         statsMap.set(testerId, {
           user_id: testerId,
           email: profileMap.get(testerId) || "Email inconnu",
-          reptiles_count: testerReptiles.length,
-          feedings_count: testerFeedings.length,
-          weights_count: testerWeights.length,
-          health_count: testerHealth.length,
-          reproduction_count: testerRepro.length,
+          reptiles_count: Number(usage.reptiles_count),
+          feedings_count: Number(usage.feedings_count),
+          weights_count: Number(usage.weights_count),
+          health_count: Number(usage.health_count),
+          reproduction_count: Number(usage.reproduction_count),
           total_actions: totalActions,
           last_activity: lastActivity,
           feedback_count: testerFeedback.length,
@@ -213,18 +193,18 @@ const TesterActivityDashboard = () => {
 
       // Stats globales
       const activeTesters = sortedStats.filter(t => t.total_actions > 0).length;
-      const avgRating = feedbacks.length > 0
+      const totalAvgRating = feedbacks.length > 0
         ? feedbacks.reduce((sum, f) => sum + f.rating, 0) / feedbacks.length
         : 0;
 
       setGlobalStats({
-        totalReptiles: reptiles.length,
-        totalFeedings: feedings.length,
-        totalWeights: weights.length,
-        totalHealth: health.length,
-        totalReproduction: reproduction.length,
+        totalReptiles: usageStats.reduce((sum: number, s: any) => sum + Number(s.reptiles_count), 0),
+        totalFeedings: usageStats.reduce((sum: number, s: any) => sum + Number(s.feedings_count), 0),
+        totalWeights: usageStats.reduce((sum: number, s: any) => sum + Number(s.weights_count), 0),
+        totalHealth: usageStats.reduce((sum: number, s: any) => sum + Number(s.health_count), 0),
+        totalReproduction: usageStats.reduce((sum: number, s: any) => sum + Number(s.reproduction_count), 0),
         totalFeedback: feedbacks.length,
-        avgRating,
+        avgRating: totalAvgRating,
         activeTesters,
       });
     } catch (error) {
