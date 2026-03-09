@@ -778,6 +778,17 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_tester_usage_stats: {
+        Args: { tester_user_ids: string[] }
+        Returns: {
+          feedings_count: number
+          health_count: number
+          reproduction_count: number
+          reptiles_count: number
+          user_id: string
+          weights_count: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
