@@ -271,11 +271,11 @@ const FeedingTab = ({ reptileId, species, readOnly = false }: FeedingTabProps) =
                     <TableCell>
                       {feeding.prey_state ? (
                         <span className={`text-xs px-2 py-0.5 rounded-full ${
-                          feeding.prey_state === 'alive' 
+                          feeding.prey_state === 'live' 
                             ? 'bg-green-500/15 text-green-600 dark:text-green-400' 
                             : 'bg-muted text-muted-foreground'
                         }`}>
-                          {feeding.prey_state === 'alive' ? '🟢 Vivant' : '⚫ Mort/Décongelé'}
+                          {feeding.prey_state === 'live' ? '🟢 Vivant' : '⚫ Mort/Décongelé'}
                         </span>
                       ) : "-"}
                     </TableCell>
