@@ -63,7 +63,7 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
       rodentStage: "",
       quantity: 1,
       feedingDate: new Date(),
-      preyState: "live" as const,
+      preyState: "dead" as const,
       calcium: false,
       vitamins: false,
       notes: "",
