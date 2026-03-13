@@ -67,6 +67,23 @@ const TypeNameFormat = {
   Unchanged: 6,
 };
 
+// Convertit différents formats (array, objet indexé, Uint8Array) en tableau de bytes
+const toNumberArray = (value: unknown): number[] => {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is number => typeof item === 'number');
+  }
+
+  if (value instanceof Uint8Array) {
+    return Array.from(value);
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.values(value).filter((item): item is number => typeof item === 'number');
+  }
+
+  return [];
+};
+
 // Créer un record NDEF Text manuellement (compatible avec le plugin premium)
 // IMPORTANT: Le champ 'id' doit être un tableau non-null pour le plugin Android
 // Un tableau vide [] peut être sérialisé en null par Capacitor, causant "No value for id"
