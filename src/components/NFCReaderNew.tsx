@@ -471,7 +471,31 @@ export const NFCReader = () => {
       });
 
       const writeSessionErrorListener = await Nfc.addListener('scanSessionError', async (sessionErr: any) => {
-        const friendlyError = getNfcFriendlyError(sessionErr?.message || 'Session NFC interrompue', 'write');
+        const rawMsg = sessionErr?.message || 'Session NFC interrompue';
+        const friendlyError = getNfcFriendlyError(rawMsg, 'write');
+
+        // Android: garder la session pour les erreurs de tag (connexion perdue, non-NDEF)
+        if (isAndroid()) {
+          const isTagError = isTagConnectionLostError(rawMsg) || isTagNotNdefError(rawMsg)
+            || rawMsg.toLowerCase().includes('tag');
+          if (isTagError) {
+            console.log('[NFC] [Android] Erreur de tag non fatale en ecriture, session maintenue');
+            toast.warning(friendlyError + '\nReessayez avec le meme tag.');
+            return;
+          }
+        }
+
+        // iOS: relancer apres connexion perdue
+        if (isIOS() && (isTagConnectionLostError(rawMsg) || isTagNotNdefError(rawMsg))) {
+          toast.warning(friendlyError);
+          try {
+            await Nfc.startScanSession({
+              alertMessage: 'Réessayez - approchez le tag sans bouger',
+            });
+          } catch { /* ignore */ }
+          return;
+        }
+
         setError(friendlyError);
         setIsWriting(false);
         toast.error(friendlyError);
