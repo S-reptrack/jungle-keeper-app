@@ -23,10 +23,15 @@ interface NdefRecord {
   id?: number[];
 }
 
+interface StartScanSessionOptions {
+  alertMessage?: string;
+  pollingOptions?: string[];
+}
+
 interface NfcPlugin {
   addListener: (event: string, callback: (event: any) => void) => Promise<any>;
   removeAllListeners: () => Promise<void>;
-  startScanSession: () => Promise<void>;
+  startScanSession: (options?: StartScanSessionOptions) => Promise<void>;
   stopScanSession: () => Promise<void>;
   write: (options: { message: { records: NdefRecord[] } }) => Promise<void>;
   isSupported: () => Promise<{ isSupported: boolean }>;
@@ -60,6 +65,23 @@ const TypeNameFormat = {
   External: 4,
   Unknown: 5,
   Unchanged: 6,
+};
+
+// Convertit différents formats (array, objet indexé, Uint8Array) en tableau de bytes
+const toNumberArray = (value: unknown): number[] => {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is number => typeof item === 'number');
+  }
+
+  if (value instanceof Uint8Array) {
+    return Array.from(value);
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.values(value).filter((item): item is number => typeof item === 'number');
+  }
+
+  return [];
 };
 
 // Créer un record NDEF Text manuellement (compatible avec le plugin premium)
@@ -206,9 +228,17 @@ export const NFCReader = () => {
     checkPlugin();
     
     return () => {
-      if (nfcCallbackRef.current) {
-        console.log('[NFC] Cleanup au démontage');
-      }
+      const cleanupNfc = async () => {
+        try {
+          await Nfc.stopScanSession();
+          await Nfc.removeAllListeners();
+        } catch {
+          // no-op
+        }
+      };
+
+      void cleanupNfc();
+      nfcCallbackRef.current = null;
     };
   }, []);
 
@@ -229,6 +259,8 @@ export const NFCReader = () => {
 
   const startScanning = async () => {
     try {
+      if (isScanning) return;
+
       setError(null);
       setIsScanning(true);
 
@@ -243,11 +275,24 @@ export const NFCReader = () => {
 
       console.log('[NFC] Configuration de l\'écouteur NFC Premium...');
 
-      await Nfc.addListener('nfcTagScanned', (event: any) => {
+      await Nfc.removeAllListeners();
+
+      const tagListener = await Nfc.addListener('nfcTagScanned', (event: any) => {
         handleNFCTagPremium(event);
       });
 
-      await Nfc.startScanSession();
+      const sessionErrorListener = await Nfc.addListener('scanSessionError', (sessionErr: any) => {
+        console.error('[NFC] Erreur session NFC:', sessionErr);
+        setIsScanning(false);
+        toast.error(sessionErr?.message || 'Session NFC interrompue');
+      });
+
+      nfcCallbackRef.current = { tagListener, sessionErrorListener };
+
+      await Nfc.startScanSession({
+        alertMessage: 'Approchez un tag NFC S-reptrack',
+        pollingOptions: ['iso14443', 'iso15693', 'iso18092'],
+      });
       
       toast.success("✓ Lecteur NFC Premium activé - Approchez un tag");
     } catch (err: any) {
@@ -260,7 +305,14 @@ export const NFCReader = () => {
       } else {
         setError(errorMsg);
       }
+
+      try {
+        await Nfc.removeAllListeners();
+      } catch {
+        // no-op
+      }
       
+      nfcCallbackRef.current = null;
       setIsScanning(false);
       toast.error("Plugin NFC non disponible");
     }
@@ -268,6 +320,13 @@ export const NFCReader = () => {
 
   const stopScanning = async () => {
     try {
+      if (nfcCallbackRef.current?.tagListener?.remove) {
+        await nfcCallbackRef.current.tagListener.remove();
+      }
+      if (nfcCallbackRef.current?.sessionErrorListener?.remove) {
+        await nfcCallbackRef.current.sessionErrorListener.remove();
+      }
+
       await Nfc.stopScanSession();
       await Nfc.removeAllListeners();
       setIsScanning(false);
@@ -278,6 +337,7 @@ export const NFCReader = () => {
       console.error('[NFC] Erreur arrêt scan:', err);
       setIsScanning(false);
       setIsWriting(false);
+      nfcCallbackRef.current = null;
     }
   };
 
@@ -361,12 +421,25 @@ export const NFCReader = () => {
       console.log('[NFC] ===== TAG PREMIUM DÉTECTÉ =====');
       console.log('[NFC] Event complet:', event);
       
-      const ndefMessage = event.nfcTag?.message;
+      const nfcTag = event?.nfcTag ?? event;
+      const ndefMessage = nfcTag?.message;
       
-      if (!ndefMessage || !ndefMessage.records || ndefMessage.records.length === 0) {
-        console.error('[NFC] Aucun message NDEF trouvé');
-        toast.error("Tag NFC vide");
+      if (!ndefMessage?.records || ndefMessage.records.length === 0) {
+        const techTypes = Array.isArray(nfcTag?.techTypes) ? nfcTag.techTypes.join(', ') : 'inconnu';
+        const tagIdHex = toNumberArray(nfcTag?.id)
+          .map((byte) => byte.toString(16).padStart(2, '0'))
+          .join('');
+
+        console.warn('[NFC] Tag détecté sans message NDEF', {
+          techTypes,
+          tagIdHex,
+          tag: nfcTag,
+        });
+
+        setError(`Tag détecté (${techTypes}) mais non formaté pour S-reptrack${tagIdHex ? ` [ID: ${tagIdHex}]` : ''}`);
+        toast.error("Tag détecté mais non formaté pour S-reptrack");
         await Nfc.stopScanSession();
+        setIsScanning(false);
         return;
       }
 
@@ -379,15 +452,8 @@ export const NFCReader = () => {
           console.log('[NFC] Record #' + i + ' type:', JSON.stringify(record?.type));
           console.log('[NFC] Record #' + i + ' payload brut:', JSON.stringify(record?.payload));
           
-          // Extraire le payload - peut être un tableau, un objet ou undefined
-          let payloadArray: number[] = [];
-          
-          if (Array.isArray(record?.payload)) {
-            payloadArray = record.payload;
-          } else if (record?.payload && typeof record.payload === 'object') {
-            // Si c'est un objet avec des indices numériques (comme {0: 2, 1: 101, ...})
-            payloadArray = Object.values(record.payload).filter((v): v is number => typeof v === 'number');
-          }
+          // Extraire le payload - peut être un tableau, un objet indexé ou un Uint8Array
+          const payloadArray = toNumberArray(record?.payload);
           
           if (payloadArray.length === 0) {
             console.log('[NFC] Record #' + i + ' sans payload valide, ignoré');
@@ -401,8 +467,7 @@ export const NFCReader = () => {
           let textContent = '';
           
           // Vérifier si c'est un record Text (type = 0x54 = 'T')
-          const typeArray = Array.isArray(record?.type) ? record.type : 
-                           (record?.type && typeof record.type === 'object' ? Object.values(record.type) : []);
+          const typeArray = toNumberArray(record?.type);
           const isTextRecord = typeArray.length === 1 && typeArray[0] === 0x54;
           
           console.log('[NFC] Is Text record:', isTextRecord, 'typeArray:', JSON.stringify(typeArray));
