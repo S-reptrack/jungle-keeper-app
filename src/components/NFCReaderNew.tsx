@@ -602,17 +602,27 @@ export const NFCReader = () => {
         return;
       }
 
-      await Nfc.stopScanSession();
-      toast.error("Tag NFC ne contient pas de donnees reptile valides");
+      // Pas de reptile ID trouve mais le tag avait du contenu NDEF
+      // Ne PAS arreter la session - laisser reessayer
+      toast.warning("Ce tag NFC ne contient pas de donnees reptile. Essayez un autre tag.");
+      console.log('[NFC] Aucun reptile ID, session maintenue active');
+      // Sur iOS, relancer la session apres chaque scan
+      if (isIOS()) {
+        try {
+          await Nfc.startScanSession({
+            alertMessage: 'Approchez un autre tag NFC',
+            compatibilityMode: true,
+          });
+        } catch {
+          // Session deja active
+        }
+      }
       
     } catch (err: any) {
       console.error('[NFC] Erreur traitement tag:', err);
       toast.error("Erreur lecture NFC");
-      try {
-        await Nfc.stopScanSession();
-      } catch (stopErr) {
-        console.error('[NFC] Erreur arret session:', stopErr);
-      }
+      // Ne pas arreter la session sur erreur de traitement - garder le scan actif
+      console.log('[NFC] Session maintenue malgre l\'erreur');
     }
   };
 
