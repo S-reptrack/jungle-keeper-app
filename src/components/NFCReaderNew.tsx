@@ -490,12 +490,23 @@ export const NFCReader = () => {
           tag: nfcTag,
         });
 
-        const friendlyError = getNfcFriendlyError('Tag Not NDEF formatted', 'read');
-        setError(`${friendlyError}${tagIdHex ? ` [ID: ${tagIdHex}]` : ''}`);
-        toast.error(friendlyError);
-        await Nfc.stopScanSession();
-        await Nfc.removeAllListeners();
-        setIsScanning(false);
+        // Ne PAS arreter la session - laisser l'utilisateur reessayer avec un autre tag
+        const hint = isIOS()
+          ? 'Ce tag est vide ou non formate. Essayez un autre tag (NTAG215 recommande).'
+          : 'Ce tag est vide ou non formate. Essayez un autre tag ou formatez-le avec NFC Tools.';
+        toast.warning(hint);
+        console.log('[NFC] Session maintenue active pour reessayer');
+        // Sur iOS, la session se ferme automatiquement apres un scan - relancer
+        if (isIOS()) {
+          try {
+            await Nfc.startScanSession({
+              alertMessage: 'Approchez un autre tag NFC',
+              compatibilityMode: true,
+            });
+          } catch {
+            // Session deja active ou terminee
+          }
+        }
         return;
       }
 
