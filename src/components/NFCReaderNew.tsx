@@ -294,16 +294,28 @@ export const NFCReader = () => {
         handleNFCTagPremium(event);
       });
 
-      const sessionErrorListener = await Nfc.addListener('scanSessionError', (sessionErr: any) => {
+      const sessionErrorListener = await Nfc.addListener('scanSessionError', async (sessionErr: any) => {
+        const rawMessage = sessionErr?.message || 'Session NFC interrompue';
+        const friendlyMessage = getNfcFriendlyError(rawMessage, 'read');
         console.error('[NFC] Erreur session NFC:', sessionErr);
+
+        setError(friendlyMessage);
         setIsScanning(false);
-        toast.error(sessionErr?.message || 'Session NFC interrompue');
+        toast.error(friendlyMessage);
+
+        try {
+          await Nfc.stopScanSession();
+          await Nfc.removeAllListeners();
+        } catch {
+          // no-op
+        }
       });
 
       nfcCallbackRef.current = { tagListener, sessionErrorListener };
 
       await Nfc.startScanSession({
         alertMessage: 'Approchez un tag NFC S-reptrack',
+        compatibilityMode: Capacitor.getPlatform() === 'ios',
       });
       
       toast.success("✓ Lecteur NFC Premium activé - Approchez un tag");
