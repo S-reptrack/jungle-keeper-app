@@ -421,12 +421,25 @@ export const NFCReader = () => {
       console.log('[NFC] ===== TAG PREMIUM DÉTECTÉ =====');
       console.log('[NFC] Event complet:', event);
       
-      const ndefMessage = event.nfcTag?.message;
+      const nfcTag = event?.nfcTag ?? event;
+      const ndefMessage = nfcTag?.message;
       
-      if (!ndefMessage || !ndefMessage.records || ndefMessage.records.length === 0) {
-        console.error('[NFC] Aucun message NDEF trouvé');
-        toast.error("Tag NFC vide");
+      if (!ndefMessage?.records || ndefMessage.records.length === 0) {
+        const techTypes = Array.isArray(nfcTag?.techTypes) ? nfcTag.techTypes.join(', ') : 'inconnu';
+        const tagIdHex = toNumberArray(nfcTag?.id)
+          .map((byte) => byte.toString(16).padStart(2, '0'))
+          .join('');
+
+        console.warn('[NFC] Tag détecté sans message NDEF', {
+          techTypes,
+          tagIdHex,
+          tag: nfcTag,
+        });
+
+        setError(`Tag détecté (${techTypes}) mais non formaté pour S-reptrack${tagIdHex ? ` [ID: ${tagIdHex}]` : ''}`);
+        toast.error("Tag détecté mais non formaté pour S-reptrack");
         await Nfc.stopScanSession();
+        setIsScanning(false);
         return;
       }
 
