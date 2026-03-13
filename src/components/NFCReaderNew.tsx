@@ -467,8 +467,7 @@ export const NFCReader = () => {
           let textContent = '';
           
           // Vérifier si c'est un record Text (type = 0x54 = 'T')
-          const typeArray = Array.isArray(record?.type) ? record.type : 
-                           (record?.type && typeof record.type === 'object' ? Object.values(record.type) : []);
+          const typeArray = toNumberArray(record?.type);
           const isTextRecord = typeArray.length === 1 && typeArray[0] === 0x54;
           
           console.log('[NFC] Is Text record:', isTextRecord, 'typeArray:', JSON.stringify(typeArray));
