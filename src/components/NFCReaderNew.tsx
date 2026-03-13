@@ -291,7 +291,6 @@ export const NFCReader = () => {
 
       await Nfc.startScanSession({
         alertMessage: 'Approchez un tag NFC S-reptrack',
-        pollingOptions: ['iso14443', 'iso15693', 'iso18092'],
       });
       
       toast.success("✓ Lecteur NFC Premium activé - Approchez un tag");
