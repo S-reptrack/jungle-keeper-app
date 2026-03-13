@@ -324,10 +324,15 @@ export const NFCReader = () => {
 
       nfcCallbackRef.current = { tagListener, sessionErrorListener };
 
-      await Nfc.startScanSession({
+      // iOS: compatibilityMode pour stabilité NDEF
+      // Android: session standard sans options restrictives
+      const sessionOptions: StartScanSessionOptions = {
         alertMessage: 'Approchez un tag NFC S-reptrack',
-        compatibilityMode: Capacitor.getPlatform() === 'ios',
-      });
+      };
+      if (isIOS()) {
+        sessionOptions.compatibilityMode = true;
+      }
+      await Nfc.startScanSession(sessionOptions);
       
       toast.success("✓ Lecteur NFC Premium activé - Approchez un tag");
     } catch (err: any) {
