@@ -417,6 +417,7 @@ export const NFCReader = () => {
 
         try {
           console.log('[NFC] Tag détecté pour écriture:', JSON.stringify(event));
+          console.log('[NFC] Plateforme:', Capacitor.getPlatform());
           
           // Tentative d'écriture directe
           try {
@@ -425,17 +426,21 @@ export const NFCReader = () => {
             const rawDirect = directWriteErr?.message || '';
             console.warn('[NFC] Écriture directe échouée:', rawDirect);
             
-            // Si tag non NDEF, tenter format() puis réessayer (Android ET iOS)
-            if (isTagNotNdefError(rawDirect)) {
-              console.log('[NFC] Tag non NDEF, tentative de formatage automatique...');
+            // Android uniquement: tenter format() puis réessayer
+            // iOS ne supporte pas format() de manière fiable
+            if (isTagNotNdefError(rawDirect) && isAndroid()) {
+              console.log('[NFC] [Android] Tag non NDEF, tentative de formatage automatique...');
               try {
                 await Nfc.format();
-                console.log('[NFC] Formatage OK, nouvelle tentative d\'écriture...');
+                console.log('[NFC] [Android] Formatage OK, nouvelle tentative d\'écriture...');
                 await Nfc.write(writePayload);
               } catch (formatErr: any) {
-                console.error('[NFC] Échec formatage:', formatErr);
-                throw directWriteErr; // remonter l'erreur originale
+                console.error('[NFC] [Android] Échec formatage:', formatErr);
+                throw directWriteErr;
               }
+            } else if (isTagNotNdefError(rawDirect) && isIOS()) {
+              // iOS: pas de format(), message clair
+              throw new Error("Ce tag n'est pas formaté NDEF. Formatez-le avec un Android (app NFC Tools) puis réessayez sur iPhone.");
             } else {
               throw directWriteErr;
             }
