@@ -239,6 +239,34 @@ const Landing = () => {
         </div>
       </section>
 
+      {/* Support / Contact Section */}
+      <section id="support" className="py-16 px-4">
+        <div className="max-w-2xl mx-auto text-center space-y-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground">
+            {t("landing.supportTitle") || "Support & Contact"}
+          </h2>
+          <p className="text-muted-foreground">
+            {t("landing.supportDescription") || "Une question, un problème ou une suggestion ? Notre équipe est là pour vous aider."}
+          </p>
+          <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+            <div className="flex flex-col items-center gap-2">
+              <p className="text-sm text-muted-foreground">
+                {t("landing.supportEmail") || "Contactez-nous par email :"}
+              </p>
+              <a 
+                href="mailto:contact@s-reptrack.app" 
+                className="text-primary font-semibold text-lg hover:underline"
+              >
+                contact@s-reptrack.app
+              </a>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {t("landing.supportResponseTime") || "Nous répondons généralement sous 24 à 48 heures."}
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="border-t border-border py-6 px-4">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
@@ -256,6 +284,9 @@ const Landing = () => {
             <button onClick={() => navigate("/legal")} className="hover:text-foreground transition-colors">
               {t("landing.legalNotice")}
             </button>
+            <a href="mailto:contact@s-reptrack.app" className="hover:text-foreground transition-colors">
+              Contact
+            </a>
             <span>© 2025 S-reptrack</span>
           </div>
         </div>
