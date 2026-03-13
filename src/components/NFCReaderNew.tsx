@@ -452,15 +452,8 @@ export const NFCReader = () => {
           console.log('[NFC] Record #' + i + ' type:', JSON.stringify(record?.type));
           console.log('[NFC] Record #' + i + ' payload brut:', JSON.stringify(record?.payload));
           
-          // Extraire le payload - peut être un tableau, un objet ou undefined
-          let payloadArray: number[] = [];
-          
-          if (Array.isArray(record?.payload)) {
-            payloadArray = record.payload;
-          } else if (record?.payload && typeof record.payload === 'object') {
-            // Si c'est un objet avec des indices numériques (comme {0: 2, 1: 101, ...})
-            payloadArray = Object.values(record.payload).filter((v): v is number => typeof v === 'number');
-          }
+          // Extraire le payload - peut être un tableau, un objet indexé ou un Uint8Array
+          const payloadArray = toNumberArray(record?.payload);
           
           if (payloadArray.length === 0) {
             console.log('[NFC] Record #' + i + ' sans payload valide, ignoré');
