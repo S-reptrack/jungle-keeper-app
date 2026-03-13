@@ -207,9 +207,7 @@ const getNfcFriendlyError = (message: string, mode: 'read' | 'write') => {
   }
 
   if (isTagNotNdefError(message)) {
-    return mode === 'read'
-      ? "Tag non NDEF : sur iPhone, seuls les tags déjà formatés NDEF peuvent être lus."
-      : "Tag non NDEF : iPhone ne peut pas formater un tag vierge. Utilisez un tag déjà NDEF (NTAG213/215/216 préformaté).";
+    return "Ce tag NFC n'est pas formaté NDEF. Formatez-le d'abord avec un téléphone Android (via une app comme NFC Tools), puis réessayez sur iPhone.";
   }
 
   return message;
