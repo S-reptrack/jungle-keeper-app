@@ -398,13 +398,14 @@ export const NFCReader = () => {
           console.log('[NFC] Tag détecté pour écriture:', JSON.stringify(event));
           console.log('[NFC] Record à écrire:', JSON.stringify(record));
           
-          // Écrire directement sans formater (format peut causer des erreurs)
-          console.log('[NFC] Tentative écriture...');
-          await Nfc.write({
+          const writePayload = {
             message: {
-              records: [record]
-            }
-          });
+              records: [record],
+            },
+          };
+
+          console.log('[NFC] Tentative écriture...');
+          await Nfc.write(writePayload);
 
           console.log('[NFC] Écriture réussie !');
           await Nfc.stopScanSession();
@@ -416,10 +417,27 @@ export const NFCReader = () => {
           console.error('[NFC] Message:', writeErr?.message);
           console.error('[NFC] Code:', writeErr?.code);
           console.error('[NFC] Data:', JSON.stringify(writeErr?.data));
-          
-          // Afficher l'erreur complète
-          const errorMsg = writeErr?.message || writeErr?.code || JSON.stringify(writeErr) || 'Erreur inconnue';
-          toast.error("Erreur lors de l'écriture: " + errorMsg);
+
+          const rawError = writeErr?.message || writeErr?.code || JSON.stringify(writeErr) || 'Erreur inconnue';
+
+          if (isTagNotNdefError(rawError) && Capacitor.getPlatform() === 'android') {
+            try {
+              console.log('[NFC] Tag non NDEF détecté sur Android, tentative de formatage...');
+              await Nfc.format();
+              await Nfc.write(writePayload);
+              await Nfc.stopScanSession();
+              await Nfc.removeAllListeners();
+              toast.success("✓ Tag formaté puis programmé avec succès !");
+              setIsWriting(false);
+              return;
+            } catch (formatErr: any) {
+              console.error('[NFC] Échec formatage Android:', formatErr);
+            }
+          }
+
+          const friendlyError = getNfcFriendlyError(rawError, 'write');
+          toast.error("Erreur lors de l'écriture: " + friendlyError);
+          setError(friendlyError);
           setIsWriting(false);
           try {
             await Nfc.stopScanSession();
