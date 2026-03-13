@@ -191,8 +191,21 @@ const checkNfcAvailable = async (): Promise<{ available: boolean; error?: string
 };
 
 const isTagNotNdefError = (message?: string) => /tag\s+not\s+ndef\s+formatted/i.test(message || '');
+const isTagConnectionLostError = (message?: string) => /tag\s+connection\s+lost/i.test(message || '');
+const isPluginUnavailableError = (message?: string) => {
+  const msg = (message || '').toLowerCase();
+  return (
+    msg.includes("plugin nfc premium") ||
+    msg.includes('not implemented') ||
+    msg.includes('plugin non disponible')
+  );
+};
 
 const getNfcFriendlyError = (message: string, mode: 'read' | 'write') => {
+  if (isTagConnectionLostError(message)) {
+    return "Connexion au tag perdue : gardez le tag immobile contre l’iPhone pendant 2 secondes puis réessayez.";
+  }
+
   if (isTagNotNdefError(message)) {
     return mode === 'read'
       ? "Tag non NDEF : sur iPhone, seuls les tags déjà formatés NDEF peuvent être lus."
@@ -385,15 +398,14 @@ export const NFCReader = () => {
       setIsWriting(true);
 
       const textToWrite = `reptile:${selectedReptileId}`;
-
-      toast.info("📝 Approchez un tag NFC vierge");
-
-      // Créer le record NDEF Text
       const record = createTextRecord(textToWrite);
 
+      toast.info("📝 Approchez un tag NFC et gardez-le immobile");
       console.log('[NFC] Préparation écriture avec record:', record);
 
-      await Nfc.addListener('nfcTagScanned', async (event: any) => {
+      await Nfc.removeAllListeners();
+
+      const writeTagListener = await Nfc.addListener('nfcTagScanned', async (event: any) => {
         const writePayload = {
           message: {
             records: [record],
@@ -402,9 +414,6 @@ export const NFCReader = () => {
 
         try {
           console.log('[NFC] Tag détecté pour écriture:', JSON.stringify(event));
-          console.log('[NFC] Record à écrire:', JSON.stringify(record));
-
-          console.log('[NFC] Tentative écriture...');
           await Nfc.write(writePayload);
 
           console.log('[NFC] Écriture réussie !');
@@ -414,10 +423,6 @@ export const NFCReader = () => {
           setIsWriting(false);
         } catch (writeErr: any) {
           console.error('[NFC] Erreur écriture tag:', writeErr);
-          console.error('[NFC] Message:', writeErr?.message);
-          console.error('[NFC] Code:', writeErr?.code);
-          console.error('[NFC] Data:', JSON.stringify(writeErr?.data));
-
           const rawError = writeErr?.message || writeErr?.code || JSON.stringify(writeErr) || 'Erreur inconnue';
 
           if (isTagNotNdefError(rawError) && Capacitor.getPlatform() === 'android') {
@@ -436,8 +441,14 @@ export const NFCReader = () => {
           }
 
           const friendlyError = getNfcFriendlyError(rawError, 'write');
-          toast.error("Erreur lors de l'écriture: " + friendlyError);
           setError(friendlyError);
+          toast.error("Erreur lors de l'écriture: " + friendlyError);
+
+          if (isTagConnectionLostError(rawError) && Capacitor.getPlatform() === 'ios') {
+            toast.info("Représentez le tag sans le bouger pendant 2 secondes.");
+            return;
+          }
+
           setIsWriting(false);
           try {
             await Nfc.stopScanSession();
@@ -448,11 +459,28 @@ export const NFCReader = () => {
         }
       });
 
-      await Nfc.startScanSession();
+      const writeSessionErrorListener = await Nfc.addListener('scanSessionError', async (sessionErr: any) => {
+        const friendlyError = getNfcFriendlyError(sessionErr?.message || 'Session NFC interrompue', 'write');
+        setError(friendlyError);
+        setIsWriting(false);
+        toast.error(friendlyError);
+        try {
+          await Nfc.stopScanSession();
+          await Nfc.removeAllListeners();
+        } catch {
+          // no-op
+        }
+      });
 
+      nfcCallbackRef.current = { writeTagListener, writeSessionErrorListener };
+
+      await Nfc.startScanSession({
+        alertMessage: 'Approchez un tag NFC et ne le bougez pas pendant 2 secondes',
+      });
     } catch (err: any) {
       console.error('[NFC] Erreur écriture:', err);
-      setError(err.message || "Erreur lors de l'écriture NFC");
+      const friendlyError = getNfcFriendlyError(err?.message || "Erreur lors de l'écriture NFC", 'write');
+      setError(friendlyError);
       setIsWriting(false);
       toast.error("Impossible d'écrire sur le tag NFC");
     }
@@ -684,7 +712,9 @@ export const NFCReader = () => {
           <div className="flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-destructive mt-0.5 flex-shrink-0" />
             <div className="flex-1">
-              <p className="font-semibold text-destructive mb-2">Plugin NFC non disponible</p>
+              <p className="font-semibold text-destructive mb-2">
+                {isPluginUnavailableError(error) ? 'Plugin NFC non disponible' : 'Erreur NFC'}
+              </p>
               <div className="text-sm text-destructive/90 space-y-1">
                 {error.split('\n').map((line, i) => (
                   <p key={i}>{line}</p>
@@ -692,7 +722,7 @@ export const NFCReader = () => {
               </div>
               <div className="mt-3 pt-3 border-t border-destructive/20">
                 <p className="text-sm text-muted-foreground">
-                  💡 <strong>Alternative :</strong> Utilisez les QR codes via le menu Paramètres → QR Code
+                  💡 <strong>Astuce :</strong> maintenez le tag collé au dos de l'iPhone jusqu'à la confirmation.
                 </p>
               </div>
             </div>
