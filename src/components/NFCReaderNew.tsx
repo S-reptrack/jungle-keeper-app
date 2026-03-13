@@ -191,8 +191,21 @@ const checkNfcAvailable = async (): Promise<{ available: boolean; error?: string
 };
 
 const isTagNotNdefError = (message?: string) => /tag\s+not\s+ndef\s+formatted/i.test(message || '');
+const isTagConnectionLostError = (message?: string) => /tag\s+connection\s+lost/i.test(message || '');
+const isPluginUnavailableError = (message?: string) => {
+  const msg = (message || '').toLowerCase();
+  return (
+    msg.includes("plugin nfc premium") ||
+    msg.includes('not implemented') ||
+    msg.includes('plugin non disponible')
+  );
+};
 
 const getNfcFriendlyError = (message: string, mode: 'read' | 'write') => {
+  if (isTagConnectionLostError(message)) {
+    return "Connexion au tag perdue : gardez le tag immobile contre l’iPhone pendant 2 secondes puis réessayez.";
+  }
+
   if (isTagNotNdefError(message)) {
     return mode === 'read'
       ? "Tag non NDEF : sur iPhone, seuls les tags déjà formatés NDEF peuvent être lus."
