@@ -412,7 +412,29 @@ export const NFCReader = () => {
 
         try {
           console.log('[NFC] Tag détecté pour écriture:', JSON.stringify(event));
-          await Nfc.write(writePayload);
+          
+          // Tentative d'écriture directe
+          try {
+            await Nfc.write(writePayload);
+          } catch (directWriteErr: any) {
+            const rawDirect = directWriteErr?.message || '';
+            console.warn('[NFC] Écriture directe échouée:', rawDirect);
+            
+            // Si tag non NDEF, tenter format() puis réessayer (Android ET iOS)
+            if (isTagNotNdefError(rawDirect)) {
+              console.log('[NFC] Tag non NDEF, tentative de formatage automatique...');
+              try {
+                await Nfc.format();
+                console.log('[NFC] Formatage OK, nouvelle tentative d\'écriture...');
+                await Nfc.write(writePayload);
+              } catch (formatErr: any) {
+                console.error('[NFC] Échec formatage:', formatErr);
+                throw directWriteErr; // remonter l'erreur originale
+              }
+            } else {
+              throw directWriteErr;
+            }
+          }
 
           console.log('[NFC] Écriture réussie !');
           await Nfc.stopScanSession();
@@ -422,21 +444,6 @@ export const NFCReader = () => {
         } catch (writeErr: any) {
           console.error('[NFC] Erreur écriture tag:', writeErr);
           const rawError = writeErr?.message || writeErr?.code || JSON.stringify(writeErr) || 'Erreur inconnue';
-
-          if (isTagNotNdefError(rawError) && Capacitor.getPlatform() === 'android') {
-            try {
-              console.log('[NFC] Tag non NDEF détecté sur Android, tentative de formatage...');
-              await Nfc.format();
-              await Nfc.write(writePayload);
-              await Nfc.stopScanSession();
-              await Nfc.removeAllListeners();
-              toast.success("✓ Tag formaté puis programmé avec succès !");
-              setIsWriting(false);
-              return;
-            } catch (formatErr: any) {
-              console.error('[NFC] Échec formatage Android:', formatErr);
-            }
-          }
 
           const friendlyError = getNfcFriendlyError(rawError, 'write');
           setError(friendlyError);
