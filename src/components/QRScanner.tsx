@@ -676,15 +676,9 @@ const handleScanSuccess = async (decodedText: string) => {
                   Scanner un QR Code
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Prenez une photo du QR code pour accéder rapidement à la fiche de l'animal.
-                </p>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm font-medium">
-                  Scanner un QR Code
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Prenez une photo du QR code pour accéder rapidement à la fiche de l'animal.
+                  {Capacitor.isNativePlatform() 
+                    ? 'Prenez une photo du QR code pour accéder rapidement à la fiche de l\'animal.'
+                    : 'Scannez en direct ou prenez une photo du QR code.'}
                 </p>
               </div>
               <div className="flex flex-col gap-2">
