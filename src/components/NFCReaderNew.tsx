@@ -26,6 +26,7 @@ interface NdefRecord {
 interface StartScanSessionOptions {
   alertMessage?: string;
   pollingOptions?: string[];
+  compatibilityMode?: boolean;
 }
 
 interface NfcPlugin {
