@@ -280,6 +280,21 @@ export const NFCReader = () => {
         const friendlyMessage = getNfcFriendlyError(rawMessage, 'read');
         console.error('[NFC] Erreur session NFC:', sessionErr);
 
+        // Connexion perdue = garder la session active pour reessayer
+        if (isTagConnectionLostError(rawMessage)) {
+          toast.warning(friendlyMessage);
+          // Sur Android, la session reste active. Sur iOS, relancer.
+          if (isIOS()) {
+            try {
+              await Nfc.startScanSession({
+                alertMessage: 'Reessayez - approchez le tag lentement',
+                compatibilityMode: true,
+              });
+            } catch { /* session peut deja etre active */ }
+          }
+          return;
+        }
+
         setError(friendlyMessage);
         setIsScanning(false);
         toast.error(friendlyMessage);
