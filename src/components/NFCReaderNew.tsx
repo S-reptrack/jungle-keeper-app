@@ -190,6 +190,18 @@ const checkNfcAvailable = async (): Promise<{ available: boolean; error?: string
   }
 };
 
+const isTagNotNdefError = (message?: string) => /tag\s+not\s+ndef\s+formatted/i.test(message || '');
+
+const getNfcFriendlyError = (message: string, mode: 'read' | 'write') => {
+  if (isTagNotNdefError(message)) {
+    return mode === 'read'
+      ? "Tag non NDEF : sur iPhone, seuls les tags déjà formatés NDEF peuvent être lus."
+      : "Tag non NDEF : iPhone ne peut pas formater un tag vierge. Utilisez un tag déjà NDEF (NTAG213/215/216 préformaté).";
+  }
+
+  return message;
+};
+
 export const NFCReader = () => {
   const navigate = useNavigate();
   const [mode, setMode] = useState<'read' | 'write'>('read');
