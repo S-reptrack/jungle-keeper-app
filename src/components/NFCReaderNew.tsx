@@ -228,9 +228,17 @@ export const NFCReader = () => {
     checkPlugin();
     
     return () => {
-      if (nfcCallbackRef.current) {
-        console.log('[NFC] Cleanup au démontage');
-      }
+      const cleanupNfc = async () => {
+        try {
+          await Nfc.stopScanSession();
+          await Nfc.removeAllListeners();
+        } catch {
+          // no-op
+        }
+      };
+
+      void cleanupNfc();
+      nfcCallbackRef.current = null;
     };
   }, []);
 
