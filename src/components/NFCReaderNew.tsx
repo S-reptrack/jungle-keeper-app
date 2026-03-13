@@ -40,7 +40,6 @@ interface NfcPlugin {
   format: () => Promise<void>;
 }
 
-// Charger le plugin NFC via registerPlugin (méthode Capacitor standard)
 const Nfc = registerPlugin<NfcPlugin>('Nfc', {
   web: () => {
     console.log('[NFC] Plugin web stub loaded');
@@ -57,7 +56,6 @@ const Nfc = registerPlugin<NfcPlugin>('Nfc', {
   },
 });
 
-// Enum TypeNameFormat comme dans le plugin
 const TypeNameFormat = {
   Empty: 0,
   WellKnown: 1,
@@ -68,119 +66,88 @@ const TypeNameFormat = {
   Unchanged: 6,
 };
 
-// Convertit différents formats (array, objet indexé, Uint8Array) en tableau de bytes
 const toNumberArray = (value: unknown): number[] => {
   if (Array.isArray(value)) {
     return value.filter((item): item is number => typeof item === 'number');
   }
-
   if (value instanceof Uint8Array) {
     return Array.from(value);
   }
-
   if (value && typeof value === 'object') {
     return Object.values(value).filter((item): item is number => typeof item === 'number');
   }
-
   return [];
 };
 
-// Créer un record NDEF Text manuellement (compatible avec le plugin premium)
-// IMPORTANT: Le champ 'id' doit être un tableau non-null pour le plugin Android
-// Un tableau vide [] peut être sérialisé en null par Capacitor, causant "No value for id"
 const createTextRecord = (text: string): NdefRecord => {
   const languageBytes = Array.from(new TextEncoder().encode('en'));
   const textBytes = Array.from(new TextEncoder().encode(text));
-  
-  // Status byte: bit 7 = 0 (UTF-8), bits 0-5 = language code length
   const statusByte = languageBytes.length;
-  
-  // Payload = [statusByte, ...languageBytes, ...textBytes]
   const payload = [statusByte, ...languageBytes, ...textBytes];
-  
-  // Le record avec id comme tableau avec un byte (0x00) au lieu de vide
-  // pour s'assurer que le JSON contient bien un array
   const record: NdefRecord = {
     tnf: TypeNameFormat.WellKnown,
-    type: [0x54], // 'T' pour Text Record
+    type: [0x54],
     payload: payload,
-    id: [0x00] // ID avec un byte null - sera ignoré mais présent dans le JSON
+    id: [0x00]
   };
-  
-  console.log('[NFC] Record créé:', JSON.stringify(record));
+  console.log('[NFC] Record cree:', JSON.stringify(record));
   return record;
 };
 
-// Variable pour tracker les erreurs
 let nfcError: string | null = null;
 
-// Message d'erreur personnalisé pour le plugin non installé
-const NFC_PLUGIN_NOT_INSTALLED_ERROR = `Le plugin NFC Premium n'est pas installé dans cette version de l'application.
+const NFC_PLUGIN_NOT_INSTALLED_ERROR = "Le plugin NFC Premium n'est pas installe dans cette version de l'application.\n\nPour utiliser le NFC, vous devez :\n1. Installer l'APK avec le plugin NFC Premium\n2. Utiliser le script \"reinstall-android-nfc.bat\"\n\nEn attendant, utilisez les QR codes comme alternative.";
 
-Pour utiliser le NFC, vous devez :
-1. Installer l'APK avec le plugin NFC Premium
-2. Utiliser le script "reinstall-android-nfc.bat"
-
-En attendant, utilisez les QR codes comme alternative.`;
-
-// Fonction pour vérifier si le plugin NFC est RÉELLEMENT disponible
 const checkNfcAvailable = async (): Promise<{ available: boolean; error?: string }> => {
   try {
     if (!Capacitor.isNativePlatform()) {
       return { available: false, error: "NFC disponible uniquement sur mobile" };
     }
     
-    console.log('[NFC] Vérification du plugin premium...');
+    console.log('[NFC] Verification du plugin premium...');
     console.log('[NFC] Platform:', Capacitor.getPlatform());
     
-    // Méthode 1: Tenter isSupported
     try {
       const result = await Nfc.isSupported();
       console.log('[NFC] isSupported result:', JSON.stringify(result));
-      // Le plugin retourne { isSupported: boolean, nfc: boolean, hce: boolean }
       const supported = result?.isSupported === true || (result as any)?.nfc === true;
       if (supported) {
-        console.log('[NFC] ✅ Plugin détecté via isSupported');
+        console.log('[NFC] Plugin detecte via isSupported');
         return { available: true };
       }
     } catch (err1: any) {
       const msg1 = err1?.message || String(err1);
       console.warn('[NFC] isSupported failed:', msg1);
-      
-      // Si "not implemented" = plugin pas installé du tout
       if (msg1.includes('not implemented') || msg1.includes('not available') || msg1.includes('does not have')) {
         nfcError = NFC_PLUGIN_NOT_INSTALLED_ERROR;
         return { available: false, error: NFC_PLUGIN_NOT_INSTALLED_ERROR };
       }
     }
     
-    // Méthode 2: Tenter isAvailable (ajouté dans v7.2.0)
     try {
       const result2 = await (Nfc as any).isAvailable();
       console.log('[NFC] isAvailable result:', JSON.stringify(result2));
       const available = result2?.nfc === true;
       if (available) {
-        console.log('[NFC] ✅ Plugin détecté via isAvailable');
+        console.log('[NFC] Plugin detecte via isAvailable');
         return { available: true };
       }
     } catch (err2: any) {
       console.warn('[NFC] isAvailable failed:', err2?.message || String(err2));
     }
     
-    // Méthode 3: Tenter checkPermissions comme dernier recours
     try {
       const perms = await (Nfc as any).checkPermissions();
       console.log('[NFC] checkPermissions result:', JSON.stringify(perms));
-      // Si checkPermissions répond sans erreur, le plugin est installé
       if (perms?.nfc === 'granted') {
-        console.log('[NFC] ✅ Plugin détecté via checkPermissions');
+        console.log('[NFC] Plugin detecte via checkPermissions');
         return { available: true };
       }
     } catch (err3: any) {
       console.warn('[NFC] checkPermissions failed:', err3?.message || String(err3));
     }
     
-    console.error('[NFC] Aucune méthode de détection n\'a confirmé le plugin');
+    console.error('[NFC] Aucune methode de detection n\'a confirme le plugin');
     nfcError = NFC_PLUGIN_NOT_INSTALLED_ERROR;
     return { available: false, error: NFC_PLUGIN_NOT_INSTALLED_ERROR };
   } catch (err: any) {
@@ -189,6 +156,10 @@ const checkNfcAvailable = async (): Promise<{ available: boolean; error?: string
     return { available: false, error: nfcError };
   }
 };
+
+// === Helpers specifiques par plateforme ===
+const isIOS = () => Capacitor.getPlatform() === 'ios';
+const isAndroid = () => Capacitor.getPlatform() === 'android';
 
 const isTagNotNdefError = (message?: string) => /tag\s+not\s+ndef\s+formatted/i.test(message || '');
 const isTagConnectionLostError = (message?: string) => /tag\s+connection\s+lost/i.test(message || '');
@@ -201,15 +172,17 @@ const isPluginUnavailableError = (message?: string) => {
   );
 };
 
-const getNfcFriendlyError = (message: string, mode: 'read' | 'write') => {
+const getNfcFriendlyError = (message: string, _mode: 'read' | 'write') => {
   if (isTagConnectionLostError(message)) {
-    return "Connexion au tag perdue : gardez le tag immobile contre l’iPhone pendant 2 secondes puis réessayez.";
+    return isIOS()
+      ? 'Connexion au tag perdue. Gardez le tag immobile contre le haut de l\'iPhone pendant 2 secondes.'
+      : 'Connexion au tag perdue. Maintenez le tag contre le dos du telephone sans bouger.';
   }
-
   if (isTagNotNdefError(message)) {
-    return "Ce tag NFC n'est pas formaté NDEF. Formatez-le d'abord avec un téléphone Android (via une app comme NFC Tools), puis réessayez sur iPhone.";
+    return isIOS()
+      ? 'Ce tag n\'est pas formate NDEF. Formatez-le d\'abord avec un Android (app NFC Tools).'
+      : 'Ce tag n\'est pas formate NDEF. Formatage automatique en cours...';
   }
-
   return message;
 };
 
@@ -223,14 +196,12 @@ export const NFCReader = () => {
   const [selectedReptileId, setSelectedReptileId] = useState<string>('');
   const nfcCallbackRef = useRef<any>(null);
   
-  // États pour la détection automatique du plugin premium
   const [isCheckingPlugin, setIsCheckingPlugin] = useState(true);
   const [isPluginAvailable, setIsPluginAvailable] = useState(false);
 
   useEffect(() => {
     loadReptiles();
     
-    // Vérifier si le plugin NFC premium est disponible au démarrage
     const checkPlugin = async () => {
       if (!Capacitor.isNativePlatform()) {
         setIsCheckingPlugin(false);
@@ -238,9 +209,9 @@ export const NFCReader = () => {
         return;
       }
       
-      console.log('[NFC] Vérification automatique du plugin premium...');
+      console.log('[NFC] Verification automatique du plugin premium...');
       const result = await checkNfcAvailable();
-      console.log('[NFC] Résultat vérification:', result);
+      console.log('[NFC] Resultat verification:', result);
       
       setIsPluginAvailable(result.available);
       if (!result.available && result.error) {
@@ -260,7 +231,6 @@ export const NFCReader = () => {
           // no-op
         }
       };
-
       void cleanupNfc();
       nfcCallbackRef.current = null;
     };
@@ -297,7 +267,7 @@ export const NFCReader = () => {
         throw new Error(checkResult.error || "Plugin NFC Premium non disponible");
       }
 
-      console.log('[NFC] Configuration de l\'écouteur NFC Premium...');
+      console.log('[NFC] Configuration de l\'ecouteur NFC Premium...');
 
       await Nfc.removeAllListeners();
 
@@ -324,17 +294,21 @@ export const NFCReader = () => {
 
       nfcCallbackRef.current = { tagListener, sessionErrorListener };
 
-      await Nfc.startScanSession({
+      // iOS: compatibilityMode pour stabilite NDEF
+      // Android: session standard sans options restrictives
+      const sessionOptions: StartScanSessionOptions = {
         alertMessage: 'Approchez un tag NFC S-reptrack',
-        compatibilityMode: Capacitor.getPlatform() === 'ios',
-      });
+      };
+      if (isIOS()) {
+        sessionOptions.compatibilityMode = true;
+      }
+      await Nfc.startScanSession(sessionOptions);
       
-      toast.success("✓ Lecteur NFC Premium activé - Approchez un tag");
+      toast.success("Lecteur NFC Premium active - Approchez un tag");
     } catch (err: any) {
-      console.error('[NFC] Erreur démarrage scan:', err);
-      const errorMsg = err?.message || "Erreur lors du démarrage du scan NFC";
+      console.error('[NFC] Erreur demarrage scan:', err);
+      const errorMsg = err?.message || "Erreur lors du demarrage du scan NFC";
       
-      // Détecter l'erreur "not implemented"
       if (errorMsg.includes('not implemented') || errorMsg.includes('not available')) {
         setError(NFC_PLUGIN_NOT_INSTALLED_ERROR);
       } else {
@@ -367,9 +341,9 @@ export const NFCReader = () => {
       setIsScanning(false);
       setIsWriting(false);
       nfcCallbackRef.current = null;
-      console.log('[NFC] Scan arrêté');
+      console.log('[NFC] Scan arrete');
     } catch (err) {
-      console.error('[NFC] Erreur arrêt scan:', err);
+      console.error('[NFC] Erreur arret scan:', err);
       setIsScanning(false);
       setIsWriting(false);
       nfcCallbackRef.current = null;
@@ -379,12 +353,12 @@ export const NFCReader = () => {
   const startWriting = async () => {
     try {
       if (!selectedReptileId) {
-        toast.error("Veuillez sélectionner un reptile");
+        toast.error("Veuillez selectionner un reptile");
         return;
       }
 
       if (!Capacitor.isNativePlatform()) {
-        throw new Error("L'écriture NFC n'est disponible que sur l'application mobile");
+        throw new Error("L'ecriture NFC n'est disponible que sur l'application mobile");
       }
 
       const checkResult = await checkNfcAvailable();
@@ -398,8 +372,8 @@ export const NFCReader = () => {
       const textToWrite = `reptile:${selectedReptileId}`;
       const record = createTextRecord(textToWrite);
 
-      toast.info("📝 Approchez un tag NFC et gardez-le immobile");
-      console.log('[NFC] Préparation écriture avec record:', record);
+      toast.info("Approchez un tag NFC et gardez-le immobile");
+      console.log('[NFC] Preparation ecriture avec record:', record);
 
       await Nfc.removeAllListeners();
 
@@ -411,46 +385,50 @@ export const NFCReader = () => {
         };
 
         try {
-          console.log('[NFC] Tag détecté pour écriture:', JSON.stringify(event));
+          console.log('[NFC] Tag detecte pour ecriture:', JSON.stringify(event));
+          console.log('[NFC] Plateforme:', Capacitor.getPlatform());
           
-          // Tentative d'écriture directe
+          // Tentative d'ecriture directe
           try {
             await Nfc.write(writePayload);
           } catch (directWriteErr: any) {
             const rawDirect = directWriteErr?.message || '';
-            console.warn('[NFC] Écriture directe échouée:', rawDirect);
+            console.warn('[NFC] Ecriture directe echouee:', rawDirect);
             
-            // Si tag non NDEF, tenter format() puis réessayer (Android ET iOS)
-            if (isTagNotNdefError(rawDirect)) {
-              console.log('[NFC] Tag non NDEF, tentative de formatage automatique...');
+            // Android uniquement: tenter format() puis reessayer
+            // iOS ne supporte pas format() de maniere fiable
+            if (isTagNotNdefError(rawDirect) && isAndroid()) {
+              console.log('[NFC] [Android] Tag non NDEF, tentative de formatage automatique...');
               try {
                 await Nfc.format();
-                console.log('[NFC] Formatage OK, nouvelle tentative d\'écriture...');
+                console.log('[NFC] [Android] Formatage OK, nouvelle tentative d\'ecriture...');
                 await Nfc.write(writePayload);
               } catch (formatErr: any) {
-                console.error('[NFC] Échec formatage:', formatErr);
-                throw directWriteErr; // remonter l'erreur originale
+                console.error('[NFC] [Android] Echec formatage:', formatErr);
+                throw directWriteErr;
               }
+            } else if (isTagNotNdefError(rawDirect) && isIOS()) {
+              throw new Error("Ce tag n'est pas formate NDEF. Formatez-le avec un Android (app NFC Tools) puis reessayez sur iPhone.");
             } else {
               throw directWriteErr;
             }
           }
 
-          console.log('[NFC] Écriture réussie !');
+          console.log('[NFC] Ecriture reussie !');
           await Nfc.stopScanSession();
           await Nfc.removeAllListeners();
-          toast.success("✓ Tag NFC programmé avec succès !");
+          toast.success("Tag NFC programme avec succes !");
           setIsWriting(false);
         } catch (writeErr: any) {
-          console.error('[NFC] Erreur écriture tag:', writeErr);
+          console.error('[NFC] Erreur ecriture tag:', writeErr);
           const rawError = writeErr?.message || writeErr?.code || JSON.stringify(writeErr) || 'Erreur inconnue';
 
           const friendlyError = getNfcFriendlyError(rawError, 'write');
           setError(friendlyError);
-          toast.error("Erreur lors de l'écriture: " + friendlyError);
+          toast.error("Erreur lors de l'ecriture: " + friendlyError);
 
-          if (isTagConnectionLostError(rawError) && Capacitor.getPlatform() === 'ios') {
-            toast.info("Représentez le tag sans le bouger pendant 2 secondes.");
+          if (isTagConnectionLostError(rawError) && isIOS()) {
+            toast.info("Representez le tag sans le bouger pendant 2 secondes.");
             return;
           }
 
@@ -479,21 +457,22 @@ export const NFCReader = () => {
 
       nfcCallbackRef.current = { writeTagListener, writeSessionErrorListener };
 
+      // iOS et Android: session standard pour ecriture
       await Nfc.startScanSession({
         alertMessage: 'Approchez un tag NFC et ne le bougez pas pendant 2 secondes',
       });
     } catch (err: any) {
-      console.error('[NFC] Erreur écriture:', err);
-      const friendlyError = getNfcFriendlyError(err?.message || "Erreur lors de l'écriture NFC", 'write');
+      console.error('[NFC] Erreur ecriture:', err);
+      const friendlyError = getNfcFriendlyError(err?.message || "Erreur lors de l'ecriture NFC", 'write');
       setError(friendlyError);
       setIsWriting(false);
-      toast.error("Impossible d'écrire sur le tag NFC");
+      toast.error("Impossible d'ecrire sur le tag NFC");
     }
   };
 
   const handleNFCTagPremium = async (event: any) => {
     try {
-      console.log('[NFC] ===== TAG PREMIUM DÉTECTÉ =====');
+      console.log('[NFC] ===== TAG PREMIUM DETECTE =====');
       console.log('[NFC] Event complet:', event);
       
       const nfcTag = event?.nfcTag ?? event;
@@ -505,7 +484,7 @@ export const NFCReader = () => {
           .map((byte) => byte.toString(16).padStart(2, '0'))
           .join('');
 
-        console.warn('[NFC] Tag détecté sans message NDEF', {
+        console.warn('[NFC] Tag detecte sans message NDEF', {
           techTypes,
           tagIdHex,
           tag: nfcTag,
@@ -529,11 +508,10 @@ export const NFCReader = () => {
           console.log('[NFC] Record #' + i + ' type:', JSON.stringify(record?.type));
           console.log('[NFC] Record #' + i + ' payload brut:', JSON.stringify(record?.payload));
           
-          // Extraire le payload - peut être un tableau, un objet indexé ou un Uint8Array
           const payloadArray = toNumberArray(record?.payload);
           
           if (payloadArray.length === 0) {
-            console.log('[NFC] Record #' + i + ' sans payload valide, ignoré');
+            console.log('[NFC] Record #' + i + ' sans payload valide, ignore');
             continue;
           }
 
@@ -543,16 +521,14 @@ export const NFCReader = () => {
 
           let textContent = '';
           
-          // Vérifier si c'est un record Text (type = 0x54 = 'T')
           const typeArray = toNumberArray(record?.type);
           const isTextRecord = typeArray.length === 1 && typeArray[0] === 0x54;
           
           console.log('[NFC] Is Text record:', isTextRecord, 'typeArray:', JSON.stringify(typeArray));
           
           if (isTextRecord && payloadBytes.length > 1) {
-            // Format NDEF Text: [status byte][language code][text]
             const statusByte = payloadBytes[0];
-            const languageCodeLength = statusByte & 0x3F; // bits 0-5
+            const languageCodeLength = statusByte & 0x3F;
             const textStartIndex = 1 + languageCodeLength;
             
             console.log('[NFC] Status byte:', statusByte, 'lang length:', languageCodeLength, 'text start:', textStartIndex);
@@ -560,12 +536,11 @@ export const NFCReader = () => {
             if (textStartIndex < payloadBytes.length) {
               const textBytes = payloadBytes.slice(textStartIndex);
               textContent = new TextDecoder('utf-8').decode(textBytes);
-              console.log('[NFC] Text record décodé:', textContent);
+              console.log('[NFC] Text record decode:', textContent);
             }
           } else {
-            // Fallback: décoder tout le payload comme texte
             textContent = new TextDecoder('utf-8').decode(payloadBytes);
-            console.log('[NFC] Payload décodé (fallback):', textContent);
+            console.log('[NFC] Payload decode (fallback):', textContent);
           }
 
           if (!textContent) {
@@ -573,30 +548,26 @@ export const NFCReader = () => {
             continue;
           }
 
-          // Regex pour UUID
           const uuidRegex = /([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/i;
 
-          // Chercher format "reptile:UUID"
           const reptileMatch = textContent.match(/reptile:([a-f0-9-]{36})/i);
           if (reptileMatch?.[1]) {
             foundReptileId = reptileMatch[1].toLowerCase();
-            console.log('[NFC] ✓ ID reptile trouvé (format reptile:):', foundReptileId);
+            console.log('[NFC] ID reptile trouve (format reptile:):', foundReptileId);
             break;
           }
           
-          // Chercher format "/reptile/UUID"
           const urlMatch = textContent.match(/\/reptile\/([a-f0-9-]{36})/i);
           if (urlMatch?.[1]) {
             foundReptileId = urlMatch[1].toLowerCase();
-            console.log('[NFC] ✓ URL reptile trouvée:', foundReptileId);
+            console.log('[NFC] URL reptile trouvee:', foundReptileId);
             break;
           }
 
-          // Fallback: chercher simplement un UUID
           const uuidMatch = textContent.match(uuidRegex);
           if (uuidMatch?.[1]) {
             foundReptileId = uuidMatch[1].toLowerCase();
-            console.log('[NFC] ✓ UUID trouvé (fallback):', foundReptileId);
+            console.log('[NFC] UUID trouve (fallback):', foundReptileId);
             break;
           }
         } catch (recordErr) {
@@ -605,14 +576,14 @@ export const NFCReader = () => {
       }
 
       if (foundReptileId) {
-        console.log('[NFC] Arrêt de la session NFC...');
+        console.log('[NFC] Arret de la session NFC...');
         await Nfc.stopScanSession();
         await Nfc.removeAllListeners();
         
         setIsScanning(false);
         nfcCallbackRef.current = null;
         
-        toast.success("🦎 Fiche reptile trouvée !");
+        toast.success("Fiche reptile trouvee !");
         
         console.log('[NFC] Navigation vers:', foundReptileId);
         navigate(`/reptile/${foundReptileId}`);
@@ -621,7 +592,7 @@ export const NFCReader = () => {
       }
 
       await Nfc.stopScanSession();
-      toast.error("Tag NFC ne contient pas de données reptile valides");
+      toast.error("Tag NFC ne contient pas de donnees reptile valides");
       
     } catch (err: any) {
       console.error('[NFC] Erreur traitement tag:', err);
@@ -629,7 +600,7 @@ export const NFCReader = () => {
       try {
         await Nfc.stopScanSession();
       } catch (stopErr) {
-        console.error('[NFC] Erreur arrêt session:', stopErr);
+        console.error('[NFC] Erreur arret session:', stopErr);
       }
     }
   };
@@ -642,29 +613,27 @@ export const NFCReader = () => {
           <AlertCircle className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
           <h2 className="text-2xl font-bold mb-2">Application mobile requise</h2>
           <p className="text-muted-foreground">
-            La fonctionnalité NFC n'est disponible que sur l'application mobile Android ou iOS.
+            La fonctionnalite NFC n'est disponible que sur l'application mobile Android ou iOS.
           </p>
         </Card>
       </div>
     );
   }
 
-  // Écran de chargement pendant la vérification du plugin
   if (isCheckingPlugin) {
     return (
       <div className="container max-w-2xl mx-auto p-6">
         <Card className="p-8 text-center">
           <Waves className="w-16 h-16 mx-auto mb-4 text-primary animate-pulse" />
-          <h2 className="text-2xl font-bold mb-2">Vérification NFC...</h2>
+          <h2 className="text-2xl font-bold mb-2">Verification NFC...</h2>
           <p className="text-muted-foreground">
-            Détection du plugin NFC Premium en cours
+            Detection du plugin NFC Premium en cours
           </p>
         </Card>
       </div>
     );
   }
 
-  // Plugin NFC non disponible - proposer alternatives
   if (!isPluginAvailable) {
     return (
       <div className="container max-w-2xl mx-auto p-6">
@@ -678,13 +647,13 @@ export const NFCReader = () => {
             <p className="font-semibold mb-2">Pour activer le NFC :</p>
             <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
               <li>Ouvrez le projet localement (git pull)</li>
-              <li>Exécutez le script <code className="bg-background px-1 py-0.5 rounded">1-RECONSTRUCTION-COMPLETE-NFC.bat</code></li>
-              <li>Installez l'APK généré sur votre téléphone</li>
+              <li>Executez le script <code className="bg-background px-1 py-0.5 rounded">1-RECONSTRUCTION-COMPLETE-NFC.bat</code></li>
+              <li>Installez l'APK genere sur votre telephone</li>
             </ol>
           </div>
           <div className="border-t pt-4">
             <p className="text-sm text-muted-foreground mb-3">
-              💡 En attendant, utilisez les <strong>QR codes</strong> comme alternative :
+              En attendant, utilisez les <strong>QR codes</strong> comme alternative :
             </p>
             <Button 
               variant="outline" 
@@ -713,7 +682,7 @@ export const NFCReader = () => {
       </div>
 
       {error && (
-        <Card className="p-4 mb-6 bg-destructive/10 border-destructive">
+        <Card className="p-4 mb-6 border-destructive bg-destructive/10">
           <div className="flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-destructive mt-0.5 flex-shrink-0" />
             <div className="flex-1">
@@ -727,7 +696,9 @@ export const NFCReader = () => {
               </div>
               <div className="mt-3 pt-3 border-t border-destructive/20">
                 <p className="text-sm text-muted-foreground">
-                  💡 <strong>Astuce :</strong> maintenez le tag collé au dos de l'iPhone jusqu'à la confirmation.
+                  <strong>Astuce :</strong> {isIOS() 
+                    ? 'Maintenez le tag colle au dos de l\'iPhone jusqu\'a la confirmation.'
+                    : 'Maintenez le tag contre le dos du telephone sans bouger.'}
                 </p>
               </div>
             </div>
@@ -743,7 +714,7 @@ export const NFCReader = () => {
           </TabsTrigger>
           <TabsTrigger value="write" className="gap-2">
             <Edit className="w-4 h-4" />
-            Écriture
+            Ecriture
           </TabsTrigger>
         </TabsList>
 
@@ -761,11 +732,11 @@ export const NFCReader = () => {
 
               <div>
                 <h3 className="text-xl font-semibold mb-2">
-                  {isScanning ? 'Approchez un tag NFC' : 'Prêt à scanner'}
+                  {isScanning ? 'Approchez un tag NFC' : 'Pret a scanner'}
                 </h3>
                 <p className="text-muted-foreground">
                   {isScanning 
-                    ? 'Maintenez votre appareil près du tag NFC'
+                    ? 'Maintenez votre appareil pres du tag NFC'
                     : 'Activez le lecteur NFC et approchez un tag'}
                 </p>
               </div>
@@ -777,20 +748,20 @@ export const NFCReader = () => {
                 </Button>
               ) : (
                 <Button onClick={stopScanning} variant="outline" size="lg" className="w-full">
-                  Désactiver
+                  Desactiver
                 </Button>
               )}
             </div>
           </Card>
 
-          <Card className="p-6 bg-blue-500/10 border-blue-500/20">
+          <Card className="p-6 bg-accent/10 border-accent/20">
             <div className="flex items-start gap-3">
-              <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-              <div className="text-sm text-blue-900 dark:text-blue-100 space-y-2">
+              <Info className="w-5 h-5 text-accent-foreground mt-0.5 flex-shrink-0" />
+              <div className="text-sm space-y-2">
                 <p className="font-semibold">Comment scanner un tag NFC ?</p>
                 <ol className="list-decimal list-inside space-y-1 ml-2">
                   <li>Cliquez sur "Activer le lecteur NFC"</li>
-                  <li>Approchez votre téléphone d'un tag NFC programmé</li>
+                  <li>Approchez votre telephone d'un tag NFC programme</li>
                   <li>Attendez la vibration/notification</li>
                   <li>La fiche du reptile s'ouvrira automatiquement</li>
                 </ol>
@@ -803,7 +774,7 @@ export const NFCReader = () => {
           <Card className="p-6 space-y-6">
             <div>
               <label className="block text-sm font-medium mb-2">
-                Sélectionnez un reptile
+                Selectionnez un reptile
               </label>
               <Select value={selectedReptileId} onValueChange={setSelectedReptileId}>
                 <SelectTrigger>
@@ -841,19 +812,19 @@ export const NFCReader = () => {
             </div>
           </Card>
 
-          <Card className="p-6 bg-amber-500/10 border-amber-500/20">
+          <Card className="p-6 bg-accent/10 border-accent/20">
             <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
-              <div className="text-sm text-amber-900 dark:text-amber-100 space-y-2">
+              <AlertCircle className="w-5 h-5 text-accent-foreground mt-0.5 flex-shrink-0" />
+              <div className="text-sm space-y-2">
                 <p className="font-semibold">Programmation d'un tag NFC</p>
                 <ol className="list-decimal list-inside space-y-1 ml-2">
-                  <li>Sélectionnez le reptile à associer au tag</li>
+                  <li>Selectionnez le reptile a associer au tag</li>
                   <li>Cliquez sur "Programmer un tag NFC"</li>
-                  <li>Approchez un tag NFC vierge de votre téléphone</li>
-                  <li>Attendez la confirmation de succès</li>
+                  <li>Approchez un tag NFC vierge de votre telephone</li>
+                  <li>Attendez la confirmation de succes</li>
                 </ol>
                 <p className="text-xs mt-2 opacity-75">
-                  Note: Utilisez des tags NFC vierges ou réinscriptibles (NTAG213/215/216)
+                  Note: Utilisez des tags NFC vierges ou reinscriptibles (NTAG213/215/216)
                 </p>
               </div>
             </div>
