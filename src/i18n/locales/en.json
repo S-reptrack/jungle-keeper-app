@@ -220,6 +220,7 @@
     "tagline": "Professional tracking for your reptiles",
     "home": "Home",
     "reptiles": "Reptiles",
+    "forSale": "For Sale",
     "feeding": "Feeding",
     "settings": "Settings",
     "add": "Add",
@@ -702,7 +703,7 @@
     "monthlyTitle": "Monthly",
     "yearlyTitle": "Yearly",
     "bestValue": "Best value",
-    "yearlySavings": "Save 2 months!",
+    "yearlySavings": "Save 30%!",
     "feature1": "Unlimited reptiles",
     "feature2": "Advanced reproduction tracking",
     "feature3": "NFC & QR Scanner",
@@ -724,7 +725,13 @@
     "limitReached": "5 reptile limit reached",
     "limitReachedDescription": "Upgrade to Premium to add unlimited reptiles.",
     "upgradeNow": "Upgrade to Premium",
-    "reptilesUsed": "{{count}}/5 reptiles used"
+    "reptilesUsed": "{{count}}/5 reptiles used",
+    "restorePurchases": "Restore my purchases",
+    "applePaymentNote": "Payment managed by Apple. Cancel anytime via Settings > Subscriptions.",
+    "autoRenewDisclosure": "Subscription automatically renews at the end of each period unless cancelled at least 24 hours before.",
+    "termsLink": "Terms of Use",
+    "privacyLink": "Privacy Policy",
+    "restoreSuccess": "Purchases restored successfully"
   },
   "premium": {
     "featureLockedDescription": "This feature is reserved for Premium subscribers.",
