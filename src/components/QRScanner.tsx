@@ -167,34 +167,37 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
       // Native (Capacitor) - Use Camera API like ImageUploadDialog
       if (Capacitor.isNativePlatform() && !forceWeb) {
         try {
+          const platform = Capacitor.getPlatform();
+          console.log('[QR Scanner] Plateforme native:', platform);
 
-          // Vérifie la disponibilité du plugin natif ML Kit
-          const hasMLKit = (Capacitor as any)?.isPluginAvailable?.('BarcodeScanner') && typeof (BarcodeScanner as any)?.scan === 'function';
-
-          // Essayer le scanner natif ML Kit en priorité (plus fiable)
-          if (hasMLKit) {
-            try {
-              const mlResult: any = await (BarcodeScanner as any).scan();
-              const mlText = mlResult?.barcodes?.[0]?.rawValue || mlResult?.barcodes?.[0]?.displayValue || mlResult?.barcodes?.[0]?.content?.rawValue || mlResult?.barcodes?.[0]?.content?.displayValue;
-              if (mlText) {
-                console.log('[QR Scanner] ✓ ML Kit détecté:', mlText);
-                handleScanSuccess(mlText);
-                return;
+          // Android: Essayer ML Kit en priorité (plus fiable pour le scan live)
+          // iOS: Skip ML Kit, aller directement à Camera.getPhoto()
+          if (platform === 'android') {
+            const hasMLKit = (Capacitor as any)?.isPluginAvailable?.('BarcodeScanner') && typeof (BarcodeScanner as any)?.scan === 'function';
+            if (hasMLKit) {
+              try {
+                const mlResult: any = await (BarcodeScanner as any).scan();
+                const mlText = mlResult?.barcodes?.[0]?.rawValue || mlResult?.barcodes?.[0]?.displayValue || mlResult?.barcodes?.[0]?.content?.rawValue || mlResult?.barcodes?.[0]?.content?.displayValue;
+                if (mlText) {
+                  console.log('[QR Scanner] ✓ ML Kit détecté:', mlText);
+                  handleScanSuccess(mlText);
+                  return;
+                }
+                console.warn('[QR Scanner] ML Kit n\'a rien détecté, fallback sur photo');
+              } catch (e) {
+                console.warn('[QR Scanner] ML Kit échec, fallback sur photo', e);
               }
-              console.warn('[QR Scanner] ML Kit n\'a rien détecté, fallback sur photo');
-            } catch (e) {
-              console.warn('[QR Scanner] ML Kit échec, fallback sur photo', e);
+            } else {
+              console.warn('[QR Scanner] Plugin ML Kit indisponible sur Android');
             }
-          } else {
-            console.warn('[QR Scanner] Plugin ML Kit indisponible');
-            toast.info("Mettez à jour l'app (git pull + npm i + npx cap sync) pour activer le scan natif.");
           }
 
-          // Fallback: Take photo using the same API that works for ImageUploadDialog
+          // Camera.getPhoto() - fonctionne sur iOS et Android
+          console.log('[QR Scanner] Ouverture caméra via Camera.getPhoto()...');
           const photo = await Camera.getPhoto({
             source: CameraSource.Camera,
             resultType: CameraResultType.Base64,
-            quality: 100, // Qualité maximale pour meilleure détection
+            quality: 100,
             correctOrientation: true,
             saveToGallery: false,
           });

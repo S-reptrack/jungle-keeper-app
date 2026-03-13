@@ -489,6 +489,8 @@ export const NFCReader = () => {
 
       nfcCallbackRef.current = { writeTagListener, writeSessionErrorListener };
 
+      // iOS: pas de compatibilityMode en écriture pour accès complet au tag
+      // Android: session standard
       await Nfc.startScanSession({
         alertMessage: 'Approchez un tag NFC et ne le bougez pas pendant 2 secondes',
       });
