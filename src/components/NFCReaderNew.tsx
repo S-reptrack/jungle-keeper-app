@@ -251,6 +251,8 @@ export const NFCReader = () => {
 
   const startScanning = async () => {
     try {
+      if (isScanning) return;
+
       setError(null);
       setIsScanning(true);
 
@@ -265,11 +267,24 @@ export const NFCReader = () => {
 
       console.log('[NFC] Configuration de l\'écouteur NFC Premium...');
 
-      await Nfc.addListener('nfcTagScanned', (event: any) => {
+      await Nfc.removeAllListeners();
+
+      const tagListener = await Nfc.addListener('nfcTagScanned', (event: any) => {
         handleNFCTagPremium(event);
       });
 
-      await Nfc.startScanSession();
+      const sessionErrorListener = await Nfc.addListener('scanSessionError', (sessionErr: any) => {
+        console.error('[NFC] Erreur session NFC:', sessionErr);
+        setIsScanning(false);
+        toast.error(sessionErr?.message || 'Session NFC interrompue');
+      });
+
+      nfcCallbackRef.current = { tagListener, sessionErrorListener };
+
+      await Nfc.startScanSession({
+        alertMessage: 'Approchez un tag NFC S-reptrack',
+        pollingOptions: ['iso14443', 'iso15693', 'iso18092'],
+      });
       
       toast.success("✓ Lecteur NFC Premium activé - Approchez un tag");
     } catch (err: any) {
@@ -282,7 +297,14 @@ export const NFCReader = () => {
       } else {
         setError(errorMsg);
       }
+
+      try {
+        await Nfc.removeAllListeners();
+      } catch {
+        // no-op
+      }
       
+      nfcCallbackRef.current = null;
       setIsScanning(false);
       toast.error("Plugin NFC non disponible");
     }
