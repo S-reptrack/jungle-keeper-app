@@ -394,15 +394,15 @@ export const NFCReader = () => {
       console.log('[NFC] Préparation écriture avec record:', record);
 
       await Nfc.addListener('nfcTagScanned', async (event: any) => {
+        const writePayload = {
+          message: {
+            records: [record],
+          },
+        };
+
         try {
           console.log('[NFC] Tag détecté pour écriture:', JSON.stringify(event));
           console.log('[NFC] Record à écrire:', JSON.stringify(record));
-          
-          const writePayload = {
-            message: {
-              records: [record],
-            },
-          };
 
           console.log('[NFC] Tentative écriture...');
           await Nfc.write(writePayload);
