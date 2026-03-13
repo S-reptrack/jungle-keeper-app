@@ -712,7 +712,9 @@ export const NFCReader = () => {
           <div className="flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-destructive mt-0.5 flex-shrink-0" />
             <div className="flex-1">
-              <p className="font-semibold text-destructive mb-2">Plugin NFC non disponible</p>
+              <p className="font-semibold text-destructive mb-2">
+                {isPluginUnavailableError(error) ? 'Plugin NFC non disponible' : 'Erreur NFC'}
+              </p>
               <div className="text-sm text-destructive/90 space-y-1">
                 {error.split('\n').map((line, i) => (
                   <p key={i}>{line}</p>
@@ -720,7 +722,7 @@ export const NFCReader = () => {
               </div>
               <div className="mt-3 pt-3 border-t border-destructive/20">
                 <p className="text-sm text-muted-foreground">
-                  💡 <strong>Alternative :</strong> Utilisez les QR codes via le menu Paramètres → QR Code
+                  💡 <strong>Astuce :</strong> maintenez le tag collé au dos de l'iPhone jusqu'à la confirmation.
                 </p>
               </div>
             </div>
