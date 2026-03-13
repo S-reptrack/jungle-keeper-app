@@ -398,15 +398,14 @@ export const NFCReader = () => {
       setIsWriting(true);
 
       const textToWrite = `reptile:${selectedReptileId}`;
-
-      toast.info("📝 Approchez un tag NFC vierge");
-
-      // Créer le record NDEF Text
       const record = createTextRecord(textToWrite);
 
+      toast.info("📝 Approchez un tag NFC et gardez-le immobile");
       console.log('[NFC] Préparation écriture avec record:', record);
 
-      await Nfc.addListener('nfcTagScanned', async (event: any) => {
+      await Nfc.removeAllListeners();
+
+      const writeTagListener = await Nfc.addListener('nfcTagScanned', async (event: any) => {
         const writePayload = {
           message: {
             records: [record],
@@ -415,9 +414,6 @@ export const NFCReader = () => {
 
         try {
           console.log('[NFC] Tag détecté pour écriture:', JSON.stringify(event));
-          console.log('[NFC] Record à écrire:', JSON.stringify(record));
-
-          console.log('[NFC] Tentative écriture...');
           await Nfc.write(writePayload);
 
           console.log('[NFC] Écriture réussie !');
@@ -427,10 +423,6 @@ export const NFCReader = () => {
           setIsWriting(false);
         } catch (writeErr: any) {
           console.error('[NFC] Erreur écriture tag:', writeErr);
-          console.error('[NFC] Message:', writeErr?.message);
-          console.error('[NFC] Code:', writeErr?.code);
-          console.error('[NFC] Data:', JSON.stringify(writeErr?.data));
-
           const rawError = writeErr?.message || writeErr?.code || JSON.stringify(writeErr) || 'Erreur inconnue';
 
           if (isTagNotNdefError(rawError) && Capacitor.getPlatform() === 'android') {
@@ -449,8 +441,14 @@ export const NFCReader = () => {
           }
 
           const friendlyError = getNfcFriendlyError(rawError, 'write');
-          toast.error("Erreur lors de l'écriture: " + friendlyError);
           setError(friendlyError);
+          toast.error("Erreur lors de l'écriture: " + friendlyError);
+
+          if (isTagConnectionLostError(rawError) && Capacitor.getPlatform() === 'ios') {
+            toast.info("Représentez le tag sans le bouger pendant 2 secondes.");
+            return;
+          }
+
           setIsWriting(false);
           try {
             await Nfc.stopScanSession();
@@ -461,11 +459,28 @@ export const NFCReader = () => {
         }
       });
 
-      await Nfc.startScanSession();
+      const writeSessionErrorListener = await Nfc.addListener('scanSessionError', async (sessionErr: any) => {
+        const friendlyError = getNfcFriendlyError(sessionErr?.message || 'Session NFC interrompue', 'write');
+        setError(friendlyError);
+        setIsWriting(false);
+        toast.error(friendlyError);
+        try {
+          await Nfc.stopScanSession();
+          await Nfc.removeAllListeners();
+        } catch {
+          // no-op
+        }
+      });
 
+      nfcCallbackRef.current = { writeTagListener, writeSessionErrorListener };
+
+      await Nfc.startScanSession({
+        alertMessage: 'Approchez un tag NFC et ne le bougez pas pendant 2 secondes',
+      });
     } catch (err: any) {
       console.error('[NFC] Erreur écriture:', err);
-      setError(err.message || "Erreur lors de l'écriture NFC");
+      const friendlyError = getNfcFriendlyError(err?.message || "Erreur lors de l'écriture NFC", 'write');
+      setError(friendlyError);
       setIsWriting(false);
       toast.error("Impossible d'écrire sur le tag NFC");
     }
