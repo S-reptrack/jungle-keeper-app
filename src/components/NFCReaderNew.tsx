@@ -478,9 +478,11 @@ export const NFCReader = () => {
           tag: nfcTag,
         });
 
-        setError(`Tag détecté (${techTypes}) mais non formaté pour S-reptrack${tagIdHex ? ` [ID: ${tagIdHex}]` : ''}`);
-        toast.error("Tag détecté mais non formaté pour S-reptrack");
+        const friendlyError = getNfcFriendlyError('Tag Not NDEF formatted', 'read');
+        setError(`${friendlyError}${tagIdHex ? ` [ID: ${tagIdHex}]` : ''}`);
+        toast.error(friendlyError);
         await Nfc.stopScanSession();
+        await Nfc.removeAllListeners();
         setIsScanning(false);
         return;
       }
