@@ -23,10 +23,15 @@ interface NdefRecord {
   id?: number[];
 }
 
+interface StartScanSessionOptions {
+  alertMessage?: string;
+  pollingOptions?: string[];
+}
+
 interface NfcPlugin {
   addListener: (event: string, callback: (event: any) => void) => Promise<any>;
   removeAllListeners: () => Promise<void>;
-  startScanSession: () => Promise<void>;
+  startScanSession: (options?: StartScanSessionOptions) => Promise<void>;
   stopScanSession: () => Promise<void>;
   write: (options: { message: { records: NdefRecord[] } }) => Promise<void>;
   isSupported: () => Promise<{ isSupported: boolean }>;
