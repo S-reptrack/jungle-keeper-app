@@ -20,8 +20,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Capacitor } from "@capacitor/core";
 
-const isIOS = (): boolean => {
+const isIOSWeb = (): boolean => {
+  // Sur iOS natif (Capacitor), NFC fonctionne via le plugin Capawesome
+  if (Capacitor.isNativePlatform()) return false;
   const userAgent = navigator.userAgent.toLowerCase();
   return /iphone|ipad|ipod/.test(userAgent);
 };
