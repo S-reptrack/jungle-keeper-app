@@ -108,25 +108,58 @@ const checkNfcAvailable = async (): Promise<{ available: boolean; error?: string
     }
     
     console.log('[NFC] Vérification du plugin premium...');
+    console.log('[NFC] Platform:', Capacitor.getPlatform());
     
-    // Tenter d'appeler isSupported pour vérifier si le plugin répond vraiment
+    // Méthode 1: Tenter isSupported
     try {
       const result = await Nfc.isSupported();
-      console.log('[NFC] isSupported result:', result);
-      return { available: result.isSupported };
-    } catch (err: any) {
-      const errorMsg = err?.message || String(err);
-      console.error('[NFC] Plugin check failed:', errorMsg);
+      console.log('[NFC] isSupported result:', JSON.stringify(result));
+      // Le plugin retourne { isSupported: boolean, nfc: boolean, hce: boolean }
+      const supported = result?.isSupported === true || (result as any)?.nfc === true;
+      if (supported) {
+        console.log('[NFC] ✅ Plugin détecté via isSupported');
+        return { available: true };
+      }
+    } catch (err1: any) {
+      const msg1 = err1?.message || String(err1);
+      console.warn('[NFC] isSupported failed:', msg1);
       
-      // Détecter l'erreur "not implemented"
-      if (errorMsg.includes('not implemented') || errorMsg.includes('not available')) {
+      // Si "not implemented" = plugin pas installé du tout
+      if (msg1.includes('not implemented') || msg1.includes('not available') || msg1.includes('does not have')) {
         nfcError = NFC_PLUGIN_NOT_INSTALLED_ERROR;
         return { available: false, error: NFC_PLUGIN_NOT_INSTALLED_ERROR };
       }
-      
-      nfcError = errorMsg;
-      return { available: false, error: errorMsg };
     }
+    
+    // Méthode 2: Tenter isAvailable (ajouté dans v7.2.0)
+    try {
+      const result2 = await (Nfc as any).isAvailable();
+      console.log('[NFC] isAvailable result:', JSON.stringify(result2));
+      const available = result2?.nfc === true;
+      if (available) {
+        console.log('[NFC] ✅ Plugin détecté via isAvailable');
+        return { available: true };
+      }
+    } catch (err2: any) {
+      console.warn('[NFC] isAvailable failed:', err2?.message || String(err2));
+    }
+    
+    // Méthode 3: Tenter checkPermissions comme dernier recours
+    try {
+      const perms = await (Nfc as any).checkPermissions();
+      console.log('[NFC] checkPermissions result:', JSON.stringify(perms));
+      // Si checkPermissions répond sans erreur, le plugin est installé
+      if (perms?.nfc === 'granted') {
+        console.log('[NFC] ✅ Plugin détecté via checkPermissions');
+        return { available: true };
+      }
+    } catch (err3: any) {
+      console.warn('[NFC] checkPermissions failed:', err3?.message || String(err3));
+    }
+    
+    console.error('[NFC] Aucune méthode de détection n\'a confirmé le plugin');
+    nfcError = NFC_PLUGIN_NOT_INSTALLED_ERROR;
+    return { available: false, error: NFC_PLUGIN_NOT_INSTALLED_ERROR };
   } catch (err: any) {
     console.error('[NFC] Plugin non disponible:', err);
     nfcError = err?.message || 'Plugin non disponible';
