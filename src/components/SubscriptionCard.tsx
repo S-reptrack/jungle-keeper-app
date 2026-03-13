@@ -328,23 +328,40 @@ const SubscriptionCard = () => {
               </Button>
             )}
 
-            <div className="text-xs text-center text-muted-foreground space-y-1">
+            <div className="text-xs text-center text-muted-foreground space-y-2 mt-4">
+              <Separator />
+              <p className="font-medium text-foreground pt-2">
+                {t("subscription.subscriptionDetails") || "Détails de l'abonnement"}
+              </p>
+              <div className="space-y-1">
+                <p>
+                  <strong>S-reptrack Premium — {t("subscription.monthlyTitle") || "Mensuel"}</strong> : {SUBSCRIPTION_TIERS.monthly.price}€/{t("subscription.perMonth") || "mois"} ({t("subscription.autoRenewMonthly") || "renouvellement mensuel automatique"})
+                </p>
+                <p>
+                  <strong>S-reptrack Premium — {t("subscription.yearlyTitle") || "Annuel"}</strong> : {SUBSCRIPTION_TIERS.yearly.price}€/{t("subscription.perYear") || "an"} ({t("subscription.autoRenewYearly") || "renouvellement annuel automatique"})
+                </p>
+              </div>
+              <p>
+                {t("subscription.autoRenewDisclosure") || "L'abonnement se renouvelle automatiquement à la fin de chaque période sauf annulation au moins 24h avant."}
+              </p>
+              {isApple && (
+                <p>
+                  {t("subscription.applePaymentNote") || "Paiement géré par Apple. Annulez à tout moment via Réglages > Abonnements."}
+                </p>
+              )}
+              {!isApple && (
+                <p>
+                  {t("subscription.securePayment") || "Paiement sécurisé. Annulez à tout moment."}
+                </p>
+              )}
               {!isApple && (
                 <p>
                   {t("subscription.nfcNote") || "⚠️ NFC non compatible avec iOS/Apple. Utilisez les QR codes sur iPhone."}
                 </p>
               )}
-              <p>
-                {isApple
-                  ? (t("subscription.applePaymentNote") || "Paiement géré par Apple. Annulez à tout moment via Réglages > Abonnements.")
-                  : (t("subscription.securePayment") || "Paiement sécurisé. Annulez à tout moment.")}
-              </p>
-              <p>
-                {t("subscription.autoRenewDisclosure") || "L'abonnement se renouvelle automatiquement à la fin de chaque période sauf annulation au moins 24h avant."}
-              </p>
               <div className="flex justify-center gap-3 mt-2">
                 <a href="/terms" className="underline hover:text-foreground">
-                  {t("subscription.termsLink") || "Conditions d'utilisation"}
+                  {t("subscription.termsLink") || "Conditions d'utilisation (EULA)"}
                 </a>
                 <span>•</span>
                 <a href="/privacy" className="underline hover:text-foreground">
