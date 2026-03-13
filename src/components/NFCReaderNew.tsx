@@ -190,6 +190,9 @@ const checkNfcAvailable = async (): Promise<{ available: boolean; error?: string
   }
 };
 
+const isIOS = () => Capacitor.getPlatform() === 'ios';
+const isAndroid = () => Capacitor.getPlatform() === 'android';
+
 const isTagNotNdefError = (message?: string) => /tag\s+not\s+ndef\s+formatted/i.test(message || '');
 const isTagConnectionLostError = (message?: string) => /tag\s+connection\s+lost/i.test(message || '');
 const isPluginUnavailableError = (message?: string) => {
