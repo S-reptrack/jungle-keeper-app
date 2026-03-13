@@ -777,7 +777,13 @@
     "limitReached": "Limite de 5 reptiles atteinte",
     "limitReachedDescription": "Passez à Premium pour ajouter un nombre illimité de reptiles.",
     "upgradeNow": "Passer à Premium",
-    "reptilesUsed": "{{count}}/5 reptiles utilisés"
+    "reptilesUsed": "{{count}}/5 reptiles utilisés",
+    "restorePurchases": "Restaurer mes achats",
+    "applePaymentNote": "Paiement géré par Apple. Annulez à tout moment via Réglages > Abonnements.",
+    "autoRenewDisclosure": "L'abonnement se renouvelle automatiquement à la fin de chaque période sauf annulation au moins 24h avant.",
+    "termsLink": "Conditions d'utilisation",
+    "privacyLink": "Politique de confidentialité",
+    "restoreSuccess": "Achats restaurés avec succès"
   },
   "legal": {
     "title": "Mentions Légales",
