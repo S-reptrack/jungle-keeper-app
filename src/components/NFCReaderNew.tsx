@@ -312,6 +312,13 @@ export const NFCReader = () => {
 
   const stopScanning = async () => {
     try {
+      if (nfcCallbackRef.current?.tagListener?.remove) {
+        await nfcCallbackRef.current.tagListener.remove();
+      }
+      if (nfcCallbackRef.current?.sessionErrorListener?.remove) {
+        await nfcCallbackRef.current.sessionErrorListener.remove();
+      }
+
       await Nfc.stopScanSession();
       await Nfc.removeAllListeners();
       setIsScanning(false);
@@ -322,6 +329,7 @@ export const NFCReader = () => {
       console.error('[NFC] Erreur arrêt scan:', err);
       setIsScanning(false);
       setIsWriting(false);
+      nfcCallbackRef.current = null;
     }
   };
 
