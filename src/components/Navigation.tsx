@@ -53,7 +53,7 @@ const Navigation = () => {
   ];
 
   const handleNFCClick = () => {
-    if (isIOS()) {
+    if (isIOSWeb()) {
       toast.info(t("nfc.iosNotSupported"), {
         description: t("nfc.iosNotSupportedDescription"),
         duration: 6000,
