@@ -14,6 +14,7 @@ import { getPaymentProvider } from "@/lib/platformUtils";
 
 const SubscriptionCard = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const {
     subscribed,
