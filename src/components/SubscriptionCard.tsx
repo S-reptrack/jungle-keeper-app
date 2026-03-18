@@ -360,13 +360,13 @@ const SubscriptionCard = () => {
                 </p>
               )}
               <div className="flex justify-center gap-3 mt-2">
-                <a href="/terms" className="underline hover:text-foreground">
+                <button onClick={() => navigate("/terms")} className="underline hover:text-foreground">
                   {t("subscription.termsLink") || "Conditions d'utilisation (EULA)"}
-                </a>
+                </button>
                 <span>•</span>
-                <a href="/privacy" className="underline hover:text-foreground">
+                <button onClick={() => navigate("/privacy")} className="underline hover:text-foreground">
                   {t("subscription.privacyLink") || "Politique de confidentialité"}
-                </a>
+                </button>
               </div>
             </div>
           </>
