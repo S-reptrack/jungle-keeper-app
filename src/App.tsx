@@ -39,6 +39,7 @@ import TesterActivityTracker from "./components/TesterActivityTracker";
 import InstagramPromo from "./pages/InstagramPromo";
 import InstallPromptBanner from "./components/InstallPromptBanner";
 import TesterSuspensionGuard from "./components/TesterSuspensionGuard";
+import Support from "./pages/Support";
 
 const queryClient = new QueryClient();
 
