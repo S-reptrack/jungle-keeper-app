@@ -39,6 +39,7 @@ import TesterActivityTracker from "./components/TesterActivityTracker";
 import InstagramPromo from "./pages/InstagramPromo";
 import InstallPromptBanner from "./components/InstallPromptBanner";
 import TesterSuspensionGuard from "./components/TesterSuspensionGuard";
+import Support from "./pages/Support";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +63,7 @@ const App = () => (
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/legal" element={<Legal />} />
+            <Route path="/support" element={<Support />} />
             
             {/* Route Admin - priorité haute, en dehors du MaintenanceGuard */}
             <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />

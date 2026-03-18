@@ -9,11 +9,12 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { useSubscription, SUBSCRIPTION_TIERS } from "@/hooks/useSubscription";
 import { useReptileCount } from "@/hooks/useReptileCount";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { getPaymentProvider } from "@/lib/platformUtils";
 
 const SubscriptionCard = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const {
     subscribed,
@@ -360,13 +361,13 @@ const SubscriptionCard = () => {
                 </p>
               )}
               <div className="flex justify-center gap-3 mt-2">
-                <a href="/terms" className="underline hover:text-foreground">
+                <button onClick={() => navigate("/terms")} className="underline hover:text-foreground">
                   {t("subscription.termsLink") || "Conditions d'utilisation (EULA)"}
-                </a>
+                </button>
                 <span>•</span>
-                <a href="/privacy" className="underline hover:text-foreground">
+                <button onClick={() => navigate("/privacy")} className="underline hover:text-foreground">
                   {t("subscription.privacyLink") || "Politique de confidentialité"}
-                </a>
+                </button>
               </div>
             </div>
           </>
