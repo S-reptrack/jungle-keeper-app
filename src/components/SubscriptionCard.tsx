@@ -76,7 +76,15 @@ const SubscriptionCard = () => {
       setCheckoutLoading(tier);
       await createCheckout(SUBSCRIPTION_TIERS[tier].priceId);
     } catch (error) {
-      toast.error(t("subscription.checkoutError") || "Erreur lors de la création du paiement");
+      const errorMessage = error instanceof Error ? error.message : "";
+      console.error("[Subscribe] Error:", errorMessage);
+      if (isApple && errorMessage.includes("not available")) {
+        toast.error(t("subscription.iapNotAvailable") || "Les achats intégrés ne sont pas disponibles. Veuillez redémarrer l'app.");
+      } else if (isApple && errorMessage.includes("not found")) {
+        toast.error(t("subscription.productNotFound") || "Produit non trouvé. Veuillez réessayer plus tard.");
+      } else {
+        toast.error(t("subscription.checkoutError") || "Erreur lors de la création du paiement");
+      }
     } finally {
       setCheckoutLoading(null);
     }

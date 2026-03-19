@@ -230,12 +230,26 @@ export const useSubscription = () => {
   const createCheckout = async (priceId: string) => {
     // Sur iOS natif, utiliser Apple IAP
     if (paymentProvider === "apple") {
+      // S'assurer que le store IAP est initialisé
+      if (!isAppleIAPAvailable()) {
+        console.warn("[Apple IAP] Store not available, attempting init...");
+        try {
+          await initializeAppleIAP();
+          setAppleIAPInitialized(true);
+        } catch (initErr) {
+          console.error("[Apple IAP] Re-init failed:", initErr);
+          throw new Error("Apple In-App Purchase is not available. Please restart the app and try again.");
+        }
+      }
+
       const appleProductId = priceId === SUBSCRIPTION_TIERS.monthly.priceId
         ? APPLE_PRODUCT_IDS.monthly
         : APPLE_PRODUCT_IDS.yearly;
 
+      console.log("[Apple IAP] Purchasing product:", appleProductId);
       const result = await purchaseAppleProduct(appleProductId);
       if (!result.success) {
+        console.error("[Apple IAP] Purchase failed:", result.error);
         throw new Error(result.error || "Apple purchase failed");
       }
       // Rafraîchir le statut après achat
