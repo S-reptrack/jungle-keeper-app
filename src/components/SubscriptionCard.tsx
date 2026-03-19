@@ -368,14 +368,25 @@ const SubscriptionCard = () => {
                   {t("subscription.nfcNote") || "⚠️ NFC non compatible avec iOS/Apple. Utilisez les QR codes sur iPhone."}
                 </p>
               )}
-              <div className="flex justify-center gap-3 mt-2">
-                <button onClick={() => navigate("/terms")} className="underline hover:text-foreground">
+              <Separator className="my-2" />
+              <div className="flex justify-center gap-4 pt-1">
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="text-xs underline h-auto p-0"
+                  onClick={() => navigate("/terms")}
+                >
                   {t("subscription.termsLink") || "Conditions d'utilisation (EULA)"}
-                </button>
-                <span>•</span>
-                <button onClick={() => navigate("/privacy")} className="underline hover:text-foreground">
+                </Button>
+                <span className="text-muted-foreground">•</span>
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="text-xs underline h-auto p-0"
+                  onClick={() => navigate("/privacy")}
+                >
                   {t("subscription.privacyLink") || "Politique de confidentialité"}
-                </button>
+                </Button>
               </div>
             </div>
           </>
