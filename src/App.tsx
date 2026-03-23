@@ -39,6 +39,7 @@ import TesterActivityTracker from "./components/TesterActivityTracker";
 import InstagramPromo from "./pages/InstagramPromo";
 import InstallPromptBanner from "./components/InstallPromptBanner";
 import TesterSuspensionGuard from "./components/TesterSuspensionGuard";
+import OfflineIndicator from "./components/OfflineIndicator";
 import Support from "./pages/Support";
 import MorphCalculator from "./pages/MorphCalculator";
 import HealthDashboard from "./pages/HealthDashboard";
@@ -58,6 +59,7 @@ const App = () => (
           <GDPRConsentDialog />
           <HatchingNotificationDialog />
           <InstallPromptBanner />
+          <OfflineIndicator />
           <TesterSuspensionGuard>
           <Routes>
             {/* Routes publiques sans garde */}

@@ -1,6 +1,6 @@
 import { useParams, useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send, Skull, CheckCircle, Trash2, Image, Sparkles, Crown, Lock } from "lucide-react";
+import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send, Skull, CheckCircle, Trash2, Image, Sparkles, Crown, Lock, FileText } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,7 @@ import { toast } from "sonner";
 import { differenceInYears, differenceInMonths } from "date-fns";
 import { useSignedImageUrl } from "@/lib/storageUtils";
 import { useSubscription } from "@/hooks/useSubscription";
+import { fetchReptilePDFData, generateHealthPDF } from "@/lib/pdfHealthSheet";
 
 interface Reptile {
   id: string;
@@ -456,6 +457,20 @@ const ReptileDetail = () => {
                       createdAt={reptile.created_at}
                       onUpdate={fetchReptile}
                     />
+                    {subscribed && (
+                      <Button
+                        variant="outline"
+                        className="w-full gap-2"
+                        onClick={async () => {
+                          const data = await fetchReptilePDFData(reptile.id);
+                          if (data) generateHealthPDF(data);
+                          else toast.error("Erreur lors de la génération du PDF");
+                        }}
+                      >
+                        <FileText className="w-4 h-4" />
+                        Exporter fiche santé PDF
+                      </Button>
+                    )}
                     <DeleteReptileDialog
                       reptileId={reptile.id}
                       reptileName={reptile.name}
