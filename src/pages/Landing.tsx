@@ -237,9 +237,11 @@ const Landing = () => {
           <p className="text-muted-foreground">
             {t("landing.ctaDescription")}
           </p>
-          <Button size="lg" onClick={() => navigate("/auth")} className="text-base px-10">
-            {t("landing.ctaButton")}
-            <ChevronRight className="w-5 h-5 ml-1" />
+          <Button asChild size="lg" className="text-base px-10">
+            <Link to="/auth">
+              {t("landing.ctaButton")}
+              <ChevronRight className="w-5 h-5 ml-1" />
+            </Link>
           </Button>
         </div>
       </section>
