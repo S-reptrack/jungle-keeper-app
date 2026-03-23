@@ -154,6 +154,10 @@ const Navigation = () => {
                       <Dna className="w-4 h-4 mr-2" />
                       Calculateur Génétique
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/health-dashboard")}>
+                      <HeartPulse className="w-4 h-4 mr-2" />
+                      Tableau de bord Santé
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               )}
