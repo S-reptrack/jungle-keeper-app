@@ -126,7 +126,7 @@ export const snakeGenetics: SpeciesGenetics[] = [
       { name: "IMG (Increasing Melanin Gene)", inheritance: "codominant", superForm: "Super IMG" },
       { name: "Fire", inheritance: "codominant", superForm: "Leucistic (Super Fire)" },
       { name: "Labyrinth", inheritance: "codominant", superForm: "Super Labyrinth" },
-      { name: "Black Stripe", inheritance: "recessive" },
+      { name: "Black Stripe", inheritance: "dominant" },
       { name: "Key West", inheritance: "codominant", superForm: "Super Key West" },
       { name: "Aztec", inheritance: "codominant", superForm: "Super Aztec" },
       { name: "Onyx", inheritance: "codominant", superForm: "Super Onyx" },
