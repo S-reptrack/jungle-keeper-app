@@ -143,8 +143,8 @@ const Landing = () => {
               <span className="text-muted-foreground">{t("landing.perMonth")}</span>
             </div>
             <p className="text-sm text-muted-foreground">{t("landing.yearlyOffer")}</p>
-            <Button size="lg" className="w-full" onClick={() => navigate("/auth")}>
-              {t("landing.tryFree")}
+            <Button asChild size="lg" className="w-full">
+              <Link to="/auth">{t("landing.tryFree")}</Link>
             </Button>
             <p className="text-xs text-muted-foreground">{t("landing.securePayment")}</p>
           </div>
