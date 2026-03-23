@@ -15,11 +15,19 @@ import { snakeGenetics } from "./morphGenetics/snakes";
 import { lizardGenetics } from "./morphGenetics/lizards";
 import { turtleGenetics } from "./morphGenetics/turtles";
 
-export const speciesGenetics: SpeciesGenetics[] = [
+// Trie les gènes/morphs par ordre alphabétique dans chaque espèce
+function sortGenes(species: SpeciesGenetics[]): SpeciesGenetics[] {
+  return species.map(s => ({
+    ...s,
+    genes: [...s.genes].sort((a, b) => a.name.localeCompare(b.name)),
+  }));
+}
+
+export const speciesGenetics: SpeciesGenetics[] = sortGenes([
   ...snakeGenetics,
   ...lizardGenetics,
   ...turtleGenetics,
-];
+]);
 
 /**
  * Recherche les données génétiques d'une espèce par son nom (exact ou partiel).
