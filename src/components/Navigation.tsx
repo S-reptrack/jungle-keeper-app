@@ -1,4 +1,4 @@
-import { Home, List, Tag, Settings, QrCode, Waves, User, Shield, BarChart3, GitBranch, Bell, Dna } from "lucide-react";
+import { Home, List, Tag, Settings, QrCode, Waves, User, Shield, BarChart3, GitBranch, Bell, Dna, HeartPulse } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -153,6 +153,10 @@ const Navigation = () => {
                     <DropdownMenuItem onClick={() => navigate("/morph-calculator")}>
                       <Dna className="w-4 h-4 mr-2" />
                       Calculateur Génétique
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/health-dashboard")}>
+                      <HeartPulse className="w-4 h-4 mr-2" />
+                      Tableau de bord Santé
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
