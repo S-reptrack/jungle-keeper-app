@@ -189,9 +189,23 @@ export const speciesGenetics: SpeciesGenetics[] = [
     commonName: "Python vert",
     category: "snake",
     genes: [
+      // Morphs génétiques
       { name: "Albino", inheritance: "recessive" },
       { name: "Blue (Axanthic)", inheritance: "recessive" },
       { name: "Mite Phase", inheritance: "codominant", superForm: "Super Mite Phase" },
+      // Localités (traitées comme dominant/polygénique pour le calcul)
+      { name: "Aru", inheritance: "dominant" },
+      { name: "Arfak", inheritance: "dominant" },
+      { name: "Biak", inheritance: "dominant" },
+      { name: "Cyclops", inheritance: "dominant" },
+      { name: "Jayapura", inheritance: "dominant" },
+      { name: "Kofiau", inheritance: "dominant" },
+      { name: "Lereh", inheritance: "dominant" },
+      { name: "Manokwari", inheritance: "dominant" },
+      { name: "Numfor", inheritance: "dominant" },
+      { name: "Padaido", inheritance: "dominant" },
+      { name: "Sorong", inheritance: "dominant" },
+      { name: "Wamena", inheritance: "dominant" },
     ],
   },
 
