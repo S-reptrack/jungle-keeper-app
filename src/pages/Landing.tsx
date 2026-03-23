@@ -218,9 +218,11 @@ const Landing = () => {
             </table>
           </div>
           <div className="mt-6 text-center">
-            <Button size="lg" onClick={() => navigate("/auth")} className="text-base px-8">
-              <Crown className="w-5 h-5 mr-2" />
-              {t("landing.startFree") || "Commencer gratuitement"}
+            <Button asChild size="lg" className="text-base px-8">
+              <Link to="/auth">
+                <Crown className="w-5 h-5 mr-2" />
+                {t("landing.startFree") || "Commencer gratuitement"}
+              </Link>
             </Button>
           </div>
         </div>
