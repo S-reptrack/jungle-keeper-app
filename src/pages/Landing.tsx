@@ -85,9 +85,11 @@ const Landing = () => {
             {t("landing.heroDescription")}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button size="lg" onClick={() => navigate("/auth")} className="text-base px-8">
-              {t("landing.startFree")}
-              <ChevronRight className="w-5 h-5 ml-1" />
+            <Button asChild size="lg" className="text-base px-8">
+              <Link to="/auth">
+                {t("landing.startFree")}
+                <ChevronRight className="w-5 h-5 ml-1" />
+              </Link>
             </Button>
             <Button size="lg" variant="outline" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>
               {t("landing.discoverFeatures")}
