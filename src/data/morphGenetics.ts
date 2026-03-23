@@ -113,14 +113,29 @@ export const speciesGenetics: SpeciesGenetics[] = [
     commonName: "Boa impérator",
     category: "snake",
     genes: [
+      // Codominant / Dominant incomplet
       { name: "Hypo", inheritance: "codominant", superForm: "Super Hypo" },
       { name: "Jungle", inheritance: "codominant", superForm: "Super Jungle" },
       { name: "Motley", inheritance: "codominant", superForm: "Super Motley" },
+      { name: "IMG (Increasing Melanin Gene)", inheritance: "codominant", superForm: "Super IMG" },
+      { name: "Fire", inheritance: "codominant", superForm: "Leucistic (Super Fire)" },
+      { name: "Labyrinth", inheritance: "codominant", superForm: "Super Labyrinth" },
+      { name: "Black Stripe", inheritance: "codominant", superForm: "Super Black Stripe" },
+      { name: "Key West", inheritance: "codominant", superForm: "Super Key West" },
+      // Récessif
       { name: "Albino (Kahl)", inheritance: "recessive" },
       { name: "Albino (Sharp)", inheritance: "recessive" },
-      { name: "Anery", inheritance: "recessive" },
+      { name: "Anery (Type I)", inheritance: "recessive" },
+      { name: "Anery (Type II)", inheritance: "recessive" },
       { name: "Leopard", inheritance: "recessive" },
       { name: "Blood", inheritance: "recessive" },
+      { name: "VPI T+", inheritance: "recessive" },
+      { name: "Eclipse", inheritance: "recessive" },
+      { name: "Paradigm", inheritance: "recessive" },
+      // Dominant
+      { name: "Het Red", inheritance: "dominant" },
+      { name: "Aztec", inheritance: "dominant" },
+      { name: "Roswell", inheritance: "dominant" },
     ],
   },
 
@@ -189,9 +204,23 @@ export const speciesGenetics: SpeciesGenetics[] = [
     commonName: "Python vert",
     category: "snake",
     genes: [
+      // Morphs génétiques
       { name: "Albino", inheritance: "recessive" },
       { name: "Blue (Axanthic)", inheritance: "recessive" },
       { name: "Mite Phase", inheritance: "codominant", superForm: "Super Mite Phase" },
+      // Localités (traitées comme dominant/polygénique pour le calcul)
+      { name: "Aru", inheritance: "dominant" },
+      { name: "Arfak", inheritance: "dominant" },
+      { name: "Biak", inheritance: "dominant" },
+      { name: "Cyclops", inheritance: "dominant" },
+      { name: "Jayapura", inheritance: "dominant" },
+      { name: "Kofiau", inheritance: "dominant" },
+      { name: "Lereh", inheritance: "dominant" },
+      { name: "Manokwari", inheritance: "dominant" },
+      { name: "Numfor", inheritance: "dominant" },
+      { name: "Padaido", inheritance: "dominant" },
+      { name: "Sorong", inheritance: "dominant" },
+      { name: "Wamena", inheritance: "dominant" },
     ],
   },
 
