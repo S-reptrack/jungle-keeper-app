@@ -1,0 +1,417 @@
+import { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import Navigation from "@/components/Navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ArrowLeft, Dna, Plus, X, Baby, FlaskConical, Info } from "lucide-react";
+import { speciesGenetics, MorphGene } from "@/data/morphGenetics";
+import { AlleleStatus, ParentGene, calculateMultiGeneCross, OffspringResult } from "@/lib/geneticsCalculator";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+
+interface ParentConfig {
+  genes: ParentGene[];
+}
+
+const MorphCalculator = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  
+  const [selectedSpecies, setSelectedSpecies] = useState<string>("");
+  const [parent1, setParent1] = useState<ParentConfig>({ genes: [] });
+  const [parent2, setParent2] = useState<ParentConfig>({ genes: [] });
+  const [results, setResults] = useState<OffspringResult[] | null>(null);
+
+  const speciesData = useMemo(() => {
+    return speciesGenetics.find(s => s.species === selectedSpecies);
+  }, [selectedSpecies]);
+
+  const availableGenes = useMemo(() => {
+    return speciesData?.genes || [];
+  }, [speciesData]);
+
+  const handleSpeciesChange = (species: string) => {
+    setSelectedSpecies(species);
+    setParent1({ genes: [] });
+    setParent2({ genes: [] });
+    setResults(null);
+  };
+
+  const addGeneToParent = (parentNum: 1 | 2, gene: MorphGene) => {
+    const setter = parentNum === 1 ? setParent1 : setParent2;
+    const parent = parentNum === 1 ? parent1 : parent2;
+    
+    if (parent.genes.find(g => g.gene.name === gene.name)) return;
+    
+    const defaultStatus: AlleleStatus = gene.inheritance === "codominant" ? "visual" : 
+                                         gene.inheritance === "recessive" ? "het" : "visual";
+    
+    setter(prev => ({
+      genes: [...prev.genes, { gene, status: defaultStatus, possibleHetPercentage: 66 }]
+    }));
+  };
+
+  const updateGeneStatus = (parentNum: 1 | 2, geneName: string, status: AlleleStatus) => {
+    const setter = parentNum === 1 ? setParent1 : setParent2;
+    setter(prev => ({
+      genes: prev.genes.map(g => g.gene.name === geneName ? { ...g, status } : g)
+    }));
+  };
+
+  const updatePossHetPct = (parentNum: 1 | 2, geneName: string, pct: number) => {
+    const setter = parentNum === 1 ? setParent1 : setParent2;
+    setter(prev => ({
+      genes: prev.genes.map(g => g.gene.name === geneName ? { ...g, possibleHetPercentage: pct } : g)
+    }));
+  };
+
+  const removeGene = (parentNum: 1 | 2, geneName: string) => {
+    const setter = parentNum === 1 ? setParent1 : setParent2;
+    setter(prev => ({
+      genes: prev.genes.filter(g => g.gene.name !== geneName)
+    }));
+  };
+
+  const calculate = () => {
+    const offspringResults = calculateMultiGeneCross(parent1.genes, parent2.genes);
+    setResults(offspringResults);
+  };
+
+  const getStatusOptions = (gene: MorphGene): { value: AlleleStatus; label: string }[] => {
+    switch (gene.inheritance) {
+      case "recessive":
+        return [
+          { value: "visual", label: `${gene.name} (visuel)` },
+          { value: "het", label: `Het ${gene.name} (100%)` },
+          { value: "possible_het", label: `Poss. Het ${gene.name}` },
+          { value: "none", label: "Aucun" },
+        ];
+      case "codominant":
+        return [
+          { value: "super", label: gene.superForm || `Super ${gene.name}` },
+          { value: "visual", label: `${gene.name} (hétérozygote)` },
+          { value: "none", label: "Aucun" },
+        ];
+      case "dominant":
+        return [
+          { value: "visual", label: `${gene.name} (hétérozygote)` },
+          { value: "super", label: `${gene.name} (homozygote)` },
+          { value: "none", label: "Aucun" },
+        ];
+      default:
+        return [
+          { value: "visual", label: gene.name },
+          { value: "none", label: "Aucun" },
+        ];
+    }
+  };
+
+  const getInheritanceBadge = (inheritance: string) => {
+    switch (inheritance) {
+      case "recessive": return <Badge variant="outline" className="text-[10px] border-orange-500/50 text-orange-500">Récessif</Badge>;
+      case "codominant": return <Badge variant="outline" className="text-[10px] border-blue-500/50 text-blue-500">Codominant</Badge>;
+      case "dominant": return <Badge variant="outline" className="text-[10px] border-green-500/50 text-green-500">Dominant</Badge>;
+      default: return null;
+    }
+  };
+
+  const getResultColor = (result: OffspringResult) => {
+    if (result.percentage >= 25) return "bg-primary/20 border-primary/40 text-primary";
+    if (result.percentage >= 12) return "bg-blue-500/20 border-blue-500/40 text-blue-500";
+    if (result.percentage >= 6) return "bg-amber-500/20 border-amber-500/40 text-amber-500";
+    return "bg-muted border-border text-muted-foreground";
+  };
+
+  const groupedSpecies = useMemo(() => {
+    const groups: Record<string, typeof speciesGenetics> = {};
+    speciesGenetics.forEach(s => {
+      const cat = s.category === "snake" ? "🐍 Serpents" : 
+                  s.category === "lizard" ? "🦎 Lézards" : "🐢 Tortues";
+      if (!groups[cat]) groups[cat] = [];
+      groups[cat].push(s);
+    });
+    return groups;
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navigation />
+      <main className="max-w-4xl mx-auto px-4 py-6 md:mt-16" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
+        {/* Header */}
+        <div className="mb-6">
+          <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="mb-3 -ml-2">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Retour
+          </Button>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="p-2.5 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
+              <Dna className="w-6 h-6 text-purple-400" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-foreground">Calculateur Génétique</h1>
+              <p className="text-sm text-muted-foreground">Prédiction des morphs pour vos reproductions</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Species Selection */}
+        <Card className="mb-6 border-border/50">
+          <CardContent className="pt-6">
+            <label className="text-sm font-medium text-foreground mb-2 block">Espèce</label>
+            <Select value={selectedSpecies} onValueChange={handleSpeciesChange}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Sélectionner une espèce..." />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.entries(groupedSpecies).map(([category, species]) => (
+                  <div key={category}>
+                    <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">{category}</div>
+                    {species.map(s => (
+                      <SelectItem key={s.species} value={s.species}>
+                        {s.species} — {s.commonName}
+                      </SelectItem>
+                    ))}
+                  </div>
+                ))}
+              </SelectContent>
+            </Select>
+          </CardContent>
+        </Card>
+
+        {speciesData && (
+          <>
+            {/* Info about available genes */}
+            <div className="flex items-center gap-2 mb-4 p-3 rounded-lg bg-muted/50 border border-border/50">
+              <Info className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+              <p className="text-xs text-muted-foreground">
+                {speciesData.genes.length} gènes disponibles pour {speciesData.commonName} — 
+                Ajoutez les morphs de chaque parent pour calculer les probabilités
+              </p>
+            </div>
+
+            {/* Parents Side by Side */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              {/* Parent 1 */}
+              <ParentCard
+                title="♂ Parent 1"
+                parent={parent1}
+                parentNum={1}
+                availableGenes={availableGenes}
+                onAddGene={(gene) => addGeneToParent(1, gene)}
+                onUpdateStatus={(name, status) => updateGeneStatus(1, name, status)}
+                onUpdatePossHetPct={(name, pct) => updatePossHetPct(1, name, pct)}
+                onRemoveGene={(name) => removeGene(1, name)}
+                getStatusOptions={getStatusOptions}
+                getInheritanceBadge={getInheritanceBadge}
+              />
+              {/* Parent 2 */}
+              <ParentCard
+                title="♀ Parent 2"
+                parent={parent2}
+                parentNum={2}
+                availableGenes={availableGenes}
+                onAddGene={(gene) => addGeneToParent(2, gene)}
+                onUpdateStatus={(name, status) => updateGeneStatus(2, name, status)}
+                onUpdatePossHetPct={(name, pct) => updatePossHetPct(2, name, pct)}
+                onRemoveGene={(name) => removeGene(2, name)}
+                getStatusOptions={getStatusOptions}
+                getInheritanceBadge={getInheritanceBadge}
+              />
+            </div>
+
+            {/* Calculate Button */}
+            <Button 
+              onClick={calculate}
+              className="w-full mb-6 h-12 text-base font-semibold bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              disabled={parent1.genes.length === 0 && parent2.genes.length === 0}
+            >
+              <FlaskConical className="w-5 h-5 mr-2" />
+              Calculer les probabilités
+            </Button>
+
+            {/* Results */}
+            {results && (
+              <Card className="border-purple-500/30 bg-card/80">
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Baby className="w-5 h-5 text-purple-400" />
+                    Résultats — Descendance possible
+                  </CardTitle>
+                  <p className="text-xs text-muted-foreground">
+                    Probabilités calculées selon les lois de Mendel
+                  </p>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    {results.map((result, i) => (
+                      <div key={i} className={`flex items-center justify-between p-3 rounded-lg border ${getResultColor(result)}`}>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-sm truncate">{result.genotype}</p>
+                          <p className="text-xs opacity-75">{result.description}</p>
+                        </div>
+                        <div className="flex items-center gap-2 flex-shrink-0 ml-3">
+                          <div className="text-right">
+                            <p className="text-lg font-bold">{result.percentage}%</p>
+                          </div>
+                          <div className="w-16 h-2 bg-background/50 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full rounded-full bg-current opacity-60" 
+                              style={{ width: `${Math.min(result.percentage, 100)}%` }} 
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Legend */}
+                  <div className="mt-4 pt-4 border-t border-border/50">
+                    <p className="text-xs font-medium text-muted-foreground mb-2">Légende :</p>
+                    <div className="flex flex-wrap gap-2 text-[10px] text-muted-foreground">
+                      <span>🟢 Visuel = animal exprime le morph</span>
+                      <span>🔵 Het = porteur confirmé</span>
+                      <span>🟡 Poss. Het = porteur possible</span>
+                      <span>⚪ Normal = type sauvage</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </>
+        )}
+
+        {!selectedSpecies && (
+          <Card className="border-dashed border-2 border-border/50">
+            <CardContent className="py-16 text-center">
+              <Dna className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
+              <p className="text-muted-foreground font-medium">Sélectionnez une espèce pour commencer</p>
+              <p className="text-sm text-muted-foreground/60 mt-1">
+                {speciesGenetics.length} espèces disponibles avec leurs morphs
+              </p>
+            </CardContent>
+          </Card>
+        )}
+      </main>
+    </div>
+  );
+};
+
+// === Parent Card Component ===
+interface ParentCardProps {
+  title: string;
+  parent: ParentConfig;
+  parentNum: 1 | 2;
+  availableGenes: MorphGene[];
+  onAddGene: (gene: MorphGene) => void;
+  onUpdateStatus: (name: string, status: AlleleStatus) => void;
+  onUpdatePossHetPct: (name: string, pct: number) => void;
+  onRemoveGene: (name: string) => void;
+  getStatusOptions: (gene: MorphGene) => { value: AlleleStatus; label: string }[];
+  getInheritanceBadge: (inheritance: string) => React.ReactNode;
+}
+
+const ParentCard = ({
+  title, parent, parentNum, availableGenes,
+  onAddGene, onUpdateStatus, onUpdatePossHetPct, onRemoveGene,
+  getStatusOptions, getInheritanceBadge
+}: ParentCardProps) => {
+  const unusedGenes = availableGenes.filter(
+    g => !parent.genes.find(pg => pg.gene.name === g.name)
+  );
+
+  return (
+    <Card className="border-border/50">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base flex items-center gap-2">
+          {title}
+          <Badge variant="secondary" className="text-[10px]">
+            {parent.genes.length} gène{parent.genes.length > 1 ? 's' : ''}
+          </Badge>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        {/* Selected genes */}
+        {parent.genes.map(pg => (
+          <div key={pg.gene.name} className="p-2.5 rounded-lg bg-muted/50 border border-border/50 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">{pg.gene.name}</span>
+                {getInheritanceBadge(pg.gene.inheritance)}
+              </div>
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => onRemoveGene(pg.gene.name)}>
+                <X className="w-3 h-3" />
+              </Button>
+            </div>
+            <Select value={pg.status} onValueChange={(v) => onUpdateStatus(pg.gene.name, v as AlleleStatus)}>
+              <SelectTrigger className="h-8 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {getStatusOptions(pg.gene).map(opt => (
+                  <SelectItem key={opt.value} value={opt.value} className="text-xs">
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {pg.status === "possible_het" && (
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] text-muted-foreground">Probabilité :</span>
+                <Select 
+                  value={String(pg.possibleHetPercentage || 66)} 
+                  onValueChange={(v) => onUpdatePossHetPct(pg.gene.name, Number(v))}
+                >
+                  <SelectTrigger className="h-7 text-xs w-24">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="50" className="text-xs">50%</SelectItem>
+                    <SelectItem value="66" className="text-xs">66%</SelectItem>
+                    <SelectItem value="100" className="text-xs">100%</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          </div>
+        ))}
+
+        {/* Add gene */}
+        {unusedGenes.length > 0 && (
+          <Select onValueChange={(name) => {
+            const gene = availableGenes.find(g => g.name === name);
+            if (gene) onAddGene(gene);
+          }}>
+            <SelectTrigger className="h-9 text-xs border-dashed">
+              <div className="flex items-center gap-1.5 text-muted-foreground">
+                <Plus className="w-3 h-3" />
+                Ajouter un gène
+              </div>
+            </SelectTrigger>
+            <SelectContent>
+              {unusedGenes.map(g => (
+                <SelectItem key={g.name} value={g.name} className="text-xs">
+                  <div className="flex items-center gap-2">
+                    {g.name}
+                    <span className="text-[10px] text-muted-foreground">
+                      ({g.inheritance === "recessive" ? "réc." : g.inheritance === "codominant" ? "codom." : "dom."})
+                    </span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
+
+        {parent.genes.length === 0 && unusedGenes.length > 0 && (
+          <p className="text-xs text-muted-foreground text-center py-2">
+            Ajoutez les morphs de ce parent
+          </p>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
+
+export default MorphCalculator;
