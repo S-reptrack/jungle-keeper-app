@@ -39,7 +39,7 @@ const GDPRConsentDialog = () => {
   };
 
   return (
-    <AlertDialog open={open} onOpenChange={() => {}} modal={true}>
+    <AlertDialog open={open} onOpenChange={() => {}}>
       <AlertDialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto" style={{ touchAction: 'manipulation' }}>
         <AlertDialogHeader>
           <AlertDialogTitle className="text-2xl">
