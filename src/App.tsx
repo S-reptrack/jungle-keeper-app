@@ -40,6 +40,7 @@ import InstagramPromo from "./pages/InstagramPromo";
 import InstallPromptBanner from "./components/InstallPromptBanner";
 import TesterSuspensionGuard from "./components/TesterSuspensionGuard";
 import Support from "./pages/Support";
+import MorphCalculator from "./pages/MorphCalculator";
 
 const queryClient = new QueryClient();
 
@@ -90,6 +91,7 @@ const App = () => (
             <Route path="/qr-codes" element={<MaintenanceGuard><QRCodeBatch /></MaintenanceGuard>} />
             <Route path="/analytics" element={<MaintenanceGuard><Analytics /></MaintenanceGuard>} />
             <Route path="/genealogy" element={<MaintenanceGuard><Genealogy /></MaintenanceGuard>} />
+            <Route path="/morph-calculator" element={<MaintenanceGuard><MorphCalculator /></MaintenanceGuard>} />
             
             {/* Catch-all route - TOUJOURS en dernier */}
             <Route path="*" element={<NotFound />} />
