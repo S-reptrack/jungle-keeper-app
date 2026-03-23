@@ -63,8 +63,8 @@ const Landing = () => {
           <div className="flex items-center gap-2">
             <LanguageSelector />
             <ThemeToggle />
-            <Button onClick={() => navigate("/auth")} size="sm">
-              {t("landing.login")}
+            <Button asChild size="sm">
+              <Link to="/auth">{t("landing.login")}</Link>
             </Button>
           </div>
         </div>
