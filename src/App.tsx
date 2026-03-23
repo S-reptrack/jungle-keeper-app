@@ -41,6 +41,7 @@ import InstallPromptBanner from "./components/InstallPromptBanner";
 import TesterSuspensionGuard from "./components/TesterSuspensionGuard";
 import Support from "./pages/Support";
 import MorphCalculator from "./pages/MorphCalculator";
+import HealthDashboard from "./pages/HealthDashboard";
 
 const queryClient = new QueryClient();
 
