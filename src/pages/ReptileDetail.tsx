@@ -457,6 +457,20 @@ const ReptileDetail = () => {
                       createdAt={reptile.created_at}
                       onUpdate={fetchReptile}
                     />
+                    {subscribed && (
+                      <Button
+                        variant="outline"
+                        className="w-full gap-2"
+                        onClick={async () => {
+                          const data = await fetchReptilePDFData(reptile.id);
+                          if (data) generateHealthPDF(data);
+                          else toast.error("Erreur lors de la génération du PDF");
+                        }}
+                      >
+                        <FileText className="w-4 h-4" />
+                        Exporter fiche santé PDF
+                      </Button>
+                    )}
                     <DeleteReptileDialog
                       reptileId={reptile.id}
                       reptileName={reptile.name}
