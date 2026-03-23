@@ -20,6 +20,7 @@ import LanguageSelector from "@/components/LanguageSelector";
 import sreptrackLogo from "@/assets/sreptrack-logo.png";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
+import { Link } from "react-router-dom";
 
 const Landing = () => {
   const { t } = useTranslation();
