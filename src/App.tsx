@@ -59,6 +59,7 @@ const App = () => (
           <GDPRConsentDialog />
           <HatchingNotificationDialog />
           <InstallPromptBanner />
+          <OfflineIndicator />
           <TesterSuspensionGuard>
           <Routes>
             {/* Routes publiques sans garde */}
