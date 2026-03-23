@@ -20,6 +20,7 @@ import LanguageSelector from "@/components/LanguageSelector";
 import sreptrackLogo from "@/assets/sreptrack-logo.png";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
+import { Link } from "react-router-dom";
 
 const Landing = () => {
   const { t } = useTranslation();
@@ -62,8 +63,8 @@ const Landing = () => {
           <div className="flex items-center gap-2">
             <LanguageSelector />
             <ThemeToggle />
-            <Button onClick={() => navigate("/auth")} size="sm">
-              {t("landing.login")}
+            <Button asChild size="sm">
+              <Link to="/auth">{t("landing.login")}</Link>
             </Button>
           </div>
         </div>
@@ -84,9 +85,11 @@ const Landing = () => {
             {t("landing.heroDescription")}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button size="lg" onClick={() => navigate("/auth")} className="text-base px-8">
-              {t("landing.startFree")}
-              <ChevronRight className="w-5 h-5 ml-1" />
+            <Button asChild size="lg" className="text-base px-8">
+              <Link to="/auth">
+                {t("landing.startFree")}
+                <ChevronRight className="w-5 h-5 ml-1" />
+              </Link>
             </Button>
             <Button size="lg" variant="outline" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>
               {t("landing.discoverFeatures")}
@@ -140,8 +143,8 @@ const Landing = () => {
               <span className="text-muted-foreground">{t("landing.perMonth")}</span>
             </div>
             <p className="text-sm text-muted-foreground">{t("landing.yearlyOffer")}</p>
-            <Button size="lg" className="w-full" onClick={() => navigate("/auth")}>
-              {t("landing.tryFree")}
+            <Button asChild size="lg" className="w-full">
+              <Link to="/auth">{t("landing.tryFree")}</Link>
             </Button>
             <p className="text-xs text-muted-foreground">{t("landing.securePayment")}</p>
           </div>
@@ -215,9 +218,11 @@ const Landing = () => {
             </table>
           </div>
           <div className="mt-6 text-center">
-            <Button size="lg" onClick={() => navigate("/auth")} className="text-base px-8">
-              <Crown className="w-5 h-5 mr-2" />
-              {t("landing.startFree") || "Commencer gratuitement"}
+            <Button asChild size="lg" className="text-base px-8">
+              <Link to="/auth">
+                <Crown className="w-5 h-5 mr-2" />
+                {t("landing.startFree") || "Commencer gratuitement"}
+              </Link>
             </Button>
           </div>
         </div>
@@ -232,9 +237,11 @@ const Landing = () => {
           <p className="text-muted-foreground">
             {t("landing.ctaDescription")}
           </p>
-          <Button size="lg" onClick={() => navigate("/auth")} className="text-base px-10">
-            {t("landing.ctaButton")}
-            <ChevronRight className="w-5 h-5 ml-1" />
+          <Button asChild size="lg" className="text-base px-10">
+            <Link to="/auth">
+              {t("landing.ctaButton")}
+              <ChevronRight className="w-5 h-5 ml-1" />
+            </Link>
           </Button>
         </div>
       </section>
