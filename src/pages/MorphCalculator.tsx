@@ -6,23 +6,48 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Dna, Plus, X, Baby, FlaskConical, Info } from "lucide-react";
-import { speciesGenetics, MorphGene } from "@/data/morphGenetics";
+import { ArrowLeft, Dna, Plus, X, Baby, FlaskConical, Info, Search } from "lucide-react";
+import { speciesGenetics, MorphGene, findSpeciesGenetics } from "@/data/morphGenetics";
 import { AlleleStatus, ParentGene, calculateMultiGeneCross, OffspringResult } from "@/lib/geneticsCalculator";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
 
 interface ParentConfig {
   genes: ParentGene[];
+  reptileId?: string;
+  reptileName?: string;
 }
 
 const MorphCalculator = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { user } = useAuth();
   
   const [selectedSpecies, setSelectedSpecies] = useState<string>("");
   const [parent1, setParent1] = useState<ParentConfig>({ genes: [] });
   const [parent2, setParent2] = useState<ParentConfig>({ genes: [] });
   const [results, setResults] = useState<OffspringResult[] | null>(null);
+  const [pickingParent, setPickingParent] = useState<1 | 2 | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Fetch user's reptiles
+  const { data: reptiles } = useQuery({
+    queryKey: ["reptiles-for-calculator", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return [];
+      const { data } = await supabase
+        .from("reptiles")
+        .select("id, name, species, morphs, sex, image_url")
+        .eq("user_id", user.id)
+        .eq("status", "active")
+        .order("name");
+      return data || [];
+    },
+    enabled: !!user?.id,
+  });
 
   const speciesData = useMemo(() => {
     return speciesGenetics.find(s => s.species === selectedSpecies);
@@ -39,6 +64,40 @@ const MorphCalculator = () => {
     setResults(null);
   };
 
+  const handlePickReptile = (reptile: { id: string; name: string; species: string; morphs: string[] | null; sex: string | null }) => {
+    if (!pickingParent) return;
+
+    // Find genetics data for this species
+    const genetics = findSpeciesGenetics(reptile.species);
+    
+    // If species differs from current, update it
+    if (genetics && genetics.species !== selectedSpecies) {
+      setSelectedSpecies(genetics.species);
+      // Reset the other parent if species changed
+      if (pickingParent === 1) setParent2({ genes: [] });
+      else setParent1({ genes: [] });
+      setResults(null);
+    }
+
+    // Build parent genes from reptile morphs
+    const parentGenes: ParentGene[] = [];
+    if (reptile.morphs && genetics) {
+      for (const morphName of reptile.morphs) {
+        const gene = genetics.genes.find(g => g.name.toLowerCase() === morphName.toLowerCase());
+        if (gene) {
+          const defaultStatus: AlleleStatus = gene.inheritance === "codominant" ? "visual" : 
+                                              gene.inheritance === "recessive" ? "visual" : "visual";
+          parentGenes.push({ gene, status: defaultStatus, possibleHetPercentage: 66 });
+        }
+      }
+    }
+
+    const setter = pickingParent === 1 ? setParent1 : setParent2;
+    setter({ genes: parentGenes, reptileId: reptile.id, reptileName: reptile.name });
+    setPickingParent(null);
+    setSearchQuery("");
+  };
+
   const addGeneToParent = (parentNum: 1 | 2, gene: MorphGene) => {
     const setter = parentNum === 1 ? setParent1 : setParent2;
     const parent = parentNum === 1 ? parent1 : parent2;
@@ -49,6 +108,7 @@ const MorphCalculator = () => {
                                          gene.inheritance === "recessive" ? "het" : "visual";
     
     setter(prev => ({
+      ...prev,
       genes: [...prev.genes, { gene, status: defaultStatus, possibleHetPercentage: 66 }]
     }));
   };
@@ -56,6 +116,7 @@ const MorphCalculator = () => {
   const updateGeneStatus = (parentNum: 1 | 2, geneName: string, status: AlleleStatus) => {
     const setter = parentNum === 1 ? setParent1 : setParent2;
     setter(prev => ({
+      ...prev,
       genes: prev.genes.map(g => g.gene.name === geneName ? { ...g, status } : g)
     }));
   };
@@ -63,6 +124,7 @@ const MorphCalculator = () => {
   const updatePossHetPct = (parentNum: 1 | 2, geneName: string, pct: number) => {
     const setter = parentNum === 1 ? setParent1 : setParent2;
     setter(prev => ({
+      ...prev,
       genes: prev.genes.map(g => g.gene.name === geneName ? { ...g, possibleHetPercentage: pct } : g)
     }));
   };
@@ -70,6 +132,7 @@ const MorphCalculator = () => {
   const removeGene = (parentNum: 1 | 2, geneName: string) => {
     const setter = parentNum === 1 ? setParent1 : setParent2;
     setter(prev => ({
+      ...prev,
       genes: prev.genes.filter(g => g.gene.name !== geneName)
     }));
   };
@@ -135,6 +198,16 @@ const MorphCalculator = () => {
     return groups;
   }, []);
 
+  const filteredReptiles = useMemo(() => {
+    if (!reptiles) return [];
+    const q = searchQuery.toLowerCase();
+    return reptiles.filter(r => 
+      r.name.toLowerCase().includes(q) || 
+      r.species.toLowerCase().includes(q) ||
+      (r.morphs || []).some(m => m.toLowerCase().includes(q))
+    );
+  }, [reptiles, searchQuery]);
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -182,7 +255,6 @@ const MorphCalculator = () => {
 
         {speciesData && (
           <>
-            {/* Info about available genes */}
             <div className="flex items-center gap-2 mb-4 p-3 rounded-lg bg-muted/50 border border-border/50">
               <Info className="w-4 h-4 text-muted-foreground flex-shrink-0" />
               <p className="text-xs text-muted-foreground">
@@ -193,7 +265,6 @@ const MorphCalculator = () => {
 
             {/* Parents Side by Side */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              {/* Parent 1 */}
               <ParentCard
                 title="♂ Parent 1"
                 parent={parent1}
@@ -205,8 +276,9 @@ const MorphCalculator = () => {
                 onRemoveGene={(name) => removeGene(1, name)}
                 getStatusOptions={getStatusOptions}
                 getInheritanceBadge={getInheritanceBadge}
+                onPickReptile={() => setPickingParent(1)}
+                hasReptiles={!!reptiles && reptiles.length > 0}
               />
-              {/* Parent 2 */}
               <ParentCard
                 title="♀ Parent 2"
                 parent={parent2}
@@ -218,6 +290,8 @@ const MorphCalculator = () => {
                 onRemoveGene={(name) => removeGene(2, name)}
                 getStatusOptions={getStatusOptions}
                 getInheritanceBadge={getInheritanceBadge}
+                onPickReptile={() => setPickingParent(2)}
+                hasReptiles={!!reptiles && reptiles.length > 0}
               />
             </div>
 
@@ -266,7 +340,6 @@ const MorphCalculator = () => {
                     ))}
                   </div>
 
-                  {/* Legend */}
                   <div className="mt-4 pt-4 border-t border-border/50">
                     <p className="text-xs font-medium text-muted-foreground mb-2">Légende :</p>
                     <div className="flex flex-wrap gap-2 text-[10px] text-muted-foreground">
@@ -283,17 +356,94 @@ const MorphCalculator = () => {
         )}
 
         {!selectedSpecies && (
-          <Card className="border-dashed border-2 border-border/50">
-            <CardContent className="py-16 text-center">
-              <Dna className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
-              <p className="text-muted-foreground font-medium">Sélectionnez une espèce pour commencer</p>
-              <p className="text-sm text-muted-foreground/60 mt-1">
-                {speciesGenetics.length} espèces disponibles avec leurs morphs
-              </p>
-            </CardContent>
-          </Card>
+          <div className="space-y-4">
+            <Card className="border-dashed border-2 border-border/50">
+              <CardContent className="py-16 text-center">
+                <Dna className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
+                <p className="text-muted-foreground font-medium">Sélectionnez une espèce pour commencer</p>
+                <p className="text-sm text-muted-foreground/60 mt-1">
+                  {speciesGenetics.length} espèces disponibles avec leurs morphs
+                </p>
+                {reptiles && reptiles.length > 0 && (
+                  <div className="mt-6">
+                    <p className="text-sm text-muted-foreground mb-3">— ou —</p>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => setPickingParent(1)}
+                      className="gap-2"
+                    >
+                      <Search className="w-4 h-4" />
+                      Choisir depuis mes reptiles
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         )}
       </main>
+
+      {/* Reptile Picker Dialog */}
+      <Dialog open={pickingParent !== null} onOpenChange={(open) => { if (!open) { setPickingParent(null); setSearchQuery(""); } }}>
+        <DialogContent className="max-w-md max-h-[80vh] flex flex-col">
+          <DialogHeader>
+            <DialogTitle>Choisir un reptile — Parent {pickingParent}</DialogTitle>
+          </DialogHeader>
+          <div className="relative mb-3">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Rechercher par nom, espèce, morph..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+          <div className="overflow-y-auto flex-1 space-y-1">
+            {filteredReptiles.length === 0 && (
+              <p className="text-sm text-muted-foreground text-center py-8">Aucun reptile trouvé</p>
+            )}
+            {filteredReptiles.map((reptile) => {
+              const hasGenetics = !!findSpeciesGenetics(reptile.species);
+              return (
+                <button
+                  key={reptile.id}
+                  onClick={() => handlePickReptile(reptile)}
+                  disabled={!hasGenetics}
+                  className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {reptile.image_url ? (
+                    <img src={reptile.image_url} alt={reptile.name} className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
+                  ) : (
+                    <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+                      <Dna className="w-4 h-4 text-muted-foreground" />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">{reptile.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">{reptile.species}</p>
+                    {reptile.morphs && reptile.morphs.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {reptile.morphs.slice(0, 4).map(m => (
+                          <Badge key={m} variant="secondary" className="text-[9px] px-1.5 py-0">{m}</Badge>
+                        ))}
+                        {reptile.morphs.length > 4 && (
+                          <Badge variant="secondary" className="text-[9px] px-1.5 py-0">+{reptile.morphs.length - 4}</Badge>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  {reptile.sex && (
+                    <span className="text-lg flex-shrink-0">{reptile.sex === "male" ? "♂" : reptile.sex === "female" ? "♀" : "?"}</span>
+                  )}
+                  {!hasGenetics && (
+                    <Badge variant="outline" className="text-[9px] text-destructive border-destructive/30 flex-shrink-0">Pas de données</Badge>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
@@ -310,12 +460,14 @@ interface ParentCardProps {
   onRemoveGene: (name: string) => void;
   getStatusOptions: (gene: MorphGene) => { value: AlleleStatus; label: string }[];
   getInheritanceBadge: (inheritance: string) => React.ReactNode;
+  onPickReptile: () => void;
+  hasReptiles: boolean;
 }
 
 const ParentCard = ({
   title, parent, parentNum, availableGenes,
   onAddGene, onUpdateStatus, onUpdatePossHetPct, onRemoveGene,
-  getStatusOptions, getInheritanceBadge
+  getStatusOptions, getInheritanceBadge, onPickReptile, hasReptiles
 }: ParentCardProps) => {
   const unusedGenes = availableGenes.filter(
     g => !parent.genes.find(pg => pg.gene.name === g.name)
@@ -324,12 +476,27 @@ const ParentCard = ({
   return (
     <Card className="border-border/50">
       <CardHeader className="pb-3">
-        <CardTitle className="text-base flex items-center gap-2">
-          {title}
-          <Badge variant="secondary" className="text-[10px]">
-            {parent.genes.length} gène{parent.genes.length > 1 ? 's' : ''}
-          </Badge>
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-base flex items-center gap-2">
+            {title}
+            <Badge variant="secondary" className="text-[10px]">
+              {parent.genes.length} gène{parent.genes.length > 1 ? 's' : ''}
+            </Badge>
+          </CardTitle>
+          {hasReptiles && (
+            <Button variant="ghost" size="sm" onClick={onPickReptile} className="text-xs h-7 gap-1 text-primary">
+              <Search className="w-3 h-3" />
+              Mes reptiles
+            </Button>
+          )}
+        </div>
+        {parent.reptileName && (
+          <div className="flex items-center gap-1.5 mt-1">
+            <Badge variant="outline" className="text-[10px] gap-1 border-primary/30 text-primary">
+              🦎 {parent.reptileName}
+            </Badge>
+          </div>
+        )}
       </CardHeader>
       <CardContent className="space-y-3">
         {/* Selected genes */}
