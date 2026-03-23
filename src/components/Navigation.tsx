@@ -150,6 +150,10 @@ const Navigation = () => {
                       <GitBranch className="w-4 h-4 mr-2" />
                       {t("genealogy.title")}
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/morph-calculator")}>
+                      <Dna className="w-4 h-4 mr-2" />
+                      Calculateur Génétique
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               )}
