@@ -470,7 +470,8 @@
     "compareAnalytics": "ਉੱਨਤ ਵਿਸ਼ਲੇਸ਼ਣ",
     "compareExport": "ਡੇਟਾ ਨਿਰਯਾਤ",
     "compareTransfer": "ਜਾਨਵਰ ਟ੍ਰਾਂਸਫ਼ਰ",
-    "compareSale": "ਵਿਕਰੀ ਲਈ"
+    "compareSale": "ਵਿਕਰੀ ਲਈ",
+    "compareMorphCalculator": "ਜੈਨੇਟਿਕ ਕੈਲਕੁਲੇਟਰ"
   },
   "species": {
     "python-regius": "ਰੌਇਲ ਪਾਇਥਨ",

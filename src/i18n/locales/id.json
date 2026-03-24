@@ -470,7 +470,8 @@
     "compareAnalytics": "Analitik lanjutan",
     "compareExport": "Ekspor data",
     "compareTransfer": "Transfer hewan",
-    "compareSale": "Dijual"
+    "compareSale": "Dijual",
+    "compareMorphCalculator": "Kalkulator genetik"
   },
   "species": {
     "python-regius": "Ball Python",

@@ -470,7 +470,8 @@
     "compareAnalytics": "மேம்பட்ட பகுப்பாய்வு",
     "compareExport": "தரவு ஏற்றுமதி",
     "compareTransfer": "விலங்கு பரிமாற்றம்",
-    "compareSale": "விற்பனைக்கு"
+    "compareSale": "விற்பனைக்கு",
+    "compareMorphCalculator": "மரபியல் கணிப்பான்"
   },
   "species": {
     "python-regius": "ராயல் பைதான்",

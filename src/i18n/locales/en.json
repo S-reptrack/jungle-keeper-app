@@ -527,7 +527,8 @@
     "compareAnalytics": "Advanced analytics",
     "compareExport": "Data export",
     "compareTransfer": "Animal transfer",
-    "compareSale": "For sale listing"
+    "compareSale": "For sale listing",
+    "compareMorphCalculator": "Genetics calculator"
   },
   "species": {
     "python-molurus-bivittatus": "Burmese Python",

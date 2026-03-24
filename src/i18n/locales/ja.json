@@ -470,7 +470,8 @@
     "compareAnalytics": "高度な分析",
     "compareExport": "データエクスポート",
     "compareTransfer": "動物の移転",
-    "compareSale": "販売出品"
+    "compareSale": "販売出品",
+    "compareMorphCalculator": "遺伝計算機"
   },
   "species": {
     "python-regius": "ボールパイソン",
