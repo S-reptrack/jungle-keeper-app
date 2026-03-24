@@ -454,7 +454,8 @@
     "compareAnalytics": "Analíticas avanzadas",
     "compareExport": "Exportación de datos",
     "compareTransfer": "Transferencia de animales",
-    "compareSale": "Puesta en venta"
+    "compareSale": "Puesta en venta",
+    "compareMorphCalculator": "Calculadora genética"
   },
   "species": {
     "python-molurus-bivittatus": "Pitón birmana",

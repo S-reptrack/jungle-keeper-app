@@ -455,7 +455,8 @@
     "compareAnalytics": "Geavanceerde analyses",
     "compareExport": "Gegevensexport",
     "compareTransfer": "Dieroverdracht",
-    "compareSale": "Te koop aanbieden"
+    "compareSale": "Te koop aanbieden",
+    "compareMorphCalculator": "Genetica calculator"
   },
   "species": {
     "python-molurus-bivittatus": "Birmese python",

@@ -470,7 +470,8 @@
     "compareAnalytics": "उन्नत विश्लेषण",
     "compareExport": "डेटा निर्यात",
     "compareTransfer": "पशु हस्तांतरण",
-    "compareSale": "बिक्री के लिए"
+    "compareSale": "बिक्री के लिए",
+    "compareMorphCalculator": "आनुवंशिक कैलकुलेटर"
   },
   "species": {
     "python-regius": "रॉयल पाइथन",

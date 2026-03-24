@@ -470,7 +470,8 @@
     "compareAnalytics": "高级分析",
     "compareExport": "数据导出",
     "compareTransfer": "动物转让",
-    "compareSale": "上架出售"
+    "compareSale": "上架出售",
+    "compareMorphCalculator": "遗传计算器"
   },
   "species": {
     "python-regius": "球蟒",

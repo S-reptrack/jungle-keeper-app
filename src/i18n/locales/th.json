@@ -470,7 +470,8 @@
     "compareAnalytics": "การวิเคราะห์ขั้นสูง",
     "compareExport": "ส่งออกข้อมูล",
     "compareTransfer": "โอนย้ายสัตว์",
-    "compareSale": "ลงประกาศขาย"
+    "compareSale": "ลงประกาศขาย",
+    "compareMorphCalculator": "เครื่องคำนวณพันธุกรรม"
   },
   "species": {
     "python-regius": "ไพธอนบอล",

@@ -456,7 +456,8 @@
     "compareAnalytics": "Erweiterte Analysen",
     "compareExport": "Datenexport",
     "compareTransfer": "Tiertransfer",
-    "compareSale": "Zum Verkauf anbieten"
+    "compareSale": "Zum Verkauf anbieten",
+    "compareMorphCalculator": "Genetik-Rechner"
   },
   "species": {
     "python-molurus-bivittatus": "Burma-Python",

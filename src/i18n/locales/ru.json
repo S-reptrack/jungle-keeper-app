@@ -470,7 +470,8 @@
     "compareAnalytics": "Расширенная аналитика",
     "compareExport": "Экспорт данных",
     "compareTransfer": "Передача животных",
-    "compareSale": "Выставление на продажу"
+    "compareSale": "Выставление на продажу",
+    "compareMorphCalculator": "Генетический калькулятор"
   },
   "species": {
     "python-regius": "Королевский питон",

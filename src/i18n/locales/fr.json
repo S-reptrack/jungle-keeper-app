@@ -583,7 +583,8 @@
     "compareAnalytics": "Analytiques avancées",
     "compareExport": "Export de données",
     "compareTransfer": "Transfert d'animaux",
-    "compareSale": "Mise en vente"
+    "compareSale": "Mise en vente",
+    "compareMorphCalculator": "Calculateur génétique"
   },
   "species": {
     "python-molurus-bivittatus": "Python birman",
