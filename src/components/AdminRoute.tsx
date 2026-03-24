@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -10,27 +9,8 @@ interface AdminRouteProps {
 const AdminRoute = ({ children }: AdminRouteProps) => {
   const { user, loading: authLoading } = useAuth();
   const { isAdmin, loading: roleLoading } = useUserRole();
-  const navigate = useNavigate();
-  const [decided, setDecided] = useState(false);
 
   const loading = authLoading || roleLoading;
-
-  useEffect(() => {
-    if (loading || decided) return;
-
-    if (!user) {
-      navigate("/auth", { replace: true });
-    } else if (!isAdmin) {
-      navigate("/landing", { replace: true });
-    } else {
-      setDecided(true);
-    }
-  }, [user, isAdmin, loading, navigate, decided]);
-
-  // Reset when user changes
-  useEffect(() => {
-    setDecided(false);
-  }, [user?.id]);
 
   if (loading) {
     return (
@@ -43,11 +23,15 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
     );
   }
 
-  if (decided && user && isAdmin) {
-    return <>{children}</>;
+  if (!user) {
+    return <Navigate to="/auth" replace />;
   }
 
-  return null;
+  if (!isAdmin) {
+    return <Navigate to="/landing" replace />;
+  }
+
+  return <>{children}</>;
 };
 
 export default AdminRoute;
