@@ -191,6 +191,7 @@ const Landing = () => {
                   { feature: t("landing.compareExport") || "Export de données", free: false, premium: true },
                   { feature: t("landing.compareTransfer") || "Transfert d'animaux", free: false, premium: true },
                   { feature: t("landing.compareSale") || "Mise en vente", free: false, premium: true },
+                  { feature: t("landing.compareMorphCalculator") || "Calculateur génétique", free: false, premium: true },
                 ].map((row, i) => (
                   <tr key={i} className="hover:bg-muted/30 transition-colors">
                     <td className="p-4 text-foreground">{row.feature}</td>
