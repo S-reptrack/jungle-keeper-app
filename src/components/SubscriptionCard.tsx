@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { useSubscription, SUBSCRIPTION_TIERS } from "@/hooks/useSubscription";
 import { useReptileCount } from "@/hooks/useReptileCount";
-import { useSearchParams, useNavigate, Link } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { getPaymentProvider } from "@/lib/platformUtils";
 
 const SubscriptionCard = () => {
@@ -370,22 +370,24 @@ const SubscriptionCard = () => {
                 </p>
               )}
               <Separator className="my-2" />
-              <div className="flex justify-center gap-4 pt-1">
-                <Link
-                  to="/terms"
-                  className="text-xs underline text-primary hover:text-primary/80 py-2 px-1"
-                  style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+              <div className="flex justify-center gap-4 pt-2">
+                <button
+                  type="button"
+                  onClick={() => navigate("/terms")}
+                  className="text-sm underline text-primary hover:text-primary/80 py-3 px-3 min-h-[44px] min-w-[44px] inline-flex items-center justify-center cursor-pointer bg-transparent border-0"
+                  style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", WebkitUserSelect: "none" }}
                 >
                   {t("subscription.termsLink") || "Conditions d'utilisation (EULA)"}
-                </Link>
-                <span className="text-muted-foreground">•</span>
-                <Link
-                  to="/privacy"
-                  className="text-xs underline text-primary hover:text-primary/80 py-2 px-1"
-                  style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+                </button>
+                <span className="text-muted-foreground self-center">•</span>
+                <button
+                  type="button"
+                  onClick={() => navigate("/privacy")}
+                  className="text-sm underline text-primary hover:text-primary/80 py-3 px-3 min-h-[44px] min-w-[44px] inline-flex items-center justify-center cursor-pointer bg-transparent border-0"
+                  style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", WebkitUserSelect: "none" }}
                 >
                   {t("subscription.privacyLink") || "Politique de confidentialité"}
-                </Link>
+                </button>
               </div>
             </div>
           </>
