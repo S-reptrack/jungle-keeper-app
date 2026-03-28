@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { useSubscription, SUBSCRIPTION_TIERS } from "@/hooks/useSubscription";
 import { useReptileCount } from "@/hooks/useReptileCount";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import { getPaymentProvider } from "@/lib/platformUtils";
 
 const SubscriptionCard = () => {
@@ -370,23 +370,21 @@ const SubscriptionCard = () => {
               )}
               <Separator className="my-2" />
               <div className="flex justify-center gap-4 pt-1">
-                <Button
-                  variant="link"
-                  size="sm"
-                  className="text-xs underline h-auto p-0"
-                  onClick={() => navigate("/terms")}
+                <Link
+                  to="/terms"
+                  className="text-xs underline text-primary hover:text-primary/80"
+                  style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
                 >
                   {t("subscription.termsLink") || "Conditions d'utilisation (EULA)"}
-                </Button>
+                </Link>
                 <span className="text-muted-foreground">•</span>
-                <Button
-                  variant="link"
-                  size="sm"
-                  className="text-xs underline h-auto p-0"
-                  onClick={() => navigate("/privacy")}
+                <Link
+                  to="/privacy"
+                  className="text-xs underline text-primary hover:text-primary/80"
+                  style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
                 >
                   {t("subscription.privacyLink") || "Politique de confidentialité"}
-                </Button>
+                </Link>
               </div>
             </div>
           </>
