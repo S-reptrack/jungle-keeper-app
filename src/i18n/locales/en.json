@@ -729,7 +729,11 @@
     "reptilesUsed": "{{count}}/5 reptiles used",
     "restorePurchases": "Restore my purchases",
     "applePaymentNote": "Payment managed by Apple. Cancel anytime via Settings > Subscriptions.",
-    "autoRenewDisclosure": "Subscription automatically renews at the end of each period unless cancelled at least 24 hours before.",
+    "appleChargeNote": "Payment will be charged to your iTunes account at confirmation of purchase.",
+    "appleRenewNote": "Your account will be charged for renewal within 24 hours prior to the end of the current period, at the same rate.",
+    "appleCancelNote": "You can manage and cancel your subscriptions in your App Store account settings after purchase.",
+    "appleTrialNote": "Any unused portion of a free trial period, if offered, will be forfeited when you purchase a subscription.",
+    "autoRenewDisclosure": "Subscription automatically renews at the end of each period unless cancelled at least 24 hours before the end of the current period.",
     "termsLink": "Terms of Use",
     "privacyLink": "Privacy Policy",
     "restoreSuccess": "Purchases restored successfully"

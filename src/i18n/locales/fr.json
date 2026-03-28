@@ -781,7 +781,11 @@
     "reptilesUsed": "{{count}}/5 reptiles utilisés",
     "restorePurchases": "Restaurer mes achats",
     "applePaymentNote": "Paiement géré par Apple. Annulez à tout moment via Réglages > Abonnements.",
-    "autoRenewDisclosure": "L'abonnement se renouvelle automatiquement à la fin de chaque période sauf annulation au moins 24h avant.",
+    "appleChargeNote": "Le paiement sera débité sur votre compte iTunes lors de la confirmation de l'achat.",
+    "appleRenewNote": "Le compte sera débité pour le renouvellement dans les 24 heures précédant la fin de la période en cours, au même tarif.",
+    "appleCancelNote": "Vous pouvez gérer et annuler vos abonnements dans les Réglages de votre compte App Store après l'achat.",
+    "appleTrialNote": "Toute portion inutilisée d'une période d'essai gratuite, le cas échéant, sera perdue lors de l'achat d'un abonnement.",
+    "autoRenewDisclosure": "L'abonnement se renouvelle automatiquement à la fin de chaque période sauf annulation au moins 24h avant la fin de la période en cours.",
     "termsLink": "Conditions d'utilisation",
     "privacyLink": "Politique de confidentialité",
     "restoreSuccess": "Achats restaurés avec succès"
