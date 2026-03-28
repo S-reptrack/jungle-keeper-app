@@ -230,14 +230,22 @@ export const useSubscription = () => {
   const createCheckout = async (priceId: string) => {
     // Sur iOS natif, utiliser Apple IAP
     if (paymentProvider === "apple") {
-      // S'assurer que le store IAP est initialisé
+      // S'assurer que le store IAP est initialisé (avec retry)
       if (!isAppleIAPAvailable()) {
         console.warn("[Apple IAP] Store not available, attempting init...");
-        try {
-          await initializeAppleIAP();
-          setAppleIAPInitialized(true);
-        } catch (initErr) {
-          console.error("[Apple IAP] Re-init failed:", initErr);
+        let initSuccess = false;
+        for (let attempt = 0; attempt < 3; attempt++) {
+          try {
+            await initializeAppleIAP();
+            setAppleIAPInitialized(true);
+            initSuccess = true;
+            break;
+          } catch (initErr) {
+            console.error(`[Apple IAP] Init attempt ${attempt + 1} failed:`, initErr);
+            if (attempt < 2) await new Promise(r => setTimeout(r, 1000));
+          }
+        }
+        if (!initSuccess) {
           throw new Error("Apple In-App Purchase is not available. Please restart the app and try again.");
         }
       }
