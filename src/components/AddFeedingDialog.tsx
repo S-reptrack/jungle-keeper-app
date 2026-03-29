@@ -67,9 +67,12 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
       preyState: "dead" as const,
       calcium: false,
       vitamins: false,
+      refused: false,
       notes: "",
     },
   });
+
+  const isRefused = form.watch("refused");
 
   // Get allowed food types based on species
   const allowedFoods = species ? getAllowedFoodTypes(species) : allFoodTypes.map(f => f.value);
