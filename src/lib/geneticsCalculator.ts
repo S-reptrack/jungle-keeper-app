@@ -214,25 +214,34 @@ function calculateCodominant(
   name: string,
   superName: string,
   p1: AlleleStatus,
-  p2: AlleleStatus
+  p2: AlleleStatus,
+  p1PossHetPct: number = 66,
+  p2PossHetPct: number = 66
 ): OffspringResult[] {
-  // For codominant: visual = heterozygous (Aa), super = homozygous (AA)
-  // none = wild type (aa)
-  const p1Alleles = getCodominantAlleles(p1);
-  const p2Alleles = getCodominantAlleles(p2);
+  const p1Data = getCodominantAlleles(p1, p1PossHetPct);
+  const p2Data = getCodominantAlleles(p2, p2PossHetPct);
 
   let pSuper = 0, pVisual = 0, pNormal = 0;
-  for (const a1 of p1Alleles) {
-    for (const a2 of p2Alleles) {
-      if (a1 === "A" && a2 === "A") pSuper++;
-      else if (a1 === "a" && a2 === "a") pNormal++;
-      else pVisual++;
+
+  for (let i = 0; i < p1Data.alleles.length; i++) {
+    for (let j = 0; j < p2Data.alleles.length; j++) {
+      const prob = p1Data.probs[i] * p2Data.probs[j];
+      const a1 = p1Data.alleles[i];
+      const a2 = p2Data.alleles[j];
+      for (const al1 of a1) {
+        for (const al2 of a2) {
+          const cellProb = prob / (a1.length * a2.length);
+          if (al1 === "A" && al2 === "A") pSuper += cellProb;
+          else if (al1 === "a" && al2 === "a") pNormal += cellProb;
+          else pVisual += cellProb;
+        }
+      }
     }
   }
-  const total = p1Alleles.length * p2Alleles.length;
 
+  const total = pSuper + pVisual + pNormal;
   const results: OffspringResult[] = [];
-  if (pSuper > 0) {
+  if (pSuper > 0.001) {
     results.push({
       genotype: superName,
       percentage: round(pSuper / total * 100),
@@ -240,15 +249,15 @@ function calculateCodominant(
       genes: [{ geneName: name, status: "super" }],
     });
   }
-  if (pVisual > 0) {
+  if (pVisual > 0.001) {
     results.push({
       genotype: name,
       percentage: round(pVisual / total * 100),
-      description: `${name} (hétérozygote)`,
+      description: `${name} (visuel)`,
       genes: [{ geneName: name, status: "visual" }],
     });
   }
-  if (pNormal > 0) {
+  if (pNormal > 0.001) {
     results.push({
       genotype: "Normal",
       percentage: round(pNormal / total * 100),
