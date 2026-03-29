@@ -154,13 +154,15 @@ const MorphCalculator = () => {
       case "codominant":
         return [
           { value: "super", label: gene.superForm || `Super ${gene.name}` },
-          { value: "visual", label: `${gene.name} (hétérozygote)` },
+          { value: "visual", label: `${gene.name} (visuel)` },
+          { value: "possible_het", label: `Poss. Het ${gene.name}` },
           { value: "none", label: "Aucun" },
         ];
       case "dominant":
         return [
-          { value: "visual", label: `${gene.name} (hétérozygote)` },
+          { value: "visual", label: `${gene.name} (visuel)` },
           { value: "super", label: `${gene.name} (homozygote)` },
+          { value: "possible_het", label: `Poss. Het ${gene.name}` },
           { value: "none", label: "Aucun" },
         ];
       default:
