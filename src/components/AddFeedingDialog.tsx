@@ -273,42 +273,44 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
               />
             )}
 
-            <div className="flex gap-6">
-              <FormField
-                control={form.control}
-                name="calcium"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center space-x-2 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormLabel className="font-normal cursor-pointer">
-                      {t("feeding.calcium", "Calcium")}
-                    </FormLabel>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="vitamins"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center space-x-2 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormLabel className="font-normal cursor-pointer">
-                      {t("feeding.vitamins", "Vitamines")}
-                    </FormLabel>
-                  </FormItem>
-                )}
-              />
-            </div>
+            {!isRefused && (
+              <div className="flex gap-6">
+                <FormField
+                  control={form.control}
+                  name="calcium"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormLabel className="font-normal cursor-pointer">
+                        {t("feeding.calcium", "Calcium")}
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="vitamins"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormLabel className="font-normal cursor-pointer">
+                        {t("feeding.vitamins", "Vitamines")}
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
 
 
             <FormField
