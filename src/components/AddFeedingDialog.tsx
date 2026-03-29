@@ -87,17 +87,20 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
         return;
       }
 
+      const refusedNote = values.refused ? "🚫 Alimentation refusée" : "";
+      const combinedNotes = [refusedNote, values.notes].filter(Boolean).join(" — ") || null;
+
       const feedingData = {
         reptile_id: reptileId,
         user_id: user.id,
         rodent_type: values.rodentType,
         rodent_stage: values.rodentStage,
-        quantity: values.quantity,
+        quantity: values.refused ? 0 : values.quantity,
         feeding_date: format(values.feedingDate, "yyyy-MM-dd"),
         prey_state: values.preyState,
-        calcium: values.calcium,
-        vitamins: values.vitamins,
-        notes: values.notes || null,
+        calcium: values.refused ? false : values.calcium,
+        vitamins: values.refused ? false : values.vitamins,
+        notes: combinedNotes,
       };
 
       const { error } = await supabase
