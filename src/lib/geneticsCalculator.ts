@@ -44,10 +44,10 @@ function calculateSingleGene(
     return calculateRecessive(name, parent1Status, parent2Status, p1PossHetPct, p2PossHetPct);
   }
   if (inheritance === "codominant") {
-    return calculateCodominant(name, superForm || `Super ${name}`, parent1Status, parent2Status);
+    return calculateCodominant(name, superForm || `Super ${name}`, parent1Status, parent2Status, p1PossHetPct, p2PossHetPct);
   }
   if (inheritance === "dominant") {
-    return calculateDominant(name, parent1Status, parent2Status);
+    return calculateDominant(name, parent1Status, parent2Status, p1PossHetPct, p2PossHetPct);
   }
   return [{ genotype: "Normal", percentage: 100, description: "Normal", genes: [] }];
 }
