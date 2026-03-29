@@ -235,7 +235,7 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
               )}
             />
 
-            {!isRefused && selectedType && ["rat", "mouse", "rabbit", "insect", "fish", "crustacean", "wholePrey"].includes(selectedType) && (
+            {selectedType && ["rat", "mouse", "rabbit", "insect", "fish", "crustacean", "wholePrey"].includes(selectedType) && (
               <FormField
                 control={form.control}
                 name="preyState"
