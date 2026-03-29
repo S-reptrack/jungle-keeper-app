@@ -36,11 +36,12 @@ import FoodTypePicker, { allFoodTypes } from "@/components/FoodTypePicker";
 const formSchema = z.object({
   rodentType: z.string().min(1, "Le type d'aliment est requis"),
   rodentStage: z.string().min(1, "Le stade est requis"),
-  quantity: z.coerce.number().min(1, "La quantité doit être au moins 1"),
+  quantity: z.coerce.number().min(0, "La quantité doit être positive"),
   feedingDate: z.date(),
   preyState: z.enum(["live", "dead"]).default("dead"),
   calcium: z.boolean().default(false),
   vitamins: z.boolean().default(false),
+  refused: z.boolean().default(false),
   notes: z.string().optional(),
 });
 
@@ -66,9 +67,12 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
       preyState: "dead" as const,
       calcium: false,
       vitamins: false,
+      refused: false,
       notes: "",
     },
   });
+
+  const isRefused = form.watch("refused");
 
   // Get allowed food types based on species
   const allowedFoods = species ? getAllowedFoodTypes(species) : allFoodTypes.map(f => f.value);
@@ -83,17 +87,20 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
         return;
       }
 
+      const refusedNote = values.refused ? "🚫 Alimentation refusée" : "";
+      const combinedNotes = [refusedNote, values.notes].filter(Boolean).join(" — ") || null;
+
       const feedingData = {
         reptile_id: reptileId,
         user_id: user.id,
         rodent_type: values.rodentType,
         rodent_stage: values.rodentStage,
-        quantity: values.quantity,
+        quantity: values.refused ? 0 : values.quantity,
         feeding_date: format(values.feedingDate, "yyyy-MM-dd"),
         prey_state: values.preyState,
-        calcium: values.calcium,
-        vitamins: values.vitamins,
-        notes: values.notes || null,
+        calcium: values.refused ? false : values.calcium,
+        vitamins: values.refused ? false : values.vitamins,
+        notes: combinedNotes,
       };
 
       const { error } = await supabase
@@ -146,19 +153,46 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
                 <p className="text-sm font-medium text-destructive">{form.formState.errors.rodentStage.message}</p>
               )}
             </FormItem>
+
+            {/* Alimentation refusée toggle */}
             <FormField
               control={form.control}
-              name="quantity"
+              name="refused"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Quantité</FormLabel>
+                <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border border-destructive/30 p-3">
                   <FormControl>
-                    <Input type="number" min="1" {...field} />
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <div>
+                    <FormLabel className="font-medium cursor-pointer text-destructive">
+                      🚫 {t("feeding.refused", "Alimentation refusée")}
+                    </FormLabel>
+                    <p className="text-xs text-muted-foreground">
+                      {t("feeding.refusedDescription", "L'animal a refusé de manger")}
+                    </p>
+                  </div>
                 </FormItem>
               )}
             />
+
+            {!isRefused && (
+              <FormField
+                control={form.control}
+                name="quantity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Quantité</FormLabel>
+                    <FormControl>
+                      <Input type="number" min="1" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <FormField
               control={form.control}
@@ -201,7 +235,7 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
               )}
             />
 
-            {selectedType && ["rat", "mouse", "rabbit", "insect", "fish", "crustacean", "wholePrey"].includes(selectedType) && (
+            {!isRefused && selectedType && ["rat", "mouse", "rabbit", "insect", "fish", "crustacean", "wholePrey"].includes(selectedType) && (
               <FormField
                 control={form.control}
                 name="preyState"
@@ -239,42 +273,44 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
               />
             )}
 
-            <div className="flex gap-6">
-              <FormField
-                control={form.control}
-                name="calcium"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center space-x-2 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormLabel className="font-normal cursor-pointer">
-                      {t("feeding.calcium", "Calcium")}
-                    </FormLabel>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="vitamins"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center space-x-2 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormLabel className="font-normal cursor-pointer">
-                      {t("feeding.vitamins", "Vitamines")}
-                    </FormLabel>
-                  </FormItem>
-                )}
-              />
-            </div>
+            {!isRefused && (
+              <div className="flex gap-6">
+                <FormField
+                  control={form.control}
+                  name="calcium"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormLabel className="font-normal cursor-pointer">
+                        {t("feeding.calcium", "Calcium")}
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="vitamins"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormLabel className="font-normal cursor-pointer">
+                        {t("feeding.vitamins", "Vitamines")}
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
 
 
             <FormField
