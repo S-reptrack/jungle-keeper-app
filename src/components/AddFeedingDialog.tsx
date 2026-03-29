@@ -36,11 +36,12 @@ import FoodTypePicker, { allFoodTypes } from "@/components/FoodTypePicker";
 const formSchema = z.object({
   rodentType: z.string().min(1, "Le type d'aliment est requis"),
   rodentStage: z.string().min(1, "Le stade est requis"),
-  quantity: z.coerce.number().min(1, "La quantité doit être au moins 1"),
+  quantity: z.coerce.number().min(0, "La quantité doit être positive"),
   feedingDate: z.date(),
   preyState: z.enum(["live", "dead"]).default("dead"),
   calcium: z.boolean().default(false),
   vitamins: z.boolean().default(false),
+  refused: z.boolean().default(false),
   notes: z.string().optional(),
 });
 
