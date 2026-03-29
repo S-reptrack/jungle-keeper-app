@@ -153,19 +153,46 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
                 <p className="text-sm font-medium text-destructive">{form.formState.errors.rodentStage.message}</p>
               )}
             </FormItem>
+
+            {/* Alimentation refusée toggle */}
             <FormField
               control={form.control}
-              name="quantity"
+              name="refused"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Quantité</FormLabel>
+                <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border border-destructive/30 p-3">
                   <FormControl>
-                    <Input type="number" min="1" {...field} />
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <div>
+                    <FormLabel className="font-medium cursor-pointer text-destructive">
+                      🚫 {t("feeding.refused", "Alimentation refusée")}
+                    </FormLabel>
+                    <p className="text-xs text-muted-foreground">
+                      {t("feeding.refusedDescription", "L'animal a refusé de manger")}
+                    </p>
+                  </div>
                 </FormItem>
               )}
             />
+
+            {!isRefused && (
+              <FormField
+                control={form.control}
+                name="quantity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Quantité</FormLabel>
+                    <FormControl>
+                      <Input type="number" min="1" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <FormField
               control={form.control}
