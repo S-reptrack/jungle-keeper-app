@@ -162,7 +162,7 @@ const MorphCalculator = () => {
         return [
           { value: "visual", label: `${gene.name} (visuel)` },
           { value: "super", label: `${gene.name} (homozygote)` },
-          { value: "possible_het", label: `Poss. Het ${gene.name}` },
+          { value: "possible_het", label: `Poss. ${gene.name}` },
           { value: "none", label: "Aucun" },
         ];
       default:
