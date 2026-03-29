@@ -281,29 +281,36 @@ function getCodominantAlleles(status: AlleleStatus, possHetPct: number = 100): {
   }
 }
 
-/**
- * Calcul pour gène dominant.
- */
 function calculateDominant(
   name: string,
   p1: AlleleStatus,
-  p2: AlleleStatus
+  p2: AlleleStatus,
+  p1PossHetPct: number = 66,
+  p2PossHetPct: number = 66
 ): OffspringResult[] {
-  // Dominant: visual = Dd or DD, none = dd
-  const p1Alleles = getDominantAlleles(p1);
-  const p2Alleles = getDominantAlleles(p2);
+  const p1Data = getDominantAlleles(p1, p1PossHetPct);
+  const p2Data = getDominantAlleles(p2, p2PossHetPct);
 
   let pVisual = 0, pNormal = 0;
-  for (const a1 of p1Alleles) {
-    for (const a2 of p2Alleles) {
-      if (a1 === "D" || a2 === "D") pVisual++;
-      else pNormal++;
+
+  for (let i = 0; i < p1Data.alleles.length; i++) {
+    for (let j = 0; j < p2Data.alleles.length; j++) {
+      const prob = p1Data.probs[i] * p2Data.probs[j];
+      const a1 = p1Data.alleles[i];
+      const a2 = p2Data.alleles[j];
+      for (const al1 of a1) {
+        for (const al2 of a2) {
+          const cellProb = prob / (a1.length * a2.length);
+          if (al1 === "D" || al2 === "D") pVisual += cellProb;
+          else pNormal += cellProb;
+        }
+      }
     }
   }
-  const total = p1Alleles.length * p2Alleles.length;
 
+  const total = pVisual + pNormal;
   const results: OffspringResult[] = [];
-  if (pVisual > 0) {
+  if (pVisual > 0.001) {
     results.push({
       genotype: name,
       percentage: round(pVisual / total * 100),
@@ -311,7 +318,7 @@ function calculateDominant(
       genes: [{ geneName: name, status: "visual" }],
     });
   }
-  if (pNormal > 0) {
+  if (pNormal > 0.001) {
     results.push({
       genotype: "Normal",
       percentage: round(pNormal / total * 100),
@@ -322,12 +329,16 @@ function calculateDominant(
   return results;
 }
 
-function getDominantAlleles(status: AlleleStatus): string[] {
+function getDominantAlleles(status: AlleleStatus, possHetPct: number = 100): { alleles: string[][]; probs: number[] } {
   switch (status) {
-    case "visual": return ["D", "d"]; // heterozygous by default
-    case "super": return ["D", "D"];  // homozygous dominant
-    case "none": return ["d", "d"];
-    default: return ["d", "d"];
+    case "visual": return { alleles: [["D", "d"]], probs: [1] };
+    case "super": return { alleles: [["D", "D"]], probs: [1] };
+    case "possible_het": {
+      const hetChance = possHetPct / 100;
+      return { alleles: [["D", "d"], ["d", "d"]], probs: [hetChance, 1 - hetChance] };
+    }
+    case "none": return { alleles: [["d", "d"]], probs: [1] };
+    default: return { alleles: [["d", "d"]], probs: [1] };
   }
 }
 
