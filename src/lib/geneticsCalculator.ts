@@ -259,12 +259,16 @@ function calculateCodominant(
   return results;
 }
 
-function getCodominantAlleles(status: AlleleStatus): string[] {
+function getCodominantAlleles(status: AlleleStatus, possHetPct: number = 100): { alleles: string[][]; probs: number[] } {
   switch (status) {
-    case "super": return ["A", "A"];
-    case "visual": return ["A", "a"];
-    case "none": return ["a", "a"];
-    default: return ["a", "a"];
+    case "super": return { alleles: [["A", "A"]], probs: [1] };
+    case "visual": return { alleles: [["A", "a"]], probs: [1] };
+    case "possible_het": {
+      const hetChance = possHetPct / 100;
+      return { alleles: [["A", "a"], ["a", "a"]], probs: [hetChance, 1 - hetChance] };
+    }
+    case "none": return { alleles: [["a", "a"]], probs: [1] };
+    default: return { alleles: [["a", "a"]], probs: [1] };
   }
 }
 
