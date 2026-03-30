@@ -16,6 +16,8 @@ interface Tester {
   created_at: string;
   suspended?: boolean;
   inactiveDays?: number | null;
+  trialExpired?: boolean;
+  trialEndDate?: string | null;
 }
 
 interface Invitation {
