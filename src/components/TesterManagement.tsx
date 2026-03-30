@@ -587,7 +587,17 @@ const TesterManagement = () => {
                             {t("admin.testers.tester")}
                           </Badge>
                         )}
-                      </div>
+                        {!tester.suspended && (
+                          tester.trialExpired ? (
+                            <Badge variant="outline" className="text-xs shrink-0 border-muted-foreground/50 text-muted-foreground">
+                              Free
+                            </Badge>
+                          ) : (
+                            <Badge variant="outline" className="text-xs shrink-0 border-primary/50 text-primary">
+                              Premium
+                            </Badge>
+                          )
+                        )}
                       <div className="flex items-center gap-1 shrink-0">
                         {tester.suspended ? (
                           <Button variant="outline" size="sm" onClick={() => reactivateTester(tester.email)} title="Réactiver" className="h-8 px-2">
