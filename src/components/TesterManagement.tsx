@@ -106,6 +106,8 @@ const TesterManagement = () => {
           const diff = Math.floor((Date.now() - new Date(lastActivity).getTime()) / (1000 * 60 * 60 * 24));
           inactiveDays = diff;
         }
+        const trialEnd = trialEndMap.get(email) || null;
+        const trialExpired = trialEnd ? new Date(trialEnd) < new Date() : false;
         return {
           id: role.id,
           user_id: role.user_id,
@@ -113,6 +115,8 @@ const TesterManagement = () => {
           created_at: role.created_at,
           suspended: suspendedMap.get(email) || false,
           inactiveDays,
+          trialExpired,
+          trialEndDate: trialEnd,
         };
       });
 
