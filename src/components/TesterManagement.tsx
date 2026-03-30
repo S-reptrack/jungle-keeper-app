@@ -16,6 +16,8 @@ interface Tester {
   created_at: string;
   suspended?: boolean;
   inactiveDays?: number | null;
+  trialExpired?: boolean;
+  trialEndDate?: string | null;
 }
 
 interface Invitation {
@@ -70,18 +72,20 @@ const TesterManagement = () => {
         if (p.email) profileMap.set(p.user_id, p.email);
       });
 
-      // Récupérer le statut de suspension des invitations
+      // Récupérer le statut de suspension et trial_end_date des invitations
       const emails = (profiles || []).map(p => p.email).filter(Boolean) as string[];
       const { data: invitations } = emails.length > 0
         ? await supabase
             .from("tester_invitations")
-            .select("email, suspended")
+            .select("email, suspended, trial_end_date")
             .in("email", emails)
         : { data: [] };
 
       const suspendedMap = new Map<string, boolean>();
+      const trialEndMap = new Map<string, string | null>();
       (invitations || []).forEach(inv => {
         suspendedMap.set(inv.email, inv.suspended || false);
+        trialEndMap.set(inv.email, inv.trial_end_date);
       });
 
       // Récupérer la dernière activité via fonction SECURITY DEFINER (contourne RLS)
@@ -102,6 +106,8 @@ const TesterManagement = () => {
           const diff = Math.floor((Date.now() - new Date(lastActivity).getTime()) / (1000 * 60 * 60 * 24));
           inactiveDays = diff;
         }
+        const trialEnd = trialEndMap.get(email) || null;
+        const trialExpired = trialEnd ? new Date(trialEnd) < new Date() : false;
         return {
           id: role.id,
           user_id: role.user_id,
@@ -109,6 +115,8 @@ const TesterManagement = () => {
           created_at: role.created_at,
           suspended: suspendedMap.get(email) || false,
           inactiveDays,
+          trialExpired,
+          trialEndDate: trialEnd,
         };
       });
 
@@ -578,6 +586,17 @@ const TesterManagement = () => {
                           <Badge variant="secondary" className="text-xs shrink-0">
                             {t("admin.testers.tester")}
                           </Badge>
+                        )}
+                        {!tester.suspended && (
+                          tester.trialExpired ? (
+                            <Badge variant="outline" className="text-xs shrink-0 border-muted-foreground/50 text-muted-foreground">
+                              Free
+                            </Badge>
+                          ) : (
+                            <Badge variant="outline" className="text-xs shrink-0 border-primary/50 text-primary">
+                              Premium
+                            </Badge>
+                          )
                         )}
                       </div>
                       <div className="flex items-center gap-1 shrink-0">
