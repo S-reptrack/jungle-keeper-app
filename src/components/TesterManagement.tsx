@@ -72,18 +72,20 @@ const TesterManagement = () => {
         if (p.email) profileMap.set(p.user_id, p.email);
       });
 
-      // Récupérer le statut de suspension des invitations
+      // Récupérer le statut de suspension et trial_end_date des invitations
       const emails = (profiles || []).map(p => p.email).filter(Boolean) as string[];
       const { data: invitations } = emails.length > 0
         ? await supabase
             .from("tester_invitations")
-            .select("email, suspended")
+            .select("email, suspended, trial_end_date")
             .in("email", emails)
         : { data: [] };
 
       const suspendedMap = new Map<string, boolean>();
+      const trialEndMap = new Map<string, string | null>();
       (invitations || []).forEach(inv => {
         suspendedMap.set(inv.email, inv.suspended || false);
+        trialEndMap.set(inv.email, inv.trial_end_date);
       });
 
       // Récupérer la dernière activité via fonction SECURITY DEFINER (contourne RLS)
