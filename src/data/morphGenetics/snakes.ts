@@ -199,7 +199,7 @@ export const snakeGenetics: SpeciesGenetics[] = [
       // Dominant
       { name: "Tessera", inheritance: "dominant" },
       { name: "Masque", inheritance: "dominant" },
-      { name: "Scaleless", inheritance: "codominant", superForm: "Super Scaleless" },
+      { name: "Scaleless", inheritance: "recessive" },
     ],
   },
 
