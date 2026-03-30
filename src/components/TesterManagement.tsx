@@ -598,6 +598,7 @@ const TesterManagement = () => {
                             </Badge>
                           )
                         )}
+                      </div>
                       <div className="flex items-center gap-1 shrink-0">
                         {tester.suspended ? (
                           <Button variant="outline" size="sm" onClick={() => reactivateTester(tester.email)} title="Réactiver" className="h-8 px-2">
