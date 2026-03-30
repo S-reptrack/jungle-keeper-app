@@ -1,0 +1,1 @@
+UPDATE tester_invitations SET trial_end_date = '2026-03-01' WHERE trial_end_date = '2027-03-01';
