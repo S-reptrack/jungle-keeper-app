@@ -129,6 +129,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
         morphs: data.morphs || [],
         birth_date: birthDateStr,
         weight: data.weight,
+        status: isTestEntry ? "test" : "active",
         purchase_date: data.purchaseDate && !data.bornInCaptivity
           ? `${data.purchaseDate.getFullYear()}-${String(data.purchaseDate.getMonth() + 1).padStart(2, '0')}-${String(data.purchaseDate.getDate()).padStart(2, '0')}`
           : null,
