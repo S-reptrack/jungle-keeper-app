@@ -614,6 +614,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
               </div>
             )}
 
+            <FormField
               control={form.control}
               name="weight"
               render={({ field }) => (
