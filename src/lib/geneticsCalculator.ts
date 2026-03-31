@@ -407,10 +407,11 @@ function combineResults(results1: OffspringResult[], results2: OffspringResult[]
       const geneNames = allGenes
         .filter(g => g.status !== "none")
         .map(g => {
+          const isRecessive = g.inheritance === "recessive";
           if (g.status === "visual") return g.geneName;
           if (g.status === "super") return `Super ${g.geneName}`;
-          if (g.status === "het") return `Het ${g.geneName}`;
-          if (g.status === "possible_het") return `Poss. Het ${g.geneName}`;
+          if (g.status === "het") return isRecessive ? `Het ${g.geneName}` : g.geneName;
+          if (g.status === "possible_het") return isRecessive ? `Poss. Het ${g.geneName}` : `Poss. ${g.geneName}`;
           return "";
         })
         .filter(Boolean);
