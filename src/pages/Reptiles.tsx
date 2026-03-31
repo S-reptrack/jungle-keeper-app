@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Printer, QrCode, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useUserRole } from "@/hooks/useUserRole";
 
 const ITEMS_PER_PAGE = 10;
 
