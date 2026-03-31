@@ -20,6 +20,8 @@ interface ParentConfig {
   genes: ParentGene[];
   reptileId?: string;
   reptileName?: string;
+  reptileSex?: string | null;
+  reptileSpecies?: string;
 }
 
 const resolveReptileGenetics = (speciesIdOrName: string) => {
@@ -27,6 +29,12 @@ const resolveReptileGenetics = (speciesIdOrName: string) => {
   const speciesName = citesEntry?.scientificName || speciesIdOrName;
 
   return findSpeciesGenetics(speciesName);
+};
+
+const getOppositeSex = (sex?: string | null) => {
+  if (sex === "male") return "female";
+  if (sex === "female") return "male";
+  return null;
 };
 
 const MorphCalculator = () => {
@@ -65,6 +73,18 @@ const MorphCalculator = () => {
     return speciesData?.genes || [];
   }, [speciesData]);
 
+  const reptileOptions = useMemo(() => {
+    return (reptiles || []).map((reptile) => {
+      const genetics = resolveReptileGenetics(reptile.species);
+
+      return {
+        ...reptile,
+        genetics,
+        geneticsSpecies: genetics?.species ?? null,
+      };
+    });
+  }, [reptiles]);
+
   const handleSpeciesChange = (species: string) => {
     setSelectedSpecies(species);
     setParent1({ genes: [] });
@@ -76,6 +96,7 @@ const MorphCalculator = () => {
     if (!pickingParent) return;
 
     const genetics = resolveReptileGenetics(reptile.species);
+    if (!genetics) return;
     
     // If species differs from current, update it
     if (genetics && genetics.species !== selectedSpecies) {
@@ -100,7 +121,13 @@ const MorphCalculator = () => {
     }
 
     const setter = pickingParent === 1 ? setParent1 : setParent2;
-    setter({ genes: parentGenes, reptileId: reptile.id, reptileName: reptile.name });
+    setter({
+      genes: parentGenes,
+      reptileId: reptile.id,
+      reptileName: reptile.name,
+      reptileSex: reptile.sex,
+      reptileSpecies: genetics.species,
+    });
     setPickingParent(null);
     setSearchQuery("");
   };
@@ -207,14 +234,25 @@ const MorphCalculator = () => {
   }, []);
 
   const filteredReptiles = useMemo(() => {
-    if (!reptiles) return [];
-    const q = searchQuery.toLowerCase();
-    return reptiles.filter(r => 
-      r.name.toLowerCase().includes(q) || 
-      r.species.toLowerCase().includes(q) ||
-      (r.morphs || []).some(m => m.toLowerCase().includes(q))
-    );
-  }, [reptiles, searchQuery]);
+    const q = searchQuery.toLowerCase().trim();
+    const oppositeParent = pickingParent === 1 ? parent2 : parent1;
+    const requiredSpecies = oppositeParent.reptileSpecies || selectedSpecies || null;
+    const requiredSex = getOppositeSex(oppositeParent.reptileSex) || (pickingParent === 1 ? "male" : "female");
+
+    return reptileOptions.filter((reptile) => {
+      const matchesSearch = !q ||
+        reptile.name.toLowerCase().includes(q) ||
+        reptile.species.toLowerCase().includes(q) ||
+        (reptile.morphs || []).some((morph) => morph.toLowerCase().includes(q));
+
+      if (!matchesSearch || !reptile.genetics || !reptile.geneticsSpecies) return false;
+      if (requiredSpecies && reptile.geneticsSpecies !== requiredSpecies) return false;
+      if (requiredSex && reptile.sex !== requiredSex) return false;
+      if (oppositeParent.reptileId && reptile.id === oppositeParent.reptileId) return false;
+
+      return true;
+    });
+  }, [reptileOptions, searchQuery, pickingParent, parent1, parent2, selectedSpecies]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -408,16 +446,16 @@ const MorphCalculator = () => {
           </div>
           <div className="overflow-y-auto flex-1 space-y-1">
             {filteredReptiles.length === 0 && (
-              <p className="text-sm text-muted-foreground text-center py-8">Aucun reptile trouvé</p>
+              <p className="text-sm text-muted-foreground text-center py-8">
+                Aucun reptile compatible trouvé pour cette espèce et ce sexe
+              </p>
             )}
             {filteredReptiles.map((reptile) => {
-              const hasGenetics = !!resolveReptileGenetics(reptile.species);
               return (
                 <button
                   key={reptile.id}
                   onClick={() => handlePickReptile(reptile)}
-                  disabled={!hasGenetics}
-                  className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left"
                 >
                   {reptile.image_url ? (
                     <img src={reptile.image_url} alt={reptile.name} className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
@@ -442,9 +480,6 @@ const MorphCalculator = () => {
                   </div>
                   {reptile.sex && (
                     <span className="text-lg flex-shrink-0">{reptile.sex === "male" ? "♂" : reptile.sex === "female" ? "♀" : "?"}</span>
-                  )}
-                  {!hasGenetics && (
-                    <Badge variant="outline" className="text-[9px] text-destructive border-destructive/30 flex-shrink-0">Pas de données</Badge>
                   )}
                 </button>
               );
