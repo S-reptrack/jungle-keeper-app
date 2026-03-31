@@ -458,7 +458,6 @@ const ReptileDetail = () => {
                       createdAt={reptile.created_at}
                       onUpdate={fetchReptile}
                     />
-                    />
                     {subscribed && (
                       <Button
                         variant="outline"
