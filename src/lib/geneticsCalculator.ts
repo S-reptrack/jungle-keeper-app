@@ -25,7 +25,7 @@ export interface OffspringResult {
   genotype: string;
   percentage: number;
   description: string;
-  genes: { geneName: string; status: string }[];
+  genes: { geneName: string; status: string; inheritance?: string }[];
 }
 
 /**
@@ -104,27 +104,25 @@ function calculateRecessive(
       genotype: name,
       percentage: round(pVisual / total * 100),
       description: `${name} (visuel)`,
-      genes: [{ geneName: name, status: "visual" }],
+      genes: [{ geneName: name, status: "visual", inheritance: "recessive" }],
     });
   }
   if (pHet > 0.001) {
-    // Determine if het is 100% or possible het
     const hetTotal = pHet + pNormal;
     if (pNormal < 0.001) {
       results.push({
         genotype: `Het ${name}`,
         percentage: round(pHet / total * 100),
         description: `100% Het ${name}`,
-        genes: [{ geneName: name, status: "het" }],
+        genes: [{ geneName: name, status: "het", inheritance: "recessive" }],
       });
     } else {
-      // Some are het, some are normal -> "possible het"
       const possHetPct = round(pHet / hetTotal * 100);
       results.push({
         genotype: `Poss. Het ${name} (${possHetPct}%)`,
         percentage: round((pHet + pNormal) / total * 100),
         description: `${possHetPct}% Possible Het ${name}`,
-        genes: [{ geneName: name, status: "possible_het" }],
+        genes: [{ geneName: name, status: "possible_het", inheritance: "recessive" }],
       });
     }
   } else if (pNormal > 0.001 && pHet <= 0.001) {
@@ -132,7 +130,7 @@ function calculateRecessive(
       genotype: "Normal",
       percentage: round(pNormal / total * 100),
       description: "Normal (pas de gène)",
-      genes: [{ geneName: name, status: "none" }],
+      genes: [{ geneName: name, status: "none", inheritance: "recessive" }],
     });
   }
 
@@ -246,7 +244,7 @@ function calculateCodominant(
       genotype: superName,
       percentage: round(pSuper / total * 100),
       description: `${superName} (homozygote)`,
-      genes: [{ geneName: name, status: "super" }],
+      genes: [{ geneName: name, status: "super", inheritance: "codominant" }],
     });
   }
   if (pVisual > 0.001) {
@@ -254,7 +252,7 @@ function calculateCodominant(
       genotype: name,
       percentage: round(pVisual / total * 100),
       description: `${name} (visuel)`,
-      genes: [{ geneName: name, status: "visual" }],
+      genes: [{ geneName: name, status: "visual", inheritance: "codominant" }],
     });
   }
   if (pNormal > 0.001) {
@@ -262,7 +260,7 @@ function calculateCodominant(
       genotype: "Normal",
       percentage: round(pNormal / total * 100),
       description: "Normal (type sauvage)",
-      genes: [{ geneName: name, status: "none" }],
+      genes: [{ geneName: name, status: "none", inheritance: "codominant" }],
     });
   }
   return results;
@@ -315,7 +313,7 @@ function calculateDominant(
       genotype: name,
       percentage: round(pVisual / total * 100),
       description: `${name} (dominant)`,
-      genes: [{ geneName: name, status: "visual" }],
+      genes: [{ geneName: name, status: "visual", inheritance: "dominant" }],
     });
   }
   if (pNormal > 0.001) {
@@ -323,7 +321,7 @@ function calculateDominant(
       genotype: "Normal",
       percentage: round(pNormal / total * 100),
       description: "Normal",
-      genes: [{ geneName: name, status: "none" }],
+      genes: [{ geneName: name, status: "none", inheritance: "dominant" }],
     });
   }
   return results;
@@ -409,10 +407,11 @@ function combineResults(results1: OffspringResult[], results2: OffspringResult[]
       const geneNames = allGenes
         .filter(g => g.status !== "none")
         .map(g => {
+          const isRecessive = g.inheritance === "recessive";
           if (g.status === "visual") return g.geneName;
           if (g.status === "super") return `Super ${g.geneName}`;
-          if (g.status === "het") return `Het ${g.geneName}`;
-          if (g.status === "possible_het") return `Poss. Het ${g.geneName}`;
+          if (g.status === "het") return isRecessive ? `Het ${g.geneName}` : g.geneName;
+          if (g.status === "possible_het") return isRecessive ? `Poss. Het ${g.geneName}` : `Poss. ${g.geneName}`;
           return "";
         })
         .filter(Boolean);
