@@ -383,7 +383,12 @@ const ReptileDetail = () => {
                         À vendre
                       </Badge>
                     )}
-                    {reptile.status !== "active" && reptile.status !== "for_sale" && (
+                    {reptile.status === "test" && (
+                      <Badge variant="outline" className="border-amber-500 text-amber-500">
+                        🧪 Test
+                      </Badge>
+                    )}
+                    {reptile.status !== "active" && reptile.status !== "for_sale" && reptile.status !== "test" && (
                       <Badge variant="destructive">
                         {reptile.status === "deceased" ? "Décédé" : "Vendu"}
                         {reptile.status_date && ` - ${formatDate(reptile.status_date)}`}
