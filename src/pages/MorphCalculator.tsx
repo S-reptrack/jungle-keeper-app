@@ -22,6 +22,13 @@ interface ParentConfig {
   reptileName?: string;
 }
 
+const resolveReptileGenetics = (speciesIdOrName: string) => {
+  const citesEntry = getAllSpecies().find((species) => species.id === speciesIdOrName);
+  const speciesName = citesEntry?.scientificName || speciesIdOrName;
+
+  return findSpeciesGenetics(speciesName);
+};
+
 const MorphCalculator = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -68,10 +75,7 @@ const MorphCalculator = () => {
   const handlePickReptile = (reptile: { id: string; name: string; species: string; morphs: string[] | null; sex: string | null }) => {
     if (!pickingParent) return;
 
-    // Resolve species ID (e.g. "boa-imperator") to scientific name (e.g. "Boa imperator")
-    const citesEntry = getAllSpecies().find(s => s.id === reptile.species);
-    const speciesName = citesEntry?.scientificName || reptile.species;
-    const genetics = findSpeciesGenetics(speciesName);
+    const genetics = resolveReptileGenetics(reptile.species);
     
     // If species differs from current, update it
     if (genetics && genetics.species !== selectedSpecies) {
@@ -407,7 +411,7 @@ const MorphCalculator = () => {
               <p className="text-sm text-muted-foreground text-center py-8">Aucun reptile trouvé</p>
             )}
             {filteredReptiles.map((reptile) => {
-              const hasGenetics = !!findSpeciesGenetics(reptile.species);
+              const hasGenetics = !!resolveReptileGenetics(reptile.species);
               return (
                 <button
                   key={reptile.id}
