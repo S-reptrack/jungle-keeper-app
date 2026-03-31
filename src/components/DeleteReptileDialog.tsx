@@ -23,6 +23,7 @@ interface DeleteReptileDialogProps {
   reptileName: string;
   createdAt: string;
   onDelete?: () => void;
+  isAdmin?: boolean;
 }
 
 const DELETION_WINDOW_HOURS = 48;
@@ -32,18 +33,19 @@ const DeleteReptileDialog = ({
   reptileName,
   createdAt,
   onDelete,
+  isAdmin = false,
 }: DeleteReptileDialogProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // Calcul du temps restant pour la suppression
+  // Admins can always delete
   const createdDate = new Date(createdAt);
   const now = new Date();
   const hoursSinceCreation = differenceInHours(now, createdDate);
   const hoursRemaining = DELETION_WINDOW_HOURS - hoursSinceCreation;
-  const canDelete = hoursSinceCreation < DELETION_WINDOW_HOURS;
+  const canDelete = isAdmin || hoursSinceCreation < DELETION_WINDOW_HOURS;
 
   const handleDelete = async () => {
     if (!canDelete) {
