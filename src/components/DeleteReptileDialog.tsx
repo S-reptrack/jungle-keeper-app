@@ -135,12 +135,14 @@ const DeleteReptileDialog = ({
               <li>Photos</li>
               <li>Généalogie</li>
             </ul>
-            <div className="flex items-center gap-2 mt-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-md">
-              <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
-              <p className="text-sm text-amber-800 dark:text-amber-200">
-                <strong>Temps restant :</strong> {Math.floor(hoursRemaining)}h pour supprimer cette fiche
-              </p>
-            </div>
+            {!isAdmin && (
+              <div className="flex items-center gap-2 mt-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-md">
+                <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                <p className="text-sm text-amber-800 dark:text-amber-200">
+                  <strong>Temps restant :</strong> {Math.floor(hoursRemaining)}h pour supprimer cette fiche
+                </p>
+              </div>
+            )}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
