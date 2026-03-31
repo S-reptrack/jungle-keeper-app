@@ -313,7 +313,7 @@ function calculateDominant(
       genotype: name,
       percentage: round(pVisual / total * 100),
       description: `${name} (dominant)`,
-      genes: [{ geneName: name, status: "visual" }],
+      genes: [{ geneName: name, status: "visual", inheritance: "dominant" }],
     });
   }
   if (pNormal > 0.001) {
@@ -321,7 +321,7 @@ function calculateDominant(
       genotype: "Normal",
       percentage: round(pNormal / total * 100),
       description: "Normal",
-      genes: [{ geneName: name, status: "none" }],
+      genes: [{ geneName: name, status: "none", inheritance: "dominant" }],
     });
   }
   return results;
