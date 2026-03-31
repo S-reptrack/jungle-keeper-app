@@ -28,6 +28,7 @@ import { differenceInYears, differenceInMonths } from "date-fns";
 import { useSignedImageUrl } from "@/lib/storageUtils";
 import { useSubscription } from "@/hooks/useSubscription";
 import { fetchReptilePDFData, generateHealthPDF } from "@/lib/pdfHealthSheet";
+import { useUserRole } from "@/hooks/useUserRole";
 
 interface Reptile {
   id: string;
@@ -56,6 +57,7 @@ const ReptileDetail = () => {
   const [searchParams] = useSearchParams();
   const { t } = useTranslation();
   const { subscribed } = useSubscription();
+  const { role } = useUserRole();
   const [reptile, setReptile] = useState<Reptile | null>(null);
   const [loading, setLoading] = useState(true);
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
@@ -476,6 +478,7 @@ const ReptileDetail = () => {
                       reptileId={reptile.id}
                       reptileName={reptile.name}
                       createdAt={reptile.created_at}
+                      isAdmin={role === "admin"}
                     />
                   </div>
                 )}

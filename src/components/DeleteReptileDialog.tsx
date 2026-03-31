@@ -23,6 +23,7 @@ interface DeleteReptileDialogProps {
   reptileName: string;
   createdAt: string;
   onDelete?: () => void;
+  isAdmin?: boolean;
 }
 
 const DELETION_WINDOW_HOURS = 48;
@@ -32,21 +33,22 @@ const DeleteReptileDialog = ({
   reptileName,
   createdAt,
   onDelete,
+  isAdmin = false,
 }: DeleteReptileDialogProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // Calcul du temps restant pour la suppression
+  // Admins can always delete
   const createdDate = new Date(createdAt);
   const now = new Date();
   const hoursSinceCreation = differenceInHours(now, createdDate);
   const hoursRemaining = DELETION_WINDOW_HOURS - hoursSinceCreation;
-  const canDelete = hoursSinceCreation < DELETION_WINDOW_HOURS;
+  const canDelete = isAdmin || hoursSinceCreation < DELETION_WINDOW_HOURS;
 
   const handleDelete = async () => {
-    if (!canDelete) {
+    if (!canDelete && !isAdmin) {
       toast.error("Le délai de suppression de 48h est dépassé");
       return;
     }
@@ -133,12 +135,14 @@ const DeleteReptileDialog = ({
               <li>Photos</li>
               <li>Généalogie</li>
             </ul>
-            <div className="flex items-center gap-2 mt-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-md">
-              <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
-              <p className="text-sm text-amber-800 dark:text-amber-200">
-                <strong>Temps restant :</strong> {Math.floor(hoursRemaining)}h pour supprimer cette fiche
-              </p>
-            </div>
+            {!isAdmin && (
+              <div className="flex items-center gap-2 mt-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-md">
+                <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                <p className="text-sm text-amber-800 dark:text-amber-200">
+                  <strong>Temps restant :</strong> {Math.floor(hoursRemaining)}h pour supprimer cette fiche
+                </p>
+              </div>
+            )}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
