@@ -266,7 +266,7 @@ const MorphCalculator = () => {
         return [
           { value: "super", label: gene.superForm || `Super ${gene.name}` },
           { value: "visual", label: `${gene.name} (visuel)` },
-          { value: "possible_het", label: `Poss. Het ${gene.name}` },
+          { value: "possible_het", label: `Poss. ${gene.name}` },
           { value: "none", label: "Aucun" },
         ];
       case "dominant":
