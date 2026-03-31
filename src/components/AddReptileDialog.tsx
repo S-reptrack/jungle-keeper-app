@@ -80,6 +80,8 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
   const [speciesPopoverOpen, setSpeciesPopoverOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showLimitDialog, setShowLimitDialog] = useState(false);
+  const [isTestEntry, setIsTestEntry] = useState(false);
+  const { role } = useUserRole();
 
   const { subscribed } = useSubscription();
   const { count, canAddReptile, FREE_TIER_LIMIT, refreshCount } = useReptileCount();
