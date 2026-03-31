@@ -478,6 +478,7 @@ const ReptileDetail = () => {
                       reptileId={reptile.id}
                       reptileName={reptile.name}
                       createdAt={reptile.created_at}
+                      isAdmin={role === "admin"}
                     />
                   </div>
                 )}
