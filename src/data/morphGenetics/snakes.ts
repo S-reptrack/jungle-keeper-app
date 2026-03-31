@@ -304,6 +304,24 @@ export const snakeGenetics: SpeciesGenetics[] = [
     ],
   },
 
+  // ========== PITUOPHIS (Bullsnakes / Gopher snakes / Pine snakes) ==========
+  {
+    species: "Pituophis",
+    commonName: "Pituophis",
+    category: "snake",
+    genes: [
+      { name: "Albino", inheritance: "recessive" },
+      { name: "Anery", inheritance: "recessive" },
+      { name: "Axanthic", inheritance: "recessive" },
+      { name: "Hypo", inheritance: "recessive" },
+      { name: "Leucistic", inheritance: "recessive" },
+      { name: "Melanistic", inheritance: "recessive" },
+      { name: "Patternless", inheritance: "recessive" },
+      { name: "Snow", inheritance: "recessive" },
+      { name: "Striped", inheritance: "recessive" },
+    ],
+  },
+
   // ========== PYTHON RETICULATUS ==========
   {
     species: "Python reticulatus",
