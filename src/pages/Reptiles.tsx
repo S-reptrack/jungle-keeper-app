@@ -379,7 +379,7 @@ const Reptiles = () => {
           <div className="text-center py-12">Chargement...</div>
         ) : (
           <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-            <TabsList className="mb-6 w-full grid grid-cols-3">
+            <TabsList className={`mb-6 w-full grid ${role === "admin" && testReptiles.length > 0 ? "grid-cols-4" : "grid-cols-3"}`}>
               <TabsTrigger value="active" className="gap-2">
                 Actifs
                 <Badge variant="secondary">{reptiles.length}</Badge>
@@ -392,6 +392,12 @@ const Reptiles = () => {
                 Transférés
                 <Badge variant="secondary">{transferredReptiles.length}</Badge>
               </TabsTrigger>
+              {role === "admin" && testReptiles.length > 0 && (
+                <TabsTrigger value="test" className="gap-2">
+                  🧪 Test
+                  <Badge variant="secondary">{testReptiles.length}</Badge>
+                </TabsTrigger>
+              )}
             </TabsList>
 
             <TabsContent value="active">
