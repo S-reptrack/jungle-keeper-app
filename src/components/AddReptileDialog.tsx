@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useUserRole } from "@/hooks/useUserRole";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -79,6 +80,8 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
   const [speciesPopoverOpen, setSpeciesPopoverOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showLimitDialog, setShowLimitDialog] = useState(false);
+  const [isTestEntry, setIsTestEntry] = useState(false);
+  const { role } = useUserRole();
 
   const { subscribed } = useSubscription();
   const { count, canAddReptile, FREE_TIER_LIMIT, refreshCount } = useReptileCount();
@@ -126,6 +129,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
         morphs: data.morphs || [],
         birth_date: birthDateStr,
         weight: data.weight,
+        status: isTestEntry ? "test" : "active",
         purchase_date: data.purchaseDate && !data.bornInCaptivity
           ? `${data.purchaseDate.getFullYear()}-${String(data.purchaseDate.getMonth() + 1).padStart(2, '0')}-${String(data.purchaseDate.getDate()).padStart(2, '0')}`
           : null,
@@ -596,6 +600,19 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                 </FormItem>
               )}
             />
+
+            {role === "admin" && (
+              <div className="flex flex-row items-center space-x-3 space-y-0">
+                <Checkbox
+                  id="isTestEntry"
+                  checked={isTestEntry}
+                  onCheckedChange={(checked) => setIsTestEntry(!!checked)}
+                />
+                <label htmlFor="isTestEntry" className="text-sm font-normal cursor-pointer text-muted-foreground">
+                  🧪 Fiche de test (sera séparée des vrais animaux)
+                </label>
+              </div>
+            )}
 
             <FormField
               control={form.control}

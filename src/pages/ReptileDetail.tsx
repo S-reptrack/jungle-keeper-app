@@ -322,7 +322,7 @@ const ReptileDetail = () => {
                     </Badge>
                   </div>
                 )}
-                {(reptile.status === "active" || reptile.status === "for_sale") && (
+                {(reptile.status === "active" || reptile.status === "for_sale" || reptile.status === "test") && (
                   <>
                     <div className="absolute top-3 right-3 flex gap-2">
                       {reptile.image_url && (
@@ -383,7 +383,12 @@ const ReptileDetail = () => {
                         À vendre
                       </Badge>
                     )}
-                    {reptile.status !== "active" && reptile.status !== "for_sale" && (
+                    {reptile.status === "test" && (
+                      <Badge variant="outline" className="border-amber-500 text-amber-500">
+                        🧪 Test
+                      </Badge>
+                    )}
+                    {reptile.status !== "active" && reptile.status !== "for_sale" && reptile.status !== "test" && (
                       <Badge variant="destructive">
                         {reptile.status === "deceased" ? "Décédé" : "Vendu"}
                         {reptile.status_date && ` - ${formatDate(reptile.status_date)}`}
@@ -445,7 +450,7 @@ const ReptileDetail = () => {
                     />
                   </div>
                 )}
-                {isCurrentOwner && (reptile.status === "active" || reptile.status === "for_sale") && (
+                {isCurrentOwner && (reptile.status === "active" || reptile.status === "for_sale" || reptile.status === "test") && (
                   <div className="mt-4 flex flex-col gap-2">
                     <EditReptileDialog
                       reptileId={reptile.id}
@@ -500,7 +505,7 @@ const ReptileDetail = () => {
 
           {/* Contenu principal avec onglets */}
           <div className="lg:col-span-2">
-            {(reptile.status === "active" || reptile.status === "for_sale") ? (
+            {(reptile.status === "active" || reptile.status === "for_sale" || reptile.status === "test") ? (
               <Tabs defaultValue={defaultTab} className="w-full">
                 <TabsList className="grid w-full grid-cols-8">
                   <TabsTrigger value="overview" className="flex items-center justify-center gap-1 px-1">

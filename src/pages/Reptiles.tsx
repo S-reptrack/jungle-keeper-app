@@ -15,17 +15,20 @@ import { Button } from "@/components/ui/button";
 import { Printer, QrCode, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useUserRole } from "@/hooks/useUserRole";
 
 const ITEMS_PER_PAGE = 10;
 
 const Reptiles = () => {
   const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
+  const { role } = useUserRole();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [reptiles, setReptiles] = useState<any[]>([]);
   const [archivedReptiles, setArchivedReptiles] = useState<any[]>([]);
   const [transferredReptiles, setTransferredReptiles] = useState<any[]>([]);
+  const [testReptiles, setTestReptiles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastFeedings, setLastFeedings] = useState<Record<string, string>>({});
   const [showPrintDialog, setShowPrintDialog] = useState(false);
@@ -117,7 +120,7 @@ const Reptiles = () => {
       if (!user) return;
 
       // Fetch all reptile categories in parallel
-      const [activeResult, archivedResult, transferredResult] = await Promise.all([
+      const [activeResult, archivedResult, transferredResult, testResult] = await Promise.all([
         supabase
           .from("reptiles")
           .select("*")
@@ -134,7 +137,13 @@ const Reptiles = () => {
           .from("reptiles")
           .select("*")
           .eq("previous_owner_id", user.id)
-          .order("transferred_at", { ascending: false })
+          .order("transferred_at", { ascending: false }),
+        supabase
+          .from("reptiles")
+          .select("*")
+          .eq("status", "test")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
       ]);
 
       if (activeResult.error) throw activeResult.error;
@@ -144,12 +153,14 @@ const Reptiles = () => {
       const reptileData = activeResult.data || [];
       const archivedData = archivedResult.data || [];
       const transferredData = transferredResult.data || [];
+      const testData = testResult.data || [];
 
       setReptiles(reptileData);
       setArchivedReptiles(archivedData);
       setTransferredReptiles(transferredData);
+      setTestReptiles(testData);
 
-      const allReptiles = [...reptileData, ...archivedData, ...transferredData];
+      const allReptiles = [...reptileData, ...archivedData, ...transferredData, ...testData];
       const reptileIds = allReptiles.map(r => r.id);
       const femaleReptileIds = allReptiles.filter(r => r.sex === "female").map(r => r.id);
 
@@ -368,7 +379,7 @@ const Reptiles = () => {
           <div className="text-center py-12">Chargement...</div>
         ) : (
           <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-            <TabsList className="mb-6 w-full grid grid-cols-3">
+            <TabsList className={`mb-6 w-full grid ${role === "admin" && testReptiles.length > 0 ? "grid-cols-4" : "grid-cols-3"}`}>
               <TabsTrigger value="active" className="gap-2">
                 Actifs
                 <Badge variant="secondary">{reptiles.length}</Badge>
@@ -381,6 +392,12 @@ const Reptiles = () => {
                 Transférés
                 <Badge variant="secondary">{transferredReptiles.length}</Badge>
               </TabsTrigger>
+              {role === "admin" && testReptiles.length > 0 && (
+                <TabsTrigger value="test" className="gap-2">
+                  🧪 Test
+                  <Badge variant="secondary">{testReptiles.length}</Badge>
+                </TabsTrigger>
+              )}
             </TabsList>
 
             <TabsContent value="active">
@@ -592,6 +609,54 @@ const Reptiles = () => {
                 </>
               )}
             </TabsContent>
+
+            {role === "admin" && testReptiles.length > 0 && (
+              <TabsContent value="test">
+                <div className="space-y-8">
+                  {groupBySpecies(sortBySpeciesAndName(testReptiles)).map(([species, speciesReptiles]) => (
+                    <div key={species}>
+                      <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
+                      {viewMode === "grid" ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {speciesReptiles.map((reptile) => (
+                            <ReptileCard
+                              key={reptile.id}
+                              id={reptile.id}
+                              name={`🧪 ${reptile.name}`}
+                              species={reptile.species}
+                              age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                              weight={`${reptile.weight || 0}g`}
+                              lastFed={lastFeedings[reptile.id] || "Jamais"}
+                              image={reptile.image_url}
+                              sex={reptile.sex}
+                              status={reptile.status}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          {speciesReptiles.map((reptile) => (
+                            <ReptileListItem
+                              key={reptile.id}
+                              id={reptile.id}
+                              name={`🧪 ${reptile.name}`}
+                              species={reptile.species}
+                              age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                              weight={`${reptile.weight || 0}g`}
+                              lastFed={lastFeedings[reptile.id] || "Jamais"}
+                              image={reptile.image_url}
+                              showImage={!isMobile}
+                              sex={reptile.sex}
+                              status={reptile.status}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </TabsContent>
+            )}
           </Tabs>
         )}
 
