@@ -322,7 +322,7 @@ const ReptileDetail = () => {
                     </Badge>
                   </div>
                 )}
-                {(reptile.status === "active" || reptile.status === "for_sale") && (
+                {(reptile.status === "active" || reptile.status === "for_sale" || reptile.status === "test") && (
                   <>
                     <div className="absolute top-3 right-3 flex gap-2">
                       {reptile.image_url && (
