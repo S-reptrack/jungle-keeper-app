@@ -57,6 +57,7 @@ const ReptileDetail = () => {
   const [searchParams] = useSearchParams();
   const { t } = useTranslation();
   const { subscribed } = useSubscription();
+  const { role } = useUserRole();
   const [reptile, setReptile] = useState<Reptile | null>(null);
   const [loading, setLoading] = useState(true);
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
