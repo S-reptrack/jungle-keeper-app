@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useSignedImageUrl } from "@/lib/storageUtils";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
