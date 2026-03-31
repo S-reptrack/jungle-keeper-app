@@ -601,7 +601,19 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
               )}
             />
 
-            <FormField
+            {role === "admin" && (
+              <div className="flex flex-row items-center space-x-3 space-y-0">
+                <Checkbox
+                  id="isTestEntry"
+                  checked={isTestEntry}
+                  onCheckedChange={(checked) => setIsTestEntry(!!checked)}
+                />
+                <label htmlFor="isTestEntry" className="text-sm font-normal cursor-pointer text-muted-foreground">
+                  🧪 Fiche de test (sera séparée des vrais animaux)
+                </label>
+              </div>
+            )}
+
               control={form.control}
               name="weight"
               render={({ field }) => (
