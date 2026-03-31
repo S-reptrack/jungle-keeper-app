@@ -458,10 +458,10 @@ const MorphCalculator = () => {
                   className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left"
                 >
                   {reptile.image_url ? (
-                    <img src={reptile.image_url} alt={reptile.name} className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
+                    <img src={reptile.image_url} alt={reptile.name} className="w-14 h-14 rounded-xl object-cover flex-shrink-0" />
                   ) : (
-                    <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
-                      <Dna className="w-4 h-4 text-muted-foreground" />
+                    <div className="w-14 h-14 rounded-xl bg-muted flex items-center justify-center flex-shrink-0">
+                      <Dna className="w-5 h-5 text-muted-foreground" />
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
