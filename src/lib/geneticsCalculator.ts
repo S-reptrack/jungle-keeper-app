@@ -25,7 +25,7 @@ export interface OffspringResult {
   genotype: string;
   percentage: number;
   description: string;
-  genes: { geneName: string; status: string }[];
+  genes: { geneName: string; status: string; inheritance?: string }[];
 }
 
 /**
