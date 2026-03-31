@@ -609,6 +609,56 @@ const Reptiles = () => {
                 </>
               )}
             </TabsContent>
+
+            {role === "admin" && testReptiles.length > 0 && (
+              <TabsContent value="test">
+                <div className="space-y-8">
+                  {groupBySpecies(sortBySpeciesAndName(testReptiles)).map(([species, speciesReptiles]) => (
+                    <div key={species}>
+                      <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
+                      {viewMode === "grid" ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {speciesReptiles.map((reptile) => (
+                            <ReptileCard
+                              key={reptile.id}
+                              id={reptile.id}
+                              name={`🧪 ${reptile.name}`}
+                              species={reptile.species}
+                              age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                              weight={`${reptile.weight || 0}g`}
+                              lastFed={lastFeedings[reptile.id] || "Jamais"}
+                              image={reptile.image_url}
+                              sex={reptile.sex}
+                              morphs={reptile.morphs}
+                              status={reptile.status}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          {speciesReptiles.map((reptile) => (
+                            <ReptileListItem
+                              key={reptile.id}
+                              id={reptile.id}
+                              name={`🧪 ${reptile.name}`}
+                              species={reptile.species}
+                              age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                              weight={`${reptile.weight || 0}g`}
+                              lastFed={lastFeedings[reptile.id] || "Jamais"}
+                              image={reptile.image_url}
+                              showImage={!isMobile}
+                              sex={reptile.sex}
+                              morphs={reptile.morphs}
+                              status={reptile.status}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </TabsContent>
+            )}
           </Tabs>
         )}
 
