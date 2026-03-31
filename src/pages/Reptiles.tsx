@@ -22,11 +22,13 @@ const ITEMS_PER_PAGE = 10;
 const Reptiles = () => {
   const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
+  const { role } = useUserRole();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [reptiles, setReptiles] = useState<any[]>([]);
   const [archivedReptiles, setArchivedReptiles] = useState<any[]>([]);
   const [transferredReptiles, setTransferredReptiles] = useState<any[]>([]);
+  const [testReptiles, setTestReptiles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastFeedings, setLastFeedings] = useState<Record<string, string>>({});
   const [showPrintDialog, setShowPrintDialog] = useState(false);
