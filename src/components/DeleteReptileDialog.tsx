@@ -48,7 +48,7 @@ const DeleteReptileDialog = ({
   const canDelete = isAdmin || hoursSinceCreation < DELETION_WINDOW_HOURS;
 
   const handleDelete = async () => {
-    if (!canDelete) {
+    if (!canDelete && !isAdmin) {
       toast.error("Le délai de suppression de 48h est dépassé");
       return;
     }
