@@ -450,7 +450,7 @@ const ReptileDetail = () => {
                     />
                   </div>
                 )}
-                {isCurrentOwner && (reptile.status === "active" || reptile.status === "for_sale") && (
+                {isCurrentOwner && (reptile.status === "active" || reptile.status === "for_sale" || reptile.status === "test") && (
                   <div className="mt-4 flex flex-col gap-2">
                     <EditReptileDialog
                       reptileId={reptile.id}
