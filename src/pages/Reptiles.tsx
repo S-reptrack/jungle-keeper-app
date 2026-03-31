@@ -647,7 +647,6 @@ const Reptiles = () => {
                               image={reptile.image_url}
                               showImage={!isMobile}
                               sex={reptile.sex}
-                              morphs={reptile.morphs}
                               status={reptile.status}
                             />
                           ))}
