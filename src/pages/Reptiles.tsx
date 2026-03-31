@@ -120,7 +120,7 @@ const Reptiles = () => {
       if (!user) return;
 
       // Fetch all reptile categories in parallel
-      const [activeResult, archivedResult, transferredResult] = await Promise.all([
+      const [activeResult, archivedResult, transferredResult, testResult] = await Promise.all([
         supabase
           .from("reptiles")
           .select("*")
@@ -137,7 +137,13 @@ const Reptiles = () => {
           .from("reptiles")
           .select("*")
           .eq("previous_owner_id", user.id)
-          .order("transferred_at", { ascending: false })
+          .order("transferred_at", { ascending: false }),
+        supabase
+          .from("reptiles")
+          .select("*")
+          .eq("status", "test")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
       ]);
 
       if (activeResult.error) throw activeResult.error;
@@ -147,12 +153,14 @@ const Reptiles = () => {
       const reptileData = activeResult.data || [];
       const archivedData = archivedResult.data || [];
       const transferredData = transferredResult.data || [];
+      const testData = testResult.data || [];
 
       setReptiles(reptileData);
       setArchivedReptiles(archivedData);
       setTransferredReptiles(transferredData);
+      setTestReptiles(testData);
 
-      const allReptiles = [...reptileData, ...archivedData, ...transferredData];
+      const allReptiles = [...reptileData, ...archivedData, ...transferredData, ...testData];
       const reptileIds = allReptiles.map(r => r.id);
       const femaleReptileIds = allReptiles.filter(r => r.sex === "female").map(r => r.id);
 
