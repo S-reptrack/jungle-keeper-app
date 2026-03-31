@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, Dna, Plus, X, Baby, FlaskConical, Info, Search } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 import { speciesGenetics, MorphGene, findSpeciesGenetics } from "@/data/morphGenetics";
 import { AlleleStatus, ParentGene, calculateMultiGeneCross, OffspringResult } from "@/lib/geneticsCalculator";
 import { getAllSpecies } from "@/data/citesSpecies";
@@ -96,6 +97,13 @@ const MorphCalculator = () => {
       (nextParent1.genes.length > 0 || nextParent2.genes.length > 0 ? selectedSpecies : "");
 
     setSelectedSpecies(nextSpecies);
+    setResults(null);
+  };
+
+  const resetAll = () => {
+    setSelectedSpecies("");
+    setParent1(createEmptyParent());
+    setParent2(createEmptyParent());
     setResults(null);
   };
 
@@ -298,6 +306,12 @@ const MorphCalculator = () => {
               <p className="text-sm text-muted-foreground">Prédiction des morphs pour vos reproductions</p>
             </div>
           </div>
+          {(selectedSpecies || parent1.genes.length > 0 || parent2.genes.length > 0 || results) && (
+            <Button variant="outline" size="sm" onClick={resetAll} className="gap-2 mt-2">
+              <RotateCcw className="w-4 h-4" />
+              Réinitialiser
+            </Button>
+          )}
         </div>
 
         {/* Species Selection */}
