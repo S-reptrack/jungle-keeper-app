@@ -28,6 +28,7 @@ import { differenceInYears, differenceInMonths } from "date-fns";
 import { useSignedImageUrl } from "@/lib/storageUtils";
 import { useSubscription } from "@/hooks/useSubscription";
 import { fetchReptilePDFData, generateHealthPDF } from "@/lib/pdfHealthSheet";
+import { useUserRole } from "@/hooks/useUserRole";
 
 interface Reptile {
   id: string;
