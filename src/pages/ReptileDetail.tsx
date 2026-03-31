@@ -454,8 +454,10 @@ const ReptileDetail = () => {
                       currentPurchaseDate={reptile.purchase_date}
                       currentWeight={reptile.weight}
                       currentSex={reptile.sex as "male" | "female" | "unknown"}
+                      currentMorphs={reptile.morphs || []}
                       createdAt={reptile.created_at}
                       onUpdate={fetchReptile}
+                    />
                     />
                     {subscribed && (
                       <Button
