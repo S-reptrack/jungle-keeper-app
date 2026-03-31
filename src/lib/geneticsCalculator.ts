@@ -104,27 +104,25 @@ function calculateRecessive(
       genotype: name,
       percentage: round(pVisual / total * 100),
       description: `${name} (visuel)`,
-      genes: [{ geneName: name, status: "visual" }],
+      genes: [{ geneName: name, status: "visual", inheritance: "recessive" }],
     });
   }
   if (pHet > 0.001) {
-    // Determine if het is 100% or possible het
     const hetTotal = pHet + pNormal;
     if (pNormal < 0.001) {
       results.push({
         genotype: `Het ${name}`,
         percentage: round(pHet / total * 100),
         description: `100% Het ${name}`,
-        genes: [{ geneName: name, status: "het" }],
+        genes: [{ geneName: name, status: "het", inheritance: "recessive" }],
       });
     } else {
-      // Some are het, some are normal -> "possible het"
       const possHetPct = round(pHet / hetTotal * 100);
       results.push({
         genotype: `Poss. Het ${name} (${possHetPct}%)`,
         percentage: round((pHet + pNormal) / total * 100),
         description: `${possHetPct}% Possible Het ${name}`,
-        genes: [{ geneName: name, status: "possible_het" }],
+        genes: [{ geneName: name, status: "possible_het", inheritance: "recessive" }],
       });
     }
   } else if (pNormal > 0.001 && pHet <= 0.001) {
@@ -132,7 +130,7 @@ function calculateRecessive(
       genotype: "Normal",
       percentage: round(pNormal / total * 100),
       description: "Normal (pas de gène)",
-      genes: [{ geneName: name, status: "none" }],
+      genes: [{ geneName: name, status: "none", inheritance: "recessive" }],
     });
   }
 
