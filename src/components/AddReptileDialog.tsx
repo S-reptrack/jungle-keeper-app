@@ -166,11 +166,9 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
 
   const filteredSpecies = getSpeciesByAnnex(selectedAnnex, selectedCategory || undefined);
 
-  const selectedSpeciesData = getAllSpecies().find(
-    (s) => s.id === form.watch("species")
-  );
+  const currentSpeciesId = form.watch("species");
   
-  const availableMorphs = selectedSpeciesData?.morphs?.slice().sort((a, b) => a.localeCompare(b)) || [];
+  const availableMorphs = getMorphsForSpecies(currentSpeciesId);
   const [selectedMorphs, setSelectedMorphs] = useState<string[]>([]);
   const [birthDateInput, setBirthDateInput] = useState("");
   const [purchaseDateInput, setPurchaseDateInput] = useState("");
