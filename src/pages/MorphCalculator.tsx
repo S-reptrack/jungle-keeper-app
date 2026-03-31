@@ -24,6 +24,8 @@ interface ParentConfig {
   reptileSpecies?: string;
 }
 
+const createEmptyParent = (): ParentConfig => ({ genes: [] });
+
 const resolveReptileGenetics = (speciesIdOrName: string) => {
   const citesEntry = getAllSpecies().find((species) => species.id === speciesIdOrName);
   const speciesName = citesEntry?.scientificName || speciesIdOrName;
@@ -85,11 +87,30 @@ const MorphCalculator = () => {
     });
   }, [reptiles]);
 
+  const syncAfterParentChange = (nextParent1: ParentConfig, nextParent2: ParentConfig) => {
+    setParent1(nextParent1);
+    setParent2(nextParent2);
+
+    const nextSpecies = nextParent1.reptileSpecies ||
+      nextParent2.reptileSpecies ||
+      (nextParent1.genes.length > 0 || nextParent2.genes.length > 0 ? selectedSpecies : "");
+
+    setSelectedSpecies(nextSpecies);
+    setResults(null);
+  };
+
   const handleSpeciesChange = (species: string) => {
     setSelectedSpecies(species);
-    setParent1({ genes: [] });
-    setParent2({ genes: [] });
+    setParent1(createEmptyParent());
+    setParent2(createEmptyParent());
     setResults(null);
+  };
+
+  const clearParent = (parentNum: 1 | 2) => {
+    const nextParent1 = parentNum === 1 ? createEmptyParent() : parent1;
+    const nextParent2 = parentNum === 2 ? createEmptyParent() : parent2;
+
+    syncAfterParentChange(nextParent1, nextParent2);
   };
 
   const handlePickReptile = (reptile: { id: string; name: string; species: string; morphs: string[] | null; sex: string | null }) => {
@@ -102,8 +123,8 @@ const MorphCalculator = () => {
     if (genetics && genetics.species !== selectedSpecies) {
       setSelectedSpecies(genetics.species);
       // Reset the other parent if species changed
-      if (pickingParent === 1) setParent2({ genes: [] });
-      else setParent1({ genes: [] });
+      if (pickingParent === 1) setParent2(createEmptyParent());
+      else setParent1(createEmptyParent());
       setResults(null);
     }
 
@@ -164,11 +185,15 @@ const MorphCalculator = () => {
   };
 
   const removeGene = (parentNum: 1 | 2, geneName: string) => {
-    const setter = parentNum === 1 ? setParent1 : setParent2;
-    setter(prev => ({
-      ...prev,
-      genes: prev.genes.filter(g => g.gene.name !== geneName)
-    }));
+    const updatedParent = {
+      ...(parentNum === 1 ? parent1 : parent2),
+      genes: (parentNum === 1 ? parent1 : parent2).genes.filter(g => g.gene.name !== geneName)
+    };
+
+    const nextParent1 = parentNum === 1 ? updatedParent : parent1;
+    const nextParent2 = parentNum === 2 ? updatedParent : parent2;
+
+    syncAfterParentChange(nextParent1, nextParent2);
   };
 
   const calculate = () => {
@@ -323,6 +348,7 @@ const MorphCalculator = () => {
                 getStatusOptions={getStatusOptions}
                 getInheritanceBadge={getInheritanceBadge}
                 onPickReptile={() => setPickingParent(1)}
+                onClearParent={() => clearParent(1)}
                 hasReptiles={!!reptiles && reptiles.length > 0}
               />
               <ParentCard
@@ -337,6 +363,7 @@ const MorphCalculator = () => {
                 getStatusOptions={getStatusOptions}
                 getInheritanceBadge={getInheritanceBadge}
                 onPickReptile={() => setPickingParent(2)}
+                onClearParent={() => clearParent(2)}
                 hasReptiles={!!reptiles && reptiles.length > 0}
               />
             </div>
@@ -504,17 +531,19 @@ interface ParentCardProps {
   getStatusOptions: (gene: MorphGene) => { value: AlleleStatus; label: string }[];
   getInheritanceBadge: (inheritance: string) => React.ReactNode;
   onPickReptile: () => void;
+  onClearParent: () => void;
   hasReptiles: boolean;
 }
 
 const ParentCard = ({
   title, parent, parentNum, availableGenes,
   onAddGene, onUpdateStatus, onUpdatePossHetPct, onRemoveGene,
-  getStatusOptions, getInheritanceBadge, onPickReptile, hasReptiles
+  getStatusOptions, getInheritanceBadge, onPickReptile, onClearParent, hasReptiles
 }: ParentCardProps) => {
   const unusedGenes = availableGenes.filter(
     g => !parent.genes.find(pg => pg.gene.name === g.name)
   );
+  const hasParentData = Boolean(parent.reptileId) || parent.genes.length > 0;
 
   return (
     <Card className="border-border/50">
@@ -526,12 +555,19 @@ const ParentCard = ({
               {parent.genes.length} gène{parent.genes.length > 1 ? 's' : ''}
             </Badge>
           </CardTitle>
-          {hasReptiles && (
-            <Button variant="ghost" size="sm" onClick={onPickReptile} className="text-xs h-7 gap-1 text-primary">
-              <Search className="w-3 h-3" />
-              Mes reptiles
-            </Button>
-          )}
+          <div className="flex items-center gap-1">
+            {hasParentData && (
+              <Button variant="ghost" size="icon" onClick={onClearParent} className="h-7 w-7 text-muted-foreground hover:text-foreground">
+                <X className="w-3.5 h-3.5" />
+              </Button>
+            )}
+            {hasReptiles && (
+              <Button variant="ghost" size="sm" onClick={onPickReptile} className="text-xs h-7 gap-1 text-primary">
+                <Search className="w-3 h-3" />
+                Mes reptiles
+              </Button>
+            )}
+          </div>
         </div>
         {parent.reptileName && (
           <div className="flex items-center gap-1.5 mt-1">
