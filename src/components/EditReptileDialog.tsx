@@ -41,6 +41,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { getAllSpecies, getSpeciesByAnnex } from "@/data/citesSpecies";
+import { getMorphsForSpecies } from "@/lib/morphUtils";
 
 const formSchema = z.object({
   name: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
@@ -51,6 +52,7 @@ const formSchema = z.object({
   sex: z.enum(["male", "female", "unknown"], {
     required_error: "Le sexe est requis",
   }),
+  morphs: z.array(z.string()).optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -64,6 +66,7 @@ interface EditReptileDialogProps {
   currentPurchaseDate?: string;
   currentWeight?: number;
   currentSex: "male" | "female" | "unknown";
+  currentMorphs?: string[];
   createdAt: string;
   onUpdate?: () => void;
 }
@@ -77,6 +80,7 @@ const EditReptileDialog = ({
   currentPurchaseDate,
   currentWeight,
   currentSex,
+  currentMorphs,
   createdAt,
   onUpdate 
 }: EditReptileDialogProps) => {
@@ -85,6 +89,9 @@ const EditReptileDialog = ({
   const [birthDateInput, setBirthDateInput] = useState("");
   const [purchaseDateInput, setPurchaseDateInput] = useState("");
   const [selectedAnnex, setSelectedAnnex] = useState<'A' | 'B' | 'C' | 'D'>('B');
+  const [selectedMorphs, setSelectedMorphs] = useState<string[]>(currentMorphs || []);
+  const [morphSearch, setMorphSearch] = useState("");
+  const [newMorph, setNewMorph] = useState("");
   
   const canEditName = true;
 
@@ -103,6 +110,7 @@ const EditReptileDialog = ({
       purchaseDate: parseDateSafe(currentPurchaseDate),
       weight: currentWeight || 0,
       sex: currentSex,
+      morphs: currentMorphs || [],
     },
   });
 
@@ -134,6 +142,18 @@ const EditReptileDialog = ({
   };
 
   const filteredSpecies = getSpeciesByAnnex(selectedAnnex, currentCategory);
+  
+  const currentSpeciesId = form.watch("species");
+  const availableMorphs = getMorphsForSpecies(currentSpeciesId);
+
+  // Reset morphs when species changes
+  useEffect(() => {
+    if (currentSpeciesId !== currentSpecies) {
+      setSelectedMorphs([]);
+      setMorphSearch("");
+      form.setValue("morphs", []);
+    }
+  }, [currentSpeciesId]);
 
   useEffect(() => {
     if (open) {
@@ -144,20 +164,24 @@ const EditReptileDialog = ({
         purchaseDate: parseDateSafe(currentPurchaseDate),
         weight: currentWeight || 0,
         sex: currentSex,
+        morphs: currentMorphs || [],
       });
+      setSelectedMorphs(currentMorphs || []);
       setBirthDateInput(formatDateToInput(parseDateSafe(currentBirthDate)));
       setPurchaseDateInput(formatDateToInput(parseDateSafe(currentPurchaseDate)));
+      setMorphSearch("");
+      setNewMorph("");
     }
-  }, [open, currentName, currentSpecies, currentBirthDate, currentPurchaseDate, currentWeight, currentSex]);
+  }, [open, currentName, currentSpecies, currentBirthDate, currentPurchaseDate, currentWeight, currentSex, currentMorphs]);
 
   const onSubmit = async (data: FormValues) => {
     try {
       const updateData: any = {
         species: data.species,
         sex: data.sex,
+        morphs: data.morphs || [],
       };
       
-      // Modifier le nom uniquement si autorisé (48h)
       if (canEditName && data.name !== currentName) {
         updateData.name = data.name;
       }
@@ -205,7 +229,7 @@ const EditReptileDialog = ({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {/* Champ Nom - modifiable uniquement dans les 48h */}
+            {/* Champ Nom */}
             <FormField
               control={form.control}
               name="name"
@@ -297,7 +321,11 @@ const EditReptileDialog = ({
                             type="button"
                             variant="outline"
                             size="icon"
-                            onClick={() => field.onChange("")}
+                            onClick={() => {
+                              field.onChange("");
+                              setSelectedMorphs([]);
+                              form.setValue("morphs", []);
+                            }}
                             className="shrink-0"
                           >
                             ✕
@@ -310,6 +338,118 @@ const EditReptileDialog = ({
                 </FormItem>
               )}
             />
+
+            {/* Morphs / Mutations */}
+            {availableMorphs.length > 0 && (
+              <FormField
+                control={form.control}
+                name="morphs"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("reptile.morphs")} ({t("reptile.optional")})</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            className="w-full justify-start text-left font-normal"
+                          >
+                            {selectedMorphs.length > 0
+                              ? selectedMorphs.join(", ")
+                              : t("reptile.selectMorphs")}
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-full p-0 z-50 bg-card border-border" align="start">
+                        <Command>
+                          <CommandInput 
+                            placeholder={t("reptile.selectMorphs") as string}
+                            value={morphSearch}
+                            onValueChange={setMorphSearch}
+                          />
+                          <CommandEmpty>Aucune mutation trouvée</CommandEmpty>
+                          <CommandGroup className="max-h-[200px] overflow-y-auto">
+                            {availableMorphs
+                              .filter(morph => 
+                                morph.toLowerCase().includes(morphSearch.toLowerCase())
+                              )
+                              .map((morph) => (
+                                <CommandItem
+                                  key={morph}
+                                  value={morph}
+                                  onSelect={() => {
+                                    const newMorphs = selectedMorphs.includes(morph)
+                                      ? selectedMorphs.filter((m) => m !== morph)
+                                      : [...selectedMorphs, morph];
+                                    setSelectedMorphs(newMorphs);
+                                    field.onChange(newMorphs);
+                                  }}
+                                  className="flex items-center space-x-2"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedMorphs.includes(morph)}
+                                    onChange={() => {}}
+                                    className="w-4 h-4"
+                                  />
+                                  <span>{morph}</span>
+                                </CommandItem>
+                              ))}
+                          </CommandGroup>
+                          <div className="p-3 border-t border-border flex gap-2">
+                            <Input
+                              placeholder={t("reptile.morphs") as string}
+                              value={newMorph}
+                              onChange={(e) => setNewMorph(e.target.value)}
+                              className="flex-1"
+                            />
+                            <Button
+                              type="button"
+                              size="sm"
+                              onClick={() => {
+                                if (newMorph.trim() && !selectedMorphs.includes(newMorph.trim())) {
+                                  const updated = [...selectedMorphs, newMorph.trim()];
+                                  setSelectedMorphs(updated);
+                                  field.onChange(updated);
+                                  setNewMorph("");
+                                }
+                              }}
+                            >
+                              +
+                            </Button>
+                          </div>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    {selectedMorphs.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {selectedMorphs.map((morph) => (
+                          <span
+                            key={morph}
+                            className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full flex items-center gap-1"
+                          >
+                            {morph}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updated = selectedMorphs.filter((m) => m !== morph);
+                                setSelectedMorphs(updated);
+                                field.onChange(updated);
+                              }}
+                              className="hover:text-destructive"
+                            >
+                              ✕
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
             <FormField
               control={form.control}
               name="birthDate"
