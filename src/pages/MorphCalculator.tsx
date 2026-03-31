@@ -39,6 +39,8 @@ const getOppositeSex = (sex?: string | null) => {
   if (sex === "male") return "female";
   if (sex === "female") return "male";
   return null;
+};
+
 const ReptilePickerItem = ({ reptile, onPick }: { reptile: any; onPick: (r: any) => void }) => {
   const { signedUrl, loading } = useSignedImageUrl(reptile.image_url);
   return (
