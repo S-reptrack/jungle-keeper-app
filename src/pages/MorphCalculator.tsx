@@ -68,8 +68,10 @@ const MorphCalculator = () => {
   const handlePickReptile = (reptile: { id: string; name: string; species: string; morphs: string[] | null; sex: string | null }) => {
     if (!pickingParent) return;
 
-    // Find genetics data for this species
-    const genetics = findSpeciesGenetics(reptile.species);
+    // Resolve species ID (e.g. "boa-imperator") to scientific name (e.g. "Boa imperator")
+    const citesEntry = getAllSpecies().find(s => s.id === reptile.species);
+    const speciesName = citesEntry?.scientificName || reptile.species;
+    const genetics = findSpeciesGenetics(speciesName);
     
     // If species differs from current, update it
     if (genetics && genetics.species !== selectedSpecies) {
