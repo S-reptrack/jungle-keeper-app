@@ -244,7 +244,7 @@ function calculateCodominant(
       genotype: superName,
       percentage: round(pSuper / total * 100),
       description: `${superName} (homozygote)`,
-      genes: [{ geneName: name, status: "super" }],
+      genes: [{ geneName: name, status: "super", inheritance: "codominant" }],
     });
   }
   if (pVisual > 0.001) {
@@ -252,7 +252,7 @@ function calculateCodominant(
       genotype: name,
       percentage: round(pVisual / total * 100),
       description: `${name} (visuel)`,
-      genes: [{ geneName: name, status: "visual" }],
+      genes: [{ geneName: name, status: "visual", inheritance: "codominant" }],
     });
   }
   if (pNormal > 0.001) {
@@ -260,7 +260,7 @@ function calculateCodominant(
       genotype: "Normal",
       percentage: round(pNormal / total * 100),
       description: "Normal (type sauvage)",
-      genes: [{ geneName: name, status: "none" }],
+      genes: [{ geneName: name, status: "none", inheritance: "codominant" }],
     });
   }
   return results;
