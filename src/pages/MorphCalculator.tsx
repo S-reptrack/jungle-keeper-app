@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ArrowLeft, Dna, Plus, X, Baby, FlaskConical, Info, Search } from "lucide-react";
 import { speciesGenetics, MorphGene, findSpeciesGenetics } from "@/data/morphGenetics";
 import { AlleleStatus, ParentGene, calculateMultiGeneCross, OffspringResult } from "@/lib/geneticsCalculator";
+import { getAllSpecies } from "@/data/citesSpecies";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
