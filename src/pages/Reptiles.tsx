@@ -629,7 +629,6 @@ const Reptiles = () => {
                               lastFed={lastFeedings[reptile.id] || "Jamais"}
                               image={reptile.image_url}
                               sex={reptile.sex}
-                              morphs={reptile.morphs}
                               status={reptile.status}
                             />
                           ))}
