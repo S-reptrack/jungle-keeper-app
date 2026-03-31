@@ -82,7 +82,7 @@ const ReptilePickerItem = ({ reptile, onPick }: { reptile: any; onPick: (r: any)
   );
 };
 
-
+const MorphCalculator = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
