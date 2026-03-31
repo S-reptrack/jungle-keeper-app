@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useSignedImageUrl } from "@/lib/storageUtils";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
@@ -38,6 +39,49 @@ const getOppositeSex = (sex?: string | null) => {
   if (sex === "male") return "female";
   if (sex === "female") return "male";
   return null;
+};
+
+const ReptilePickerItem = ({ reptile, onPick }: { reptile: any; onPick: (r: any) => void }) => {
+  const { signedUrl, loading } = useSignedImageUrl(reptile.image_url);
+  return (
+    <button
+      onClick={() => onPick(reptile)}
+      className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left"
+    >
+      {reptile.image_url ? (
+        loading ? (
+          <div className="w-14 h-14 rounded-xl bg-muted animate-pulse flex-shrink-0" />
+        ) : signedUrl ? (
+          <img src={signedUrl} alt={reptile.name} className="w-14 h-14 rounded-xl object-cover flex-shrink-0" />
+        ) : (
+          <div className="w-14 h-14 rounded-xl bg-muted flex items-center justify-center flex-shrink-0">
+            <Dna className="w-5 h-5 text-muted-foreground" />
+          </div>
+        )
+      ) : (
+        <div className="w-14 h-14 rounded-xl bg-muted flex items-center justify-center flex-shrink-0">
+          <Dna className="w-5 h-5 text-muted-foreground" />
+        </div>
+      )}
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium truncate">{reptile.name}</p>
+        <p className="text-xs text-muted-foreground truncate">{reptile.species}</p>
+        {reptile.morphs && reptile.morphs.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-1">
+            {reptile.morphs.slice(0, 4).map((m: string) => (
+              <Badge key={m} variant="secondary" className="text-[9px] px-1.5 py-0">{m}</Badge>
+            ))}
+            {reptile.morphs.length > 4 && (
+              <Badge variant="secondary" className="text-[9px] px-1.5 py-0">+{reptile.morphs.length - 4}</Badge>
+            )}
+          </div>
+        )}
+      </div>
+      {reptile.sex && (
+        <span className="text-lg flex-shrink-0">{reptile.sex === "male" ? "♂" : reptile.sex === "female" ? "♀" : "?"}</span>
+      )}
+    </button>
+  );
 };
 
 const MorphCalculator = () => {
@@ -493,36 +537,7 @@ const MorphCalculator = () => {
             )}
             {filteredReptiles.map((reptile) => {
               return (
-                <button
-                  key={reptile.id}
-                  onClick={() => handlePickReptile(reptile)}
-                  className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left"
-                >
-                  {reptile.image_url ? (
-                    <img src={reptile.image_url} alt={reptile.name} className="w-14 h-14 rounded-xl object-cover flex-shrink-0" />
-                  ) : (
-                    <div className="w-14 h-14 rounded-xl bg-muted flex items-center justify-center flex-shrink-0">
-                      <Dna className="w-5 h-5 text-muted-foreground" />
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{reptile.name}</p>
-                    <p className="text-xs text-muted-foreground truncate">{reptile.species}</p>
-                    {reptile.morphs && reptile.morphs.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {reptile.morphs.slice(0, 4).map(m => (
-                          <Badge key={m} variant="secondary" className="text-[9px] px-1.5 py-0">{m}</Badge>
-                        ))}
-                        {reptile.morphs.length > 4 && (
-                          <Badge variant="secondary" className="text-[9px] px-1.5 py-0">+{reptile.morphs.length - 4}</Badge>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                  {reptile.sex && (
-                    <span className="text-lg flex-shrink-0">{reptile.sex === "male" ? "♂" : reptile.sex === "female" ? "♀" : "?"}</span>
-                  )}
-                </button>
+                <ReptilePickerItem key={reptile.id} reptile={reptile} onPick={handlePickReptile} />
               );
             })}
           </div>
