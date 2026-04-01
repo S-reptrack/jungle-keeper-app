@@ -60,14 +60,16 @@ const App = () => (
           <HatchingNotificationDialog />
           <InstallPromptBanner />
           <OfflineIndicator />
-          <TesterSuspensionGuard>
           <Routes>
-            {/* Routes publiques sans garde */}
+            {/* Routes publiques sans garde — accessibles sans auth */}
             <Route path="/auth" element={<Auth />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/legal" element={<Legal />} />
             <Route path="/support" element={<Support />} />
+          </Routes>
+          <TesterSuspensionGuard>
+          <Routes>
             
             {/* Route Admin - priorité haute, en dehors du MaintenanceGuard */}
             <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />

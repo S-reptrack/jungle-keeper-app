@@ -176,6 +176,26 @@ const SubscriptionCard = () => {
           </>
         ) : (
           <>
+            {/* Liens EULA & Privacy - conformité Apple 3.1.2(c) */}
+            <div className="flex items-center justify-center gap-3 text-sm pb-2">
+              <button
+                type="button"
+                onClick={() => navigate("/terms")}
+                className="underline text-primary hover:text-primary/80 py-2 px-2 min-h-[44px] inline-flex items-center cursor-pointer bg-transparent border-0"
+                style={{ touchAction: "manipulation" }}
+              >
+                {t("subscription.termsLink") || "Conditions d'utilisation (EULA)"}
+              </button>
+              <span className="text-muted-foreground">•</span>
+              <button
+                type="button"
+                onClick={() => navigate("/privacy")}
+                className="underline text-primary hover:text-primary/80 py-2 px-2 min-h-[44px] inline-flex items-center cursor-pointer bg-transparent border-0"
+                style={{ touchAction: "manipulation" }}
+              >
+                {t("subscription.privacyLink") || "Politique de confidentialité"}
+              </button>
+            </div>
             <div className="grid gap-4 md:grid-cols-3">
               {/* Free Plan */}
               <div className="relative p-4 border-2 border-primary rounded-lg bg-primary/5">
