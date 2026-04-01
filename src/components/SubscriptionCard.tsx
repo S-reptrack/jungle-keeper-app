@@ -407,7 +407,7 @@ const SubscriptionCard = () => {
               <div className="flex justify-center gap-4 pt-2">
                 <button
                   type="button"
-                  onClick={() => openLegalLink("/terms")}}
+                  onClick={() => openLegalLink("/terms")}
                   className="text-sm underline text-primary hover:text-primary/80 py-3 px-3 min-h-[44px] min-w-[44px] inline-flex items-center justify-center cursor-pointer bg-transparent border-0"
                   style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", WebkitUserSelect: "none" }}
                 >
