@@ -13,6 +13,7 @@ import jungleHero from "@/assets/jungle-hero.jpg";
 import { validatePassword, validatePasswordComplete, type PasswordValidationResult } from "@/lib/passwordValidation";
 import LanguageSelector from "@/components/LanguageSelector";
 import ReferralCodeInput from "@/components/ReferralCodeInput";
+import { isNativeIOS } from "@/lib/platformUtils";
 
 const Auth = () => {
   const { t } = useTranslation();
