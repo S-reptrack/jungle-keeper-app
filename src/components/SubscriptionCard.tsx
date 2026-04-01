@@ -10,7 +10,8 @@ import { toast } from "sonner";
 import { useSubscription, SUBSCRIPTION_TIERS } from "@/hooks/useSubscription";
 import { useReptileCount } from "@/hooks/useReptileCount";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { getPaymentProvider } from "@/lib/platformUtils";
+import { getPaymentProvider, isNativeIOS } from "@/lib/platformUtils";
+import { Browser } from "@capacitor/browser";
 
 const SubscriptionCard = () => {
   const { t } = useTranslation();

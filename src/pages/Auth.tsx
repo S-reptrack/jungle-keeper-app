@@ -238,8 +238,8 @@ const Auth = () => {
                 )}
               </div>
 
-              {/* Code de parrainage */}
-              {!isLogin && (
+              {/* Code de parrainage - masqué sur iOS natif (Apple Guideline 3.1.1) */}
+              {!isLogin && !isNativeIOS() && (
                 <ReferralCodeInput
                   value={referralCode}
                   onChange={setReferralCode}

@@ -14,6 +14,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "sonner";
 import { languages } from "@/i18n/config";
+import { isNativeIOS } from "@/lib/platformUtils";
 import { useState, useEffect } from "react";
 import ExportDataDialog from "@/components/ExportDataDialog";
 import DeleteAccountDialog from "@/components/DeleteAccountDialog";
