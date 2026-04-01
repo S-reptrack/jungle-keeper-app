@@ -13,6 +13,7 @@ import jungleHero from "@/assets/jungle-hero.jpg";
 import { validatePassword, validatePasswordComplete, type PasswordValidationResult } from "@/lib/passwordValidation";
 import LanguageSelector from "@/components/LanguageSelector";
 import ReferralCodeInput from "@/components/ReferralCodeInput";
+import { isNativeIOS } from "@/lib/platformUtils";
 
 const Auth = () => {
   const { t } = useTranslation();
@@ -238,8 +239,8 @@ const Auth = () => {
                 )}
               </div>
 
-              {/* Code de parrainage */}
-              {!isLogin && (
+              {/* Code de parrainage - masqué sur iOS natif (Apple Guideline 3.1.1) */}
+              {!isLogin && !isNativeIOS() && (
                 <ReferralCodeInput
                   value={referralCode}
                   onChange={setReferralCode}

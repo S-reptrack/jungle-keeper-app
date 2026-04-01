@@ -10,7 +10,8 @@ import { toast } from "sonner";
 import { useSubscription, SUBSCRIPTION_TIERS } from "@/hooks/useSubscription";
 import { useReptileCount } from "@/hooks/useReptileCount";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { getPaymentProvider } from "@/lib/platformUtils";
+import { getPaymentProvider, isNativeIOS } from "@/lib/platformUtils";
+import { Browser } from "@capacitor/browser";
 
 const SubscriptionCard = () => {
   const { t } = useTranslation();
@@ -35,6 +36,19 @@ const SubscriptionCard = () => {
   const [restoreLoading, setRestoreLoading] = useState(false);
 
   const currentTier = getCurrentTier();
+
+  // Helper pour ouvrir les liens légaux - Capacitor Browser sur iOS natif
+  const openLegalLink = async (path: string) => {
+    if (isNativeIOS()) {
+      try {
+        await Browser.open({ url: `https://s-reptrack.app/#${path}` });
+      } catch {
+        window.open(`https://s-reptrack.app/#${path}`, "_blank");
+      }
+    } else {
+      navigate(path);
+    }
+  };
 
   // Handle subscription success/cancel URL params
   useEffect(() => {
@@ -180,7 +194,7 @@ const SubscriptionCard = () => {
             <div className="flex items-center justify-center gap-3 text-sm pb-2">
               <button
                 type="button"
-                onClick={() => navigate("/terms")}
+                onClick={() => openLegalLink("/terms")}
                 className="underline text-primary hover:text-primary/80 py-2 px-2 min-h-[44px] inline-flex items-center cursor-pointer bg-transparent border-0"
                 style={{ touchAction: "manipulation" }}
               >
@@ -189,7 +203,7 @@ const SubscriptionCard = () => {
               <span className="text-muted-foreground">•</span>
               <button
                 type="button"
-                onClick={() => navigate("/privacy")}
+                onClick={() => openLegalLink("/privacy")}
                 className="underline text-primary hover:text-primary/80 py-2 px-2 min-h-[44px] inline-flex items-center cursor-pointer bg-transparent border-0"
                 style={{ touchAction: "manipulation" }}
               >
@@ -393,7 +407,7 @@ const SubscriptionCard = () => {
               <div className="flex justify-center gap-4 pt-2">
                 <button
                   type="button"
-                  onClick={() => navigate("/terms")}
+                  onClick={() => openLegalLink("/terms")}
                   className="text-sm underline text-primary hover:text-primary/80 py-3 px-3 min-h-[44px] min-w-[44px] inline-flex items-center justify-center cursor-pointer bg-transparent border-0"
                   style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", WebkitUserSelect: "none" }}
                 >
@@ -402,7 +416,7 @@ const SubscriptionCard = () => {
                 <span className="text-muted-foreground self-center">•</span>
                 <button
                   type="button"
-                  onClick={() => navigate("/privacy")}
+                  onClick={() => openLegalLink("/privacy")}
                   className="text-sm underline text-primary hover:text-primary/80 py-3 px-3 min-h-[44px] min-w-[44px] inline-flex items-center justify-center cursor-pointer bg-transparent border-0"
                   style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", WebkitUserSelect: "none" }}
                 >

@@ -14,6 +14,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "sonner";
 import { languages } from "@/i18n/config";
+import { isNativeIOS } from "@/lib/platformUtils";
 import { useState, useEffect } from "react";
 import ExportDataDialog from "@/components/ExportDataDialog";
 import DeleteAccountDialog from "@/components/DeleteAccountDialog";
@@ -86,8 +87,8 @@ const Settings = () => {
           {/* Abonnement Premium */}
           <SubscriptionCard />
 
-          {/* Parrainage */}
-          <ReferralCard />
+          {/* Parrainage - masqué sur iOS natif (Apple Guideline 3.1.1) */}
+          {!isNativeIOS() && <ReferralCard />}
           {/* Apparence */}
           <Card>
             <CardHeader>
