@@ -416,7 +416,7 @@ const SubscriptionCard = () => {
                 <span className="text-muted-foreground self-center">•</span>
                 <button
                   type="button"
-                  onClick={() => navigate("/privacy")}
+                  onClick={() => openLegalLink("/privacy")}}
                   className="text-sm underline text-primary hover:text-primary/80 py-3 px-3 min-h-[44px] min-w-[44px] inline-flex items-center justify-center cursor-pointer bg-transparent border-0"
                   style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", WebkitUserSelect: "none" }}
                 >
