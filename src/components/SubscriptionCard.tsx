@@ -37,6 +37,19 @@ const SubscriptionCard = () => {
 
   const currentTier = getCurrentTier();
 
+  // Helper pour ouvrir les liens légaux - Capacitor Browser sur iOS natif
+  const openLegalLink = async (path: string) => {
+    if (isNativeIOS()) {
+      try {
+        await Browser.open({ url: `https://s-reptrack.app/#${path}` });
+      } catch {
+        window.open(`https://s-reptrack.app/#${path}`, "_blank");
+      }
+    } else {
+      navigate(path);
+    }
+  };
+
   // Handle subscription success/cancel URL params
   useEffect(() => {
     const subscriptionStatus = searchParams.get("subscription");
