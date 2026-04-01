@@ -86,8 +86,8 @@ const Settings = () => {
           {/* Abonnement Premium */}
           <SubscriptionCard />
 
-          {/* Parrainage */}
-          <ReferralCard />
+          {/* Parrainage - masqué sur iOS natif (Apple Guideline 3.1.1) */}
+          {!isNativeIOS() && <ReferralCard />}
           {/* Apparence */}
           <Card>
             <CardHeader>
