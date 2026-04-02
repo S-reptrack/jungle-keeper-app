@@ -53,30 +53,10 @@ const SubscriptionCard = () => {
   // Handle subscription success/cancel URL params
   useEffect(() => {
     const subscriptionStatus = searchParams.get("subscription");
-    const refCode = searchParams.get("ref");
     
     if (subscriptionStatus === "success") {
       toast.success(t("subscription.successMessage") || "Abonnement activé avec succès !");
       checkSubscription();
-      
-      // Apply referral reward if a referral code was used
-      if (refCode && !isNativeIOS()) {
-        const applyReferral = async () => {
-          try {
-            const { data: sessionData } = await supabase.auth.getSession();
-            const accessToken = sessionData.session?.access_token;
-            if (accessToken) {
-              await supabase.functions.invoke("apply-referral-reward", {
-                headers: { Authorization: `Bearer ${accessToken}` },
-                body: { referral_code: refCode },
-              });
-            }
-          } catch (error) {
-            console.error("Error applying referral reward:", error);
-          }
-        };
-        applyReferral();
-      }
       
       setSearchParams({});
     } else if (subscriptionStatus === "cancelled") {
