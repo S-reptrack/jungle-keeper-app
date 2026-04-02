@@ -24,8 +24,8 @@ const ReferralCard = () => {
   const [codeVisible, setCodeVisible] = useState(false);
   const [displayCountdown, setDisplayCountdown] = useState(0);
   const [validCountdown, setValidCountdown] = useState(0);
-  const displayTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const validTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const displayTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const validTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const fetchReferralData = useCallback(async () => {
     if (!user) return;
