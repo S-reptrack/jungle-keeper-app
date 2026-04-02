@@ -41,9 +41,9 @@ const SubscriptionCard = () => {
   const openLegalLink = async (path: string) => {
     if (isNativeIOS()) {
       try {
-        await Browser.open({ url: `https://s-reptrack.app/#${path}` });
+        await Browser.open({ url: `https://s-reptrack.app${path}` });
       } catch {
-        window.open(`https://s-reptrack.app/#${path}`, "_blank");
+        window.open(`https://s-reptrack.app${path}`, "_blank", "noopener,noreferrer");
       }
     } else {
       navigate(path);
@@ -60,7 +60,7 @@ const SubscriptionCard = () => {
       checkSubscription();
       
       // Apply referral reward if a referral code was used
-      if (refCode) {
+      if (refCode && !isNativeIOS()) {
         const applyReferral = async () => {
           try {
             const { data: sessionData } = await supabase.auth.getSession();

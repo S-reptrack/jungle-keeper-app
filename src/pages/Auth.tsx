@@ -103,7 +103,7 @@ const Auth = () => {
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/`,
-            data: referralCode ? { referral_code: referralCode } : undefined,
+            data: referralCode && !isNativeIOS() ? { referral_code: referralCode } : undefined,
           },
         });
         if (error) throw error;
