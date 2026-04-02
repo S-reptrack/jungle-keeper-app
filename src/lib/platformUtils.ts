@@ -11,16 +11,26 @@ export const isNativeIOS = (): boolean => {
     return true;
   }
   
-  // Méthode 2 : Détection du WebView iOS Capacitor via User Agent
-  // Le WebView Capacitor iOS contient toujours ces marqueurs
+  // Méthode 2 : Protocol capacitor:// = app native iOS/Android
+  if (window.location.protocol === "capacitor:") {
+    const ua = navigator.userAgent;
+    const isIOSDevice = /iPad|iPhone|iPod/.test(ua) || 
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    if (isIOSDevice) return true;
+  }
+  
+  // Méthode 3 : Détection du WebView iOS Capacitor via User Agent
   const ua = navigator.userAgent;
   const isIOSDevice = /iPad|iPhone|iPod/.test(ua) || 
     (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-  const isStandaloneOrWebView = (window.navigator as any).standalone === true || 
-    !ua.includes("Safari") || ua.includes("CriOS") === false;
   
   // Si c'est un appareil iOS ET pas un navigateur Safari classique → probablement WebView Capacitor
   if (isIOSDevice && !ua.includes("Safari/")) {
+    return true;
+  }
+  
+  // Méthode 4 : Si le protocol est capacitor, on est en natif (fallback)
+  if (window.location.protocol === "capacitor:") {
     return true;
   }
   
