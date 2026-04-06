@@ -34,7 +34,7 @@ const Navigation = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const isMobile = useIsMobile();
-  const [scannerOpen, setScannerOpen] = useState(false);
+  
   const { user } = useAuth();
   const { isAdmin } = useUserRole();
   const { subscribed } = useSubscription();
