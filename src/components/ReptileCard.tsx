@@ -1,8 +1,6 @@
-import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { useSignedImageUrl } from "@/lib/storageUtils";
 import { useSignedImageUrl } from "@/lib/storageUtils";
 
 interface ReptileCardProps {
