@@ -34,7 +34,6 @@ const Landing = () => {
   }, [user, isAdmin, authLoading, roleLoading, navigate]);
 
   const features = [
-    { icon: QrCode, title: t("landing.featureQrTitle"), description: t("landing.featureQrDescription") },
     { icon: Nfc, title: t("landing.featureNfcTitle"), description: t("landing.featureNfcDescription") },
     { icon: Calendar, title: t("landing.featureFeedingTitle"), description: t("landing.featureFeedingDescription") },
     { icon: Heart, title: t("landing.featureHealthTitle"), description: t("landing.featureHealthDescription") },
