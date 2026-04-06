@@ -41,10 +41,10 @@ Que vous soyez éleveur professionnel ou passionné, S-reptrack vous accompagne 
 • Dates d'éclosion prévues avec alertes
 • Statistiques de reproduction
 
-📱 SCAN QR CODE & NFC
-• Identification rapide de vos animaux
-• Génération de QR codes pour chaque reptile
-• Compatible avec les puces NFC (Android uniquement)
+📱 SCAN NFC
+• Identification rapide de vos animaux par tags NFC
+• Compatible avec les puces NFC (iOS et Android)
+• Accès instantané aux fiches de vos reptiles
 
 📋 CONFORMITÉ CITES
 • Liste des espèces protégées intégrée
