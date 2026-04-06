@@ -317,21 +317,15 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     }
   };
 
-  // ─── Auto-start live scanner when dialog opens ───
+  // ─── Reset scanner state when dialog closes ───
   useEffect(() => {
-    if (open && !hasStartedRef.current) {
-      hasStartedRef.current = true;
-      // Small delay to let the DOM render the video element
-      const timer = setTimeout(() => {
-        startLiveScanner();
-      }, 300);
-      return () => clearTimeout(timer);
-    }
     if (!open) {
-      hasStartedRef.current = false;
-      stopScanning();
+      void stopScanning();
+      setError(null);
+      setCameraPermissionDenied(false);
+      setScannerReady(false);
     }
-  }, [open, startLiveScanner, stopScanning]);
+  }, [open, stopScanning]);
 
   // Cleanup on unmount
   useEffect(() => {
