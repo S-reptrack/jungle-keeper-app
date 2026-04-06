@@ -63,17 +63,6 @@ const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntil
             </Badge>
           </div>
         )}
-        <div className="absolute top-3 right-3">
-          <button 
-            className="p-2 bg-card/90 backdrop-blur-sm rounded-lg hover:bg-accent transition-colors"
-            onClick={(e) => {
-              e.stopPropagation();
-              setQrDialogOpen(true);
-            }}
-          >
-            <QrCode className="w-5 h-5 text-foreground" />
-          </button>
-        </div>
       </div>
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
