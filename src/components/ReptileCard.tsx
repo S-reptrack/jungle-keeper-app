@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { QrCode } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import QRCodeDialog from "./QRCodeDialog";
+import { useSignedImageUrl } from "@/lib/storageUtils";
 import { useSignedImageUrl } from "@/lib/storageUtils";
 
 interface ReptileCardProps {
