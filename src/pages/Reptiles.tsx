@@ -354,23 +354,6 @@ const Reptiles = () => {
             <ViewModeSelector viewMode={viewMode} onViewModeChange={handleViewModeChange} />
           </div>
           <div className="flex flex-col sm:flex-row gap-2">
-            <Button
-              variant="outline"
-              onClick={() => navigate("/qr-codes")}
-              className="w-full sm:w-auto"
-            >
-              <QrCode className="mr-2 h-4 w-4" />
-              Tous les QR codes
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => setShowPrintDialog(true)}
-              disabled={reptiles.length === 0}
-              className="w-full sm:w-auto"
-            >
-              <Printer className="mr-2 h-4 w-4" />
-              Imprimer QR codes
-            </Button>
             <AddReptileDialog onReptileAdded={fetchReptiles} />
           </div>
         </div>
