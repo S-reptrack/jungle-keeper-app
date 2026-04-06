@@ -187,17 +187,15 @@ const Navigation = () => {
       </nav>
 
       {isMobile && (
-        <>
-          <Button
-            onClick={handleNFCClick}
-            size="icon"
-            style={{ bottom: nfcButtonBottom }}
-            className="fixed right-4 z-40 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all bg-gradient-to-br from-primary to-primary/80"
-            aria-label="Lecteur NFC"
-          >
-            <Waves className="h-6 w-6" />
-          </Button>
-        </>
+        <Button
+          onClick={handleNFCClick}
+          size="icon"
+          style={{ bottom: nfcButtonBottom }}
+          className="fixed right-4 z-40 h-16 w-16 rounded-full shadow-lg hover:shadow-xl transition-all bg-gradient-to-br from-primary to-primary/80 border-2 border-primary-foreground/20"
+          aria-label="Lecteur NFC"
+        >
+          <Waves className="h-7 w-7" />
+        </Button>
       )}
     </>
   );
