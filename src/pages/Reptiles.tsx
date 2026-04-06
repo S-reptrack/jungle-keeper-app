@@ -6,7 +6,7 @@ import ReptileCard from "@/components/ReptileCard";
 import ReptileListItem from "@/components/ReptileListItem";
 import ViewModeSelector, { ViewMode } from "@/components/ViewModeSelector";
 import AddReptileDialog from "@/components/AddReptileDialog";
-import PrintQRCodesDialog from "@/components/PrintQRCodesDialog";
+
 import { useAuth } from "@/hooks/useAuth";
 import { AuthForm } from "@/components/AuthForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
