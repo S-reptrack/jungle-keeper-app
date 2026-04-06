@@ -24,12 +24,47 @@ interface QRScannerProps {
 export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   const [scanning, setScanning] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [cameraPermissionDenied, setCameraPermissionDenied] = useState(false);
   const [forceWeb, setForceWeb] = useState(false);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const codeReaderRef = useRef<BrowserQRCodeReader | null>(null);
   const qrScannerRef = useRef<QrScanner | null>(null);
   const navigate = useNavigate();
   const webTimeoutRef = useRef<number | null>(null);
+
+  const isCameraPermissionError = (err: unknown) => {
+    const message = err instanceof Error ? err.message : String(err ?? "");
+    const normalized = message.toLowerCase();
+
+    return [
+      "permission",
+      "denied",
+      "refused",
+      "notallowed",
+      "not allowed",
+      "access denied",
+      "camera access",
+      "restricted",
+    ].some((token) => normalized.includes(token));
+  };
+
+  const getNativeCameraErrorDetails = async (err: unknown) => {
+    let permissionDenied = isCameraPermissionError(err);
+
+    try {
+      const permissions = await Camera.checkPermissions();
+      permissionDenied = permissionDenied || permissions.camera === "denied";
+    } catch (permissionErr) {
+      console.warn("[QR Scanner] Impossible de vérifier les permissions caméra:", permissionErr);
+    }
+
+    return {
+      permissionDenied,
+      message: permissionDenied
+        ? "Accès à la caméra refusé. Autorisez l’accès dans les réglages de l’app, ou utilisez une image existante."
+        : "Impossible d'accéder à la caméra. Essayez à nouveau ou utilisez “Scanner depuis une image”.",
+    };
+  };
 
   useEffect(() => {
     return () => {
@@ -160,12 +195,14 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   // Sur Capacitor natif, Camera.getPhoto() gère ses propres permissions.
   // Ne pas pré-vérifier les permissions car cela peut bloquer l'accès.
 
-  const startScanning = async () => {
+  const startScanning = async ({ preferWeb = false }: { preferWeb?: boolean } = {}) => {
     try {
       setError(null);
+      setCameraPermissionDenied(false);
+      const shouldForceWeb = preferWeb;
 
       // Native (Capacitor) - Use Camera API like ImageUploadDialog
-      if (Capacitor.isNativePlatform() && !forceWeb) {
+      if (Capacitor.isNativePlatform() && !shouldForceWeb) {
         try {
           const platform = Capacitor.getPlatform();
           console.log('[QR Scanner] Plateforme native:', platform);
@@ -326,9 +363,10 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
             toast.info("Capture annulée");
             return;
           }
-          const msg = "Impossible d'accéder à la caméra";
-          setError(msg);
-          toast.error(msg);
+          const { message, permissionDenied } = await getNativeCameraErrorDetails(nativeErr);
+          setCameraPermissionDenied(permissionDenied);
+          setError(message);
+          toast.error(message);
           return;
         }
       }
@@ -361,7 +399,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
         );
         await qrScannerRef.current.start();
         setScanning(true);
-        if (!Capacitor.isNativePlatform() || forceWeb) {
+        if (!Capacitor.isNativePlatform() || shouldForceWeb) {
           if (webTimeoutRef.current) clearTimeout(webTimeoutRef.current);
           webTimeoutRef.current = window.setTimeout(() => {
             toast.info("Astuce: rapprochez le QR (>50% du cadre), bonne lumière, évitez les reflets.");
@@ -420,7 +458,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
       console.log("✅ [Html5Qrcode] Scan en direct démarré avec succès");
       
       // Afficher un conseil si rien n'est détecté au bout de 10s (sans interrompre le scan)
-      if (!Capacitor.isNativePlatform() || forceWeb) {
+      if (!Capacitor.isNativePlatform() || shouldForceWeb) {
         if (webTimeoutRef.current) clearTimeout(webTimeoutRef.current);
         webTimeoutRef.current = window.setTimeout(() => {
           toast.info("Astuce: rapprochez le QR (>50% du cadre), bonne lumière, évitez les reflets.");
@@ -662,12 +700,29 @@ const handleScanSuccess = async (decodedText: string) => {
                   {error}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Assurez-vous que le QR code est bien visible et net dans la photo.
+                  {cameraPermissionDenied
+                    ? "Si l’autorisation a été refusée, réactivez la caméra dans les réglages iOS de S-reptrack, ou utilisez une image existante du QR code."
+                    : "Assurez-vous que le QR code est bien visible et net dans la photo."}
                 </p>
               </div>
-              <Button onClick={startScanning} className="w-full">
-                Réessayer
-              </Button>
+              <div className="flex flex-col gap-2">
+                <Button onClick={() => { setForceWeb(false); void startScanning({ preferWeb: false }); }} className="w-full">
+                  Réessayer
+                </Button>
+                <Button onClick={scanFromGallery} variant="outline" className="w-full">
+                  Scanner depuis une image
+                </Button>
+                {Capacitor.isNativePlatform() && (
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => { setForceWeb(true); void startScanning({ preferWeb: true }); }}
+                    className="w-full"
+                  >
+                    Essayer le scan en direct (mode web)
+                  </Button>
+                )}
+              </div>
             </div>
           ) : (
             <div className="text-center space-y-4">
@@ -682,7 +737,7 @@ const handleScanSuccess = async (decodedText: string) => {
                 </p>
               </div>
               <div className="flex flex-col gap-2">
-                <Button onClick={startScanning} className="w-full">
+                <Button onClick={() => { setForceWeb(false); void startScanning({ preferWeb: false }); }} className="w-full">
                   <CameraIcon className="h-4 w-4 mr-2" />
                   Prendre une photo
                 </Button>
@@ -694,7 +749,7 @@ const handleScanSuccess = async (decodedText: string) => {
                 <Button
                   variant="secondary"
                   size="sm"
-                  onClick={() => { setForceWeb(true); startScanning(); }}
+                  onClick={() => { setForceWeb(true); void startScanning({ preferWeb: true }); }}
                   className="w-full"
                 >
                   Essayer le scan en direct (mode web)
