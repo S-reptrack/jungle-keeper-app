@@ -24,7 +24,6 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   const qrScannerRef = useRef<QrScanner | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const navigate = useNavigate();
-  const hasStartedRef = useRef(false);
 
   // ─── Cleanup ───
   const stopScanning = useCallback(async () => {
