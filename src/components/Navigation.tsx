@@ -1,4 +1,4 @@
-import { Home, List, Tag, Settings, QrCode, Waves, User, Shield, BarChart3, GitBranch, Bell, Dna, HeartPulse } from "lucide-react";
+import { Home, List, Tag, Settings, Waves, User, Shield, BarChart3, GitBranch, Bell, Dna, HeartPulse } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
