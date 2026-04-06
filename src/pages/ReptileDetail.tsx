@@ -15,7 +15,7 @@ import HealthTab from "@/components/HealthTab";
 import EditReptileDialog from "@/components/EditReptileDialog";
 import DeleteReptileDialog from "@/components/DeleteReptileDialog";
 import WeightChart from "@/components/WeightChart";
-import QRCodeDialog from "@/components/QRCodeDialog";
+
 import ImageUploadDialog from "@/components/ImageUploadDialog";
 import { TransferAnimalDialog } from "@/components/TransferAnimalDialog";
 import { PhotoHistoryTab } from "@/components/PhotoHistoryTab";
