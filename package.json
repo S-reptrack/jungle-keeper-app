@@ -62,7 +62,6 @@
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.23.26",
-    "html5-qrcode": "^2.3.8",
     "i18next": "^25.5.3",
     "input-otp": "^1.4.2",
     "jsqr": "^1.4.0",
