@@ -873,7 +873,7 @@
         "feeding": "Enregistrement et planification des nourrissages",
         "health": "Suivi de santé et historique vétérinaire",
         "reproduction": "Suivi de reproduction (accouplements, pontes, éclosions)",
-        "nfc": "Identification par QR codes et tags NFC",
+        "nfc": "Identification par tags NFC",
         "transfer": "Transfert d'animaux entre utilisateurs"
       }
     },
