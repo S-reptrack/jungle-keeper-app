@@ -28,7 +28,7 @@ import HealthReptilesList from "./pages/HealthReptilesList";
 import ReproductionReptilesList from "./pages/ReproductionReptilesList";
 import FeedingsDue from "./pages/FeedingsDue";
 import CostBreakdown from "./pages/CostBreakdown";
-import QRCodeBatch from "./pages/QRCodeBatch";
+
 import Feeding from "./pages/Feeding";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminRoute from "./components/AdminRoute";
