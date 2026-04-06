@@ -93,7 +93,7 @@ const App = () => (
             <Route path="/transfers" element={<MaintenanceGuard><Transfers /></MaintenanceGuard>} />
             <Route path="/nfc" element={<MaintenanceGuard><NFCReader /></MaintenanceGuard>} />
             <Route path="/cost-breakdown" element={<MaintenanceGuard><CostBreakdown /></MaintenanceGuard>} />
-            <Route path="/qr-codes" element={<MaintenanceGuard><QRCodeBatch /></MaintenanceGuard>} />
+            
             <Route path="/analytics" element={<MaintenanceGuard><Analytics /></MaintenanceGuard>} />
             <Route path="/genealogy" element={<MaintenanceGuard><Genealogy /></MaintenanceGuard>} />
             <Route path="/morph-calculator" element={<MaintenanceGuard><MorphCalculator /></MaintenanceGuard>} />
