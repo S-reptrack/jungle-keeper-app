@@ -92,7 +92,7 @@ Captures suggérées :
 4. **Calendrier nourrissage** - Alertes et suivi alimentation
 5. **Suivi santé** - Historique médical
 6. **Reproduction** - Gestion des accouplements
-7. **Scanner QR/NFC** - Identification rapide
+7. **Scanner NFC** - Identification rapide
 8. **Multi-langue** - Sélecteur de langues
 
 ---
