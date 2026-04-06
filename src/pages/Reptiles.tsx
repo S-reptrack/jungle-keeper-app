@@ -643,11 +643,6 @@ const Reptiles = () => {
           </Tabs>
         )}
 
-        <PrintQRCodesDialog
-          open={showPrintDialog}
-          onOpenChange={setShowPrintDialog}
-          reptiles={reptiles}
-        />
       </main>
     </div>
   );

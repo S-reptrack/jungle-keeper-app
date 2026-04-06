@@ -733,12 +733,6 @@ const ReptileDetail = () => {
           </div>
         </div>
 
-        <QRCodeDialog
-          open={qrDialogOpen}
-          onOpenChange={setQrDialogOpen}
-          reptileId={reptile.id}
-          reptileName={reptile.name}
-        />
         
         <ImageUploadDialog
           open={imageUploadOpen}
