@@ -109,12 +109,6 @@ const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntil
         </div>
       </CardContent>
 
-      <QRCodeDialog
-        open={qrDialogOpen}
-        onOpenChange={setQrDialogOpen}
-        reptileId={id}
-        reptileName={name}
-      />
     </Card>
   );
 };
