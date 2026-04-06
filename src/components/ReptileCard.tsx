@@ -1,9 +1,6 @@
-import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { QrCode } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import QRCodeDialog from "./QRCodeDialog";
 import { useSignedImageUrl } from "@/lib/storageUtils";
 
 interface ReptileCardProps {
@@ -23,7 +20,7 @@ interface ReptileCardProps {
 
 const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntilHatch, status, sex, hasHealthIssue, hasReproductionActivity }: ReptileCardProps) => {
   const navigate = useNavigate();
-  const [qrDialogOpen, setQrDialogOpen] = useState(false);
+  
   const { signedUrl, loading } = useSignedImageUrl(image);
 
   const handleCardClick = () => {
@@ -64,17 +61,6 @@ const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntil
             </Badge>
           </div>
         )}
-        <div className="absolute top-3 right-3">
-          <button 
-            className="p-2 bg-card/90 backdrop-blur-sm rounded-lg hover:bg-accent transition-colors"
-            onClick={(e) => {
-              e.stopPropagation();
-              setQrDialogOpen(true);
-            }}
-          >
-            <QrCode className="w-5 h-5 text-foreground" />
-          </button>
-        </div>
       </div>
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
@@ -121,12 +107,6 @@ const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntil
         </div>
       </CardContent>
 
-      <QRCodeDialog
-        open={qrDialogOpen}
-        onOpenChange={setQrDialogOpen}
-        reptileId={id}
-        reptileName={name}
-      />
     </Card>
   );
 };

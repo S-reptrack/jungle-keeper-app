@@ -1,6 +1,6 @@
 import { useParams, useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ArrowLeft, Calendar, Scale, QrCode, Eye, Utensils, Heart, Activity, Camera, Send, Skull, CheckCircle, Trash2, Image, Sparkles, Crown, Lock, FileText } from "lucide-react";
+import { ArrowLeft, Calendar, Scale, Eye, Utensils, Heart, Activity, Camera, Send, Skull, CheckCircle, Trash2, Image, Sparkles, Crown, Lock, FileText } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,7 @@ import HealthTab from "@/components/HealthTab";
 import EditReptileDialog from "@/components/EditReptileDialog";
 import DeleteReptileDialog from "@/components/DeleteReptileDialog";
 import WeightChart from "@/components/WeightChart";
-import QRCodeDialog from "@/components/QRCodeDialog";
+
 import ImageUploadDialog from "@/components/ImageUploadDialog";
 import { TransferAnimalDialog } from "@/components/TransferAnimalDialog";
 import { PhotoHistoryTab } from "@/components/PhotoHistoryTab";
@@ -60,7 +60,7 @@ const ReptileDetail = () => {
   const { role } = useUserRole();
   const [reptile, setReptile] = useState<Reptile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [qrDialogOpen, setQrDialogOpen] = useState(false);
+  
   const [imageUploadOpen, setImageUploadOpen] = useState(false);
   const [transferDialogOpen, setTransferDialogOpen] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
@@ -341,13 +341,6 @@ const ReptileDetail = () => {
                         aria-label="Ajouter une photo"
                       >
                         <Camera className="w-5 h-5 text-foreground" />
-                      </button>
-                      <button 
-                        className="p-2.5 bg-card/95 backdrop-blur-sm rounded-lg shadow-lg hover:bg-accent active:scale-95 transition-all"
-                        onClick={() => setQrDialogOpen(true)}
-                        aria-label="Afficher QR code"
-                      >
-                        <QrCode className="w-5 h-5 text-foreground" />
                       </button>
                     </div>
                     {!reptile.image_url && (
@@ -740,12 +733,6 @@ const ReptileDetail = () => {
           </div>
         </div>
 
-        <QRCodeDialog
-          open={qrDialogOpen}
-          onOpenChange={setQrDialogOpen}
-          reptileId={reptile.id}
-          reptileName={reptile.name}
-        />
         
         <ImageUploadDialog
           open={imageUploadOpen}

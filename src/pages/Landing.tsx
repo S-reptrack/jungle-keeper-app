@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { 
-  QrCode, 
   Nfc, 
   Calendar, 
   Heart, 
@@ -35,7 +34,6 @@ const Landing = () => {
   }, [user, isAdmin, authLoading, roleLoading, navigate]);
 
   const features = [
-    { icon: QrCode, title: t("landing.featureQrTitle"), description: t("landing.featureQrDescription") },
     { icon: Nfc, title: t("landing.featureNfcTitle"), description: t("landing.featureNfcDescription") },
     { icon: Calendar, title: t("landing.featureFeedingTitle"), description: t("landing.featureFeedingDescription") },
     { icon: Heart, title: t("landing.featureHealthTitle"), description: t("landing.featureHealthDescription") },
@@ -180,7 +178,7 @@ const Landing = () => {
                   { feature: t("landing.compareFeeding") || "Suivi alimentation", free: true, premium: true },
                   { feature: t("landing.compareWeight") || "Poids actuel", free: true, premium: true },
                   { feature: t("landing.compareWeightHistory") || "Historique de poids", free: false, premium: true },
-                  { feature: t("landing.compareQR") || "Scanner QR Code", free: true, premium: true },
+                  { feature: t("landing.compareNFC") || "Scanner NFC", free: true, premium: true },
                   { feature: t("landing.compareProfilePhoto") || "Photo de profil", free: true, premium: true },
                   { feature: t("landing.comparePhotoHistory") || "Historique photos", free: false, premium: true },
                   { feature: t("landing.compareShedding") || "Suivi mues & selles", free: false, premium: true },

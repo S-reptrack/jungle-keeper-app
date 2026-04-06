@@ -6,13 +6,13 @@ import ReptileCard from "@/components/ReptileCard";
 import ReptileListItem from "@/components/ReptileListItem";
 import ViewModeSelector, { ViewMode } from "@/components/ViewModeSelector";
 import AddReptileDialog from "@/components/AddReptileDialog";
-import PrintQRCodesDialog from "@/components/PrintQRCodesDialog";
+
 import { useAuth } from "@/hooks/useAuth";
 import { AuthForm } from "@/components/AuthForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Printer, QrCode, ChevronLeft, ChevronRight } from "lucide-react";
+import { Printer, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -31,7 +31,7 @@ const Reptiles = () => {
   const [testReptiles, setTestReptiles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastFeedings, setLastFeedings] = useState<Record<string, string>>({});
-  const [showPrintDialog, setShowPrintDialog] = useState(false);
+  
   const [daysUntilHatch, setDaysUntilHatch] = useState<Record<string, number | null>>({});
   
   // Lire les pages depuis les paramètres URL
@@ -354,23 +354,6 @@ const Reptiles = () => {
             <ViewModeSelector viewMode={viewMode} onViewModeChange={handleViewModeChange} />
           </div>
           <div className="flex flex-col sm:flex-row gap-2">
-            <Button
-              variant="outline"
-              onClick={() => navigate("/qr-codes")}
-              className="w-full sm:w-auto"
-            >
-              <QrCode className="mr-2 h-4 w-4" />
-              Tous les QR codes
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => setShowPrintDialog(true)}
-              disabled={reptiles.length === 0}
-              className="w-full sm:w-auto"
-            >
-              <Printer className="mr-2 h-4 w-4" />
-              Imprimer QR codes
-            </Button>
             <AddReptileDialog onReptileAdded={fetchReptiles} />
           </div>
         </div>
@@ -660,11 +643,6 @@ const Reptiles = () => {
           </Tabs>
         )}
 
-        <PrintQRCodesDialog
-          open={showPrintDialog}
-          onOpenChange={setShowPrintDialog}
-          reptiles={reptiles}
-        />
       </main>
     </div>
   );

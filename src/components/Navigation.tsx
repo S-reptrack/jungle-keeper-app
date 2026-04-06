@@ -1,4 +1,4 @@
-import { Home, List, Tag, Settings, QrCode, Waves, User, Shield, BarChart3, GitBranch, Bell, Dna, HeartPulse } from "lucide-react";
+import { Home, List, Tag, Settings, Waves, User, Shield, BarChart3, GitBranch, Bell, Dna, HeartPulse } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -6,7 +6,7 @@ import LanguageSelector from "./LanguageSelector";
 import ThemeToggle from "./ThemeToggle";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useBottomInset } from "@/hooks/useBottomInset";
-import { QRScanner } from "./QRScanner";
+
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
@@ -34,7 +34,7 @@ const Navigation = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const isMobile = useIsMobile();
-  const [scannerOpen, setScannerOpen] = useState(false);
+  
   const { user } = useAuth();
   const { isAdmin } = useUserRole();
   const { subscribed } = useSubscription();
@@ -43,7 +43,7 @@ const Navigation = () => {
   // Extraire le pseudo de l'email (partie avant @)
   const userDisplayName = user?.email?.split('@')[0] || null;
   
-  const qrButtonBottom = `calc(5rem + env(safe-area-inset-bottom))`;
+  const nfcButtonBottom = `calc(5rem + env(safe-area-inset-bottom))`;
   
   const navItems = [
     { icon: Home, label: t("common.home"), path: "/" },
@@ -191,24 +191,12 @@ const Navigation = () => {
           <Button
             onClick={handleNFCClick}
             size="icon"
-            style={{ bottom: qrButtonBottom }}
-            className="fixed right-20 z-40 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all bg-gradient-to-br from-primary to-primary/80"
+            style={{ bottom: nfcButtonBottom }}
+            className="fixed right-4 z-40 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all bg-gradient-to-br from-primary to-primary/80"
             aria-label="Lecteur NFC"
           >
             <Waves className="h-6 w-6" />
           </Button>
-
-          <Button
-            onClick={() => setScannerOpen(true)}
-            size="icon"
-            style={{ bottom: qrButtonBottom }}
-            className="fixed right-4 z-40 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all"
-            aria-label="Scanner un QR code"
-          >
-            <QrCode className="h-6 w-6" />
-          </Button>
-
-          <QRScanner open={scannerOpen} onOpenChange={setScannerOpen} />
         </>
       )}
     </>

@@ -41,10 +41,10 @@ Que vous soyez éleveur professionnel ou passionné, S-reptrack vous accompagne 
 • Dates d'éclosion prévues avec alertes
 • Statistiques de reproduction
 
-📱 SCAN QR CODE & NFC
-• Identification rapide de vos animaux
-• Génération de QR codes pour chaque reptile
-• Compatible avec les puces NFC (Android uniquement)
+📱 SCAN NFC
+• Identification rapide de vos animaux par tags NFC
+• Compatible avec les puces NFC (iOS et Android)
+• Accès instantané aux fiches de vos reptiles
 
 📋 CONFORMITÉ CITES
 • Liste des espèces protégées intégrée
@@ -92,7 +92,7 @@ Captures suggérées :
 4. **Calendrier nourrissage** - Alertes et suivi alimentation
 5. **Suivi santé** - Historique médical
 6. **Reproduction** - Gestion des accouplements
-7. **Scanner QR/NFC** - Identification rapide
+7. **Scanner NFC** - Identification rapide
 8. **Multi-langue** - Sélecteur de langues
 
 ---
@@ -106,7 +106,7 @@ Outils / Productivité
 
 ### Tags/Mots-clés
 ```
-reptile, élevage, serpent, lézard, gecko, python, boa, terrarium, nourrissage, reproduction, santé animale, gestion élevage, CITES
+reptile, élevage, serpent, lézard, gecko, python, boa, terrarium, nourrissage, reproduction, santé animale, gestion élevage, CITES, NFC
 ```
 
 ### Classification du contenu

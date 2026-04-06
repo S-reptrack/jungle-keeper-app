@@ -28,7 +28,7 @@ import HealthReptilesList from "./pages/HealthReptilesList";
 import ReproductionReptilesList from "./pages/ReproductionReptilesList";
 import FeedingsDue from "./pages/FeedingsDue";
 import CostBreakdown from "./pages/CostBreakdown";
-import QRCodeBatch from "./pages/QRCodeBatch";
+
 import Feeding from "./pages/Feeding";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminRoute from "./components/AdminRoute";
@@ -93,7 +93,7 @@ const App = () => (
             <Route path="/transfers" element={<MaintenanceGuard><Transfers /></MaintenanceGuard>} />
             <Route path="/nfc" element={<MaintenanceGuard><NFCReader /></MaintenanceGuard>} />
             <Route path="/cost-breakdown" element={<MaintenanceGuard><CostBreakdown /></MaintenanceGuard>} />
-            <Route path="/qr-codes" element={<MaintenanceGuard><QRCodeBatch /></MaintenanceGuard>} />
+            
             <Route path="/analytics" element={<MaintenanceGuard><Analytics /></MaintenanceGuard>} />
             <Route path="/genealogy" element={<MaintenanceGuard><Genealogy /></MaintenanceGuard>} />
             <Route path="/morph-calculator" element={<MaintenanceGuard><MorphCalculator /></MaintenanceGuard>} />
