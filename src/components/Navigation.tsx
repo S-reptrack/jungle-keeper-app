@@ -191,24 +191,12 @@ const Navigation = () => {
           <Button
             onClick={handleNFCClick}
             size="icon"
-            style={{ bottom: qrButtonBottom }}
-            className="fixed right-20 z-40 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all bg-gradient-to-br from-primary to-primary/80"
+            style={{ bottom: nfcButtonBottom }}
+            className="fixed right-4 z-40 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all bg-gradient-to-br from-primary to-primary/80"
             aria-label="Lecteur NFC"
           >
             <Waves className="h-6 w-6" />
           </Button>
-
-          <Button
-            onClick={() => setScannerOpen(true)}
-            size="icon"
-            style={{ bottom: qrButtonBottom }}
-            className="fixed right-4 z-40 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all"
-            aria-label="Scanner un QR code"
-          >
-            <QrCode className="h-6 w-6" />
-          </Button>
-
-          <QRScanner open={scannerOpen} onOpenChange={setScannerOpen} />
         </>
       )}
     </>
