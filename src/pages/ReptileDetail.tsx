@@ -60,7 +60,7 @@ const ReptileDetail = () => {
   const { role } = useUserRole();
   const [reptile, setReptile] = useState<Reptile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [qrDialogOpen, setQrDialogOpen] = useState(false);
+  
   const [imageUploadOpen, setImageUploadOpen] = useState(false);
   const [transferDialogOpen, setTransferDialogOpen] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
