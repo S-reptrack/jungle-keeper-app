@@ -31,7 +31,7 @@ const Reptiles = () => {
   const [testReptiles, setTestReptiles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastFeedings, setLastFeedings] = useState<Record<string, string>>({});
-  const [showPrintDialog, setShowPrintDialog] = useState(false);
+  
   const [daysUntilHatch, setDaysUntilHatch] = useState<Record<string, number | null>>({});
   
   // Lire les pages depuis les paramètres URL
