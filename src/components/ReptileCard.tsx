@@ -22,7 +22,7 @@ interface ReptileCardProps {
 
 const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntilHatch, status, sex, hasHealthIssue, hasReproductionActivity }: ReptileCardProps) => {
   const navigate = useNavigate();
-  const [qrDialogOpen, setQrDialogOpen] = useState(false);
+  
   const { signedUrl, loading } = useSignedImageUrl(image);
 
   const handleCardClick = () => {
