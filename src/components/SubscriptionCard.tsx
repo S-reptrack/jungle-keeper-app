@@ -380,7 +380,7 @@ const SubscriptionCard = () => {
               </div>
               {!isApple && (
                 <p className="text-left px-2">
-                  ⚠️ {t("subscription.nfcNote") || "NFC non compatible avec iOS/Apple. Utilisez les QR codes sur iPhone."}
+                  ⚠️ {t("subscription.nfcNote") || "NFC nécessite l'application native iOS ou Android."}
                 </p>
               )}
               <Separator className="my-2" />
