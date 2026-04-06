@@ -724,19 +724,6 @@ export const NFCReader = () => {
               <li>Installez l'APK genere sur votre telephone</li>
             </ol>
           </div>
-          <div className="border-t pt-4">
-            <p className="text-sm text-muted-foreground mb-3">
-              En attendant, utilisez les <strong>QR codes</strong> comme alternative :
-            </p>
-            <Button 
-              variant="outline" 
-              onClick={() => navigate('/settings')}
-              className="gap-2"
-            >
-              <ScanLine className="w-4 h-4" />
-              Aller aux QR codes
-            </Button>
-          </div>
         </Card>
       </div>
     );
