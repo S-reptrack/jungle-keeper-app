@@ -96,7 +96,7 @@ const createTextRecord = (text: string): NdefRecord => {
 
 let nfcError: string | null = null;
 
-const NFC_PLUGIN_NOT_INSTALLED_ERROR = "Le plugin NFC Premium n'est pas installe dans cette version de l'application.\n\nPour utiliser le NFC, vous devez :\n1. Installer l'APK avec le plugin NFC Premium\n2. Utiliser le script \"reinstall-android-nfc.bat\"\n\nEn attendant, utilisez les QR codes comme alternative.";
+const NFC_PLUGIN_NOT_INSTALLED_ERROR = "Le plugin NFC Premium n'est pas installe dans cette version de l'application.\n\nPour utiliser le NFC, vous devez :\n1. Installer l'APK avec le plugin NFC Premium\n2. Utiliser le script \"reinstall-android-nfc.bat\"\n\nInstallez la version avec le plugin NFC pour profiter de cette fonctionnalite.";
 
 const checkNfcAvailable = async (): Promise<{ available: boolean; error?: string }> => {
   try {
