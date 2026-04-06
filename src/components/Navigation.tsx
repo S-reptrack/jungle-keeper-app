@@ -43,7 +43,7 @@ const Navigation = () => {
   // Extraire le pseudo de l'email (partie avant @)
   const userDisplayName = user?.email?.split('@')[0] || null;
   
-  const qrButtonBottom = `calc(5rem + env(safe-area-inset-bottom))`;
+  const nfcButtonBottom = `calc(5rem + env(safe-area-inset-bottom))`;
   
   const navItems = [
     { icon: Home, label: t("common.home"), path: "/" },
