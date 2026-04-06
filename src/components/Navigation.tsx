@@ -6,7 +6,7 @@ import LanguageSelector from "./LanguageSelector";
 import ThemeToggle from "./ThemeToggle";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useBottomInset } from "@/hooks/useBottomInset";
-import { QRScanner } from "./QRScanner";
+
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
