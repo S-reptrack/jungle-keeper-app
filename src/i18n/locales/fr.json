@@ -261,7 +261,7 @@
   },
   "nfc": {
     "iosNotSupported": "NFC non disponible sur iPhone",
-    "iosNotSupportedDescription": "Apple ne permet pas l'accès au NFC depuis les applications web. Utilisez le scanner QR code à la place, ou installez l'app native Android pour profiter du NFC."
+    "iosNotSupportedDescription": "Apple ne permet pas l'accès au NFC depuis les applications web. Installez l'app native pour profiter du NFC."
   },
   "admin": {
     "dashboard": "Administration",
