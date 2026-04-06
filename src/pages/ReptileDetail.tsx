@@ -342,13 +342,6 @@ const ReptileDetail = () => {
                       >
                         <Camera className="w-5 h-5 text-foreground" />
                       </button>
-                      <button 
-                        className="p-2.5 bg-card/95 backdrop-blur-sm rounded-lg shadow-lg hover:bg-accent active:scale-95 transition-all"
-                        onClick={() => setQrDialogOpen(true)}
-                        aria-label="Afficher QR code"
-                      >
-                        <QrCode className="w-5 h-5 text-foreground" />
-                      </button>
                     </div>
                     {!reptile.image_url && (
                       <div className="absolute inset-0 flex items-center justify-center">
