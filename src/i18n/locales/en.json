@@ -712,7 +712,7 @@
     "manage": "Manage subscription",
     "manageSubscription": "Manage my subscription",
     "securePayment": "Secure payment. Cancel anytime.",
-    "nfcNote": "⚠️ NFC not compatible with iOS/Apple. Use QR codes on iPhone.",
+    "nfcNote": "⚠️ NFC requires the native iOS or Android app.",
     "expiresOn": "Expires on",
     "renewsOn": "Renews on",
     "currentPlan": "Your subscription",
