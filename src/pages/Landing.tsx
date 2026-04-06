@@ -178,7 +178,7 @@ const Landing = () => {
                   { feature: t("landing.compareFeeding") || "Suivi alimentation", free: true, premium: true },
                   { feature: t("landing.compareWeight") || "Poids actuel", free: true, premium: true },
                   { feature: t("landing.compareWeightHistory") || "Historique de poids", free: false, premium: true },
-                  { feature: t("landing.compareQR") || "Scanner QR Code", free: true, premium: true },
+                  { feature: t("landing.compareNFC") || "Scanner NFC", free: true, premium: true },
                   { feature: t("landing.compareProfilePhoto") || "Photo de profil", free: true, premium: true },
                   { feature: t("landing.comparePhotoHistory") || "Historique photos", free: false, premium: true },
                   { feature: t("landing.compareShedding") || "Suivi mues & selles", free: false, premium: true },
