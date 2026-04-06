@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Capacitor } from "@capacitor/core";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { Browser } from "@capacitor/browser";
+import { BarcodeScanner, BarcodeFormat } from "@capacitor-mlkit/barcode-scanning";
 import jsQR from "jsqr";
 import QrScanner from "qr-scanner";
 import { supabase } from "@/integrations/supabase/client";
@@ -24,10 +25,30 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   const qrScannerRef = useRef<QrScanner | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const navigate = useNavigate();
+  const isNative = Capacitor.isNativePlatform();
 
-  // ─── Cleanup ───
+  const hasCameraPermission = (state?: string) => state === "granted" || state === "limited";
+
+  const isCameraPermissionError = (err: unknown) => {
+    const message = err instanceof Error ? err.message : String(err ?? "");
+    const normalized = message.toLowerCase();
+
+    return ["permission", "denied", "refused", "notallowed", "not allowed", "restricted", "camera"].some(
+      (token) => normalized.includes(token),
+    );
+  };
+
   const stopScanning = useCallback(async () => {
     try {
+      if (Capacitor.isNativePlatform()) {
+        try {
+          await BarcodeScanner.removeAllListeners();
+        } catch {}
+        try {
+          await BarcodeScanner.stopScan();
+        } catch {}
+      }
+
       if (qrScannerRef.current) {
         qrScannerRef.current.stop();
         qrScannerRef.current.destroy();
@@ -36,101 +57,161 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     } catch (e) {
       console.warn("[QR Scanner] cleanup error:", e);
     }
+
     setScanning(false);
     setScannerReady(false);
   }, []);
 
-  // ─── Handle successful QR decode ───
-  const handleScanSuccess = useCallback(async (decodedText: string) => {
-    await stopScanning();
-    console.log("[QR Scanner] Decoded:", decodedText);
+  const handleScanSuccess = useCallback(
+    async (decodedText: string) => {
+      await stopScanning();
+      console.log("[QR Scanner] Decoded:", decodedText);
 
-    const { data: { user } } = await supabase.auth.getUser();
-    const userId = user?.id;
-    if (!userId) {
-      toast.error("Vous devez être connecté");
-      return;
-    }
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const userId = user?.id;
+      if (!userId) {
+        toast.error("Vous devez être connecté");
+        return;
+      }
 
-    // 1) UUID in /reptile/UUID URL
-    const urlMatch = decodedText.match(/\/reptile\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i);
-    if (urlMatch?.[1]) {
-      toast.success("QR code scanné !");
-      onOpenChange(false);
-      navigate(`/reptile/${urlMatch[1]}`);
-      return;
-    }
+      const urlMatch = decodedText.match(/\/reptile\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i);
+      if (urlMatch?.[1]) {
+        toast.success("QR code scanné !");
+        onOpenChange(false);
+        navigate(`/reptile/${urlMatch[1]}`);
+        return;
+      }
 
-    // 2) Raw UUID anywhere
-    const uuidMatch = decodedText.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);
-    if (uuidMatch) {
-      toast.success("QR code scanné !");
-      onOpenChange(false);
-      navigate(`/reptile/${uuidMatch[0]}`);
-      return;
-    }
+      const uuidMatch = decodedText.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);
+      if (uuidMatch) {
+        toast.success("QR code scanné !");
+        onOpenChange(false);
+        navigate(`/reptile/${uuidMatch[0]}`);
+        return;
+      }
 
-    // 3) Short hex prefix (8-12 chars)
-    const prefixMatch = decodedText.match(/[0-9a-f]{12}/i) || decodedText.match(/[0-9a-f]{10}/i) || decodedText.match(/[0-9a-f]{8}/i);
-    const prefix = prefixMatch?.[0]?.toLowerCase();
-    if (prefix) {
-      try {
-        const { data: myReptiles } = await supabase
-          .from("reptiles")
-          .select("id,name")
-          .eq("user_id", userId)
-          .in("status", ["active", "for_sale"])
-          .limit(1000);
+      const prefixMatch = decodedText.match(/[0-9a-f]{12}/i) || decodedText.match(/[0-9a-f]{10}/i) || decodedText.match(/[0-9a-f]{8}/i);
+      const prefix = prefixMatch?.[0]?.toLowerCase();
+      if (prefix) {
+        try {
+          const { data: myReptiles } = await supabase
+            .from("reptiles")
+            .select("id,name")
+            .eq("user_id", userId)
+            .in("status", ["active", "for_sale"])
+            .limit(1000);
 
-        const candidates = (myReptiles || []).filter((r) => r.id.toLowerCase().startsWith(prefix));
-        if (candidates.length === 1) {
-          toast.success(`Reptile trouvé: ${candidates[0].name}`);
-          onOpenChange(false);
-          navigate(`/reptile/${candidates[0].id}`);
-          return;
-        } else if (candidates.length > 1) {
-          toast.error("Plusieurs correspondances pour cet ID");
-          setError("Ambiguïté - plusieurs correspondances");
-          return;
-        } else {
+          const candidates = (myReptiles || []).filter((r) => r.id.toLowerCase().startsWith(prefix));
+          if (candidates.length === 1) {
+            toast.success(`Reptile trouvé: ${candidates[0].name}`);
+            onOpenChange(false);
+            navigate(`/reptile/${candidates[0].id}`);
+            return;
+          }
+
+          if (candidates.length > 1) {
+            toast.error("Plusieurs correspondances pour cet ID");
+            setError("Ambiguïté - plusieurs correspondances");
+            return;
+          }
+
           toast.error("ID introuvable dans votre base");
           setError("Reptile introuvable");
           return;
+        } catch {
+          toast.error("Erreur lors de la recherche");
+          return;
         }
-      } catch {
-        toast.error("Erreur lors de la recherche");
+      }
+
+      if (/^https?:\/\//i.test(decodedText)) {
+        toast.info("Ouverture du lien détecté");
+        try {
+          if (Capacitor.isNativePlatform()) {
+            await Browser.open({ url: decodedText, presentationStyle: "fullscreen" });
+          } else {
+            window.open(decodedText, "_blank", "noopener,noreferrer");
+          }
+          onOpenChange(false);
+          return;
+        } catch (e) {
+          console.error("[QR Scanner] Failed to open URL:", e);
+        }
+      }
+
+      toast.error("QR code non reconnu. Utilisez un QR généré par S-reptrack.");
+      setError("QR code non reconnu");
+    },
+    [navigate, onOpenChange, stopScanning],
+  );
+
+  const startNativeScan = useCallback(async () => {
+    try {
+      await stopScanning();
+      setError(null);
+      setCameraPermissionDenied(false);
+      setScanning(true);
+
+      const { supported } = await BarcodeScanner.isSupported();
+      if (!supported) {
+        setError("La caméra n'est pas disponible sur cet appareil.");
+        setScanning(false);
         return;
       }
-    }
 
-    // 4) Generic URL
-    if (/^https?:\/\//i.test(decodedText)) {
-      toast.info("Ouverture du lien détecté");
-      try {
-        if (Capacitor.isNativePlatform()) {
-          await Browser.open({ url: decodedText, presentationStyle: "fullscreen" });
-        } else {
-          window.open(decodedText, "_blank", "noopener,noreferrer");
-        }
-        onOpenChange(false);
-        return;
-      } catch (e) {
-        console.error("[QR Scanner] Failed to open URL:", e);
+      let permissions = await BarcodeScanner.checkPermissions();
+      if (!hasCameraPermission(permissions.camera)) {
+        permissions = await BarcodeScanner.requestPermissions();
       }
+
+      if (!hasCameraPermission(permissions.camera)) {
+        setCameraPermissionDenied(true);
+        setError("Accès à l’appareil photo refusé. Autorisez la caméra dans Réglages > S-reptrack > Caméra.");
+        setScanning(false);
+        return;
+      }
+
+      const result = await BarcodeScanner.scan({
+        formats: [BarcodeFormat.QrCode],
+      });
+
+      const barcode = result.barcodes?.[0];
+      const text = barcode?.rawValue || barcode?.displayValue || "";
+
+      if (!text) {
+        setScanning(false);
+        toast.info("Scan annulé");
+        return;
+      }
+
+      await handleScanSuccess(text);
+    } catch (err) {
+      console.error("[QR Scanner] Native scan error:", err);
+
+      if (isCameraPermissionError(err)) {
+        setCameraPermissionDenied(true);
+        setError("Accès à l’appareil photo refusé. Autorisez la caméra dans Réglages > S-reptrack > Caméra.");
+      } else {
+        setError("Impossible d'accéder à l'appareil photo. Essayez à nouveau ou utilisez une image.");
+      }
+
+      setScanning(false);
     }
+  }, [handleScanSuccess, stopScanning]);
 
-    toast.error("QR code non reconnu. Utilisez un QR généré par S-reptrack.");
-    setError("QR code non reconnu");
-  }, [navigate, onOpenChange, stopScanning]);
-
-  // ─── Start live scanner ───
   const startLiveScanner = useCallback(async () => {
+    if (Capacitor.isNativePlatform()) {
+      await startNativeScan();
+      return;
+    }
+
     try {
       setError(null);
       setCameraPermissionDenied(false);
       setScanning(true);
 
-      // Wait for video element to be in DOM
       await new Promise((resolve) => setTimeout(resolve, 200));
 
       const videoEl = videoRef.current;
@@ -141,7 +222,6 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
         return;
       }
 
-      // Stop previous instance
       if (qrScannerRef.current) {
         try {
           qrScannerRef.current.stop();
@@ -156,7 +236,7 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
           const text = typeof result === "string" ? result : result?.data;
           if (text) {
             console.log("[QR Scanner] Live decode:", text);
-            handleScanSuccess(text);
+            void handleScanSuccess(text);
           }
         },
         {
@@ -164,38 +244,32 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
           highlightScanRegion: true,
           highlightCodeOutline: true,
           maxScansPerSecond: 10,
-        }
+        },
       );
 
       qrScannerRef.current = scanner;
       await scanner.start();
       setScannerReady(true);
       console.log("[QR Scanner] Live scanner started");
-
     } catch (err) {
       console.error("[QR Scanner] Live scanner error:", err);
-      const message = err instanceof Error ? err.message : String(err ?? "");
-      const normalized = message.toLowerCase();
 
-      const isPermissionError = ["permission", "denied", "refused", "notallowed", "not allowed", "restricted"].some(
-        (token) => normalized.includes(token)
-      );
-
-      if (isPermissionError) {
+      if (isCameraPermissionError(err)) {
         setCameraPermissionDenied(true);
-        setError("Accès à la caméra refusé. Autorisez l'accès dans Réglages > S-reptrack > Caméra.");
+        setError("Accès à l’appareil photo refusé. Autorisez la caméra dans les réglages du navigateur ou de l’app.");
       } else {
-        setError("Impossible d'accéder à la caméra. Essayez \"Scanner depuis une image\".");
+        setError("Impossible d'accéder à l'appareil photo. Essayez " + '"Scanner depuis une image"' + ".");
       }
+
       setScanning(false);
     }
-  }, [handleScanSuccess]);
+  }, [handleScanSuccess, startNativeScan]);
 
-  // ─── Scan from photo (native camera) ───
   const scanFromPhoto = async () => {
     try {
       await stopScanning();
       setError(null);
+      setCameraPermissionDenied(false);
 
       const photo = await Camera.getPhoto({
         source: CameraSource.Camera,
@@ -216,12 +290,17 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
         toast.info("Capture annulée");
         return;
       }
+
       console.error("[QR Scanner] Photo error:", err);
-      toast.error("Erreur lors de la capture photo");
+      if (isCameraPermissionError(err)) {
+        setCameraPermissionDenied(true);
+        setError("Accès à l’appareil photo refusé. Autorisez la caméra dans Réglages > S-reptrack > Caméra.");
+      } else {
+        toast.error("Erreur lors de la capture photo");
+      }
     }
   };
 
-  // ─── Scan from gallery ───
   const scanFromGallery = async () => {
     try {
       await stopScanning();
@@ -249,7 +328,6 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     }
   };
 
-  // ─── Decode QR from base64 image ───
   const decodeQRFromBase64 = async (base64: string, format?: string) => {
     const img = new Image();
     await new Promise<void>((resolve, reject) => {
@@ -270,28 +348,25 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     }
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-    // Try qr-scanner WASM first
     try {
       const qrResult: any = await (QrScanner as any).scanImage(canvas);
       const text = typeof qrResult === "string" ? qrResult : qrResult?.data;
       if (text) {
-        handleScanSuccess(text);
+        await handleScanSuccess(text);
         return;
       }
     } catch {}
 
-    // Try jsQR
     let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     let code = jsQR(imageData.data, imageData.width, imageData.height, {
       inversionAttempts: "attemptBoth",
     });
 
-    // Preprocessing attempt
     if (!code) {
       const data = imageData.data;
       for (let i = 0; i < data.length; i += 4) {
         const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
-        const value = Math.max(0, Math.min(255, ((gray - 128) * 1.5) + 128));
+        const value = Math.max(0, Math.min(255, (gray - 128) * 1.5 + 128));
         data[i] = data[i + 1] = data[i + 2] = value;
       }
       code = jsQR(imageData.data, imageData.width, imageData.height, {
@@ -299,7 +374,6 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
       });
     }
 
-    // Central crop attempt
     if (!code) {
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       const size = Math.floor(Math.min(canvas.width, canvas.height) * 0.8);
@@ -310,14 +384,13 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     }
 
     if (code?.data) {
-      handleScanSuccess(code.data);
+      await handleScanSuccess(code.data);
     } else {
       toast.error("QR code non détecté. Assurez-vous que le QR code est bien visible et net.");
       setError("QR code non détecté dans l'image");
     }
   };
 
-  // ─── Reset scanner state when dialog closes ───
   useEffect(() => {
     if (!open) {
       void stopScanning();
@@ -327,10 +400,9 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
     }
   }, [open, stopScanning]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
-      stopScanning();
+      void stopScanning();
     };
   }, [stopScanning]);
 
@@ -343,14 +415,8 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md max-h-[100dvh] overflow-y-auto pt-[env(safe-area-inset-top,16px)]">
-        {/* Close button */}
         <div className="sticky top-0 z-10 pb-2">
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={handleClose}
-            className="w-full h-10 gap-2 text-sm font-medium"
-          >
+          <Button variant="destructive" size="sm" onClick={handleClose} className="w-full h-10 gap-2 text-sm font-medium">
             <X className="h-4 w-4" />
             Fermer le scanner
           </Button>
@@ -361,14 +427,11 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
             <CameraIcon className="h-5 w-5" />
             Scanner un QR Code
           </DialogTitle>
-          <DialogDescription className="sr-only">
-            Scannez un QR code pour ouvrir la fiche de l'animal
-          </DialogDescription>
+          <DialogDescription className="sr-only">Scannez un QR code pour ouvrir la fiche de l'animal</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           {error ? (
-            /* ─── Error State ─── */
             <div className="text-center space-y-4">
               <div className="flex justify-center">
                 <div className="rounded-full bg-destructive/10 p-4">
@@ -379,80 +442,86 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
                 <p className="text-sm font-medium text-destructive">{error}</p>
                 <p className="text-xs text-muted-foreground">
                   {cameraPermissionDenied
-                    ? "Allez dans Réglages > S-reptrack > Caméra pour réactiver l'accès, ou utilisez les options ci-dessous."
+                    ? "Autorisez la caméra dans les réglages iOS de l’app, puis relancez le scanner."
                     : "Vous pouvez aussi scanner depuis une photo ou une image existante."}
                 </p>
               </div>
               <div className="flex flex-col gap-2">
-                <Button
-                  onClick={() => startLiveScanner()}
-                  className="w-full min-h-[44px]"
-                  style={{ touchAction: "manipulation" }}
-                >
+                <Button onClick={() => void startLiveScanner()} className="w-full min-h-[44px]" style={{ touchAction: "manipulation" }}>
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Réessayer le scanner
                 </Button>
-                <Button
-                  onClick={scanFromPhoto}
-                  variant="outline"
-                  className="w-full min-h-[44px]"
-                  style={{ touchAction: "manipulation" }}
-                >
+                {cameraPermissionDenied && isNative && (
+                  <Button
+                    onClick={() => void BarcodeScanner.openSettings()}
+                    variant="secondary"
+                    className="w-full min-h-[44px]"
+                    style={{ touchAction: "manipulation" }}
+                  >
+                    Ouvrir les réglages iOS
+                  </Button>
+                )}
+                <Button onClick={scanFromPhoto} variant="outline" className="w-full min-h-[44px]" style={{ touchAction: "manipulation" }}>
                   <CameraIcon className="h-4 w-4 mr-2" />
                   Prendre une photo du QR
                 </Button>
-                <Button
-                  onClick={scanFromGallery}
-                  variant="outline"
-                  className="w-full min-h-[44px]"
-                  style={{ touchAction: "manipulation" }}
-                >
+                <Button onClick={scanFromGallery} variant="outline" className="w-full min-h-[44px]" style={{ touchAction: "manipulation" }}>
                   <ImageIcon className="h-4 w-4 mr-2" />
                   Scanner depuis une image
                 </Button>
               </div>
             </div>
           ) : (
-            /* ─── Scanner / Normal State ─── */
             <div className="space-y-4">
-              {/* Live video scanner area */}
-              <div className="relative rounded-lg overflow-hidden border-2 border-primary bg-black aspect-square">
-                <video
-                  ref={videoRef}
-                  className="w-full h-full object-cover"
-                  muted
-                  playsInline
-                />
-                {scanning && !scannerReady && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/60">
-                    <div className="text-center space-y-2">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto" />
-                      <p className="text-xs text-white">Initialisation de la caméra...</p>
+              {isNative ? (
+                <div className="space-y-4">
+                  <div className="rounded-lg border border-border bg-muted/40 p-6 text-center space-y-3">
+                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+                      <CameraIcon className="h-7 w-7 text-primary" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium text-foreground">Scanner natif iPhone / iPad</p>
+                      <p className="text-xs text-muted-foreground">
+                        Touchez le bouton ci-dessous pour ouvrir le vrai scanner caméra de l’app.
+                      </p>
                     </div>
                   </div>
-                )}
-                {!scanning && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-                    <Button
-                      onClick={() => startLiveScanner()}
-                      size="lg"
-                      className="min-h-[44px]"
-                      style={{ touchAction: "manipulation" }}
-                    >
-                      <CameraIcon className="h-5 w-5 mr-2" />
-                      Démarrer le scanner
-                    </Button>
-                  </div>
-                )}
-              </div>
 
-              {scannerReady && (
-                <p className="text-xs text-center text-muted-foreground">
-                  Positionnez le QR code dans le cadre — la détection est automatique
-                </p>
+                  <Button onClick={() => void startLiveScanner()} className="w-full min-h-[44px]" style={{ touchAction: "manipulation" }}>
+                    <CameraIcon className="h-4 w-4 mr-2" />
+                    {scanning ? "Ouverture du scanner..." : "Ouvrir le scanner QR"}
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <div className="relative rounded-lg overflow-hidden border-2 border-primary bg-black aspect-square">
+                    <video ref={videoRef} className="w-full h-full object-cover" muted playsInline />
+                    {scanning && !scannerReady && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/60">
+                        <div className="text-center space-y-2">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto" />
+                          <p className="text-xs text-white">Initialisation de la caméra...</p>
+                        </div>
+                      </div>
+                    )}
+                    {!scanning && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                        <Button onClick={() => void startLiveScanner()} size="lg" className="min-h-[44px]" style={{ touchAction: "manipulation" }}>
+                          <CameraIcon className="h-5 w-5 mr-2" />
+                          Démarrer le scanner
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+
+                  {scannerReady && (
+                    <p className="text-xs text-center text-muted-foreground">
+                      Positionnez le QR code dans le cadre — la détection est automatique
+                    </p>
+                  )}
+                </>
               )}
 
-              {/* Alternative scan methods */}
               <div className="flex flex-col gap-2">
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
@@ -462,21 +531,11 @@ export function QRScanner({ open, onOpenChange }: QRScannerProps) {
                     <span className="bg-background px-2 text-muted-foreground">ou</span>
                   </div>
                 </div>
-                <Button
-                  onClick={scanFromPhoto}
-                  variant="outline"
-                  className="w-full min-h-[44px]"
-                  style={{ touchAction: "manipulation" }}
-                >
+                <Button onClick={scanFromPhoto} variant="outline" className="w-full min-h-[44px]" style={{ touchAction: "manipulation" }}>
                   <CameraIcon className="h-4 w-4 mr-2" />
                   Prendre une photo du QR
                 </Button>
-                <Button
-                  onClick={scanFromGallery}
-                  variant="outline"
-                  className="w-full min-h-[44px]"
-                  style={{ touchAction: "manipulation" }}
-                >
+                <Button onClick={scanFromGallery} variant="outline" className="w-full min-h-[44px]" style={{ touchAction: "manipulation" }}>
                   <ImageIcon className="h-4 w-4 mr-2" />
                   Scanner depuis une image
                 </Button>
