@@ -880,7 +880,7 @@
         "feeding": "Feeding recording and scheduling",
         "health": "Health tracking and veterinary history",
         "reproduction": "Reproduction tracking (mating, egg laying, hatching)",
-        "nfc": "QR code and NFC tag identification",
+        "nfc": "NFC tag identification",
         "transfer": "Animal transfer between users"
       }
     },
