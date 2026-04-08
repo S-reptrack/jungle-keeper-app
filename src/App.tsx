@@ -56,7 +56,7 @@ const App = () => (
         <Sonner />
         <Router>
           <TesterActivityTracker />
-          <GDPRConsentDialog />
+          
           <HatchingNotificationDialog />
           <InstallPromptBanner />
           <OfflineIndicator />
