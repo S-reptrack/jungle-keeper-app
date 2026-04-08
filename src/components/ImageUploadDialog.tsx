@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Upload, Camera as CameraIcon, Trash2 } from "lucide-react";
-import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { Capacitor } from "@capacitor/core";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -28,7 +27,7 @@ const ImageUploadDialog = ({
 }: ImageUploadDialogProps) => {
   const [uploading, setUploading] = useState(false);
 
-  const uploadFile = async (file: File) => {
+  const uploadFile = useCallback(async (file: File) => {
     setUploading(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -67,106 +66,116 @@ const ImageUploadDialog = ({
     } finally {
       setUploading(false);
     }
-  };
+  }, [reptileId, onUploadSuccess, onOpenChange]);
 
-  const handleTakePhoto = async () => {
+  const handleTakePhoto = useCallback(async () => {
     try {
-      // Prefer native camera when available
       if (Capacitor.isNativePlatform()) {
-        const photo = await Camera.getPhoto({
-          source: CameraSource.Camera,
-          resultType: CameraResultType.Uri,
-          quality: 80,
-          correctOrientation: true,
-          saveToGallery: false,
-        });
-        if (!photo.webPath) throw new Error('Impossible de capturer la photo');
-        const blob = await fetch(photo.webPath).then(r => r.blob());
-        const file = new File([blob], `${reptileId}-${Date.now()}.jpg`, { type: blob.type || 'image/jpeg' });
-        return uploadFile(file);
+        // Dynamically import Camera to avoid crashes if plugin is not available
+        let CameraModule: any;
+        try {
+          CameraModule = await import("@capacitor/camera");
+        } catch (importErr) {
+          console.error("Camera plugin not available:", importErr);
+          // Fallback to file input with capture
+          const input = document.getElementById('camera-upload') as HTMLInputElement;
+          if (input) input.click();
+          return;
+        }
+
+        const { Camera, CameraResultType, CameraSource } = CameraModule;
+
+        try {
+          // Check permissions first to avoid crash
+          const permStatus = await Camera.checkPermissions().catch(() => ({ camera: 'prompt' }));
+          
+          if (permStatus.camera === 'denied') {
+            toast.error("Accès à la caméra refusé. Veuillez l'activer dans les réglages.");
+            return;
+          }
+
+          if (permStatus.camera === 'prompt' || permStatus.camera === 'prompt-with-rationale') {
+            const requested = await Camera.requestPermissions({ permissions: ['camera'] }).catch(() => ({ camera: 'denied' }));
+            if (requested.camera === 'denied') {
+              toast.error("Accès à la caméra refusé.");
+              return;
+            }
+          }
+
+          const photo = await Camera.getPhoto({
+            source: CameraSource.Camera,
+            resultType: CameraResultType.Uri,
+            quality: 80,
+            correctOrientation: true,
+            saveToGallery: false,
+          });
+
+          if (!photo.webPath) throw new Error('Impossible de capturer la photo');
+          const blob = await fetch(photo.webPath).then((r: Response) => r.blob());
+          const file = new File([blob], `${reptileId}-${Date.now()}.jpg`, { type: blob.type || 'image/jpeg' });
+          return uploadFile(file);
+        } catch (cameraErr: any) {
+          // User cancelled or camera error - don't crash
+          if (cameraErr?.message?.includes('cancelled') || cameraErr?.message?.includes('User cancelled')) {
+            return; // Silent cancel
+          }
+          console.error('Camera getPhoto error:', cameraErr);
+          toast.error("Impossible d'accéder à la caméra. Essayez 'Choisir depuis l'appareil'.");
+          return;
+        }
       }
 
-      // Fallback to input capture on web
-      document.getElementById('camera-upload')?.dispatchEvent(new MouseEvent('click'));
+      // Fallback to file input with capture on web
+      const input = document.getElementById('camera-upload') as HTMLInputElement;
+      if (input) input.click();
     } catch (e: any) {
       console.error('Camera error:', e);
-      toast.error("Accès à la caméra refusé ou indisponible");
+      toast.error("Accès à la caméra indisponible");
     }
-  };
+  }, [reptileId, uploadFile]);
 
-  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    // Client-side validation for immediate feedback
-    const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
-    if (!validTypes.includes(file.type)) {
-      toast.error("Format d'image non supporté. Utilisez PNG, JPEG, JPG ou WEBP");
-      return;
-    }
-
-    // Validate file size (5MB)
-    if (file.size > 5242880) {
-      toast.error("L'image est trop grande. Maximum 5MB");
-      return;
-    }
-
-    setUploading(true);
-
+  const handleFileSelect = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      // Récupérer la session pour l'authentification
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        throw new Error("Vous devez être connecté pour uploader une image");
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      // Reset input value so the same file can be re-selected
+      event.target.value = '';
+
+      const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+      if (!validTypes.includes(file.type)) {
+        toast.error("Format d'image non supporté. Utilisez PNG, JPEG, JPG ou WEBP");
+        return;
       }
 
-      // Créer un FormData pour l'upload via edge function
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('reptileId', reptileId);
-
-      // Utiliser fetch directement pour mieux contrôler les headers sur Android
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/upload-image`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-          },
-          body: formData,
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `Erreur HTTP: ${response.status}`);
+      if (file.size > 5242880) {
+        toast.error("L'image est trop grande. Maximum 5MB");
+        return;
       }
 
-      const data = await response.json();
-
-      if (!data.success || !data.path) {
-        throw new Error("Erreur lors du téléchargement de l'image");
-      }
-
-      toast.success("Image uploadée avec succès");
-      onUploadSuccess(data.path);
-      onOpenChange(false);
+      await uploadFile(file);
     } catch (error: any) {
-      console.error('Error uploading image:', error);
-      toast.error(error.message || "Erreur lors de l'upload de l'image");
-    } finally {
-      setUploading(false);
+      console.error('File select error:', error);
+      toast.error("Erreur lors de la sélection du fichier");
     }
-  };
+  }, [uploadFile]);
 
-  const handleDeleteClick = () => {
+  const handleChooseFile = useCallback(() => {
+    try {
+      const input = document.getElementById('file-upload') as HTMLInputElement;
+      if (input) input.click();
+    } catch (e) {
+      console.error('File picker error:', e);
+      toast.error("Impossible d'ouvrir le sélecteur de fichiers");
+    }
+  }, []);
+
+  const handleDeleteClick = useCallback(() => {
     if (onDeletePhoto) {
       onDeletePhoto();
       onOpenChange(false);
     }
-  };
+  }, [onDeletePhoto, onOpenChange]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -180,18 +189,17 @@ const ImageUploadDialog = ({
           </p>
           
           <div className="flex flex-col gap-3">
-            <label htmlFor="file-upload" className="cursor-pointer">
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full"
-                disabled={uploading}
-                onClick={() => document.getElementById('file-upload')?.click()}
-              >
-                <Upload className="mr-2 h-4 w-4" />
-                {uploading ? "Upload en cours..." : "Choisir depuis l'appareil"}
-              </Button>
-            </label>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full min-h-[44px]"
+              style={{ touchAction: 'manipulation' }}
+              disabled={uploading}
+              onClick={handleChooseFile}
+            >
+              <Upload className="mr-2 h-4 w-4" />
+              {uploading ? "Upload en cours..." : "Choisir depuis l'appareil"}
+            </Button>
             <input
               id="file-upload"
               type="file"
@@ -203,7 +211,8 @@ const ImageUploadDialog = ({
             <Button
               type="button"
               variant="outline"
-              className="w-full"
+              className="w-full min-h-[44px]"
+              style={{ touchAction: 'manipulation' }}
               disabled={uploading}
               onClick={handleTakePhoto}
             >
@@ -223,7 +232,8 @@ const ImageUploadDialog = ({
               <Button
                 type="button"
                 variant="destructive"
-                className="w-full"
+                className="w-full min-h-[44px]"
+                style={{ touchAction: 'manipulation' }}
                 disabled={uploading}
                 onClick={handleDeleteClick}
               >
