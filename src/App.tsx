@@ -18,7 +18,7 @@ import Privacy from "./pages/Privacy";
 import Legal from "./pages/Legal";
 import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
-import GDPRConsentDialog from "./components/GDPRConsentDialog";
+
 import { HatchingNotificationDialog } from "./components/HatchingNotificationDialog";
 import Install from "./pages/Install";
 import Transfers from "./pages/Transfers";
