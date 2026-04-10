@@ -67,42 +67,37 @@ const App = () => (
             <Route path="/terms" element={<Terms />} />
             <Route path="/legal" element={<Legal />} />
             <Route path="/support" element={<Support />} />
-          </Routes>
-          <TesterSuspensionGuard>
-          <Routes>
+
+            {/* Route Admin - priorité haute */}
+            <Route path="/admin" element={<TesterSuspensionGuard><AdminRoute><AdminDashboard /></AdminRoute></TesterSuspensionGuard>} />
+            <Route path="/instagram-promo" element={<TesterSuspensionGuard><AdminRoute><InstagramPromo /></AdminRoute></TesterSuspensionGuard>} />
             
-            {/* Route Admin - priorité haute, en dehors du MaintenanceGuard */}
-            <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-            <Route path="/instagram-promo" element={<AdminRoute><InstagramPromo /></AdminRoute>} />
-            
-            {/* Toutes les autres routes passent par MaintenanceGuard */}
-            <Route path="/" element={<MaintenanceGuard><Landing /></MaintenanceGuard>} />
-            <Route path="/dashboard" element={<MaintenanceGuard><Index /></MaintenanceGuard>} />
-            <Route path="/welcome" element={<MaintenanceGuard><Landing /></MaintenanceGuard>} />
-            <Route path="/landing" element={<MaintenanceGuard><Landing /></MaintenanceGuard>} />
-            <Route path="/install" element={<MaintenanceGuard><Install /></MaintenanceGuard>} />
-            <Route path="/reptiles" element={<MaintenanceGuard><Reptiles /></MaintenanceGuard>} />
-            <Route path="/reptile/:id" element={<MaintenanceGuard><ReptileDetail /></MaintenanceGuard>} />
-            <Route path="/feeding" element={<MaintenanceGuard><Feeding /></MaintenanceGuard>} />
-            <Route path="/feedings-due" element={<MaintenanceGuard><FeedingsDue /></MaintenanceGuard>} />
-            <Route path="/settings" element={<MaintenanceGuard><Settings /></MaintenanceGuard>} />
-            <Route path="/health" element={<MaintenanceGuard><HealthReptilesList /></MaintenanceGuard>} />
-            <Route path="/reproduction" element={<MaintenanceGuard><ReproductionReptilesList /></MaintenanceGuard>} />
-            <Route path="/all-reptiles" element={<MaintenanceGuard><AllReptilesList /></MaintenanceGuard>} />
-            <Route path="/for-sale" element={<MaintenanceGuard><ForSale /></MaintenanceGuard>} />
-            <Route path="/transfers" element={<MaintenanceGuard><Transfers /></MaintenanceGuard>} />
-            <Route path="/nfc" element={<MaintenanceGuard><NFCReader /></MaintenanceGuard>} />
-            <Route path="/cost-breakdown" element={<MaintenanceGuard><CostBreakdown /></MaintenanceGuard>} />
-            
-            <Route path="/analytics" element={<MaintenanceGuard><Analytics /></MaintenanceGuard>} />
-            <Route path="/genealogy" element={<MaintenanceGuard><Genealogy /></MaintenanceGuard>} />
-            <Route path="/morph-calculator" element={<MaintenanceGuard><MorphCalculator /></MaintenanceGuard>} />
-            <Route path="/health-dashboard" element={<MaintenanceGuard><HealthDashboard /></MaintenanceGuard>} />
+            {/* Toutes les autres routes passent par TesterSuspensionGuard + MaintenanceGuard */}
+            <Route path="/" element={<TesterSuspensionGuard><MaintenanceGuard><Landing /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/dashboard" element={<TesterSuspensionGuard><MaintenanceGuard><Index /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/welcome" element={<TesterSuspensionGuard><MaintenanceGuard><Landing /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/landing" element={<TesterSuspensionGuard><MaintenanceGuard><Landing /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/install" element={<TesterSuspensionGuard><MaintenanceGuard><Install /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/reptiles" element={<TesterSuspensionGuard><MaintenanceGuard><Reptiles /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/reptile/:id" element={<TesterSuspensionGuard><MaintenanceGuard><ReptileDetail /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/feeding" element={<TesterSuspensionGuard><MaintenanceGuard><Feeding /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/feedings-due" element={<TesterSuspensionGuard><MaintenanceGuard><FeedingsDue /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/settings" element={<TesterSuspensionGuard><MaintenanceGuard><Settings /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/health" element={<TesterSuspensionGuard><MaintenanceGuard><HealthReptilesList /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/reproduction" element={<TesterSuspensionGuard><MaintenanceGuard><ReproductionReptilesList /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/all-reptiles" element={<TesterSuspensionGuard><MaintenanceGuard><AllReptilesList /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/for-sale" element={<TesterSuspensionGuard><MaintenanceGuard><ForSale /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/transfers" element={<TesterSuspensionGuard><MaintenanceGuard><Transfers /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/nfc" element={<TesterSuspensionGuard><MaintenanceGuard><NFCReader /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/cost-breakdown" element={<TesterSuspensionGuard><MaintenanceGuard><CostBreakdown /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/analytics" element={<TesterSuspensionGuard><MaintenanceGuard><Analytics /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/genealogy" element={<TesterSuspensionGuard><MaintenanceGuard><Genealogy /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/morph-calculator" element={<TesterSuspensionGuard><MaintenanceGuard><MorphCalculator /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/health-dashboard" element={<TesterSuspensionGuard><MaintenanceGuard><HealthDashboard /></MaintenanceGuard></TesterSuspensionGuard>} />
             
             {/* Catch-all route - TOUJOURS en dernier */}
             <Route path="*" element={<NotFound />} />
           </Routes>
-          </TesterSuspensionGuard>
         </Router>
       </TooltipProvider>
     </ThemeProvider>
