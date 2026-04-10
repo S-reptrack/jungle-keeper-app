@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Globe, LogOut, User, Shield, Send, ArrowLeft, MessageSquare } from "lucide-react";
+import { Moon, Sun, Globe, LogOut, User, Shield, ArrowLeft, MessageSquare } from "lucide-react";
 import { useTheme } from "next-themes";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
