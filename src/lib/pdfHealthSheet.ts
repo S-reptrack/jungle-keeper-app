@@ -58,7 +58,7 @@ function sexLabel(sex: string | null): string {
   return "Indéterminé";
 }
 
-export function generateHealthPDF(data: ReptilePDFData): void {
+export function generateHealthPDF(data: ReptilePDFData, printWindow?: Window | null): void {
   const { reptile, feedings, weights, healthRecords, sheddings } = data;
 
   // Build HTML content for PDF
@@ -211,14 +211,14 @@ export function generateHealthPDF(data: ReptilePDFData): void {
 </body>
 </html>`;
 
-  // Open print dialog with the generated HTML
-  const printWindow = window.open("", "_blank");
-  if (printWindow) {
-    printWindow.document.write(html);
-    printWindow.document.close();
-    // Auto-trigger print for PDF save
+  // Use provided window or open a new one
+  const win = printWindow || window.open("", "_blank");
+  if (win) {
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
     setTimeout(() => {
-      printWindow.print();
+      win.print();
     }, 500);
   }
 }

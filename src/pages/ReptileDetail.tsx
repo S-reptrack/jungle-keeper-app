@@ -462,10 +462,21 @@ const ReptileDetail = () => {
                       <Button
                         variant="outline"
                         className="w-full gap-2"
-                        onClick={async () => {
-                          const data = await fetchReptilePDFData(reptile.id);
-                          if (data) generateHealthPDF(data);
-                          else toast.error("Erreur lors de la génération du PDF");
+                        onClick={() => {
+                          // Open window synchronously to avoid popup blocker
+                          const printWindow = window.open("", "_blank");
+                          if (!printWindow) {
+                            toast.error("Veuillez autoriser les pop-ups pour exporter le PDF");
+                            return;
+                          }
+                          printWindow.document.write("<p>Chargement...</p>");
+                          fetchReptilePDFData(reptile.id).then((data) => {
+                            if (data) generateHealthPDF(data, printWindow);
+                            else {
+                              printWindow.close();
+                              toast.error("Erreur lors de la génération du PDF");
+                            }
+                          });
                         }}
                       >
                         <FileText className="w-4 h-4" />
