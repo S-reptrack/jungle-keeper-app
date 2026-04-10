@@ -195,24 +195,6 @@ const Settings = () => {
             </CardContent>
           </Card>
 
-          {/* Transferts */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Send className="w-5 h-5" />
-                {t("transfer.pageTitle")}
-              </CardTitle>
-              <CardDescription>Gérez les transferts d'animaux envoyés et reçus</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link to="/transfers">
-                <Button variant="outline" className="w-full">
-                  <Send className="w-4 h-4 mr-2" />
-                  Voir les transferts
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
 
           {/* Compte */}
           <Card>
