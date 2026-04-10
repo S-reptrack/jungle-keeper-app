@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Globe, LogOut, User, Shield, ArrowLeft, MessageSquare } from "lucide-react";
+import { Moon, Sun, Globe, LogOut, User, Shield, Send, ArrowLeft, MessageSquare } from "lucide-react";
 import { useTheme } from "next-themes";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -196,7 +196,25 @@ const Settings = () => {
           </Card>
 
 
-          {/* Compte */}
+          {/* Transferts */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Send className="w-5 h-5" />
+                {t("transfer.pageTitle")}
+              </CardTitle>
+              <CardDescription>Gérez les transferts d'animaux envoyés et reçus</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Link to="/transfers">
+                <Button variant="outline" className="w-full">
+                  <Send className="w-4 h-4 mr-2" />
+                  Voir les transferts
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
