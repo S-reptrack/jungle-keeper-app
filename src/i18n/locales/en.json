@@ -736,7 +736,10 @@
     "autoRenewDisclosure": "Subscription automatically renews at the end of each period unless cancelled at least 24 hours before the end of the current period.",
     "termsLink": "Terms of Use",
     "privacyLink": "Privacy Policy",
-    "restoreSuccess": "Purchases restored successfully"
+    "restoreSuccess": "Purchases restored successfully",
+    "subscriptionDetails": "Subscription details",
+    "perMonth": "month",
+    "perYear": "year"
   },
   "premium": {
     "featureLockedDescription": "This feature is reserved for Premium subscribers.",
