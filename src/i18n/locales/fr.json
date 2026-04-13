@@ -788,7 +788,10 @@
     "autoRenewDisclosure": "L'abonnement se renouvelle automatiquement à la fin de chaque période sauf annulation au moins 24h avant la fin de la période en cours.",
     "termsLink": "Conditions d'utilisation",
     "privacyLink": "Politique de confidentialité",
-    "restoreSuccess": "Achats restaurés avec succès"
+    "restoreSuccess": "Achats restaurés avec succès",
+    "subscriptionDetails": "Détails de l'abonnement",
+    "perMonth": "mois",
+    "perYear": "an"
   },
   "legal": {
     "title": "Mentions Légales",
