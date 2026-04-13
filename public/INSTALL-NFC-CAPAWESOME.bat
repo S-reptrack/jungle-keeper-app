@@ -21,16 +21,16 @@ echo (Copiez-collez la clé reçue par email)
 echo ========================================
 set /p LICENSE_KEY="Clé de licence: "
 
-call npm config set //npm.registry.capawesome.io/:_authToken %LICENSE_KEY%
-call npm config set //npm.registry.capawesome.io/:always-auth true
+echo @capawesome-team:registry=https://npm.registry.capawesome.io> .npmrc
+echo //npm.registry.capawesome.io/:_authToken=%LICENSE_KEY%>> .npmrc
 
 echo.
 echo [3/6] Désinstallation ancien plugin NFC...
-call npm uninstall @exxili/capacitor-nfc
+call npm uninstall @exxili/capacitor-nfc --legacy-peer-deps
 
 echo.
 echo [4/6] Installation plugin NFC Premium...
-call npm install @capawesome-team/capacitor-nfc
+call npm install @capawesome-team/capacitor-nfc --legacy-peer-deps
 
 echo.
 echo [5/6] Build du projet...
