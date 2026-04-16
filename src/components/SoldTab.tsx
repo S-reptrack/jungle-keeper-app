@@ -30,7 +30,6 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const dateLocale = localeMap[i18n.language] || enUS;
-  const navigate = useNavigate();
   const [date, setDate] = useState<Date>();
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
