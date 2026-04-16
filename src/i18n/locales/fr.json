@@ -37,6 +37,10 @@
     "generalInfo": "Informations générales",
     "noHealthRecords": "Aucun enregistrement de santé pour le moment",
     "viewAll": "Voir tout",
+    "deceased": "Décédé",
+    "sold": "Vendu",
+    "transferred": "Transféré",
+    "noTransferred": "Aucun animal transféré",
     "tabs": {
       "overview": "Aperçu",
       "feeding": "Repas",
@@ -236,7 +240,9 @@
     "language": "Langue",
     "back": "Retour",
     "loading": "Chargement...",
-    "close": "Fermer"
+    "close": "Fermer",
+    "never": "Jamais",
+    "unknown": "Inconnu"
   },
   "auth": {
     "login": "Connexion",

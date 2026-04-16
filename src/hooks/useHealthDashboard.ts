@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import i18n from "@/i18n/config";
 
 export interface HealthAlert {
   id: string;
@@ -114,8 +115,8 @@ export const useHealthDashboard = () => {
               reptileImage: reptile.image_url,
               type: "overdue_feeding",
               severity: daysDiff > 7 ? "danger" : "warning",
-              message: `Repas en retard de ${daysDiff} jours`,
-              detail: `Dernier repas le ${new Date(lastFeeding.feeding_date).toLocaleDateString("fr-FR")}`,
+               message: i18n.t("healthDashboard.feedingOverdue", { days: daysDiff }),
+              detail: i18n.t("healthDashboard.lastFeedingOn", { date: new Date(lastFeeding.feeding_date).toLocaleDateString(i18n.language) }),
               date: lastFeeding.feeding_date,
             });
           }
@@ -138,8 +139,8 @@ export const useHealthDashboard = () => {
             reptileImage: reptile.image_url,
             type: "feeding_refused",
             severity: refusals.length >= 3 ? "danger" : "warning",
-            message: `${refusals.length} refus alimentaires récents`,
-            detail: "Plusieurs refus de nourriture détectés dans les derniers repas",
+            message: i18n.t("healthDashboard.feedingRefusals", { count: refusals.length }),
+            detail: i18n.t("healthDashboard.refusalDetail"),
           });
         }
 
@@ -161,8 +162,8 @@ export const useHealthDashboard = () => {
               reptileImage: reptile.image_url,
               type: "overdue_shedding",
               severity: daysSinceShedding > 120 ? "danger" : "warning",
-              message: `Pas de mue depuis ${daysSinceShedding} jours`,
-              detail: `Dernière mue le ${lastSheddingDate.toLocaleDateString("fr-FR")}`,
+              message: i18n.t("healthDashboard.noSheddingSince", { days: daysSinceShedding }),
+              detail: i18n.t("healthDashboard.lastSheddingOn", { date: lastSheddingDate.toLocaleDateString(i18n.language) }),
               date: lastShedding.shedding_date,
             });
           }
@@ -177,8 +178,8 @@ export const useHealthDashboard = () => {
               reptileImage: reptile.image_url,
               type: "overdue_shedding",
               severity: "warning",
-              message: `Dernière mue de mauvaise qualité`,
-              detail: `Mue ${lastShedding.quality === "partial" ? "partielle" : "problématique"} le ${lastSheddingDate.toLocaleDateString("fr-FR")}`,
+              message: i18n.t("healthDashboard.badSheddingQuality"),
+              detail: i18n.t("healthDashboard.badSheddingDetail"),
               date: lastShedding.shedding_date,
             });
           }
@@ -201,8 +202,8 @@ export const useHealthDashboard = () => {
               reptileImage: reptile.image_url,
               type: "weight_loss",
               severity: weightChange < -20 ? "danger" : "warning",
-              message: `Perte de poids de ${Math.abs(Math.round(weightChange))}%`,
-              detail: `${previousWeight.weight}g → ${lastWeight.weight}g`,
+              message: i18n.t("healthDashboard.weightLoss", { percent: Math.abs(Math.round(weightChange)) }),
+              detail: i18n.t("healthDashboard.weightLossDetail", { from: previousWeight.weight, to: lastWeight.weight }),
               date: lastWeight.measurement_date,
             });
           }
@@ -220,8 +221,8 @@ export const useHealthDashboard = () => {
               reptileImage: reptile.image_url,
               type: "health_issue",
               severity: "danger",
-              message: `Problème non résolu : ${issue.condition}`,
-              detail: `Diagnostiqué le ${new Date(issue.diagnosis_date).toLocaleDateString("fr-FR")}`,
+              message: i18n.t("healthDashboard.unresolvedIssues", { count: 1 }).replace("1 ", "") + `: ${issue.condition}`,
+              detail: new Date(issue.diagnosis_date).toLocaleDateString(i18n.language),
               date: issue.diagnosis_date,
             });
           }

@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Capacitor } from "@capacitor/core";
+import i18n from "@/i18n/config";
 
 interface FeedingDueItem {
   reptileId: string;
@@ -118,12 +119,12 @@ export const useFeedingNotifications = () => {
         const notifications = urgentItems.map((item, index) => {
           const body =
             item.daysUntil < 0
-              ? `${item.reptileName} a un repas en retard de ${Math.abs(item.daysUntil)} jour(s) !`
-              : `${item.reptileName} doit être nourri aujourd'hui`;
+              ? i18n.t("feedingSchedule.feedingOverdueNotif", { name: item.reptileName, days: Math.abs(item.daysUntil) })
+              : i18n.t("feedingSchedule.feedingDueToday", { name: item.reptileName });
 
           return {
             id: 10000 + index,
-            title: "🍽️ Repas à donner",
+            title: `🍽️ ${i18n.t("feedingSchedule.feedingToGive")}`,
             body,
             schedule: { at: new Date(Date.now() + 1000) },
             smallIcon: "ic_stat_icon_config_sample",
@@ -144,8 +145,8 @@ export const useFeedingNotifications = () => {
 
           return {
             id: 15000 + index,
-            title: "🍽️ Repas prévu aujourd'hui",
-            body: `${item.reptileName} doit être nourri aujourd'hui`,
+            title: `🍽️ ${i18n.t("feedingSchedule.feedingPlannedToday")}`,
+            body: i18n.t("feedingSchedule.feedingDueToday", { name: item.reptileName }),
             schedule: { at: scheduleDate },
             smallIcon: "ic_stat_icon_config_sample",
             iconColor: "#FF9800",
