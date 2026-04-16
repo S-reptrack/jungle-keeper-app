@@ -236,7 +236,9 @@
     "language": "Langue",
     "back": "Retour",
     "loading": "Chargement...",
-    "close": "Fermer"
+    "close": "Fermer",
+    "never": "Jamais",
+    "unknown": "Inconnu"
   },
   "auth": {
     "login": "Connexion",
