@@ -5,6 +5,7 @@ import * as z from "zod";
 import { Plus, Calendar as CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
+import { fr, enUS, de, es, it, pt, nl, pl, ru, ja, zhCN, hi, th, id as idLocale } from "date-fns/locale";
 import {
   Dialog,
   DialogContent,
@@ -33,11 +34,11 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+const localeMap: Record<string, any> = { fr, en: enUS, de, es, it, pt, nl, pl, ru, ja, zh: zhCN, hi, th, id: idLocale };
+
 const formSchema = z.object({
-  weight: z.string().min(1, "Le poids est requis"),
-  measurement_date: z.date({
-    required_error: "La date de mesure est requise",
-  }),
+  weight: z.string().min(1, "Weight is required"),
+  measurement_date: z.date(),
   notes: z.string().optional(),
 });
 
@@ -47,9 +48,10 @@ interface AddWeightRecordDialogProps {
 }
 
 const AddWeightRecordDialog = ({ reptileId, onSuccess }: AddWeightRecordDialogProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const dateLocale = localeMap[i18n.language] || enUS;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -66,7 +68,7 @@ const AddWeightRecordDialog = ({ reptileId, onSuccess }: AddWeightRecordDialogPr
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
-        toast.error("Utilisateur non authentifié");
+        toast.error(t("addWeight.authError"));
         return;
       }
 
@@ -80,18 +82,17 @@ const AddWeightRecordDialog = ({ reptileId, onSuccess }: AddWeightRecordDialogPr
 
       if (error) throw error;
 
-      // Mettre à jour le poids du reptile
       await supabase.from("reptiles").update({
         weight: parseFloat(values.weight),
       }).eq("id", reptileId);
 
-      toast.success("Pesée enregistrée avec succès");
+      toast.success(t("addWeight.success"));
       setOpen(false);
       form.reset();
       onSuccess();
     } catch (error) {
       console.error("Error adding weight record:", error);
-      toast.error("Erreur lors de l'enregistrement de la pesée");
+      toast.error(t("addWeight.error"));
     } finally {
       setLoading(false);
     }
@@ -102,12 +103,12 @@ const AddWeightRecordDialog = ({ reptileId, onSuccess }: AddWeightRecordDialogPr
       <DialogTrigger asChild>
         <Button size="sm" className="gap-2">
           <Plus className="w-4 h-4" />
-          Ajouter une pesée
+          {t("addWeight.addButton")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Nouvelle pesée</DialogTitle>
+          <DialogTitle>{t("addWeight.title")}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -116,14 +117,9 @@ const AddWeightRecordDialog = ({ reptileId, onSuccess }: AddWeightRecordDialogPr
               name="weight"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Poids (grammes)</FormLabel>
+                  <FormLabel>{t("addWeight.weightGrams")}</FormLabel>
                   <FormControl>
-                    <Input
-                      type="number"
-                      step="0.1"
-                      placeholder="150"
-                      {...field}
-                    />
+                    <Input type="number" step="0.1" placeholder="150" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -135,22 +131,15 @@ const AddWeightRecordDialog = ({ reptileId, onSuccess }: AddWeightRecordDialogPr
               name="measurement_date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Date de mesure</FormLabel>
+                  <FormLabel>{t("addWeight.measurementDate")}</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
                           variant="outline"
-                          className={cn(
-                            "w-full pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                          )}
+                          className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
                         >
-                          {field.value ? (
-                            format(field.value, "PPP", { locale: undefined })
-                          ) : (
-                            <span>Sélectionner une date</span>
-                          )}
+                          {field.value ? format(field.value, "PPP", { locale: dateLocale }) : <span>{t("addWeight.selectDate")}</span>}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
                       </FormControl>
@@ -159,11 +148,10 @@ const AddWeightRecordDialog = ({ reptileId, onSuccess }: AddWeightRecordDialogPr
                       <Calendar
                         mode="single"
                         selected={field.value}
-                        onSelect={(date) => {
-                          field.onChange(date);
-                        }}
+                        onSelect={field.onChange}
                         disabled={(date) => date > new Date()}
                         initialFocus
+                        locale={dateLocale}
                         className={cn("p-3 pointer-events-auto")}
                       />
                     </PopoverContent>
@@ -178,14 +166,9 @@ const AddWeightRecordDialog = ({ reptileId, onSuccess }: AddWeightRecordDialogPr
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Notes (optionnel)</FormLabel>
+                  <FormLabel>{t("addWeight.notesOptional")}</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Observations particulières..."
-                      className="resize-none"
-                      rows={3}
-                      {...field}
-                    />
+                    <Textarea placeholder={t("addWeight.notesPlaceholder")} className="resize-none" rows={3} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -193,15 +176,11 @@ const AddWeightRecordDialog = ({ reptileId, onSuccess }: AddWeightRecordDialogPr
             />
 
             <div className="flex justify-end gap-3">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setOpen(false)}
-              >
-                Annuler
+              <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                {t("addWeight.cancel")}
               </Button>
               <Button type="submit" disabled={loading}>
-                {loading ? "Enregistrement..." : "Enregistrer"}
+                {loading ? t("addWeight.saving") : t("addWeight.save")}
               </Button>
             </div>
           </form>

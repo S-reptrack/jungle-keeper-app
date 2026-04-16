@@ -29,20 +29,10 @@ interface AddHealthRecordDialogProps {
   onRecordAdded: () => void;
 }
 
-const COMMON_CONDITIONS = [
-  { value: "prolapsus", label: "Prolapsus" },
-  { value: "stomatite", label: "Stomatite (Mouth Rot)" },
-  { value: "acariens", label: "Acariens (Mites)" },
-  { value: "infection_respiratoire", label: "Infection respiratoire" },
-  { value: "deshydratation", label: "Déshydratation" },
-  { value: "retention_oeufs", label: "Rétention d'œufs" },
-  { value: "mbd", label: "Maladie métabolique osseuse (MBD)" },
-  { value: "parasites_internes", label: "Parasites internes" },
-  { value: "abces", label: "Abcès" },
-  { value: "brulures", label: "Brûlures thermiques" },
-  { value: "mue_difficile", label: "Mue difficile (Dysecdysis)" },
-  { value: "regurgitation", label: "Régurgitation" },
-  { value: "autre", label: "Autre" },
+const CONDITION_KEYS = [
+  "prolapsus", "stomatite", "acariens", "infection_respiratoire",
+  "deshydratation", "retention_oeufs", "mbd", "parasites_internes",
+  "abces", "brulures", "mue_difficile", "regurgitation", "autre",
 ];
 
 const AddHealthRecordDialog = ({ reptileId, onRecordAdded }: AddHealthRecordDialogProps) => {
@@ -59,7 +49,7 @@ const AddHealthRecordDialog = ({ reptileId, onRecordAdded }: AddHealthRecordDial
     e.preventDefault();
 
     if (!condition || !diagnosisDate) {
-      toast.error("Veuillez remplir tous les champs requis");
+      toast.error(t("addHealth.fillRequired"));
       return;
     }
 
@@ -68,7 +58,7 @@ const AddHealthRecordDialog = ({ reptileId, onRecordAdded }: AddHealthRecordDial
       const { data: { user } } = await supabase.auth.getUser();
 
       if (!user) {
-        toast.error("Vous devez être connecté");
+        toast.error(t("addHealth.loginRequired"));
         return;
       }
 
@@ -86,13 +76,13 @@ const AddHealthRecordDialog = ({ reptileId, onRecordAdded }: AddHealthRecordDial
 
       if (error) throw error;
 
-      toast.success("Problème de santé ajouté avec succès");
+      toast.success(t("addHealth.success"));
       setOpen(false);
       resetForm();
       onRecordAdded();
     } catch (error) {
       console.error("Error adding health record:", error);
-      toast.error("Erreur lors de l'ajout du problème de santé");
+      toast.error(t("addHealth.error"));
     } finally {
       setLoading(false);
     }
@@ -111,27 +101,25 @@ const AddHealthRecordDialog = ({ reptileId, onRecordAdded }: AddHealthRecordDial
       <DialogTrigger asChild>
         <Button>
           <Plus className="w-4 h-4 mr-2" />
-          Ajouter un problème
+          {t("addHealth.addButton")}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Ajouter un problème de santé</DialogTitle>
-          <DialogDescription>
-            Enregistrez les problèmes de santé de votre reptile
-          </DialogDescription>
+          <DialogTitle>{t("addHealth.title")}</DialogTitle>
+          <DialogDescription>{t("addHealth.description")}</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="condition">Condition *</Label>
+            <Label htmlFor="condition">{t("addHealth.condition")}</Label>
             <Select value={condition} onValueChange={setCondition}>
               <SelectTrigger>
-                <SelectValue placeholder="Sélectionnez une maladie" />
+                <SelectValue placeholder={t("addHealth.selectCondition")} />
               </SelectTrigger>
               <SelectContent>
-                {COMMON_CONDITIONS.map((cond) => (
-                  <SelectItem key={cond.value} value={cond.label}>
-                    {cond.label}
+                {CONDITION_KEYS.map((key) => (
+                  <SelectItem key={key} value={t(`conditions.${key}`)}>
+                    {t(`conditions.${key}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -139,7 +127,7 @@ const AddHealthRecordDialog = ({ reptileId, onRecordAdded }: AddHealthRecordDial
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="diagnosisDate">Date de diagnostic *</Label>
+            <Label htmlFor="diagnosisDate">{t("addHealth.diagnosisDate")}</Label>
             <Input
               id="diagnosisDate"
               type="date"
@@ -151,23 +139,23 @@ const AddHealthRecordDialog = ({ reptileId, onRecordAdded }: AddHealthRecordDial
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="treatment">Traitement</Label>
+            <Label htmlFor="treatment">{t("addHealth.treatment")}</Label>
             <Textarea
               id="treatment"
               value={treatment}
               onChange={(e) => setTreatment(e.target.value)}
-              placeholder="Décrivez le traitement appliqué..."
+              placeholder={t("addHealth.treatmentPlaceholder")}
               rows={3}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="notes">Notes complémentaires</Label>
+            <Label htmlFor="notes">{t("addHealth.additionalNotes")}</Label>
             <Textarea
               id="notes"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Ajoutez des détails supplémentaires..."
+              placeholder={t("addHealth.additionalNotesPlaceholder")}
               rows={3}
             />
           </div>
@@ -179,16 +167,16 @@ const AddHealthRecordDialog = ({ reptileId, onRecordAdded }: AddHealthRecordDial
               onCheckedChange={(checked) => setResolved(checked as boolean)}
             />
             <Label htmlFor="resolved" className="cursor-pointer">
-              Problème résolu
+              {t("addHealth.resolved")}
             </Label>
           </div>
 
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-              Annuler
+              {t("addHealth.cancel")}
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Ajout..." : "Ajouter"}
+              {loading ? t("addHealth.adding") : t("addHealth.add")}
             </Button>
           </div>
         </form>
