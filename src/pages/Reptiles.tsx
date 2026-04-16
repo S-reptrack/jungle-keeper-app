@@ -20,7 +20,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 const ITEMS_PER_PAGE = 10;
 
 const Reptiles = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const { role } = useUserRole();
   const navigate = useNavigate();
@@ -191,9 +191,9 @@ const Reptiles = () => {
         feedDate.setHours(0, 0, 0, 0);
         const diffTime = today.getTime() - feedDate.getTime();
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-        if (diffDays === 0) return "Aujourd'hui";
-        if (diffDays === 1) return "Il y a 1 jour";
-        return `Il y a ${diffDays} jours`;
+        if (diffDays === 0) return t("timeAgo.today");
+        if (diffDays === 1) return t("timeAgo.yesterday");
+        return t("timeAgo.daysAgo", { days: diffDays });
       };
 
       const feedingsMap: Record<string, string> = {};
