@@ -95,7 +95,7 @@ const FeedingsDue = () => {
   };
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString("fr-FR", {
+    return new Date(date).toLocaleDateString(i18n.language, {
       day: "numeric",
       month: "long",
       year: "numeric",
@@ -114,27 +114,27 @@ const FeedingsDue = () => {
             className="mb-4"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Retour
+            {t("common.back")}
           </Button>
           
           <h1 className="text-3xl font-bold text-foreground mb-2">
-            Repas à venir
+            {t("feedingSchedule.title")}
           </h1>
           <p className="text-muted-foreground mb-2">
-            Reptiles à nourrir dans les 10 prochains jours
+            {t("feedingSchedule.subtitle")}
           </p>
           <p className="text-sm text-muted-foreground italic">
-            ℹ️ Ces dates sont calculées à titre indicatif selon les intervalles de nourrissage définis
+            ℹ️ {t("feedingSchedule.disclaimer")}
           </p>
         </div>
 
         {loading ? (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">Chargement...</p>
+            <p className="text-muted-foreground">{t("feedingSchedule.loading")}</p>
           </div>
         ) : reptiles.length === 0 ? (
           <div className="text-center py-12 border border-dashed border-border rounded-lg">
-            <p className="text-muted-foreground">Aucun repas prévu dans les 10 prochains jours</p>
+            <p className="text-muted-foreground">{t("feedingSchedule.noFeedings")}</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -168,13 +168,13 @@ const FeedingsDue = () => {
                         <div>
                           {reptile.days_overdue < 0 ? (
                             <Badge variant="destructive">
-                              En retard de {Math.abs(reptile.days_overdue)}j
+                              {t("feedingSchedule.overdue", { days: Math.abs(reptile.days_overdue) })}
                             </Badge>
                           ) : reptile.days_overdue === 0 ? (
-                            <Badge variant="default">Aujourd'hui</Badge>
+                            <Badge variant="default">{t("feedingSchedule.today")}</Badge>
                           ) : (
                             <Badge variant="secondary">
-                              Dans {reptile.days_overdue}j
+                              {t("feedingSchedule.inDays", { days: reptile.days_overdue })}
                             </Badge>
                           )}
                         </div>
@@ -183,39 +183,16 @@ const FeedingsDue = () => {
                       <div className="space-y-2">
                         <div className="flex flex-wrap gap-4 text-sm">
                           <div className="flex items-center gap-1">
-                            <span className="text-muted-foreground">Intervalle:</span>
-                            <span className="font-medium">{reptile.feeding_interval_days} jours</span>
+                            <span className="text-muted-foreground">{t("feedingSchedule.interval")}:</span>
+                            <span className="font-medium">{reptile.feeding_interval_days} {t("feedingSchedule.days")}</span>
                           </div>
 
                           {reptile.last_feeding_date && (
                             <div className="flex items-center gap-1">
-                              <span className="text-muted-foreground">Dernier repas:</span>
+                              <span className="text-muted-foreground">{t("feedingSchedule.lastMeal")}:</span>
                               <span className="font-medium">{formatDate(reptile.last_feeding_date)}</span>
                             </div>
                           )}
-                        </div>
-                        
-                        {/* Debug info */}
-                        <div className="text-xs bg-muted/50 p-2 rounded space-y-1">
-                          <div className="font-mono">
-                            <span className="text-muted-foreground">Debug:</span>
-                          </div>
-                          <div className="font-mono">
-                            Prochain repas: {reptile.next_feeding_date.toLocaleDateString('fr-FR')}
-                          </div>
-                          <div className="font-mono">
-                            Jours calculés (days_overdue): {reptile.days_overdue}
-                          </div>
-                          <div className="font-mono">
-                            {reptile.last_feeding_date ? (
-                              <>
-                                Dernier repas: {new Date(reptile.last_feeding_date).toLocaleDateString('fr-FR')}
-                                {' '}+ {reptile.feeding_interval_days}j = {reptile.next_feeding_date.toLocaleDateString('fr-FR')}
-                              </>
-                            ) : (
-                              'Aucun repas enregistré (considéré comme dû aujourd\'hui)'
-                            )}
-                          </div>
                         </div>
                       </div>
                     </div>
