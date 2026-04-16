@@ -64,8 +64,14 @@
         "prelaying_shed": "Pre-laying shed",
         "laying": "Egg laying",
         "other": "Other"
-      }
-    }
+      },
+      "expectedDate": "Expected date",
+      "hatchingAlerts": "Hatching alerts",
+      "multipleHatchingSoon": "{{count}} hatchings are expected soon!",
+      "oneHatchingSoon": "A hatching is expected soon!",
+      "today": "Today"
+    },
+    "viewAll": "View all"
   },
   "feeding": {
     "stage": "Stage",
@@ -335,7 +341,9 @@
         "reptileData": "Information about your reptiles (name, species, age, etc.)",
         "feedingRecords": "Feeding records",
         "healthRecords": "Health and weight records",
-        "images": "Photos you upload"
+        "images": "Photos you upload",
+        "reproductionRecords": "Reproduction observations (mating, egg laying, hatching)",
+        "weightRecords": "Weight history of your animals"
       }
     },
     "dataUsage": {
@@ -344,7 +352,9 @@
       "items": {
         "service": "Provide and improve our services",
         "management": "Allow you to manage your reptiles",
-        "improvements": "Improve user experience"
+        "improvements": "Improve user experience",
+        "notifications": "Send you important notifications (upcoming hatchings, feeding reminders)",
+        "support": "Respond to your support requests"
       }
     },
     "dataSecurity": {
@@ -357,12 +367,21 @@
         "access": "Access your personal data",
         "correction": "Correct or update your information",
         "deletion": "Request deletion of your account and data",
-        "export": "Export your data"
-      }
+        "export": "Export your data",
+        "opposition": "Right to object: object to the processing of your data",
+        "restriction": "Right to restriction: restrict the processing of your data"
+      },
+      "exercise": "To exercise these rights, go to Settings > Privacy and Data in the Application, or contact us at contact@s-reptrack.app",
+      "intro": "Under GDPR, you have the following rights:"
     },
     "dataSharing": {
       "title": "Data Sharing",
-      "content": "We do not sell or share your personal data with third parties. Your data remains private and is only accessible by you."
+      "content": "We do not sell or share your personal data with third parties. Your data remains private and is only accessible by you.",
+      "items": {
+        "hosting": "Our hosting provider (secure cloud infrastructure) for data storage",
+        "legal": "Competent authorities if required by law",
+        "payment": "Our payment provider (Stripe) for subscription processing"
+      }
     },
     "contact": {
       "title": "Contact",
@@ -375,8 +394,45 @@
         "code": "The source code and application architecture are protected",
         "design": "Designs, interfaces and visual elements are our exclusive property",
         "content": "All texts, images and content are protected by copyright",
-      "prohibited": "Unauthorized copying, reproduction, modification or distribution of all or part of the application is strictly prohibited and subject to legal action"
+        "prohibited": "Unauthorized copying, reproduction, modification or distribution of all or part of the application is strictly prohibited and subject to legal action"
       }
+    },
+    "authority": {
+      "content": "If you believe that the processing of your personal data violates GDPR, you have the right to lodge a complaint with CNIL: www.cnil.fr",
+      "title": "Supervisory Authority"
+    },
+    "changes": {
+      "content": "We reserve the right to modify this privacy policy at any time. In case of substantial changes, you will be notified through the Application.",
+      "title": "Policy Changes"
+    },
+    "cookies": {
+      "content": "The Application uses your browser's local storage to remember your preferences (language, theme, GDPR consent). We do not use advertising tracking cookies.",
+      "title": "Cookies and Local Storage"
+    },
+    "dataController": {
+      "content": "The data controller is F.M. BERTIN, sole proprietor registered in France, operating the S-reptrack application. Email: contact@s-reptrack.app | Website: https://s-reptrack.app",
+      "title": "Data Controller"
+    },
+    "dataRetention": {
+      "content": "Your personal data is retained as long as your account is active. If you delete your account, all data will be permanently erased within 30 days.",
+      "title": "Data Retention"
+    },
+    "international": {
+      "content": "Your data is hosted in the European Union. In case of transfer to third countries, appropriate safeguards are in place in accordance with GDPR.",
+      "title": "International Transfers"
+    },
+    "legalBasis": {
+      "intro": "We process your personal data on the following legal bases:",
+      "items": {
+        "consent": "Your explicit consent when creating your account",
+        "contract": "Performance of the service contract when you use our Application",
+        "legitimate": "Our legitimate interest in improving our services and ensuring the security of the Application"
+      },
+      "title": "Legal Basis for Processing"
+    },
+    "minors": {
+      "content": "The Application is not intended for children under 16. We do not knowingly collect personal data from minors.",
+      "title": "Protection of Minors"
     }
   },
   "install": {
@@ -528,7 +584,9 @@
     "compareExport": "Data export",
     "compareTransfer": "Animal transfer",
     "compareSale": "For sale listing",
-    "compareMorphCalculator": "Genetics calculator"
+    "compareMorphCalculator": "Genetics calculator",
+    "legalNotice": "Legal Notice",
+    "termsOfService": "Terms of Service"
   },
   "species": {
     "python-molurus-bivittatus": "Burmese Python",
@@ -748,7 +806,20 @@
   },
   "analytics": {
     "title": "Analytics",
-    "description": "Advanced statistics and detailed charts of your breeding."
+    "description": "Advanced statistics and detailed charts of your breeding.",
+    "active": "Active",
+    "byCategory": "By category",
+    "distribution": "Distribution of your reptiles",
+    "feedingsPerMonth": "Feedings per month",
+    "hatched": "Hatched",
+    "healthStats": "Health statistics",
+    "reproductionStats": "Reproduction",
+    "resolved": "Resolved",
+    "stillborn": "Stillborn",
+    "top10Species": "Top 10 species",
+    "topSpecies": "Top species",
+    "unhatched": "Unhatched",
+    "weightEvolution": "Average weight evolution"
   },
   "genealogy": {
     "title": "Genealogy",
@@ -776,11 +847,52 @@
   },
   "marketplace": {
     "title": "Marketplace",
-    "description": "Classifieds between breeders to sell or exchange reptiles."
+    "description": "Classifieds between breeders to sell or exchange reptiles.",
+    "active": "Active",
+    "browse": "Browse",
+    "createListing": "Create listing",
+    "createListingDescription": "Post a listing to sell or exchange.",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Describe your animal...",
+    "exchange": "Exchange",
+    "fixed": "Fixed price",
+    "free": "Free",
+    "listingCreated": "Listing created!",
+    "listingDeleted": "Listing deleted",
+    "listingTitle": "Title",
+    "location": "Location",
+    "locationPlaceholder": "e.g. Paris, France",
+    "markSold": "Mark as sold",
+    "markedAsSold": "Listing marked as sold",
+    "myListings": "My listings",
+    "negotiable": "Negotiable",
+    "noDescription": "No description",
+    "noListings": "No listings yet.",
+    "noMyListings": "You don't have any listings yet.",
+    "price": "Price (€)",
+    "priceOnRequest": "Price on request",
+    "priceType": "Price type",
+    "publish": "Publish",
+    "searchPlaceholder": "Search...",
+    "sold": "Sold",
+    "titlePlaceholder": "e.g. Female pastel ball python",
+    "titleRequired": "Title is required",
+    "views": "views"
   },
   "photoHistory": {
     "title": "Photo History",
-    "premiumDescription": "Track your animals' evolution with a photo history."
+    "premiumDescription": "Track your animals' evolution with a photo history.",
+    "addPhoto": "Add a photo",
+    "addPhotoDescription": "Add a photo to track evolution.",
+    "caption": "Caption (optional)",
+    "captionPlaceholder": "e.g. First shed",
+    "date": "Photo date",
+    "noPhotos": "No photos in history.",
+    "photoAdded": "Photo added!",
+    "photoDeleted": "Photo deleted",
+    "selectFile": "Please select a file",
+    "selectImage": "Select an image",
+    "upload": "Upload"
   },
   "installBanner": {
     "title": "Install S-reptrack",
@@ -964,5 +1076,48 @@
       "title": "Subscription Auto-Renewal",
       "content": "Premium subscriptions (monthly at €5.99/month and annual at €49.99/year) automatically renew at the end of each period unless cancelled at least 24 hours before the end of the current period. On iOS, renewal is managed by Apple through your Apple account settings. On other platforms, payment is managed by Stripe. You can cancel at any time from the Application settings or your device settings."
     }
+  },
+  "legal": {
+    "cookies": {
+      "content": "The site uses your browser's local storage to remember your preferences (language, theme, consent). No advertising tracking cookies are used.",
+      "title": "Cookies"
+    },
+    "director": {
+      "title": "Publication Director"
+    },
+    "editor": {
+      "address": "Address",
+      "email": "Email",
+      "name": "Name",
+      "siret": "SIRET",
+      "status": "Status",
+      "statusValue": "Sole Proprietor (Micro-enterprise)",
+      "title": "Site Publisher"
+    },
+    "hosting": {
+      "address": "Address",
+      "name": "Name",
+      "title": "Hosting",
+      "website": "Website"
+    },
+    "intellectual": {
+      "content": "All content of the S-reptrack site (texts, images, graphics, logos, icons, sounds, software, etc.) is the exclusive property of the publisher. Any reproduction, distribution, modification, adaptation, retransmission or publication of these elements is strictly prohibited without the prior written consent of the publisher.",
+      "title": "Intellectual Property"
+    },
+    "lastUpdated": "Last updated",
+    "law": {
+      "content": "These legal notices are governed by French law. In case of dispute, French courts shall have exclusive jurisdiction.",
+      "title": "Applicable Law"
+    },
+    "liability": {
+      "content": "The publisher strives to provide accurate information. However, it cannot be held responsible for omissions, inaccuracies, or deficiencies in updates.",
+      "title": "Limitation of Liability"
+    },
+    "personalData": {
+      "content": "For more information about the processing of your personal data, please consult our",
+      "link": "Privacy Policy",
+      "title": "Personal Data"
+    },
+    "title": "Legal Notice"
   }
 }

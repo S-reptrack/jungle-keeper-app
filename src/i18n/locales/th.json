@@ -254,7 +254,24 @@
     "managementTools": "เครื่องมือการจัดการ",
     "managementToolsDescription": "การจัดการผู้ใช้และการสมัครสมาชิก",
     "comingSoon": "ฟีเจอร์ที่จะมาถึง: การจัดการผู้ใช้, การสมัคร Stripe, สถิติโดยละเอียด...",
-    "errorFetchingStats": "เกิดข้อผิดพลาดในการดึงสถิติ"
+    "errorFetchingStats": "เกิดข้อผิดพลาดในการดึงสถิติ",
+    "testers": {
+      "alreadyTester": "This user is already a tester",
+      "note": "Testers can access the app even in maintenance mode, but don't have admin privileges.",
+      "userNotFound": "No user found with this email",
+      "add": "Add",
+      "addSuccess": "Tester added successfully",
+      "emailPlaceholder": "Tester email",
+      "errorFetching": "Error fetching testers",
+      "removeSuccess": "{{email}} removed from testers",
+      "errorAdding": "Error adding tester",
+      "tester": "Tester",
+      "noTesters": "No testers yet",
+      "enterEmail": "Please enter an email",
+      "description": "Testers can access the app during maintenance",
+      "title": "Tester Management",
+      "errorRemoving": "Error removing tester"
+    }
   },
   "gdpr": {
     "title": "ความยินยอมและความเป็นส่วนตัว",
@@ -299,7 +316,9 @@
         "reptileData": "ข้อมูลเกี่ยวกับสัตว์เลื้อยคลานของคุณ",
         "feedingRecords": "บันทึกการให้อาหาร",
         "healthRecords": "บันทึกสุขภาพและน้ำหนัก",
-        "images": "รูปภาพที่คุณอัปโหลด"
+        "images": "รูปภาพที่คุณอัปโหลด",
+        "reproductionRecords": "Reproduction observations (mating, egg laying, hatching)",
+        "weightRecords": "Weight history of your animals"
       }
     },
     "dataUsage": {
@@ -308,7 +327,9 @@
       "items": {
         "service": "ให้บริการและปรับปรุงบริการของเรา",
         "management": "ให้คุณจัดการสัตว์เลื้อยคลานของคุณ",
-        "improvements": "ปรับปรุงประสบการณ์ผู้ใช้"
+        "improvements": "ปรับปรุงประสบการณ์ผู้ใช้",
+        "notifications": "Send you important notifications (upcoming hatchings, feeding reminders)",
+        "support": "Respond to your support requests"
       }
     },
     "dataSecurity": {
@@ -321,12 +342,21 @@
         "access": "เข้าถึงข้อมูลส่วนบุคคลของคุณ",
         "correction": "แก้ไขหรืออัปเดตข้อมูลของคุณ",
         "deletion": "ขอลบบัญชีและข้อมูลของคุณ",
-        "export": "ส่งออกข้อมูลของคุณ"
-      }
+        "export": "ส่งออกข้อมูลของคุณ",
+        "opposition": "Right to object: object to the processing of your data",
+        "restriction": "Right to restriction: restrict the processing of your data"
+      },
+      "intro": "Under GDPR, you have the following rights:",
+      "exercise": "To exercise these rights, go to Settings > Privacy and Data in the Application, or contact us at contact@s-reptrack.app"
     },
     "dataSharing": {
       "title": "การแบ่งปันข้อมูล",
-      "content": "เราไม่ขายหรือแบ่งปันข้อมูลส่วนบุคคลของคุณกับบุคคลที่สาม"
+      "content": "เราไม่ขายหรือแบ่งปันข้อมูลส่วนบุคคลของคุณกับบุคคลที่สาม",
+      "items": {
+        "legal": "Competent authorities if required by law",
+        "hosting": "Our hosting provider (secure cloud infrastructure) for data storage",
+        "payment": "Our payment provider (Stripe) for subscription processing"
+      }
     },
     "contact": {
       "title": "ติดต่อ",
@@ -341,6 +371,43 @@
         "content": "ข้อความ รูปภาพ และเนื้อหาทั้งหมดได้รับการคุ้มครองโดยลิขสิทธิ์",
         "prohibited": "ห้ามคัดลอกหรือแจกจ่ายโดยไม่ได้รับอนุญาต"
       }
+    },
+    "legalBasis": {
+      "intro": "We process your personal data on the following legal bases:",
+      "items": {
+        "legitimate": "Our legitimate interest in improving our services and ensuring the security of the Application",
+        "contract": "Performance of the service contract when you use our Application",
+        "consent": "Your explicit consent when creating your account"
+      },
+      "title": "Legal Basis for Processing"
+    },
+    "minors": {
+      "title": "Protection of Minors",
+      "content": "The Application is not intended for children under 16. We do not knowingly collect personal data from minors."
+    },
+    "international": {
+      "content": "Your data is hosted in the European Union. In case of transfer to third countries, appropriate safeguards are in place in accordance with GDPR.",
+      "title": "International Transfers"
+    },
+    "authority": {
+      "content": "If you believe that the processing of your personal data violates GDPR, you have the right to lodge a complaint with CNIL: www.cnil.fr",
+      "title": "Supervisory Authority"
+    },
+    "changes": {
+      "title": "Policy Changes",
+      "content": "We reserve the right to modify this privacy policy at any time. In case of substantial changes, you will be notified through the Application."
+    },
+    "dataRetention": {
+      "content": "Your personal data is retained as long as your account is active. If you delete your account, all data will be permanently erased within 30 days.",
+      "title": "Data Retention"
+    },
+    "dataController": {
+      "content": "The data controller is F.M. BERTIN, sole proprietor registered in France, operating the S-reptrack application. Email: contact@s-reptrack.app | Website: https://s-reptrack.app",
+      "title": "Data Controller"
+    },
+    "cookies": {
+      "content": "The Application uses your browser's local storage to remember your preferences (language, theme, GDPR consent). We do not use advertising tracking cookies.",
+      "title": "Cookies and Local Storage"
     }
   },
   "install": {
@@ -350,12 +417,35 @@
       "title": "Android (Chrome)",
       "instruction": "ใช้เมนู ⋮ จากนั้น 'เพิ่มลงหน้าจอหลัก'",
       "installNow": "ติดตั้งเลย",
-      "installNotReady": "ปุ่มจะใช้งานได้เมื่อสามารถติดตั้งได้"
+      "installNotReady": "ปุ่มจะใช้งานได้เมื่อสามารถติดตั้งได้",
+      "requirement": "Required browser: Google Chrome",
+      "tip": "If the button doesn't activate, use the manual steps above",
+      "step2": "Tap the ⋮ menu (3 vertical dots in top right)",
+      "step1": "Open Chrome and go to s-reptrack.app",
+      "step3": "Tap 'Install app' or 'Add to Home screen'",
+      "step4": "Confirm by tapping 'Install'",
+      "done": "The S-reptrack icon appears on your home screen!",
+      "subtitle": "Follow these simple steps"
     },
     "ios": {
       "title": "iPhone (Safari)",
-      "instruction": "กดปุ่ม 'แชร์' จากนั้น 'เพิ่มลงหน้าจอหลัก'"
-    }
+      "instruction": "กดปุ่ม 'แชร์' จากนั้น 'เพิ่มลงหน้าจอหลัก'",
+      "step1": "Open Safari and go to s-reptrack.app",
+      "warning": "Installation does NOT work with Chrome, Firefox or other browsers on iOS",
+      "important": "Don't confuse with 'S-reptrack app' that sometimes appears in the menu - this option doesn't work. Only use 'Add to Home Screen'.",
+      "step5": "Tap 'Add' in the top right",
+      "subtitle": "Safari is required",
+      "step3": "Scroll down in the menu",
+      "step4": "Tap 'Add to Home Screen'",
+      "requirement": "Required browser: Safari only (Chrome doesn't work)",
+      "step2": "Tap the Share icon (square with arrow pointing up)",
+      "done": "The S-reptrack icon appears on your home screen!"
+    },
+    "yourDevice": "Your device",
+    "showIos": "Show iPhone instructions",
+    "otherDevice": "Other device?",
+    "showAndroid": "Show Android instructions",
+    "detectingDevice": "Detecting your device..."
   },
   "transfer": {
     "title": "โอนย้ายสัตว์",
@@ -471,12 +561,165 @@
     "compareExport": "ส่งออกข้อมูล",
     "compareTransfer": "โอนย้ายสัตว์",
     "compareSale": "ลงประกาศขาย",
-    "compareMorphCalculator": "เครื่องคำนวณพันธุกรรม"
+    "compareMorphCalculator": "เครื่องคำนวณพันธุกรรม",
+    "legalNotice": "Legal Notice",
+    "termsOfService": "Terms of Service"
   },
   "species": {
     "python-regius": "ไพธอนบอล",
     "boa-constrictor": "บัวคอนสตริกเตอร์",
-    "pantherophis-guttatus": "งูข้าวโพด"
+    "pantherophis-guttatus": "งูข้าวโพด",
+    "varanus-acanthurus": "Spiny-tailed Monitor",
+    "pituophis-catenifer": "Gopher Snake",
+    "thamnopis-proximus": "Western Ribbon Snake",
+    "centrochelys-sulcata": "Sulcata Tortoise",
+    "brachylophus-fasciatus": "Fiji Banded Iguana",
+    "heosemys-spinosa": "Spiny Turtle",
+    "physignathus-cocincinus": "Chinese Water Dragon",
+    "cuora-trifasciata": "Golden Coin Turtle",
+    "varanus-salvator": "Asian Water Monitor",
+    "manouria-emys": "Asian Giant Tortoise",
+    "uromastyx-geyri": "Saharan Uromastyx",
+    "graptemys-pseudogeographica": "False Map Turtle",
+    "pelusios-castaneus": "West African Mud Turtle",
+    "cuora-galbinifrons": "Indochinese Box Turtle",
+    "chelonoidis-denticulatus": "Yellow-footed Tortoise",
+    "ctenosaura-similis": "Black Spiny-tailed Iguana",
+    "iguana-iguana": "Green Iguana",
+    "chrysemys-picta": "Painted Turtle",
+    "trioceros-melleri": "Meller's Chameleon",
+    "nerodia-sipedon": "Northern Water Snake",
+    "lampropeltis-californiae": "California Mountain Kingsnake",
+    "antaresia-childreni": "Children's Python",
+    "varanus-niloticus": "Nile Monitor",
+    "acrantophis": "Madagascar Ground Boa",
+    "leiopython-albertisii": "Northern White-lipped Python",
+    "liasis-olivaceus": "Olive Python",
+    "testudo-hermanni": "Hermann's Tortoise",
+    "pogona-vitticeps": "Bearded Dragon",
+    "cuora-amboinensis": "Asian Box Turtle",
+    "python-molurus": "Indian Python",
+    "cyclura-lewisi": "Blue Iguana",
+    "malayemys-subtrijuga": "Mekong Snail-eating Turtle",
+    "glyptemys-insculpta": "Wood Turtle",
+    "elaphe-obsoleta": "Black Rat Snake",
+    "morelia-boeleni": "Boelen's Python",
+    "pyxis-arachnoides": "Spider Tortoise",
+    "python-molurus-bivittatus": "Burmese Python",
+    "rhacodactylus-leachianus": "New Caledonian Giant Gecko",
+    "epicrates-cenchria": "Rainbow Boa",
+    "kinixys-belliana": "Bell's Hinge-back Tortoise",
+    "anguis-fragilis": "Slow Worm",
+    "elaphe-climacophora": "Japanese Rat Snake",
+    "lacerta-viridis": "European Green Lizard",
+    "sceloporus-malachiticus": "Emerald Swift",
+    "pelomedusa-subrufa": "African Helmeted Turtle",
+    "geochelone-yniphora": "Ploughshare Tortoise",
+    "tiliqua-scincoides": "Blue-tongued Skink",
+    "apalone-ferox": "Florida Softshell Turtle",
+    "testudo-graeca": "Greek Tortoise",
+    "varanus-griseus": "Desert Monitor",
+    "eunectes-notaeus": "Yellow Anaconda",
+    "morelia-oenpelliensis": "Oenpelli Python",
+    "geochelone-radiata": "Radiated Tortoise",
+    "trachemys-scripta": "Red-eared Slider",
+    "liasis-mackloti": "Macklot's Python",
+    "chelonoidis-carbonarius": "Red-footed Tortoise",
+    "epicrates-subflavus": "Jamaican Boa",
+    "terrapene-carolina": "Eastern Box Turtle",
+    "vipera-ursinii": "Meadow Viper",
+    "heterodon-nasicus": "Western Hognose Snake",
+    "brookesia-perarmata": "Armored Leaf Chameleon",
+    "pituophis-catenifer-sayi": "Bullsnake",
+    "mauremys-japonica": "Japanese Pond Turtle",
+    "aspidites-ramsayi": "Woma Python",
+    "furcifer-pardalis": "Panther Chameleon",
+    "antaresia-maculosa": "Spotted Python",
+    "cyclura-cornuta": "Rhinoceros Iguana",
+    "brachylophus-vitiensis": "Fiji Crested Iguana",
+    "gonyosoma-oxycephalum": "Red-tailed Racer",
+    "lampropeltis-triangulum": "Milk Snake",
+    "morelia-bredli": "Bredl's Python",
+    "stigmochelys-pardalis": "Leopard Tortoise",
+    "cyclemys-dentata": "Asian Leaf Turtle",
+    "lampropeltis-getula": "California Kingsnake",
+    "testudo-kleinmanni": "Egyptian Tortoise",
+    "kinosternon-subrubrum": "Eastern Mud Turtle",
+    "hemidactylus-frenatus": "Common House Gecko",
+    "corallus-hortulanus": "Amazon Tree Boa",
+    "batagur-baska": "Northern River Terrapin",
+    "emys-orbicularis": "European Pond Turtle",
+    "sanzinia-madagascariensis": "Madagascar Tree Boa",
+    "sternotherus-odoratus": "Common Musk Turtle",
+    "heloderma-suspectum": "Gila Monster",
+    "epicrates-alvarezi": "Argentine Rainbow Boa",
+    "aspidites-melanocephalus": "Black-headed Python",
+    "chelonoidis-nigra": "Galápagos Giant Tortoise",
+    "mauremys-reevesii": "Reeves' Turtle",
+    "epicrates-monensis": "Mona Boa",
+    "candoia-aspera": "Viper Boa",
+    "eublepharis-macularius": "Leopard Gecko",
+    "clemmys-guttata": "Spotted Turtle",
+    "varanus-prasinus": "Emerald Tree Monitor",
+    "indotestudo-elongata": "Elongated Tortoise",
+    "phelsuma-grandis": "Madagascar Giant Day Gecko",
+    "bothrochilus-boa": "Bismarck Ringed Python",
+    "geochelone-platynota": "Burmese Star Tortoise",
+    "sacalia-quadriocellata": "Four-eyed Turtle",
+    "boa-constrictor-occidentalis": "Argentine Boa",
+    "chelydra-serpentina": "Common Snapping Turtle",
+    "chamaeleo-chamaeleon": "Common Chameleon",
+    "podarcis-muralis": "Common Wall Lizard",
+    "python-sebae": "African Rock Python",
+    "morelia-spilota-cheynei": "Jungle Carpet Python",
+    "lampropeltis-alterna": "Gray-banded Kingsnake",
+    "chamaeleo-calyptratus": "Veiled Chameleon",
+    "anolis-carolinensis": "Green Anole",
+    "varanus-rudicollis": "Roughneck Monitor",
+    "corallus-batesii": "Bates Tree Boa",
+    "morelia-viridis-emerald": "Emerald Python",
+    "geochelone-elegans": "Indian Star Tortoise",
+    "sauromalus-varius": "San Esteban Chuckwalla",
+    "cyclura-nubila": "Cuban Rock Iguana",
+    "python-timoriensis": "Timor Python",
+    "varanus-exanthematicus": "Savannah Monitor",
+    "acanthosaura-armata": "Armored Pricklenape",
+    "basiliscus-vittatus": "Brown Basilisk",
+    "morelia-viridis": "Green Tree Python",
+    "mauremys-annamensis": "Vietnamese Pond Turtle",
+    "thamnophis-sirtalis": "Common Garter Snake",
+    "boa-imperator": "Common Boa",
+    "corallus-caninus": "Emerald Tree Boa",
+    "pituophis-lineaticollis": "Striped-necked Snake",
+    "gekko-gecko": "Tokay Gecko",
+    "morelia-amethistina": "Amethystine Python",
+    "geochelone-sulcata-a": "Sulcata Tortoise (Protected)",
+    "morelia-spilota-mcdowelli": "Coastal Carpet Python",
+    "pituophis-melanoleucus": "Pine Snake",
+    "morelia-spilota": "Carpet Python",
+    "morelia-carinata": "Rough-scaled Python",
+    "trioceros-jacksonii": "Jackson's Chameleon",
+    "tiliqua-gigas": "Giant Blue-tongued Skink",
+    "macrochelys-temminckii": "Alligator Snapping Turtle",
+    "takydromus-sexlineatus": "Asian Grass Lizard",
+    "heloderma-horridum": "Beaded Lizard",
+    "correlophus-ciliatus": "Crested Gecko",
+    "mniarogekko-chahoua": "Mossy Prehensile-tailed Gecko",
+    "gehyra-mutilata": "Mutilating Gecko",
+    "platysternon-megacephalum": "Big-headed Turtle",
+    "pituophis-catenifer-affinis": "Sonoran Gopher Snake",
+    "epicrates-inornatus": "Puerto Rican Boa",
+    "corallus-grenadensis": "Grenadian Tree Boa",
+    "epicrates-maurus": "Colombian Rainbow Boa",
+    "python-reticulatus": "Reticulated Python",
+    "uromastyx-ornata": "Ornate Uromastyx",
+    "testudo-marginata": "Marginated Tortoise",
+    "phelsuma-guentheri": "Günther's Day Gecko",
+    "pituophis-deppei": "Mexican Pine Snake",
+    "python-anchietae": "Angolan Python",
+    "varanus-komodoensis": "Komodo Dragon",
+    "testudo-horsfieldii": "Russian Tortoise",
+    "pyxis-planicauda": "Flat-tailed Tortoise"
   },
   "comingSoon": {
     "title": "เร็วๆ นี้",
@@ -486,7 +729,14 @@
     "title": "ติดตั้งแอป",
     "description": "ติดตั้ง S-reptrack เพื่อประสบการณ์ที่ดีขึ้น",
     "install": "ติดตั้ง",
-    "iosInstructions": "แตะไอคอนแชร์แล้วเลือก \"เพิ่มไปยังหน้าจอโฮม\""
+    "iosInstructions": "แตะไอคอนแชร์แล้วเลือก \"เพิ่มไปยังหน้าจอโฮม\"",
+    "later": "Later",
+    "howToInstall": "How to install",
+    "iosStep2": "Scroll and tap 'Add to Home Screen'",
+    "iosStep1": "Tap the Share button",
+    "iosStep3": "Tap 'Add' in the top right",
+    "notNow": "Not now",
+    "iosTitle": "Install on iPhone/iPad"
   },
   "shedding": {
     "title": "ประวัติการลอกคราบ",
@@ -536,5 +786,341 @@
     "dateRequired": "กรุณาเลือกวันที่",
     "loginRequired": "ต้องเข้าสู่ระบบ",
     "days": "วัน"
+  },
+  "terms": {
+    "appStore": {
+      "items": {
+        "claims": "F.M. BERTIN, not Apple, is responsible for any claims related to the Application, including: (i) product liability claims; (ii) any claim of legal or regulatory non-compliance; (iii) claims under consumer protection or privacy legislation.",
+        "compliance": "You represent and warrant that (i) you are not located in a country subject to a U.S. Government embargo or designated as a 'terrorist supporting' country; and (ii) you are not listed on any U.S. Government restricted parties list.",
+        "ip": "In the event of a third-party claim that the Application infringes intellectual property rights, F.M. BERTIN, not Apple, is solely responsible for investigation, defense, settlement, and resolution.",
+        "warranty": "In the event of any failure of the Application to conform to any applicable warranty, you may notify Apple, which will refund the purchase price. To the maximum extent permitted by applicable law, Apple has no other warranty obligation. Any other claims related to non-conformity are the sole responsibility of F.M. BERTIN.",
+        "beneficiary": "You acknowledge and agree that Apple and its subsidiaries are third-party beneficiaries of these Terms. Upon your acceptance, Apple will have the right to enforce these Terms against you as a third-party beneficiary.",
+        "thirdParty": "You must comply with applicable third-party terms when using the Application.",
+        "agreement": "These Terms constitute an agreement between you and F.M. BERTIN (the publisher), not with Apple Inc. Apple is not a party to this agreement.",
+        "maintenance": "F.M. BERTIN is solely responsible for providing maintenance and support services. Apple has no obligation to provide any maintenance or support services.",
+        "license": "The license granted is a non-transferable license limited to use of the Application on any Apple-branded device you own or control, in accordance with the Apple Media Services Terms and Conditions."
+      },
+      "title": "App Store (Apple) Provisions",
+      "intro": "If you downloaded the Application from Apple's App Store, the following provisions apply:"
+    },
+    "intellectual": {
+      "title": "Intellectual Property",
+      "content": "The Application, its source code, design, features and content are the exclusive property of the publisher and are protected by French and international intellectual property laws. Any unauthorized reproduction, modification or use is strictly prohibited."
+    },
+    "subscription": {
+      "title": "Subscription and Pricing",
+      "items": {
+        "cancel": "The subscription can be cancelled at any time from Settings. Premium access remains active until the end of the paid period",
+        "payment": "Payments are processed securely by our payment provider",
+        "premium": "Premium version: unlimited number of reptiles (€5.99/month or €49.99/year)",
+        "free": "Free version: access to all features for up to 5 reptiles"
+      },
+      "intro": "The Application offers a free and a premium plan:"
+    },
+    "access": {
+      "title": "Access to the Service",
+      "items": {
+        "accurate": "Provide accurate information during registration",
+        "security": "Maintain the confidentiality of login credentials",
+        "email": "Have a valid email address",
+        "age": "Be at least 16 years old (or have parental authorization)"
+      },
+      "intro": "To use the Application, the User must:"
+    },
+    "obligations": {
+      "title": "User Obligations",
+      "items": {
+        "respect": "Respect the intellectual property rights of the publisher",
+        "accurate": "Provide accurate information and keep it up to date",
+        "noAbuse": "Not attempt to circumvent security measures or Service limitations",
+        "legal": "Use the Application in accordance with applicable laws",
+        "noHarm": "Not use the Application for illegal activities, including trafficking of protected species"
+      },
+      "intro": "The User agrees to:"
+    },
+    "liability": {
+      "title": "Limitation of Liability",
+      "items": {
+        "data": "Data loss resulting from circumstances beyond its control",
+        "indirect": "Indirect damages resulting from the use of the Application",
+        "thirdParty": "Content of third-party sites accessible via links from the Application",
+        "availability": "Service interruptions, bugs, or technical malfunctions"
+      },
+      "intro": "The publisher cannot be held liable for:"
+    },
+    "services": {
+      "intro": "The Application offers the following features:",
+      "items": {
+        "health": "Health tracking and veterinary history",
+        "reproduction": "Reproduction tracking (mating, egg laying, hatching)",
+        "feeding": "Feeding recording and scheduling",
+        "transfer": "Animal transfer between users",
+        "tracking": "Reptile management and tracking (information, photos, weight)",
+        "nfc": "NFC tag identification"
+      },
+      "title": "Description of Services"
+    },
+    "contact": {
+      "publisher": "Publisher",
+      "website": "Website",
+      "title": "Contact",
+      "emailLabel": "Email",
+      "content": "For any questions, complaints or requests regarding these Terms or the Application, you can contact us:"
+    },
+    "termination": {
+      "title": "Termination",
+      "content": "The publisher reserves the right to suspend or delete any account in case of violation of these Terms, without notice or compensation. The User may delete their account at any time from the Application settings."
+    },
+    "definitions": {
+      "service": "Service",
+      "serviceDef": "All features offered by the Application",
+      "content": "User Content",
+      "user": "User",
+      "contentDef": "Any information, data, text or image submitted by the User",
+      "title": "Definitions",
+      "appDef": "The S-reptrack progressive web application accessible at s-reptrack.app",
+      "app": "Application",
+      "userDef": "Any individual or legal entity using the Application"
+    },
+    "userContent": {
+      "content": "The User retains ownership of their data and content. By using the Application, the User grants the publisher a limited license to store, display and process this content solely for the purpose of providing the Service.",
+      "title": "User Content"
+    },
+    "object": {
+      "title": "Purpose",
+      "content": "The S-reptrack Application is a reptile breeding management platform enabling tracking of animals, their feeding, health, and reproduction. These Terms define the conditions of access and use of the Application."
+    },
+    "modifications": {
+      "content": "The publisher reserves the right to modify these Terms at any time. Users will be informed of substantial changes. Continued use of the Application after modification constitutes acceptance of the new Terms.",
+      "title": "Modifications"
+    },
+    "law": {
+      "content": "These Terms are governed by French law. In case of dispute, and after failure of any amicable resolution attempt, French courts shall have exclusive jurisdiction.",
+      "title": "Applicable Law and Jurisdiction"
+    },
+    "lastUpdated": "Last updated",
+    "preamble": {
+      "content": "These Terms of Use govern the use of the S-reptrack application. By accessing the application and creating an account, you unconditionally accept these Terms. If you do not agree, please do not use the application.",
+      "title": "Preamble"
+    },
+    "autoRenewal": {
+      "content": "Premium subscriptions (monthly at €5.99/month and annual at €49.99/year) automatically renew at the end of each period unless cancelled at least 24 hours before the end of the current period. On iOS, renewal is managed by Apple through your Apple account settings. On other platforms, payment is managed by Stripe. You can cancel at any time from the Application settings or your device settings.",
+      "title": "Subscription Auto-Renewal"
+    },
+    "title": "Terms of Use"
+  },
+  "subscription": {
+    "restorePurchases": "Restore my purchases",
+    "expiresOn": "Expires on",
+    "yearlySavings": "Save 30%!",
+    "reptilesUsed": "{{count}}/5 reptiles used",
+    "feature1": "Unlimited reptiles",
+    "currentPlanBadge": "Your plan",
+    "title": "Subscription",
+    "freeTitle": "Free",
+    "manageSubscription": "Manage my subscription",
+    "privacyLink": "Privacy Policy",
+    "bestValue": "Best value",
+    "checkoutError": "Error creating payment",
+    "nfcNote": "⚠️ NFC requires the native iOS or Android app.",
+    "freeFeature1": "Up to 5 reptiles",
+    "feature2": "Advanced reproduction tracking",
+    "monthlyPlan": "Monthly Subscription",
+    "appleTrialNote": "Any unused portion of a free trial period, if offered, will be forfeited when you purchase a subscription.",
+    "securePayment": "Secure payment. Cancel anytime.",
+    "limitReached": "5 reptile limit reached",
+    "monthlyTitle": "Monthly",
+    "appleRenewNote": "Your account will be charged for renewal within 24 hours prior to the end of the current period, at the same rate.",
+    "inactiveDescription": "Manage up to 5 reptiles for free. Upgrade to Premium for unlimited.",
+    "freeFeature2": "Reproduction tracking",
+    "restoreSuccess": "Purchases restored successfully",
+    "upgradeNow": "Upgrade to Premium",
+    "premiumActive": "Premium Active",
+    "currentPlan": "Your subscription",
+    "freeFeature3": "NFC Scanner",
+    "renewsOn": "Renews on",
+    "cancelledMessage": "Payment cancelled",
+    "yearlyTitle": "Yearly",
+    "termsLink": "Terms of Use",
+    "freePlan": "Free Version",
+    "appleChargeNote": "Payment will be charged to your iTunes account at confirmation of purchase.",
+    "subscriptionDetails": "Subscription details",
+    "subscribe": "Subscribe",
+    "manage": "Manage subscription",
+    "applePaymentNote": "Payment managed by Apple. Cancel anytime via Settings > Subscriptions.",
+    "portalError": "Error opening portal",
+    "freeDescription": "All features, up to 5 reptiles",
+    "perMonth": "month",
+    "feature3": "NFC Scanner",
+    "successMessage": "Subscription activated successfully!",
+    "autoRenewDisclosure": "Subscription automatically renews at the end of each period unless cancelled at least 24 hours before the end of the current period.",
+    "yearlyPlan": "Yearly Subscription",
+    "limitReachedDescription": "Upgrade to Premium to add unlimited reptiles.",
+    "perYear": "year",
+    "activeDescription": "You have access to all Premium features",
+    "appleCancelNote": "You can manage and cancel your subscriptions in your App Store account settings after purchase."
+  },
+  "marketplace": {
+    "priceOnRequest": "Price on request",
+    "titleRequired": "Title is required",
+    "views": "views",
+    "description": "Classifieds between breeders to sell or exchange reptiles.",
+    "price": "Price (€)",
+    "title": "Marketplace",
+    "publish": "Publish",
+    "noDescription": "No description",
+    "noMyListings": "You don't have any listings yet.",
+    "negotiable": "Negotiable",
+    "location": "Location",
+    "myListings": "My listings",
+    "listingDeleted": "Listing deleted",
+    "listingTitle": "Title",
+    "free": "Free",
+    "active": "Active",
+    "priceType": "Price type",
+    "locationPlaceholder": "e.g. Paris, France",
+    "fixed": "Fixed price",
+    "markedAsSold": "Listing marked as sold",
+    "createListingDescription": "Post a listing to sell or exchange.",
+    "markSold": "Mark as sold",
+    "exchange": "Exchange",
+    "titlePlaceholder": "e.g. Female pastel ball python",
+    "descriptionPlaceholder": "Describe your animal...",
+    "noListings": "No listings yet.",
+    "descriptionLabel": "Description",
+    "createListing": "Create listing",
+    "listingCreated": "Listing created!",
+    "browse": "Browse",
+    "sold": "Sold",
+    "searchPlaceholder": "Search..."
+  },
+  "auth": {
+    "password": "Password",
+    "signupButton": "สมัคร",
+    "passwordSecure": "Secure password",
+    "passwordMedium": "Medium",
+    "login": "เข้าสู่ระบบ",
+    "loginDescription": "Sign in to access your reptiles",
+    "privacyPolicy": "Privacy Policy",
+    "passwordPlaceholder": "Minimum 12 characters",
+    "strength": "Strength",
+    "passwordWeak": "Weak",
+    "passwordStrong": "Strong",
+    "loginButton": "เข้าสู่ระบบ",
+    "hasAccount": "Already have an account? Sign in",
+    "signupDescription": "Create an account to get started",
+    "noAccount": "Don't have an account? Sign up",
+    "checkingPassword": "Checking password security...",
+    "emailPlaceholder": "your@email.com",
+    "email": "Email",
+    "signup": "สมัครสมาชิก"
+  },
+  "legal": {
+    "cookies": {
+      "title": "Cookies",
+      "content": "The site uses your browser's local storage to remember your preferences (language, theme, consent). No advertising tracking cookies are used."
+    },
+    "editor": {
+      "statusValue": "Sole Proprietor (Micro-enterprise)",
+      "status": "Status",
+      "title": "Site Publisher",
+      "address": "Address",
+      "name": "Name",
+      "email": "Email",
+      "siret": "SIRET"
+    },
+    "title": "Legal Notice",
+    "hosting": {
+      "address": "Address",
+      "name": "Name",
+      "title": "Hosting",
+      "website": "Website"
+    },
+    "intellectual": {
+      "content": "All content of the S-reptrack site (texts, images, graphics, logos, icons, sounds, software, etc.) is the exclusive property of the publisher. Any reproduction, distribution, modification, adaptation, retransmission or publication of these elements is strictly prohibited without the prior written consent of the publisher.",
+      "title": "Intellectual Property"
+    },
+    "law": {
+      "title": "Applicable Law",
+      "content": "These legal notices are governed by French law. In case of dispute, French courts shall have exclusive jurisdiction."
+    },
+    "personalData": {
+      "link": "Privacy Policy",
+      "content": "For more information about the processing of your personal data, please consult our",
+      "title": "Personal Data"
+    },
+    "liability": {
+      "content": "The publisher strives to provide accurate information. However, it cannot be held responsible for omissions, inaccuracies, or deficiencies in updates.",
+      "title": "Limitation of Liability"
+    },
+    "lastUpdated": "Last updated",
+    "director": {
+      "title": "Publication Director"
+    }
+  },
+  "genealogy": {
+    "selectMother": "Select mother",
+    "addLink": "Add link",
+    "cannotBeSameAnimal": "An animal cannot be its own parent",
+    "addParentLink": "Add parental link",
+    "unknown": "Unknown",
+    "selectFather": "Select father",
+    "noLinks": "No genealogy links recorded.",
+    "childReptile": "Reptile (child)",
+    "title": "Genealogy",
+    "father": "Father",
+    "linkAdded": "Link added successfully",
+    "parentReptile": "Parent",
+    "selectBoth": "Please select a child and a parent",
+    "description": "Family tree to track your animals' lineages.",
+    "selectChild": "Select reptile",
+    "addParentLinkDescription": "Define the parents of a reptile.",
+    "parentType": "Parent type",
+    "parentAlreadySet": "This parent type is already defined for this reptile",
+    "selectAtLeastOneParent": "Please select at least one parent (mother or father)",
+    "mother": "Mother",
+    "linkRemoved": "Link removed",
+    "selectParent": "Select parent"
+  },
+  "photoHistory": {
+    "photoAdded": "Photo added!",
+    "captionPlaceholder": "e.g. First shed",
+    "addPhotoDescription": "Add a photo to track evolution.",
+    "addPhoto": "Add a photo",
+    "premiumDescription": "Track your animals' evolution with a photo history.",
+    "caption": "Caption (optional)",
+    "selectFile": "Please select a file",
+    "upload": "Upload",
+    "noPhotos": "No photos in history.",
+    "title": "Photo History",
+    "photoDeleted": "Photo deleted",
+    "date": "Photo date",
+    "selectImage": "Select an image"
+  },
+  "analytics": {
+    "feedingsPerMonth": "การให้อาหาร/เดือน",
+    "title": "Analytics",
+    "unhatched": "Unhatched",
+    "weightEvolution": "Average weight evolution",
+    "distribution": "การกระจายสัตว์เลื้อยคลาน",
+    "reproductionStats": "Reproduction",
+    "stillborn": "Stillborn",
+    "resolved": "แก้ไขแล้ว",
+    "healthStats": "สถิติสุขภาพ",
+    "topSpecies": "สายพันธุ์ยอดนิยม",
+    "hatched": "Hatched",
+    "active": "ใช้งานอยู่",
+    "top10Species": "Top 10 species",
+    "description": "Advanced statistics and detailed charts of your breeding.",
+    "byCategory": "ตามหมวดหมู่"
+  },
+  "nfc": {
+    "iosNotSupported": "NFC not available on iPhone",
+    "iosNotSupportedDescription": "Apple does not allow NFC access from web apps. Install the native app to use NFC."
+  },
+  "premium": {
+    "featureLockedDescription": "ฟีเจอร์ Premium",
+    "upgradeToPremium": "อัพเกรด Premium",
+    "upgradeToAccess": "Upgrade to Premium to unlock this feature."
   }
 }
