@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
-import { fr } from "date-fns/locale";
+import { fr, enUS, de, es, it, pt, nl, pl, ru, ja, zhCN, hi, th, id as idLocale } from "date-fns/locale";
 import AddWeightRecordDialog from "./AddWeightRecordDialog";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
+const localeMap: Record<string, any> = { fr, en: enUS, de, es, it, pt, nl, pl, ru, ja, zh: zhCN, hi, th, id: idLocale };
+
 interface WeightRecord {
   id: string;
   weight: number;
@@ -32,9 +35,11 @@ interface WeightChartProps {
 }
 
 const WeightChart = ({ reptileId }: WeightChartProps) => {
+  const { t, i18n } = useTranslation();
   const [records, setRecords] = useState<WeightRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const dateLocale = localeMap[i18n.language] || enUS;
 
   const fetchWeightRecords = async () => {
     try {
@@ -46,11 +51,10 @@ const WeightChart = ({ reptileId }: WeightChartProps) => {
         .order("measurement_date", { ascending: true });
 
       if (error) throw error;
-
       setRecords(data || []);
     } catch (error) {
       console.error("Error fetching weight records:", error);
-      toast.error("Erreur lors du chargement des pesées");
+      toast.error(t("weightChart.loadError"));
     } finally {
       setLoading(false);
     }
@@ -62,32 +66,27 @@ const WeightChart = ({ reptileId }: WeightChartProps) => {
 
   const handleDelete = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from("weight_records")
-        .delete()
-        .eq("id", id);
-
+      const { error } = await supabase.from("weight_records").delete().eq("id", id);
       if (error) throw error;
-
-      toast.success("Pesée supprimée");
+      toast.success(t("weightChart.deleteSuccess"));
       fetchWeightRecords();
     } catch (error) {
       console.error("Error deleting weight record:", error);
-      toast.error("Erreur lors de la suppression");
+      toast.error(t("weightChart.deleteError"));
     } finally {
       setDeleteId(null);
     }
   };
 
   const chartData = records.map((record) => ({
-    date: format(parseISO(record.measurement_date), "dd MMM yyyy", { locale: fr }),
+    date: format(parseISO(record.measurement_date), "dd MMM yyyy", { locale: dateLocale }),
     weight: Number(record.weight),
     fullDate: record.measurement_date,
   }));
 
   const chartConfig = {
     weight: {
-      label: "Poids",
+      label: t("weightChart.weightLabel"),
       color: "hsl(var(--primary))",
     },
   };
@@ -96,10 +95,10 @@ const WeightChart = ({ reptileId }: WeightChartProps) => {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Évolution du poids</CardTitle>
+          <CardTitle>{t("weightChart.title")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">Chargement...</p>
+          <p className="text-muted-foreground">{t("common.loading")}</p>
         </CardContent>
       </Card>
     );
@@ -110,11 +109,13 @@ const WeightChart = ({ reptileId }: WeightChartProps) => {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div>
-            <CardTitle>Évolution du poids</CardTitle>
+            <CardTitle>{t("weightChart.title")}</CardTitle>
             <CardDescription>
               {records.length > 0
-                ? `${records.length} mesure${records.length > 1 ? "s" : ""} enregistrée${records.length > 1 ? "s" : ""}`
-                : "Aucune mesure enregistrée"}
+                ? (records.length > 1
+                    ? t("weightChart.measurementsPlural", { count: records.length })
+                    : t("weightChart.measurements", { count: records.length }))
+                : t("weightChart.noMeasurements")}
             </CardDescription>
           </div>
           <AddWeightRecordDialog reptileId={reptileId} onSuccess={fetchWeightRecords} />
@@ -126,56 +127,29 @@ const WeightChart = ({ reptileId }: WeightChartProps) => {
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                    <XAxis
-                      dataKey="date"
-                      className="text-xs"
-                      tick={{ fill: "hsl(var(--muted-foreground))" }}
-                    />
-                    <YAxis
-                      className="text-xs"
-                      tick={{ fill: "hsl(var(--muted-foreground))" }}
-                      label={{ value: "Poids (g)", angle: -90, position: "insideLeft" }}
-                    />
+                    <XAxis dataKey="date" className="text-xs" tick={{ fill: "hsl(var(--muted-foreground))" }} />
+                    <YAxis className="text-xs" tick={{ fill: "hsl(var(--muted-foreground))" }} label={{ value: t("weightChart.weightUnit"), angle: -90, position: "insideLeft" }} />
                     <ChartTooltip content={<ChartTooltipContent />} />
-                    <Line
-                      type="monotone"
-                      dataKey="weight"
-                      stroke="hsl(var(--primary))"
-                      strokeWidth={2}
-                      dot={{ fill: "hsl(var(--primary))", r: 4 }}
-                      activeDot={{ r: 6 }}
-                    />
+                    <Line type="monotone" dataKey="weight" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ fill: "hsl(var(--primary))", r: 4 }} activeDot={{ r: 6 }} />
                   </LineChart>
                 </ResponsiveContainer>
               </ChartContainer>
 
               <div className="space-y-2">
-                <h4 className="font-semibold text-sm">Historique des pesées</h4>
+                <h4 className="font-semibold text-sm">{t("weightChart.history")}</h4>
                 <div className="space-y-2">
                   {records.slice().reverse().map((record) => (
-                    <div
-                      key={record.id}
-                      className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
-                    >
+                    <div key={record.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
                       <div className="flex-1">
                         <div className="flex items-center gap-3">
                           <p className="font-medium">{record.weight}g</p>
                           <p className="text-sm text-muted-foreground">
-                            {format(parseISO(record.measurement_date), "dd MMMM yyyy", {
-                              locale: fr,
-                            })}
+                            {format(parseISO(record.measurement_date), "dd MMMM yyyy", { locale: dateLocale })}
                           </p>
                         </div>
-                        {record.notes && (
-                          <p className="text-sm text-muted-foreground mt-1">{record.notes}</p>
-                        )}
+                        {record.notes && <p className="text-sm text-muted-foreground mt-1">{record.notes}</p>}
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setDeleteId(record.id)}
-                        className="text-destructive hover:text-destructive"
-                      >
+                      <Button variant="ghost" size="sm" onClick={() => setDeleteId(record.id)} className="text-destructive hover:text-destructive">
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
@@ -185,9 +159,7 @@ const WeightChart = ({ reptileId }: WeightChartProps) => {
             </div>
           ) : (
             <div className="text-center py-8">
-              <p className="text-muted-foreground mb-4">
-                Aucune pesée enregistrée pour le moment
-              </p>
+              <p className="text-muted-foreground mb-4">{t("weightChart.noData")}</p>
             </div>
           )}
         </CardContent>
@@ -196,15 +168,13 @@ const WeightChart = ({ reptileId }: WeightChartProps) => {
       <AlertDialog open={deleteId !== null} onOpenChange={(open) => !open && setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
-            <AlertDialogDescription>
-              Êtes-vous sûr de vouloir supprimer cette pesée ? Cette action est irréversible.
-            </AlertDialogDescription>
+            <AlertDialogTitle>{t("weightChart.confirmDelete")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("weightChart.confirmDeleteDesc")}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogCancel>{t("weightChart.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={() => deleteId && handleDelete(deleteId)}>
-              Supprimer
+              {t("weightChart.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

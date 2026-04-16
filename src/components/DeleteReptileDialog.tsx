@@ -40,7 +40,6 @@ const DeleteReptileDialog = ({
   const [isDeleting, setIsDeleting] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // Admins can always delete
   const createdDate = new Date(createdAt);
   const now = new Date();
   const hoursSinceCreation = differenceInHours(now, createdDate);
@@ -49,14 +48,13 @@ const DeleteReptileDialog = ({
 
   const handleDelete = async () => {
     if (!canDelete && !isAdmin) {
-      toast.error("Le délai de suppression de 48h est dépassé");
+      toast.error(t("deleteReptile.expiredError"));
       return;
     }
 
     setIsDeleting(true);
 
     try {
-      // Supprimer d'abord les données liées (feedings, weight_records, health_records, etc.)
       const deletePromises = [
         supabase.from("feedings").delete().eq("reptile_id", reptileId),
         supabase.from("weight_records").delete().eq("reptile_id", reptileId),
@@ -70,7 +68,6 @@ const DeleteReptileDialog = ({
 
       await Promise.all(deletePromises);
 
-      // Puis supprimer le reptile
       const { error } = await supabase
         .from("reptiles")
         .delete()
@@ -78,7 +75,7 @@ const DeleteReptileDialog = ({
 
       if (error) throw error;
 
-      toast.success(`${reptileName} a été supprimé avec succès`);
+      toast.success(t("deleteReptile.success", { name: reptileName }));
       setOpen(false);
 
       if (onDelete) {
@@ -88,7 +85,7 @@ const DeleteReptileDialog = ({
       }
     } catch (error) {
       console.error("Erreur lors de la suppression:", error);
-      toast.error("Erreur lors de la suppression du reptile");
+      toast.error(t("deleteReptile.error"));
     } finally {
       setIsDeleting(false);
     }
@@ -101,10 +98,10 @@ const DeleteReptileDialog = ({
         size="sm"
         className="gap-2 text-muted-foreground cursor-not-allowed opacity-50"
         disabled
-        title="Le délai de 48h pour supprimer cette fiche est dépassé"
+        title={t("deleteReptile.expiredTitle")}
       >
         <Trash2 className="w-4 h-4" />
-        Supprimer (48h dépassées)
+        {t("deleteReptile.expired")}
       </Button>
     );
   }
@@ -114,45 +111,45 @@ const DeleteReptileDialog = ({
       <AlertDialogTrigger asChild>
         <Button variant="ghost" size="sm" className="gap-2 text-destructive hover:text-destructive hover:bg-destructive/10">
           <Trash2 className="w-4 h-4" />
-          Supprimer
+          {t("deleteReptile.deleteButton")}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="flex items-center gap-2">
             <AlertTriangle className="w-5 h-5 text-destructive" />
-            Supprimer {reptileName} ?
+            {t("deleteReptile.confirmTitle", { name: reptileName })}
           </AlertDialogTitle>
           <AlertDialogDescription className="space-y-3">
             <p>
-              Cette action est <strong>irréversible</strong>. Toutes les données associées seront supprimées :
+              {t("deleteReptile.confirmDescription")}
             </p>
             <ul className="list-disc list-inside text-sm space-y-1 ml-2">
-              <li>Historique des repas</li>
-              <li>Historique des poids</li>
-              <li>Dossier santé</li>
-              <li>Observations de reproduction</li>
-              <li>Photos</li>
-              <li>Généalogie</li>
+              <li>{t("deleteReptile.feedingHistory")}</li>
+              <li>{t("deleteReptile.weightHistory")}</li>
+              <li>{t("deleteReptile.healthRecords")}</li>
+              <li>{t("deleteReptile.reproductionObs")}</li>
+              <li>{t("deleteReptile.photos")}</li>
+              <li>{t("deleteReptile.genealogyLinks")}</li>
             </ul>
             {!isAdmin && (
               <div className="flex items-center gap-2 mt-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-md">
                 <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
                 <p className="text-sm text-amber-800 dark:text-amber-200">
-                  <strong>Temps restant :</strong> {Math.floor(hoursRemaining)}h pour supprimer cette fiche
+                  <strong>{t("deleteReptile.timeRemaining", { hours: Math.floor(hoursRemaining) })}</strong>
                 </p>
               </div>
             )}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isDeleting}>Annuler</AlertDialogCancel>
+          <AlertDialogCancel disabled={isDeleting}>{t("deleteReptile.cancel")}</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleDelete}
             disabled={isDeleting}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
           >
-            {isDeleting ? "Suppression..." : "Supprimer définitivement"}
+            {isDeleting ? t("deleteReptile.deleting") : t("deleteReptile.confirmButton")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

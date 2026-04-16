@@ -10,10 +10,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
-import { fr } from "date-fns/locale";
+import { fr, enUS, de, es, it, pt, nl, pl, ru, ja, zhCN, hi, th, id as idLocale } from "date-fns/locale";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+
+const localeMap: Record<string, any> = { fr, en: enUS, de, es, it, pt, nl, pl, ru, ja, zh: zhCN, hi, th, id: idLocale };
 
 interface DeathTabProps {
   reptileId: string;
@@ -21,15 +23,16 @@ interface DeathTabProps {
 }
 
 const DeathTab = ({ reptileId, reptileName }: DeathTabProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [date, setDate] = useState<Date>();
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
+  const dateLocale = localeMap[i18n.language] || enUS;
 
   const handleSubmit = async () => {
     if (!date) {
-      toast.error("Veuillez sélectionner une date");
+      toast.error(t("deathTab.selectDateError"));
       return;
     }
 
@@ -47,11 +50,11 @@ const DeathTab = ({ reptileId, reptileName }: DeathTabProps) => {
 
       if (error) throw error;
 
-      toast.success(`${reptileName} a été marqué comme décédé et archivé`);
+      toast.success(t("deathTab.success", { name: reptileName }));
       navigate("/reptiles");
     } catch (error) {
       console.error("Error archiving reptile:", error);
-      toast.error("Erreur lors de l'archivage");
+      toast.error(t("deathTab.error"));
     } finally {
       setLoading(false);
     }
@@ -62,15 +65,15 @@ const DeathTab = ({ reptileId, reptileName }: DeathTabProps) => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Heart className="w-5 h-5" />
-          Marquer comme décédé
+          {t("deathTab.title")}
         </CardTitle>
         <CardDescription>
-          Archivez {reptileName} comme décédé. Les informations seront conservées pour la traçabilité.
+          {t("deathTab.description", { name: reptileName })}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <Label>Date de décès *</Label>
+          <Label>{t("deathTab.deathDate")}</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -81,7 +84,7 @@ const DeathTab = ({ reptileId, reptileName }: DeathTabProps) => {
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, "PPP", { locale: fr }) : "Sélectionner une date"}
+                {date ? format(date, "PPP", { locale: dateLocale }) : t("deathTab.selectDate")}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
@@ -91,7 +94,7 @@ const DeathTab = ({ reptileId, reptileName }: DeathTabProps) => {
                 onSelect={setDate}
                 disabled={(date) => date > new Date()}
                 initialFocus
-                locale={fr}
+                locale={dateLocale}
                 className="pointer-events-auto"
               />
             </PopoverContent>
@@ -99,9 +102,9 @@ const DeathTab = ({ reptileId, reptileName }: DeathTabProps) => {
         </div>
 
         <div className="space-y-2">
-          <Label>Notes (optionnel)</Label>
+          <Label>{t("deathTab.notes")}</Label>
           <Textarea
-            placeholder="Ex: Cause du décès, circonstances..."
+            placeholder={t("deathTab.notesPlaceholder")}
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={4}
@@ -115,7 +118,7 @@ const DeathTab = ({ reptileId, reptileName }: DeathTabProps) => {
             className="w-full"
             variant="destructive"
           >
-            {loading ? "Archivage en cours..." : "Marquer comme décédé et archiver"}
+            {loading ? t("deathTab.submitting") : t("deathTab.submit")}
           </Button>
         </div>
       </CardContent>
