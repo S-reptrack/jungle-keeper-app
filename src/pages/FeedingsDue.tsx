@@ -20,7 +20,7 @@ interface FeedingDueReptile {
 }
 
 const FeedingsDue = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [reptiles, setReptiles] = useState<FeedingDueReptile[]>([]);
   const [loading, setLoading] = useState(true);
