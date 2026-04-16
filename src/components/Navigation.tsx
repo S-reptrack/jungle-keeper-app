@@ -104,7 +104,7 @@ const Navigation = () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-72">
                     <div className="px-3 py-2 border-b border-border">
-                      <p className="text-sm font-semibold">🍽️ Repas à prévoir</p>
+                      <p className="text-sm font-semibold">🍽️ {t("feedingSchedule.feedingsToSchedule")}</p>
                     </div>
                     {feedingsDue.slice(0, 5).map((item) => (
                       <DropdownMenuItem
@@ -118,16 +118,16 @@ const Navigation = () => {
                           className="ml-2 text-[10px] flex-shrink-0"
                         >
                           {item.daysUntil < 0
-                            ? `Retard ${Math.abs(item.daysUntil)}j`
+                            ? t("feedingSchedule.overdueBy", { days: Math.abs(item.daysUntil) })
                             : item.daysUntil === 0
-                            ? "Aujourd'hui"
-                            : `Dans ${item.daysUntil}j`}
+                            ? t("feedingSchedule.today")
+                            : t("feedingSchedule.inDaysShort", { days: item.daysUntil })}
                         </Badge>
                       </DropdownMenuItem>
                     ))}
                     {feedingsDue.length > 5 && (
                       <DropdownMenuItem onClick={() => navigate("/feedings-due")} className="text-primary text-sm justify-center">
-                        Voir tout ({feedingsDue.length})
+                        {t("feedingSchedule.seeAll", { count: feedingsDue.length })}
                       </DropdownMenuItem>
                     )}
                   </DropdownMenuContent>
@@ -152,11 +152,11 @@ const Navigation = () => {
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate("/morph-calculator")}>
                       <Dna className="w-4 h-4 mr-2" />
-                      Calculateur Génétique
+                      {t("morphCalculator.title")}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate("/health-dashboard")}>
                       <HeartPulse className="w-4 h-4 mr-2" />
-                      Tableau de bord Santé
+                      {t("healthDashboard.title")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
