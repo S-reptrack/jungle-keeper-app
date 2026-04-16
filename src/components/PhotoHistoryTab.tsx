@@ -311,6 +311,7 @@ export const PhotoHistoryTab = ({ reptileId }: PhotoHistoryTabProps) => {
 
 // Separate component to handle signed URL
 const PhotoCard = ({ photo, onSelect, onDelete }: { photo: Photo; onSelect: () => void; onDelete: () => void }) => {
+  const { i18n } = useTranslation();
   const [imageUrl, setImageUrl] = useState<string>("");
 
   useEffect(() => {
