@@ -83,11 +83,11 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
-        toast.error("Vous devez être connecté");
+        toast.error(t("addFeeding.loginRequired"));
         return;
       }
 
-      const refusedNote = values.refused ? "🚫 Alimentation refusée" : "";
+      const refusedNote = values.refused ? `🚫 ${t("feeding.refused", "Alimentation refusée")}` : "";
       const combinedNotes = [refusedNote, values.notes].filter(Boolean).join(" — ") || null;
 
       const feedingData = {
@@ -109,13 +109,13 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
 
       if (error) throw error;
 
-      toast.success("Repas enregistré");
+      toast.success(t("addFeeding.success"));
       form.reset();
       setOpen(false);
       onFeedingAdded();
     } catch (error) {
       console.error("Error adding feeding:", error);
-      toast.error("Erreur lors de l'enregistrement du repas");
+      toast.error(t("addFeeding.error"));
     }
   };
 
@@ -126,12 +126,12 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
       <DialogTrigger asChild>
         <Button>
           <Plus className="w-4 h-4 mr-2" />
-          Enregistrer un repas
+          {t("addFeeding.title")}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Enregistrer un repas</DialogTitle>
+          <DialogTitle>{t("addFeeding.title")}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -184,7 +184,7 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
                 name="quantity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Quantité</FormLabel>
+                    <FormLabel>{t("addFeeding.quantity")}</FormLabel>
                     <FormControl>
                       <Input type="number" min="1" {...field} />
                     </FormControl>
@@ -199,7 +199,7 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
               name="feedingDate"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Date du repas</FormLabel>
+                  <FormLabel>{t("addFeeding.feedingDate")}</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -213,7 +213,7 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
                           {field.value ? (
                             format(field.value, "dd MMM yyyy", { locale: fr })
                           ) : (
-                            <span>Sélectionner une date</span>
+                            <span>{t("addFeeding.selectDate")}</span>
                           )}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
@@ -318,10 +318,10 @@ const AddFeedingDialog = ({ reptileId, species, onFeedingAdded }: AddFeedingDial
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Notes (optionnel)</FormLabel>
+                  <FormLabel>{t("addFeeding.notesOptional")}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Remarques sur le repas..."
+                      placeholder={t("addFeeding.notesPlaceholder")}
                       {...field}
                     />
                   </FormControl>
