@@ -403,9 +403,9 @@ const Reptiles = () => {
                                 id={reptile.id}
                                 name={reptile.name}
                                 species={reptile.species}
-                                age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                                age={reptile.birth_date ? calculateAge(reptile.birth_date) : t("reptile.unknown")}
                                 weight={`${reptile.weight || 0}g`}
-                                lastFed={lastFeedings[reptile.id] || "Jamais"}
+                                lastFed={lastFeedings[reptile.id] || t("common.never")}
                                 image={reptile.image_url}
                                 daysUntilHatch={daysUntilHatch[reptile.id]}
                                 status={reptile.status}
@@ -421,9 +421,9 @@ const Reptiles = () => {
                                 id={reptile.id}
                                 name={reptile.name}
                                 species={reptile.species}
-                                age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                                age={reptile.birth_date ? calculateAge(reptile.birth_date) : t("reptile.unknown")}
                                 weight={`${reptile.weight || 0}g`}
-                                lastFed={lastFeedings[reptile.id] || "Jamais"}
+                                lastFed={lastFeedings[reptile.id] || t("common.never")}
                                 image={reptile.image_url}
                                 daysUntilHatch={daysUntilHatch[reptile.id]}
                                 status={reptile.status}
@@ -464,9 +464,9 @@ const Reptiles = () => {
                                   id={reptile.id}
                                   name={reptile.name}
                                   species={reptile.species}
-                                  age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                                  age={reptile.birth_date ? calculateAge(reptile.birth_date) : t("reptile.unknown")}
                                   weight={`${reptile.weight || 0}g`}
-                                  lastFed={lastFeedings[reptile.id] || "Jamais"}
+                                  lastFed={lastFeedings[reptile.id] || t("common.never")}
                                   image={reptile.image_url}
                                   daysUntilHatch={daysUntilHatch[reptile.id]}
                                   sex={reptile.sex}
@@ -475,8 +475,8 @@ const Reptiles = () => {
                                   variant="secondary" 
                                   className="absolute top-4 right-4 z-10"
                                 >
-                                  {reptile.status === "deceased" ? "Décédé" : "Vendu"}
-                                  {reptile.status_date && ` - ${new Date(reptile.status_date).toLocaleDateString("fr-FR")}`}
+                                  {reptile.status === "deceased" ? t("reptile.deceased") : t("reptile.sold")}
+                                  {reptile.status_date && ` - ${new Date(reptile.status_date).toLocaleDateString(i18n.language)}`}
                                 </Badge>
                               </div>
                             ))}
@@ -489,9 +489,9 @@ const Reptiles = () => {
                                   id={reptile.id}
                                   name={reptile.name}
                                   species={reptile.species}
-                                  age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                                  age={reptile.birth_date ? calculateAge(reptile.birth_date) : t("reptile.unknown")}
                                   weight={`${reptile.weight || 0}g`}
-                                  lastFed={lastFeedings[reptile.id] || "Jamais"}
+                                  lastFed={lastFeedings[reptile.id] || t("common.never")}
                                   image={reptile.image_url}
                                   daysUntilHatch={daysUntilHatch[reptile.id]}
                                   sex={reptile.sex}
@@ -501,7 +501,7 @@ const Reptiles = () => {
                                   variant="secondary" 
                                   className="absolute top-1.5 right-1.5 z-10 text-xs"
                                 >
-                                  {reptile.status === "deceased" ? "Décédé" : "Vendu"}
+                                  {reptile.status === "deceased" ? t("reptile.deceased") : t("reptile.sold")}
                                 </Badge>
                               </div>
                             ))}
@@ -538,9 +538,9 @@ const Reptiles = () => {
                                   id={reptile.id}
                                   name={reptile.name}
                                   species={reptile.species}
-                                  age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                                  age={reptile.birth_date ? calculateAge(reptile.birth_date) : t("reptile.unknown")}
                                   weight={`${reptile.weight || 0}g`}
-                                  lastFed={lastFeedings[reptile.id] || "Jamais"}
+                                  lastFed={lastFeedings[reptile.id] || t("common.never")}
                                   image={reptile.image_url}
                                   daysUntilHatch={daysUntilHatch[reptile.id]}
                                   sex={reptile.sex}
@@ -550,7 +550,7 @@ const Reptiles = () => {
                                   className="absolute top-4 right-4 z-10 border-yellow-500 text-yellow-700 dark:text-yellow-400 bg-card"
                                 >
                                   Transféré
-                                  {reptile.transferred_at && ` - ${new Date(reptile.transferred_at).toLocaleDateString("fr-FR")}`}
+                                  {reptile.transferred_at && ` - ${new Date(reptile.transferred_at).toLocaleDateString(i18n.language)}`}
                                 </Badge>
                               </div>
                             ))}
@@ -563,9 +563,9 @@ const Reptiles = () => {
                                   id={reptile.id}
                                   name={reptile.name}
                                   species={reptile.species}
-                                  age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                                  age={reptile.birth_date ? calculateAge(reptile.birth_date) : t("reptile.unknown")}
                                   weight={`${reptile.weight || 0}g`}
-                                  lastFed={lastFeedings[reptile.id] || "Jamais"}
+                                  lastFed={lastFeedings[reptile.id] || t("common.never")}
                                   image={reptile.image_url}
                                   daysUntilHatch={daysUntilHatch[reptile.id]}
                                   sex={reptile.sex}
@@ -607,9 +607,9 @@ const Reptiles = () => {
                               id={reptile.id}
                               name={`🧪 ${reptile.name}`}
                               species={reptile.species}
-                              age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                              age={reptile.birth_date ? calculateAge(reptile.birth_date) : t("reptile.unknown")}
                               weight={`${reptile.weight || 0}g`}
-                              lastFed={lastFeedings[reptile.id] || "Jamais"}
+                              lastFed={lastFeedings[reptile.id] || t("common.never")}
                               image={reptile.image_url}
                               sex={reptile.sex}
                               status={reptile.status}
@@ -624,9 +624,9 @@ const Reptiles = () => {
                               id={reptile.id}
                               name={`🧪 ${reptile.name}`}
                               species={reptile.species}
-                              age={reptile.birth_date ? calculateAge(reptile.birth_date) : "Inconnu"}
+                              age={reptile.birth_date ? calculateAge(reptile.birth_date) : t("reptile.unknown")}
                               weight={`${reptile.weight || 0}g`}
-                              lastFed={lastFeedings[reptile.id] || "Jamais"}
+                              lastFed={lastFeedings[reptile.id] || t("common.never")}
                               image={reptile.image_url}
                               showImage={!isMobile}
                               sex={reptile.sex}
