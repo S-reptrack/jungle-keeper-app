@@ -14,7 +14,7 @@ import { getPaymentProvider, isNativeIOS } from "@/lib/platformUtils";
 import { Browser } from "@capacitor/browser";
 
 const SubscriptionCard = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const {
@@ -96,7 +96,7 @@ const SubscriptionCard = () => {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("fr-FR", {
+    return new Date(dateString).toLocaleDateString(i18n.language, {
       day: "numeric",
       month: "long",
       year: "numeric",

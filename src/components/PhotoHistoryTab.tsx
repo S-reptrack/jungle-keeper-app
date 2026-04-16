@@ -11,7 +11,9 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { Camera, Plus, Trash2, Calendar, Crown, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import { fr } from "date-fns/locale";
+import { fr, enUS, de, es, it, pt, nl, pl, ru, ja, zhCN, hi, th, id as idLocale } from "date-fns/locale";
+
+const localeMap: Record<string, any> = { fr, en: enUS, de, es, it, pt, nl, pl, ru, ja, zh: zhCN, hi, th, id: idLocale };
 import {
   Dialog,
   DialogContent,
@@ -35,7 +37,7 @@ interface PhotoHistoryTabProps {
 }
 
 export const PhotoHistoryTab = ({ reptileId }: PhotoHistoryTabProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const { subscribed, loading: subLoading } = useSubscription();
   const navigate = useNavigate();
@@ -353,7 +355,7 @@ const PhotoCard = ({ photo, onSelect, onDelete }: { photo: Photo; onSelect: () =
       <CardContent className="p-2">
         <div className="flex items-center gap-1 text-xs text-muted-foreground">
           <Calendar className="w-3 h-3" />
-          {format(new Date(photo.taken_at), "d MMM yyyy", { locale: fr })}
+          {format(new Date(photo.taken_at), "d MMM yyyy", { locale: localeMap[i18n.language] || enUS })}
         </div>
         {photo.caption && (
           <p className="text-sm line-clamp-1 mt-1">{photo.caption}</p>

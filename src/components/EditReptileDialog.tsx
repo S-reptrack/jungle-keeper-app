@@ -203,7 +203,7 @@ const EditReptileDialog = ({
 
       if (error) throw error;
 
-      toast.success("Informations mises à jour avec succès!");
+      toast.success(t("editReptile.success"));
       setOpen(false);
       
       if (onUpdate) {
@@ -211,7 +211,7 @@ const EditReptileDialog = ({
       }
     } catch (error) {
       console.error("Error updating reptile:", error);
-      toast.error("Erreur lors de la mise à jour");
+      toast.error(t("editReptile.error"));
     }
   };
 
@@ -220,12 +220,12 @@ const EditReptileDialog = ({
       <DialogTrigger asChild>
         <Button variant="outline" size="sm" className="gap-2">
           <Pencil className="w-4 h-4" />
-          Modifier
+          {t("editReptile.trigger")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Modifier les informations</DialogTitle>
+          <DialogTitle>{t("editReptile.title")}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -265,16 +265,16 @@ const EditReptileDialog = ({
               name="species"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Espèce CITES</FormLabel>
+                  <FormLabel>{t("editReptile.citesSpecies")}</FormLabel>
                   
                   <Tabs value={selectedAnnex} onValueChange={(value) => {
                     setSelectedAnnex(value as 'A' | 'B' | 'C' | 'D');
                   }}>
                     <TabsList className="grid w-full grid-cols-4 mb-4">
-                      <TabsTrigger value="A">Annexe A</TabsTrigger>
-                      <TabsTrigger value="B">Annexe B</TabsTrigger>
-                      <TabsTrigger value="C">Annexe C</TabsTrigger>
-                      <TabsTrigger value="D">Annexe D</TabsTrigger>
+                      <TabsTrigger value="A">{t("editReptile.annexA")}</TabsTrigger>
+                      <TabsTrigger value="B">{t("editReptile.annexB")}</TabsTrigger>
+                      <TabsTrigger value="C">{t("editReptile.annexC")}</TabsTrigger>
+                      <TabsTrigger value="D">{t("editReptile.annexD")}</TabsTrigger>
                     </TabsList>
                     
                     <TabsContent value={selectedAnnex} className="mt-0">
@@ -298,7 +298,7 @@ const EditReptileDialog = ({
                           <PopoverContent className="w-[--radix-popover-trigger-width] p-0 z-50 bg-card border-border" align="start">
                             <Command>
                               <CommandInput placeholder={t("reptile.selectSpecies") as string} />
-                              <CommandEmpty>Aucune espèce trouvée</CommandEmpty>
+                              <CommandEmpty>{t("editReptile.noSpeciesFound")}</CommandEmpty>
                               <CommandGroup className="max-h-[300px] overflow-y-auto">
                                 {filteredSpecies.map((species) => (
                                   <CommandItem
@@ -367,7 +367,7 @@ const EditReptileDialog = ({
                             value={morphSearch}
                             onValueChange={setMorphSearch}
                           />
-                          <CommandEmpty>Aucune mutation trouvée</CommandEmpty>
+                          <CommandEmpty>{t("editReptile.noMorphFound")}</CommandEmpty>
                           <CommandGroup className="max-h-[200px] overflow-y-auto">
                             {availableMorphs
                               .filter(morph => 
@@ -611,10 +611,10 @@ const EditReptileDialog = ({
                 variant="outline"
                 onClick={() => setOpen(false)}
               >
-                Annuler
+                {t("editReptile.cancel")}
               </Button>
               <Button type="submit">
-                Enregistrer
+                {t("editReptile.save")}
               </Button>
             </div>
           </form>
