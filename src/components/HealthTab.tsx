@@ -38,7 +38,7 @@ interface HealthTabProps {
 }
 
 const HealthTab = ({ reptileId, reptileStatus = "active", readOnly = false }: HealthTabProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [records, setRecords] = useState<HealthRecord[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -55,7 +55,7 @@ const HealthTab = ({ reptileId, reptileStatus = "active", readOnly = false }: He
       setRecords(data || []);
     } catch (error) {
       console.error("Error fetching health records:", error);
-      toast.error("Erreur lors du chargement des données de santé");
+      toast.error(t("healthTab.loadError"));
     } finally {
       setLoading(false);
     }
@@ -67,31 +67,26 @@ const HealthTab = ({ reptileId, reptileStatus = "active", readOnly = false }: He
 
   const handleDelete = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from("health_records")
-        .delete()
-        .eq("id", id);
-
+      const { error } = await supabase.from("health_records").delete().eq("id", id);
       if (error) throw error;
-
-      toast.success("Enregistrement supprimé");
+      toast.success(t("healthTab.deleteSuccess"));
       fetchHealthRecords();
     } catch (error) {
       console.error("Error deleting health record:", error);
-      toast.error("Erreur lors de la suppression");
+      toast.error(t("healthTab.deleteError"));
     }
   };
 
   const formatDate = (dateString: string) => {
     const [year, month, day] = dateString.split('-').map(Number);
-    return new Date(year, month - 1, day).toLocaleDateString('fr-FR');
+    return new Date(year, month - 1, day).toLocaleDateString(i18n.language);
   };
 
   if (loading) {
     return (
       <Card>
         <CardContent className="py-8">
-          <p className="text-center text-muted-foreground">Chargement...</p>
+          <p className="text-center text-muted-foreground">{t("common.loading")}</p>
         </CardContent>
       </Card>
     );
@@ -102,11 +97,11 @@ const HealthTab = ({ reptileId, reptileStatus = "active", readOnly = false }: He
       {reptileStatus === "active" && (
         <Card className="bg-muted/50 border-dashed">
           <CardHeader>
-            <CardTitle className="text-base">Archivage</CardTitle>
+            <CardTitle className="text-base">{t("healthTab.archiveTitle")}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground mb-4">
-              Si le reptile est décédé ou a été vendu, vous pouvez archiver sa fiche. Elle restera accessible dans les archives pour la traçabilité.
+              {t("healthTab.archiveDescription")}
             </p>
             <ArchiveReptileDialog reptileId={reptileId} onArchived={fetchHealthRecords} />
           </CardContent>
@@ -115,13 +110,13 @@ const HealthTab = ({ reptileId, reptileStatus = "active", readOnly = false }: He
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-          <CardTitle>Historique de santé</CardTitle>
+          <CardTitle>{t("healthTab.healthHistory")}</CardTitle>
           {!readOnly && <AddHealthRecordDialog reptileId={reptileId} onRecordAdded={fetchHealthRecords} />}
         </CardHeader>
         <CardContent>
         {records.length === 0 ? (
           <p className="text-muted-foreground text-center py-8">
-            Aucun problème de santé enregistré
+            {t("healthTab.noHealthRecords")}
           </p>
         ) : (
           <ScrollArea className="h-[500px] pr-4">
@@ -146,15 +141,15 @@ const HealthTab = ({ reptileId, reptileStatus = "active", readOnly = false }: He
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
+                            <AlertDialogTitle>{t("healthTab.confirmDelete")}</AlertDialogTitle>
                             <AlertDialogDescription>
-                              Cette action est irréversible. L'enregistrement sera définitivement supprimé.
+                              {t("healthTab.confirmDeleteDesc")}
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                            <AlertDialogCancel>Annuler</AlertDialogCancel>
+                            <AlertDialogCancel>{t("healthTab.cancel")}</AlertDialogCancel>
                             <AlertDialogAction onClick={() => handleDelete(record.id)}>
-                              Supprimer
+                              {t("healthTab.delete")}
                             </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>
@@ -163,23 +158,23 @@ const HealthTab = ({ reptileId, reptileStatus = "active", readOnly = false }: He
 
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-sm">
-                        <span className="text-muted-foreground">Date de diagnostic:</span>
+                        <span className="text-muted-foreground">{t("healthTab.diagnosisDate")}</span>
                         <span className="font-medium">{formatDate(record.diagnosis_date)}</span>
                         <Badge variant={record.resolved ? "default" : "secondary"}>
-                          {record.resolved ? "Résolu" : "En cours"}
+                          {record.resolved ? t("healthTab.resolved") : t("healthTab.ongoing")}
                         </Badge>
                       </div>
 
                       {record.treatment && (
                         <div className="mt-3">
-                          <p className="text-sm font-medium text-muted-foreground mb-1">Traitement:</p>
+                          <p className="text-sm font-medium text-muted-foreground mb-1">{t("healthTab.treatment")}</p>
                           <p className="text-sm bg-muted p-2 rounded">{record.treatment}</p>
                         </div>
                       )}
 
                       {record.notes && (
                         <div className="mt-3">
-                          <p className="text-sm font-medium text-muted-foreground mb-1">Notes:</p>
+                          <p className="text-sm font-medium text-muted-foreground mb-1">{t("healthTab.notes")}</p>
                           <p className="text-sm bg-muted p-2 rounded">{record.notes}</p>
                         </div>
                       )}
