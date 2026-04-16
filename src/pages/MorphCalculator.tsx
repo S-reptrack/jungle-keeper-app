@@ -257,37 +257,37 @@ const MorphCalculator = () => {
     switch (gene.inheritance) {
       case "recessive":
         return [
-          { value: "visual", label: `${gene.name} (visuel)` },
+          { value: "visual", label: `${gene.name} (${t("morphCalculator.none") === "None" ? "visual" : "visuel"})` },
           { value: "het", label: `Het ${gene.name} (100%)` },
           { value: "possible_het", label: `Poss. Het ${gene.name}` },
-          { value: "none", label: "Aucun" },
+          { value: "none", label: t("morphCalculator.none") },
         ];
       case "codominant":
         return [
           { value: "super", label: gene.superForm || `Super ${gene.name}` },
-          { value: "visual", label: `${gene.name} (visuel)` },
+          { value: "visual", label: `${gene.name} (${t("morphCalculator.none") === "None" ? "visual" : "visuel"})` },
           { value: "possible_het", label: `Poss. ${gene.name}` },
-          { value: "none", label: "Aucun" },
+          { value: "none", label: t("morphCalculator.none") },
         ];
       case "dominant":
         return [
-          { value: "visual", label: `${gene.name} (visuel)` },
+          { value: "visual", label: `${gene.name} (${t("morphCalculator.none") === "None" ? "visual" : "visuel"})` },
           { value: "possible_het", label: `Poss. ${gene.name}` },
-          { value: "none", label: "Aucun" },
+          { value: "none", label: t("morphCalculator.none") },
         ];
       default:
         return [
           { value: "visual", label: gene.name },
-          { value: "none", label: "Aucun" },
+          { value: "none", label: t("morphCalculator.none") },
         ];
     }
   };
 
   const getInheritanceBadge = (inheritance: string) => {
     switch (inheritance) {
-      case "recessive": return <Badge variant="outline" className="text-[10px] border-orange-500/50 text-orange-500">Récessif</Badge>;
-      case "codominant": return <Badge variant="outline" className="text-[10px] border-blue-500/50 text-blue-500">Codominant</Badge>;
-      case "dominant": return <Badge variant="outline" className="text-[10px] border-green-500/50 text-green-500">Dominant</Badge>;
+      case "recessive": return <Badge variant="outline" className="text-[10px] border-orange-500/50 text-orange-500">{t("morphCalculator.recessiveFull")}</Badge>;
+      case "codominant": return <Badge variant="outline" className="text-[10px] border-blue-500/50 text-blue-500">{t("morphCalculator.codominantFull")}</Badge>;
+      case "dominant": return <Badge variant="outline" className="text-[10px] border-green-500/50 text-green-500">{t("morphCalculator.dominantFull")}</Badge>;
       default: return null;
     }
   };
@@ -302,13 +302,13 @@ const MorphCalculator = () => {
   const groupedSpecies = useMemo(() => {
     const groups: Record<string, typeof speciesGenetics> = {};
     speciesGenetics.forEach(s => {
-      const cat = s.category === "snake" ? "🐍 Serpents" : 
-                  s.category === "lizard" ? "🦎 Lézards" : "🐢 Tortues";
+      const cat = s.category === "snake" ? `🐍 ${t("morphCalculator.snakes")}` : 
+                  s.category === "lizard" ? `🦎 ${t("morphCalculator.lizards")}` : `🐢 ${t("morphCalculator.turtles")}`;
       if (!groups[cat]) groups[cat] = [];
       groups[cat].push(s);
     });
     return groups;
-  }, []);
+  }, [t]);
 
   const filteredReptiles = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
@@ -339,21 +339,21 @@ const MorphCalculator = () => {
         <div className="mb-6">
           <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="mb-3 -ml-2">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Retour
+            {t("common.back")}
           </Button>
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2.5 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
               <Dna className="w-6 h-6 text-purple-400" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-foreground">Calculateur Génétique</h1>
-              <p className="text-sm text-muted-foreground">Prédiction des morphs pour vos reproductions</p>
+              <h1 className="text-2xl font-bold text-foreground">{t("morphCalculator.title")}</h1>
+              <p className="text-sm text-muted-foreground">{t("morphCalculator.subtitle")}</p>
             </div>
           </div>
           {(selectedSpecies || parent1.genes.length > 0 || parent2.genes.length > 0 || results) && (
             <Button variant="outline" size="sm" onClick={resetAll} className="gap-2 mt-2">
               <RotateCcw className="w-4 h-4" />
-              Réinitialiser
+              {t("morphCalculator.reset")}
             </Button>
           )}
         </div>
@@ -361,10 +361,10 @@ const MorphCalculator = () => {
         {/* Species Selection */}
         <Card className="mb-6 border-border/50">
           <CardContent className="pt-6">
-            <label className="text-sm font-medium text-foreground mb-2 block">Espèce</label>
+            <label className="text-sm font-medium text-foreground mb-2 block">{t("morphCalculator.species")}</label>
             <Select value={selectedSpecies} onValueChange={handleSpeciesChange}>
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Sélectionner une espèce..." />
+                <SelectValue placeholder={t("morphCalculator.selectSpecies")} />
               </SelectTrigger>
               <SelectContent>
                 {Object.entries(groupedSpecies).map(([category, species]) => (
@@ -387,15 +387,14 @@ const MorphCalculator = () => {
             <div className="flex items-center gap-2 mb-4 p-3 rounded-lg bg-muted/50 border border-border/50">
               <Info className="w-4 h-4 text-muted-foreground flex-shrink-0" />
               <p className="text-xs text-muted-foreground">
-                {speciesData.genes.length} gènes disponibles pour {speciesData.commonName} — 
-                Ajoutez les morphs de chaque parent pour calculer les probabilités
+                {t("morphCalculator.genesAvailable", { count: speciesData.genes.length, name: speciesData.commonName })}
               </p>
             </div>
 
             {/* Parents Side by Side */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <ParentCard
-                title="♂ Parent 1"
+                title={t("morphCalculator.parent1")}
                 parent={parent1}
                 parentNum={1}
                 availableGenes={availableGenes}
@@ -410,7 +409,7 @@ const MorphCalculator = () => {
                 hasReptiles={!!reptiles && reptiles.length > 0}
               />
               <ParentCard
-                title="♀ Parent 2"
+                title={t("morphCalculator.parent2")}
                 parent={parent2}
                 parentNum={2}
                 availableGenes={availableGenes}
@@ -433,7 +432,7 @@ const MorphCalculator = () => {
               disabled={parent1.genes.length === 0 && parent2.genes.length === 0}
             >
               <FlaskConical className="w-5 h-5 mr-2" />
-              Calculer les probabilités
+              {t("morphCalculator.calculate")}
             </Button>
 
             {/* Results */}
@@ -442,10 +441,10 @@ const MorphCalculator = () => {
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center gap-2 text-lg">
                     <Baby className="w-5 h-5 text-purple-400" />
-                    Résultats — Descendance possible
+                    {t("morphCalculator.resultsTitle")}
                   </CardTitle>
                   <p className="text-xs text-muted-foreground">
-                    Probabilités calculées selon les lois de Mendel
+                    {t("morphCalculator.resultsSubtitle")}
                   </p>
                 </CardHeader>
                 <CardContent>
@@ -472,12 +471,12 @@ const MorphCalculator = () => {
                   </div>
 
                   <div className="mt-4 pt-4 border-t border-border/50">
-                    <p className="text-xs font-medium text-muted-foreground mb-2">Légende :</p>
+                    <p className="text-xs font-medium text-muted-foreground mb-2">{t("morphCalculator.legend")}</p>
                     <div className="flex flex-wrap gap-2 text-[10px] text-muted-foreground">
-                      <span>🟢 Visuel = animal exprime le morph</span>
-                      <span>🔵 Het = porteur confirmé</span>
-                      <span>🟡 Poss. Het = porteur possible</span>
-                      <span>⚪ Normal = type sauvage</span>
+                      <span>🟢 {t("morphCalculator.legendVisual")}</span>
+                      <span>🔵 {t("morphCalculator.legendHet")}</span>
+                      <span>🟡 {t("morphCalculator.legendPossHet")}</span>
+                      <span>⚪ {t("morphCalculator.legendNormal")}</span>
                     </div>
                   </div>
                 </CardContent>
@@ -491,20 +490,20 @@ const MorphCalculator = () => {
             <Card className="border-dashed border-2 border-border/50">
               <CardContent className="py-16 text-center">
                 <Dna className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
-                <p className="text-muted-foreground font-medium">Sélectionnez une espèce pour commencer</p>
+                <p className="text-muted-foreground font-medium">{t("morphCalculator.selectSpeciesToStart")}</p>
                 <p className="text-sm text-muted-foreground/60 mt-1">
-                  {speciesGenetics.length} espèces disponibles avec leurs morphs
+                  {t("morphCalculator.speciesAvailable", { count: speciesGenetics.length })}
                 </p>
                 {reptiles && reptiles.length > 0 && (
                   <div className="mt-6">
-                    <p className="text-sm text-muted-foreground mb-3">— ou —</p>
+                    <p className="text-sm text-muted-foreground mb-3">{t("morphCalculator.or")}</p>
                     <Button 
                       variant="outline" 
                       onClick={() => setPickingParent(1)}
                       className="gap-2"
                     >
                       <Search className="w-4 h-4" />
-                      Choisir depuis mes reptiles
+                      {t("morphCalculator.chooseFromMyReptiles")}
                     </Button>
                   </div>
                 )}
@@ -518,12 +517,12 @@ const MorphCalculator = () => {
       <Dialog open={pickingParent !== null} onOpenChange={(open) => { if (!open) { setPickingParent(null); setSearchQuery(""); } }}>
         <DialogContent className="max-w-md max-h-[80vh] flex flex-col">
           <DialogHeader>
-            <DialogTitle>Choisir un reptile — Parent {pickingParent}</DialogTitle>
+            <DialogTitle>{t("morphCalculator.chooseReptileTitle", { num: pickingParent })}</DialogTitle>
           </DialogHeader>
           <div className="relative mb-3">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
-              placeholder="Rechercher par nom, espèce, morph..."
+              placeholder={t("morphCalculator.searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9"
@@ -532,7 +531,7 @@ const MorphCalculator = () => {
           <div className="overflow-y-auto flex-1 space-y-1">
             {filteredReptiles.length === 0 && (
               <p className="text-sm text-muted-foreground text-center py-8">
-                Aucun reptile compatible trouvé pour cette espèce et ce sexe
+                {t("morphCalculator.noCompatibleReptile")}
               </p>
             )}
             {filteredReptiles.map((reptile) => {
