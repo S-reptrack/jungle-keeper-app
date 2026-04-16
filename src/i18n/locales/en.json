@@ -71,7 +71,11 @@
       "oneHatchingSoon": "A hatching is expected soon!",
       "today": "Today"
     },
-    "viewAll": "View all"
+    "viewAll": "View all",
+    "deceased": "Deceased",
+    "sold": "Sold",
+    "transferred": "Transferred",
+    "noTransferred": "No transferred animals"
   },
   "feeding": {
     "stage": "Stage",
@@ -238,7 +242,9 @@
     "language": "Language",
     "back": "Back",
     "loading": "Loading...",
-    "close": "Close"
+    "close": "Close",
+    "never": "Never",
+    "unknown": "Unknown"
   },
   "auth": {
     "login": "Login",

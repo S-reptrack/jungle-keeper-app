@@ -41,7 +41,9 @@
     "back": "Volver",
     "loading": "Cargando...",
     "close": "Cerrar",
-    "forSale": "En venta"
+    "forSale": "En venta",
+    "never": "Nunca",
+    "unknown": "Desconocido"
   },
   "admin": {
     "dashboard": "Administración",
@@ -174,7 +176,11 @@
       "hatchingAlerts": "Alertas de eclosión"
     },
     "viewAll": "Ver todo",
-    "bornInCaptivity": "Born in captivity"
+    "bornInCaptivity": "Born in captivity",
+    "deceased": "Fallecido",
+    "sold": "Vendido",
+    "transferred": "Transferido",
+    "noTransferred": "Sin animales transferidos"
   },
   "feeding": {
     "stage": "Etapa",
