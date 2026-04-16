@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +14,7 @@ interface FeedingIntervalCardProps {
 }
 
 const FeedingIntervalCard = ({ reptileId, readOnly = false }: FeedingIntervalCardProps) => {
+  const { t, i18n } = useTranslation();
   const [interval, setInterval] = useState<number | null>(null);
   const [editing, setEditing] = useState(false);
   const [tempInterval, setTempInterval] = useState<string>("");
@@ -113,7 +115,7 @@ const FeedingIntervalCard = ({ reptileId, readOnly = false }: FeedingIntervalCar
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("fr-FR", {
+    return date.toLocaleDateString(i18n.language, {
       day: "numeric",
       month: "long",
       year: "numeric",
@@ -124,7 +126,7 @@ const FeedingIntervalCard = ({ reptileId, readOnly = false }: FeedingIntervalCar
     return (
       <Card>
         <CardContent className="py-8">
-          <p className="text-muted-foreground text-center">Chargement...</p>
+          <p className="text-muted-foreground text-center">{t("common.loading")}</p>
         </CardContent>
       </Card>
     );
@@ -136,45 +138,38 @@ const FeedingIntervalCard = ({ reptileId, readOnly = false }: FeedingIntervalCar
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Calendar className="w-5 h-5 text-primary" />
-            <CardTitle>Intervalle de repas</CardTitle>
+            <CardTitle>{t("feedingSchedule.interval")}</CardTitle>
           </div>
           {!readOnly && !editing && (
             <Button variant="outline" size="sm" onClick={handleEdit}>
               <Edit2 className="w-4 h-4 mr-2" />
-              Modifier
+              {t("common.edit")}
             </Button>
           )}
         </div>
-        <CardDescription>
-          Définissez la fréquence d'alimentation pour ce reptile
-        </CardDescription>
       </CardHeader>
       <CardContent>
         {editing ? (
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="interval">Intervalle en jours</Label>
+              <Label htmlFor="interval">{t("feedingSchedule.interval")} ({t("feedingSchedule.days")})</Label>
               <Input
                 id="interval"
                 type="number"
                 min="1"
                 max="365"
-                placeholder="Ex: 7 pour une fois par semaine"
                 value={tempInterval}
                 onChange={(e) => setTempInterval(e.target.value)}
               />
-              <p className="text-xs text-muted-foreground">
-                Laissez vide si vous ne souhaitez pas définir d'intervalle
-              </p>
             </div>
             <div className="flex gap-2">
               <Button onClick={handleSave} className="flex-1">
                 <Save className="w-4 h-4 mr-2" />
-                Enregistrer
+                {t("common.save")}
               </Button>
               <Button variant="outline" onClick={handleCancel} className="flex-1">
                 <X className="w-4 h-4 mr-2" />
-                Annuler
+                {t("common.cancel")}
               </Button>
             </div>
           </div>
@@ -183,26 +178,26 @@ const FeedingIntervalCard = ({ reptileId, readOnly = false }: FeedingIntervalCar
             {interval ? (
               <>
                 <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                  <span className="text-sm text-muted-foreground">Fréquence</span>
+                  <span className="text-sm text-muted-foreground">{t("feedingSchedule.interval")}</span>
                   <span className="font-semibold text-lg">
-                    Tous les {interval} jour{interval > 1 ? 's' : ''}
+                    {interval} {t("feedingSchedule.days")}
                   </span>
                 </div>
                 {lastFeedingDate && nextFeeding && (
                   <>
                     <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                      <span className="text-sm text-muted-foreground">Dernier repas</span>
+                      <span className="text-sm text-muted-foreground">{t("timeAgo.lastMeal")}</span>
                       <span className="font-medium">{formatDate(lastFeedingDate)}</span>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-primary/10 rounded-lg">
-                      <span className="text-sm font-medium">Prochain repas prévu</span>
+                      <span className="text-sm font-medium">{t("timeAgo.nextMealPlanned")}</span>
                       <div className="text-right">
                         <div className="font-semibold">{formatDate(nextFeeding.nextDate.toISOString())}</div>
                         <div className="text-xs text-muted-foreground">
-                          {nextFeeding.diffDays === 0 && "Aujourd'hui"}
-                          {nextFeeding.diffDays === 1 && "Demain"}
-                          {nextFeeding.diffDays > 1 && `Dans ${nextFeeding.diffDays} jours`}
-                          {nextFeeding.diffDays < 0 && `En retard de ${Math.abs(nextFeeding.diffDays)} jour${Math.abs(nextFeeding.diffDays) > 1 ? 's' : ''}`}
+                          {nextFeeding.diffDays === 0 && t("timeAgo.today")}
+                          {nextFeeding.diffDays === 1 && t("timeAgo.tomorrow")}
+                          {nextFeeding.diffDays > 1 && t("timeAgo.inDays", { days: nextFeeding.diffDays })}
+                          {nextFeeding.diffDays < 0 && t("timeAgo.overdueBy", { days: Math.abs(nextFeeding.diffDays), plural: Math.abs(nextFeeding.diffDays) > 1 ? 's' : '' })}
                         </div>
                       </div>
                     </div>
@@ -211,10 +206,10 @@ const FeedingIntervalCard = ({ reptileId, readOnly = false }: FeedingIntervalCar
               </>
             ) : (
               <div className="text-center py-4">
-                <p className="text-muted-foreground mb-2">Aucun intervalle défini</p>
+                <p className="text-muted-foreground mb-2">{t("timeAgo.noIntervalDefined")}</p>
                 {!readOnly && (
                   <Button variant="outline" size="sm" onClick={handleEdit}>
-                    Définir un intervalle
+                    {t("timeAgo.setInterval")}
                   </Button>
                 )}
               </div>
