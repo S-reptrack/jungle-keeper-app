@@ -9,12 +9,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { MessageSquare, Star, Loader2, Send } from "lucide-react";
 
-const categories = [
-  { value: "bug", label: "Bug / Erreur" },
-  { value: "ui", label: "Interface / Design" },
-  { value: "feature", label: "Nouvelle fonctionnalité" },
-  { value: "performance", label: "Performance" },
-  { value: "general", label: "Général" },
+const categories = (t: any) => [
+  { value: "bug", label: t("testerFeedback.categories.bug") },
+  { value: "ui", label: t("testerFeedback.categories.ui") },
+  { value: "feature", label: t("testerFeedback.categories.feature") },
+  { value: "performance", label: t("testerFeedback.categories.performance") },
+  { value: "general", label: t("testerFeedback.categories.general") },
 ];
 
 const TesterFeedbackForm = () => {
@@ -28,17 +28,17 @@ const TesterFeedbackForm = () => {
 
   const handleSubmit = async () => {
     if (!user) {
-      toast.error("Vous devez être connecté");
+      toast.error(t("testerFeedback.loginRequired"));
       return;
     }
 
     if (rating === 0) {
-      toast.error("Veuillez donner une note");
+      toast.error(t("testerFeedback.ratingRequired"));
       return;
     }
 
     if (!feedback.trim()) {
-      toast.error("Veuillez écrire votre feedback");
+      toast.error(t("testerFeedback.feedbackRequired"));
       return;
     }
 
@@ -54,13 +54,13 @@ const TesterFeedbackForm = () => {
 
       if (error) throw error;
 
-      toast.success("Merci pour votre feedback !");
+      toast.success(t("testerFeedback.success"));
       setRating(0);
       setCategory("general");
       setFeedback("");
     } catch (error: any) {
       console.error("Error submitting feedback:", error);
-      toast.error("Erreur lors de l'envoi du feedback");
+      toast.error(t("testerFeedback.error"));
     } finally {
       setSubmitting(false);
     }
@@ -71,16 +71,16 @@ const TesterFeedbackForm = () => {
       <CardHeader>
         <div className="flex items-center gap-2">
           <MessageSquare className="h-5 w-5 text-primary" />
-          <CardTitle className="text-lg">Envoyer un feedback</CardTitle>
+          <CardTitle className="text-lg">{t("testerFeedback.title")}</CardTitle>
         </div>
         <CardDescription>
-          Aidez-nous à améliorer l'application en partageant vos impressions
+          {t("testerFeedback.description")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Rating */}
         <div>
-          <label className="text-sm font-medium mb-2 block">Note globale</label>
+          <label className="text-sm font-medium mb-2 block">{t("testerFeedback.overallRating")}</label>
           <div className="flex gap-1">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
@@ -105,13 +105,13 @@ const TesterFeedbackForm = () => {
 
         {/* Category */}
         <div>
-          <label className="text-sm font-medium mb-2 block">Catégorie</label>
+          <label className="text-sm font-medium mb-2 block">{t("testerFeedback.category")}</label>
           <Select value={category} onValueChange={setCategory}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {categories.map((cat) => (
+              {categories(t).map((cat) => (
                 <SelectItem key={cat.value} value={cat.value}>
                   {cat.label}
                 </SelectItem>
@@ -122,9 +122,9 @@ const TesterFeedbackForm = () => {
 
         {/* Feedback text */}
         <div>
-          <label className="text-sm font-medium mb-2 block">Votre feedback</label>
+          <label className="text-sm font-medium mb-2 block">{t("testerFeedback.feedbackLabel")}</label>
           <Textarea
-            placeholder="Décrivez votre expérience, les bugs rencontrés, ou vos suggestions d'amélioration..."
+            placeholder={t("testerFeedback.feedbackPlaceholder")}
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
             rows={4}
@@ -141,7 +141,7 @@ const TesterFeedbackForm = () => {
           ) : (
             <Send className="h-4 w-4 mr-2" />
           )}
-          Envoyer le feedback
+          {t("testerFeedback.submit")}
         </Button>
       </CardContent>
     </Card>

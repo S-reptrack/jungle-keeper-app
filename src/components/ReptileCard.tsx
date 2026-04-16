@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +20,7 @@ interface ReptileCardProps {
 }
 
 const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntilHatch, status, sex, hasHealthIssue, hasReproductionActivity }: ReptileCardProps) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   
   const { signedUrl, loading } = useSignedImageUrl(image);
@@ -43,21 +45,21 @@ const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntil
         {daysUntilHatch !== undefined && daysUntilHatch !== null && status !== 'deceased' && (
           <div className="absolute top-3 left-3">
             <Badge className="bg-orange-500 hover:bg-orange-600 text-white border-0 text-sm font-bold px-3 py-1.5 shadow-lg animate-pulse">
-              🥚 Éclosion dans {daysUntilHatch}j
+              🥚 {t("reptileCard.hatchingIn", { days: daysUntilHatch })}
             </Badge>
           </div>
         )}
         {hasReproductionActivity && !(daysUntilHatch !== undefined && daysUntilHatch !== null && status !== 'deceased') && (
           <div className="absolute top-3 left-3">
             <Badge className="bg-pink-500 hover:bg-pink-600 text-white border-0 text-sm font-bold px-3 py-1.5 shadow-lg">
-              💕 Reproduction
+              💕 {t("reptileCard.reproduction")}
             </Badge>
           </div>
         )}
         {hasHealthIssue && (
           <div className={`absolute ${(daysUntilHatch !== undefined && daysUntilHatch !== null && status !== 'deceased') || hasReproductionActivity ? 'top-14' : 'top-3'} left-3`}>
             <Badge className="bg-blue-500 hover:bg-blue-600 text-white border-0 text-sm font-bold px-3 py-1.5 shadow-lg">
-              🩺 Santé
+              🩺 {t("reptileCard.health")}
             </Badge>
           </div>
         )}
@@ -74,7 +76,7 @@ const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntil
                     ? "text-pink-500" 
                     : "text-muted-foreground"
                 }`}
-                title={sex === "male" ? "Mâle" : sex === "female" ? "Femelle" : "Inconnu"}
+                title={sex === "male" ? t("reptileCard.male") : sex === "female" ? t("reptileCard.female") : t("reptileCard.unknown")}
               >
                 {sex === "male" ? "♂" : sex === "female" ? "♀" : "?"}
               </span>
@@ -87,7 +89,7 @@ const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntil
           <div className="flex flex-col items-end gap-2">
             {status === "for_sale" && (
               <Badge variant="outline" className="border-primary text-primary">
-                À vendre
+                {t("reptileCard.forSale")}
               </Badge>
             )}
             <Badge variant="secondary" className="bg-accent/20 text-accent-foreground border-accent/30">
@@ -98,11 +100,11 @@ const ReptileCard = ({ id, name, species, age, weight, lastFed, image, daysUntil
       </CardHeader>
       <CardContent className="space-y-2">
         <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Poids</span>
+          <span className="text-muted-foreground">{t("reptileCard.weight")}</span>
           <span className="font-medium text-foreground">{weight}</span>
         </div>
         <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Dernier repas</span>
+          <span className="text-muted-foreground">{t("reptileCard.lastMeal")}</span>
           <span className="font-medium text-foreground">{lastFed}</span>
         </div>
       </CardContent>

@@ -114,7 +114,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
-        toast.error("Vous devez être connecté pour ajouter un reptile");
+        toast.error(t("addReptile.loginRequired"));
         return;
       }
 
@@ -144,12 +144,12 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
           user_id: user.id,
           weight: data.weight,
           measurement_date: new Date().toISOString().split('T')[0],
-          notes: "Poids initial",
+          notes: t("addReptile.initialWeight"),
         });
       }
 
       toast.success(t("reptile.addReptile"), {
-        description: `${data.name} a été ajouté avec succès!`,
+        description: t("addReptile.successDescription", { name: data.name }),
       });
       form.reset();
       setSelectedMorphs([]);
@@ -162,7 +162,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
       }
     } catch (error: any) {
       console.error("Error adding reptile:", error);
-      toast.error("Erreur lors de l'ajout du reptile");
+      toast.error(t("addReptile.error"));
     } finally {
       setIsSubmitting(false);
     }
@@ -329,17 +329,17 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
               name="species"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Espèce CITES</FormLabel>
+                  <FormLabel>{t("addReptile.citesSpecies")}</FormLabel>
                   
                   <Tabs value={selectedAnnex} onValueChange={(value) => {
                     setSelectedAnnex(value as 'A' | 'B' | 'C' | 'D');
                     form.setValue("species", "");
                   }}>
                     <TabsList className="grid w-full grid-cols-4 mb-4">
-                      <TabsTrigger value="A">Annexe A</TabsTrigger>
-                      <TabsTrigger value="B">Annexe B</TabsTrigger>
-                      <TabsTrigger value="C">Annexe C</TabsTrigger>
-                      <TabsTrigger value="D">Annexe D</TabsTrigger>
+                      <TabsTrigger value="A">{t("addReptile.annexA")}</TabsTrigger>
+                      <TabsTrigger value="B">{t("addReptile.annexB")}</TabsTrigger>
+                      <TabsTrigger value="C">{t("addReptile.annexC")}</TabsTrigger>
+                      <TabsTrigger value="D">{t("addReptile.annexD")}</TabsTrigger>
                     </TabsList>
                     
                     <TabsContent value={selectedAnnex} className="mt-0">
@@ -364,7 +364,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                           <PopoverContent className="w-[--radix-popover-trigger-width] p-0 z-50 bg-card border-border" align="start">
                             <Command>
                               <CommandInput placeholder={t("reptile.selectSpecies") as string} />
-                              <CommandEmpty>Aucune espèce trouvée</CommandEmpty>
+                              <CommandEmpty>{t("addReptile.noSpeciesFound")}</CommandEmpty>
                               <CommandGroup className="max-h-[300px] overflow-y-auto">
                                 {filteredSpecies.map((species) => (
                                   <CommandItem
