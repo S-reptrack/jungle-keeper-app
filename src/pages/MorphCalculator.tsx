@@ -568,6 +568,7 @@ const ParentCard = ({
   onAddGene, onUpdateStatus, onUpdatePossHetPct, onRemoveGene,
   getStatusOptions, getInheritanceBadge, onPickReptile, onClearParent, hasReptiles
 }: ParentCardProps) => {
+  const { t } = useTranslation();
   const unusedGenes = availableGenes.filter(
     g => !parent.genes.find(pg => pg.gene.name === g.name)
   );
@@ -580,7 +581,9 @@ const ParentCard = ({
           <CardTitle className="text-base flex items-center gap-2">
             {title}
             <Badge variant="secondary" className="text-[10px]">
-              {parent.genes.length} gène{parent.genes.length > 1 ? 's' : ''}
+              {parent.genes.length > 1 
+                ? t("morphCalculator.geneCountPlural", { count: parent.genes.length })
+                : t("morphCalculator.geneCount", { count: parent.genes.length })}
             </Badge>
           </CardTitle>
           <div className="flex items-center gap-1">
@@ -592,7 +595,7 @@ const ParentCard = ({
             {hasReptiles && (
               <Button variant="ghost" size="sm" onClick={onPickReptile} className="text-xs h-7 gap-1 text-primary">
                 <Search className="w-3 h-3" />
-                Mes reptiles
+                {t("morphCalculator.myReptiles")}
               </Button>
             )}
           </div>
@@ -632,7 +635,7 @@ const ParentCard = ({
             </Select>
             {pg.status === "possible_het" && (
               <div className="flex items-center gap-2">
-                <span className="text-[10px] text-muted-foreground">Probabilité :</span>
+                <span className="text-[10px] text-muted-foreground">{t("morphCalculator.probability")}</span>
                 <Select 
                   value={String(pg.possibleHetPercentage || 66)} 
                   onValueChange={(v) => onUpdatePossHetPct(pg.gene.name, Number(v))}
@@ -660,7 +663,7 @@ const ParentCard = ({
             <SelectTrigger className="h-9 text-xs border-dashed">
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <Plus className="w-3 h-3" />
-                Ajouter un gène
+                {t("morphCalculator.addGene")}
               </div>
             </SelectTrigger>
             <SelectContent>
@@ -669,7 +672,7 @@ const ParentCard = ({
                   <div className="flex items-center gap-2">
                     {g.name}
                     <span className="text-[10px] text-muted-foreground">
-                      ({g.inheritance === "recessive" ? "réc." : g.inheritance === "codominant" ? "codom." : "dom."})
+                      ({g.inheritance === "recessive" ? t("morphCalculator.recessive") : g.inheritance === "codominant" ? t("morphCalculator.codominant") : t("morphCalculator.dominant")})
                     </span>
                   </div>
                 </SelectItem>
@@ -680,7 +683,7 @@ const ParentCard = ({
 
         {parent.genes.length === 0 && unusedGenes.length > 0 && (
           <p className="text-xs text-muted-foreground text-center py-2">
-            Ajoutez les morphs de ce parent
+            {t("morphCalculator.addParentMorphs")}
           </p>
         )}
       </CardContent>
