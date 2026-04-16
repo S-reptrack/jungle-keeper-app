@@ -12,12 +12,14 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
-import { fr } from "date-fns/locale";
+import { fr, enUS, de, es, it, pt, nl, pl, ru, ja, zhCN, hi, th, id as idLocale } from "date-fns/locale";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+
+const localeMap: Record<string, any> = { fr, en: enUS, de, es, it, pt, nl, pl, ru, ja, zh: zhCN, hi, th, id: idLocale };
 
 interface SoldTabProps {
   reptileId: string;
@@ -25,7 +27,9 @@ interface SoldTabProps {
 }
 
 const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const dateLocale = localeMap[i18n.language] || enUS;
   const navigate = useNavigate();
   const [date, setDate] = useState<Date>();
   const [notes, setNotes] = useState("");
@@ -58,7 +62,7 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
       }
     } catch (error) {
       console.error("Error taking photo:", error);
-      toast.error("Erreur lors de la prise de photo");
+      toast.error(t("soldTab.photoError"));
     }
   };
 
@@ -75,7 +79,7 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
           setDocumentPreview("pdf");
         }
       } else {
-        toast.error("Format non supporté. Veuillez utiliser un PDF ou une image.");
+        toast.error(t("soldTab.unsupportedFormat"));
       }
     }
   };
@@ -125,7 +129,7 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
 
   const handleSubmit = async () => {
     if (!date) {
-      toast.error("Veuillez sélectionner une date");
+      toast.error(t("soldTab.dateRequired"));
       return;
     }
 
@@ -166,13 +170,11 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
 
       if (error) throw error;
 
-      toast.success(`${reptileName} a été marqué comme vendu et archivé`);
-      
-      // Show transfer dialog
+      toast.success(t("soldTab.success", { name: reptileName }));
       setShowTransferDialog(true);
     } catch (error) {
       console.error("Error archiving reptile:", error);
-      toast.error("Erreur lors de l'archivage");
+      toast.error(t("soldTab.error"));
     } finally {
       setLoading(false);
     }
@@ -180,12 +182,12 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
 
   const handleSendTransfer = async () => {
     if (!buyerEmail.trim()) {
-      toast.error("Veuillez entrer l'email de l'acheteur");
+      toast.error(t("soldTab.buyerRequired"));
       return;
     }
 
     if (!buyerExists) {
-      toast.error("L'acheteur doit posséder l'application pour recevoir la fiche");
+      toast.error(t("soldTab.buyerMustHaveApp"));
       return;
     }
 
@@ -215,17 +217,17 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
           from_user_id: user.id,
           to_user_email: buyerEmail.trim(),
           to_user_id: recipientUserId,
-          message: transferMessage.trim() || `Fiche de ${reptileName} suite à la vente`,
+          message: transferMessage.trim() || t("soldTab.defaultTransferMessage", { name: reptileName }),
         });
 
       if (error) throw error;
 
-      toast.success("La fiche a été envoyée à l'acheteur");
+      toast.success(t("soldTab.transferSuccess"));
       setShowTransferDialog(false);
       navigate("/reptiles");
     } catch (error: any) {
       console.error("Transfer error:", error);
-      toast.error(error.message || "Erreur lors de l'envoi");
+      toast.error(error.message || t("soldTab.transferError"));
     } finally {
       setSendingTransfer(false);
     }
@@ -242,15 +244,15 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CheckCircle className="w-5 h-5" />
-            Marquer comme vendu
+            {t("soldTab.title")}
           </CardTitle>
           <CardDescription>
-            Enregistrez la vente de {reptileName}. L'animal sera archivé avec son historique complet.
+            {t("soldTab.description", { name: reptileName })}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label>Date de vente *</Label>
+            <Label>{t("soldTab.saleDate")}</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -261,7 +263,7 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, "PPP", { locale: fr }) : "Sélectionner une date"}
+                  {date ? format(date, "PPP", { locale: dateLocale }) : t("soldTab.selectDate")}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0 z-[100]">
@@ -271,7 +273,7 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
                   onSelect={setDate}
                   disabled={(date) => date > new Date()}
                   initialFocus
-                  locale={fr}
+                  locale={dateLocale}
                   className="pointer-events-auto"
                 />
               </PopoverContent>
@@ -279,9 +281,9 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>Notes (optionnel)</Label>
+            <Label>{t("soldTab.notes")}</Label>
             <Textarea
-              placeholder="Ex: Vendu à M. Dupont, élevage Python Passion..."
+              placeholder={t("soldTab.notesPlaceholder")}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={4}
@@ -289,7 +291,7 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>Document de vente (optionnel)</Label>
+            <Label>{t("soldTab.saleDocument")}</Label>
             {!documentFile ? (
               <div className="flex gap-2">
                 <Button
@@ -299,7 +301,7 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
                   className="flex-1 gap-2"
                 >
                   <Camera className="w-4 h-4" />
-                  Prendre une photo
+                  {t("soldTab.takePhoto")}
                 </Button>
                 <Button
                   type="button"
@@ -308,7 +310,7 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
                   className="flex-1 gap-2"
                 >
                   <FileUp className="w-4 h-4" />
-                  Fichier
+                  {t("soldTab.file")}
                 </Button>
                 <input
                   id="file-upload-sold"
@@ -351,7 +353,7 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
               disabled={loading || !date}
               className="w-full"
             >
-              {loading ? "Archivage en cours..." : "Confirmer la vente et archiver"}
+              {loading ? t("soldTab.archiving") : t("soldTab.submit")}
             </Button>
           </div>
         </CardContent>
@@ -363,22 +365,21 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Send className="w-5 h-5" />
-              Envoyer la fiche à l'acheteur ?
+              {t("soldTab.transferTitle")}
             </DialogTitle>
             <DialogDescription>
-              Voulez-vous transférer la fiche de {reptileName} au nouveau propriétaire ? 
-              L'acheteur doit posséder l'application pour recevoir la fiche avec tout l'historique.
+              {t("soldTab.transferDescription", { name: reptileName })}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="buyer-email">Email de l'acheteur</Label>
+              <Label htmlFor="buyer-email">{t("soldTab.buyerEmail")}</Label>
               <div className="relative">
                 <Input
                   id="buyer-email"
                   type="email"
-                  placeholder="acheteur@example.com"
+                  placeholder={t("soldTab.buyerEmailPlaceholder")}
                   value={buyerEmail}
                   onChange={(e) => handleEmailChange(e.target.value)}
                   onBlur={handleEmailBlur}
@@ -401,22 +402,22 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
               {buyerExists === true && (
                 <Badge variant="outline" className="text-green-600 border-green-600">
                   <UserCheck className="w-3 h-3 mr-1" />
-                  Utilisateur trouvé - peut recevoir la fiche
+                  {t("soldTab.buyerFound")}
                 </Badge>
               )}
               {buyerExists === false && (
                 <Badge variant="outline" className="text-red-600 border-red-600">
                   <UserX className="w-3 h-3 mr-1" />
-                  Utilisateur non trouvé - ne possède pas l'application
+                  {t("soldTab.buyerNotFound")}
                 </Badge>
               )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="transfer-message">Message (optionnel)</Label>
+              <Label htmlFor="transfer-message">{t("soldTab.transferMessage")}</Label>
               <Textarea
                 id="transfer-message"
-                placeholder="Message pour l'acheteur..."
+                placeholder={t("soldTab.transferMessagePlaceholder")}
                 value={transferMessage}
                 onChange={(e) => setTransferMessage(e.target.value)}
                 rows={2}
@@ -426,7 +427,7 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
 
           <DialogFooter className="flex-col sm:flex-row gap-2">
             <Button variant="outline" onClick={handleSkipTransfer} className="w-full sm:w-auto">
-              Non, terminer sans envoyer
+              {t("soldTab.skipTransfer")}
             </Button>
             <Button 
               onClick={handleSendTransfer} 
@@ -434,7 +435,7 @@ const SoldTab = ({ reptileId, reptileName }: SoldTabProps) => {
               className="w-full sm:w-auto"
             >
               <Send className="w-4 h-4 mr-2" />
-              {sendingTransfer ? "Envoi en cours..." : "Envoyer la fiche"}
+              {sendingTransfer ? t("soldTab.sending") : t("soldTab.sendCard")}
             </Button>
           </DialogFooter>
         </DialogContent>
