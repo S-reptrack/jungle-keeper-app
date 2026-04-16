@@ -40,8 +40,8 @@
     "language": "Idioma",
     "back": "Volver",
     "loading": "Cargando...",
-    "close": "Close",
-    "forSale": "For Sale"
+    "close": "Cerrar",
+    "forSale": "En venta"
   },
   "admin": {
     "dashboard": "Administración",
@@ -59,21 +59,21 @@
     "comingSoon": "Próximamente: gestión de usuarios, suscripciones Stripe, estadísticas detalladas...",
     "errorFetchingStats": "Error al obtener estadísticas",
     "testers": {
-      "alreadyTester": "This user is already a tester",
-      "note": "Testers can access the app even in maintenance mode, but don't have admin privileges.",
-      "userNotFound": "No user found with this email",
-      "add": "Add",
-      "addSuccess": "Tester added successfully",
-      "emailPlaceholder": "Tester email",
-      "errorFetching": "Error fetching testers",
-      "removeSuccess": "{{email}} removed from testers",
-      "errorAdding": "Error adding tester",
+      "alreadyTester": "Ya es tester",
+      "note": "Los testers tienen acceso a la app incluso en modo mantenimiento.",
+      "userNotFound": "Usuario no encontrado",
+      "add": "Añadir",
+      "addSuccess": "Tester añadido",
+      "emailPlaceholder": "Email del tester",
+      "errorFetching": "Error al recuperar los testers",
+      "removeSuccess": "{{email}} eliminado",
+      "errorAdding": "Error al añadir",
       "tester": "Tester",
-      "noTesters": "No testers yet",
-      "enterEmail": "Please enter an email",
-      "description": "Testers can access the app during maintenance",
-      "title": "Tester Management",
-      "errorRemoving": "Error removing tester"
+      "noTesters": "No hay testers",
+      "enterEmail": "Introduzca un email",
+      "description": "Los testers pueden acceder a la app durante el mantenimiento",
+      "title": "Gestión de testers",
+      "errorRemoving": "Error al eliminar"
     }
   },
   "gdpr": {
@@ -167,13 +167,13 @@
         "laying": "Puesta de huevos",
         "other": "Otro"
       },
-      "today": "Today",
-      "expectedDate": "Expected date",
-      "multipleHatchingSoon": "{{count}} hatchings are expected soon!",
-      "oneHatchingSoon": "A hatching is expected soon!",
-      "hatchingAlerts": "Hatching alerts"
+      "today": "Hoy",
+      "expectedDate": "Fecha prevista",
+      "multipleHatchingSoon": "¡{{count}} eclosiones previstas pronto!",
+      "oneHatchingSoon": "¡Una eclosión prevista pronto!",
+      "hatchingAlerts": "Alertas de eclosión"
     },
-    "viewAll": "View all",
+    "viewAll": "Ver todo",
     "bornInCaptivity": "Born in captivity"
   },
   "feeding": {
@@ -567,8 +567,8 @@
     "compareTransfer": "Transferencia de animales",
     "compareSale": "Puesta en venta",
     "compareMorphCalculator": "Calculadora genética",
-    "legalNotice": "Legal Notice",
-    "termsOfService": "Terms of Service"
+    "legalNotice": "Aviso legal",
+    "termsOfService": "Condiciones de uso"
   },
   "species": {
     "python-molurus-bivittatus": "Pitón birmana",
@@ -1000,25 +1000,25 @@
     "searchPlaceholder": "Search..."
   },
   "auth": {
-    "password": "Password",
-    "signupButton": "Sign Up",
-    "passwordSecure": "Secure password",
-    "passwordMedium": "Medium",
-    "login": "Login",
-    "loginDescription": "Sign in to access your reptiles",
-    "privacyPolicy": "Privacy Policy",
-    "passwordPlaceholder": "Minimum 12 characters",
-    "strength": "Strength",
-    "passwordWeak": "Weak",
-    "passwordStrong": "Strong",
-    "loginButton": "Sign In",
-    "hasAccount": "Already have an account? Sign in",
-    "signupDescription": "Create an account to get started",
-    "noAccount": "Don't have an account? Sign up",
-    "checkingPassword": "Checking password security...",
-    "emailPlaceholder": "your@email.com",
+    "password": "Contraseña",
+    "signupButton": "Registrarse",
+    "passwordSecure": "Contraseña segura",
+    "passwordMedium": "Media",
+    "login": "Iniciar sesión",
+    "loginDescription": "Inicie sesión para acceder a sus reptiles",
+    "privacyPolicy": "Política de privacidad",
+    "passwordPlaceholder": "Mínimo 12 caracteres",
+    "strength": "Fuerza",
+    "passwordWeak": "Débil",
+    "passwordStrong": "Fuerte",
+    "loginButton": "Iniciar sesión",
+    "hasAccount": "¿Ya tiene cuenta? Inicie sesión",
+    "signupDescription": "Cree una cuenta para empezar",
+    "noAccount": "¿No tiene cuenta? Regístrese",
+    "checkingPassword": "Verificando seguridad...",
+    "emailPlaceholder": "su@email.com",
     "email": "Email",
-    "signup": "Sign Up"
+    "signup": "Registrarse"
   },
   "legal": {
     "cookies": {
@@ -1103,29 +1103,29 @@
     "selectImage": "Select an image"
   },
   "analytics": {
-    "feedingsPerMonth": "Feedings per month",
+    "feedingsPerMonth": "Alimentaciones por mes",
     "title": "Analytics",
-    "unhatched": "Unhatched",
-    "weightEvolution": "Average weight evolution",
-    "distribution": "Distribution of your reptiles",
-    "reproductionStats": "Reproduction",
-    "stillborn": "Stillborn",
-    "resolved": "Resolved",
-    "healthStats": "Health statistics",
-    "topSpecies": "Top species",
-    "hatched": "Hatched",
-    "active": "Active",
-    "top10Species": "Top 10 species",
+    "unhatched": "No eclosionados",
+    "weightEvolution": "Evolución del peso medio",
+    "distribution": "Distribución de sus reptiles",
+    "reproductionStats": "Reproducción",
+    "stillborn": "Nacidos muertos",
+    "resolved": "Resueltos",
+    "healthStats": "Estadísticas de salud",
+    "topSpecies": "Especies principales",
+    "hatched": "Eclosionados",
+    "active": "Activos",
+    "top10Species": "Las 10 especies más presentes",
     "description": "Advanced statistics and detailed charts of your breeding.",
-    "byCategory": "By category"
+    "byCategory": "Por categoría"
   },
   "nfc": {
-    "iosNotSupported": "NFC not available on iPhone",
-    "iosNotSupportedDescription": "Apple does not allow NFC access from web apps. Install the native app to use NFC."
+    "iosNotSupported": "NFC no disponible en iPhone",
+    "iosNotSupportedDescription": "Apple no permite el acceso NFC desde aplicaciones web."
   },
   "premium": {
-    "featureLockedDescription": "This feature is reserved for Premium subscribers.",
-    "upgradeToPremium": "Upgrade to Premium",
-    "upgradeToAccess": "Upgrade to Premium to unlock this feature."
+    "featureLockedDescription": "Esta función es para suscriptores Premium.",
+    "upgradeToPremium": "Pasar a Premium",
+    "upgradeToAccess": "Pase a Premium para desbloquear."
   }
 }

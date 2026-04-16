@@ -996,24 +996,24 @@
   },
   "auth": {
     "password": "Password",
-    "signupButton": "Sign Up",
+    "signupButton": "Daftar",
     "passwordSecure": "Secure password",
     "passwordMedium": "Medium",
-    "login": "Login",
+    "login": "Masuk",
     "loginDescription": "Sign in to access your reptiles",
     "privacyPolicy": "Privacy Policy",
     "passwordPlaceholder": "Minimum 12 characters",
     "strength": "Strength",
     "passwordWeak": "Weak",
     "passwordStrong": "Strong",
-    "loginButton": "Sign In",
+    "loginButton": "Masuk",
     "hasAccount": "Already have an account? Sign in",
     "signupDescription": "Create an account to get started",
     "noAccount": "Don't have an account? Sign up",
     "checkingPassword": "Checking password security...",
     "emailPlaceholder": "your@email.com",
     "email": "Email",
-    "signup": "Sign Up"
+    "signup": "Daftar"
   },
   "legal": {
     "cookies": {
@@ -1098,29 +1098,29 @@
     "selectImage": "Select an image"
   },
   "analytics": {
-    "feedingsPerMonth": "Feedings per month",
+    "feedingsPerMonth": "Pemberian makan/bulan",
     "title": "Analytics",
     "unhatched": "Unhatched",
     "weightEvolution": "Average weight evolution",
-    "distribution": "Distribution of your reptiles",
+    "distribution": "Distribusi reptil",
     "reproductionStats": "Reproduction",
     "stillborn": "Stillborn",
-    "resolved": "Resolved",
-    "healthStats": "Health statistics",
-    "topSpecies": "Top species",
+    "resolved": "Terselesaikan",
+    "healthStats": "Statistik kesehatan",
+    "topSpecies": "Spesies teratas",
     "hatched": "Hatched",
-    "active": "Active",
+    "active": "Aktif",
     "top10Species": "Top 10 species",
     "description": "Advanced statistics and detailed charts of your breeding.",
-    "byCategory": "By category"
+    "byCategory": "Berdasarkan kategori"
   },
   "nfc": {
     "iosNotSupported": "NFC not available on iPhone",
     "iosNotSupportedDescription": "Apple does not allow NFC access from web apps. Install the native app to use NFC."
   },
   "premium": {
-    "featureLockedDescription": "This feature is reserved for Premium subscribers.",
-    "upgradeToPremium": "Upgrade to Premium",
+    "featureLockedDescription": "Fitur Premium.",
+    "upgradeToPremium": "Upgrade Premium",
     "upgradeToAccess": "Upgrade to Premium to unlock this feature."
   }
 }

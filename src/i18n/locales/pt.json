@@ -273,8 +273,8 @@
     "language": "Idioma",
     "back": "Voltar",
     "loading": "Carregando...",
-    "close": "Close",
-    "forSale": "For Sale"
+    "close": "Fechar",
+    "forSale": "À venda"
   },
   "admin": {
     "dashboard": "Administração",
@@ -295,17 +295,17 @@
       "alreadyTester": "This user is already a tester",
       "note": "Testers can access the app even in maintenance mode, but don't have admin privileges.",
       "userNotFound": "No user found with this email",
-      "add": "Add",
+      "add": "Adicionar",
       "addSuccess": "Tester added successfully",
       "emailPlaceholder": "Tester email",
       "errorFetching": "Error fetching testers",
       "removeSuccess": "{{email}} removed from testers",
       "errorAdding": "Error adding tester",
-      "tester": "Tester",
-      "noTesters": "No testers yet",
+      "tester": "Testador",
+      "noTesters": "Nenhum testador",
       "enterEmail": "Please enter an email",
       "description": "Testers can access the app during maintenance",
-      "title": "Tester Management",
+      "title": "Gestão de testadores",
       "errorRemoving": "Error removing tester"
     }
   },
@@ -603,8 +603,8 @@
     "compareTransfer": "Transferência de animais",
     "compareSale": "Colocar à venda",
     "compareMorphCalculator": "Calculadora genética",
-    "legalNotice": "Legal Notice",
-    "termsOfService": "Terms of Service"
+    "legalNotice": "Aviso legal",
+    "termsOfService": "Termos de uso"
   },
   "species": {
     "python-molurus-bivittatus": "Píton-birmanesa",
@@ -1036,25 +1036,25 @@
     "searchPlaceholder": "Search..."
   },
   "auth": {
-    "password": "Password",
-    "signupButton": "Sign Up",
+    "password": "Senha",
+    "signupButton": "Cadastrar",
     "passwordSecure": "Secure password",
     "passwordMedium": "Medium",
-    "login": "Login",
+    "login": "Entrar",
     "loginDescription": "Sign in to access your reptiles",
     "privacyPolicy": "Privacy Policy",
     "passwordPlaceholder": "Minimum 12 characters",
     "strength": "Strength",
     "passwordWeak": "Weak",
     "passwordStrong": "Strong",
-    "loginButton": "Sign In",
-    "hasAccount": "Already have an account? Sign in",
+    "loginButton": "Entrar",
+    "hasAccount": "Já tem conta? Entre",
     "signupDescription": "Create an account to get started",
-    "noAccount": "Don't have an account? Sign up",
+    "noAccount": "Sem conta? Cadastre-se",
     "checkingPassword": "Checking password security...",
     "emailPlaceholder": "your@email.com",
     "email": "Email",
-    "signup": "Sign Up"
+    "signup": "Cadastrar"
   },
   "legal": {
     "cookies": {
@@ -1139,29 +1139,29 @@
     "selectImage": "Select an image"
   },
   "analytics": {
-    "feedingsPerMonth": "Feedings per month",
+    "feedingsPerMonth": "Alimentações/mês",
     "title": "Analytics",
-    "unhatched": "Unhatched",
+    "unhatched": "Não eclodidos",
     "weightEvolution": "Average weight evolution",
-    "distribution": "Distribution of your reptiles",
-    "reproductionStats": "Reproduction",
-    "stillborn": "Stillborn",
-    "resolved": "Resolved",
-    "healthStats": "Health statistics",
-    "topSpecies": "Top species",
-    "hatched": "Hatched",
-    "active": "Active",
+    "distribution": "Distribuição dos répteis",
+    "reproductionStats": "Reprodução",
+    "stillborn": "Natimortos",
+    "resolved": "Resolvidos",
+    "healthStats": "Estatísticas de saúde",
+    "topSpecies": "Espécies principais",
+    "hatched": "Eclodidos",
+    "active": "Ativos",
     "top10Species": "Top 10 species",
     "description": "Advanced statistics and detailed charts of your breeding.",
-    "byCategory": "By category"
+    "byCategory": "Por categoria"
   },
   "nfc": {
     "iosNotSupported": "NFC not available on iPhone",
     "iosNotSupportedDescription": "Apple does not allow NFC access from web apps. Install the native app to use NFC."
   },
   "premium": {
-    "featureLockedDescription": "This feature is reserved for Premium subscribers.",
-    "upgradeToPremium": "Upgrade to Premium",
+    "featureLockedDescription": "Recurso Premium.",
+    "upgradeToPremium": "Premium",
     "upgradeToAccess": "Upgrade to Premium to unlock this feature."
   }
 }

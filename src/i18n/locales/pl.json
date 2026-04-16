@@ -273,8 +273,8 @@
     "language": "Język",
     "back": "Powrót",
     "loading": "Ładowanie...",
-    "close": "Close",
-    "forSale": "For Sale"
+    "close": "Zamknij",
+    "forSale": "Na sprzedaż"
   },
   "admin": {
     "dashboard": "Administracja",
@@ -603,8 +603,8 @@
     "compareTransfer": "Transfer zwierząt",
     "compareSale": "Wystawienie na sprzedaż",
     "compareMorphCalculator": "Kalkulator genetyczny",
-    "legalNotice": "Legal Notice",
-    "termsOfService": "Terms of Service"
+    "legalNotice": "Nota prawna",
+    "termsOfService": "Regulamin"
   },
   "species": {
     "python-molurus-bivittatus": "Pyton birmański",
@@ -1036,25 +1036,25 @@
     "searchPlaceholder": "Search..."
   },
   "auth": {
-    "password": "Password",
-    "signupButton": "Sign Up",
+    "password": "Hasło",
+    "signupButton": "Zarejestruj",
     "passwordSecure": "Secure password",
     "passwordMedium": "Medium",
-    "login": "Login",
+    "login": "Logowanie",
     "loginDescription": "Sign in to access your reptiles",
     "privacyPolicy": "Privacy Policy",
     "passwordPlaceholder": "Minimum 12 characters",
     "strength": "Strength",
     "passwordWeak": "Weak",
     "passwordStrong": "Strong",
-    "loginButton": "Sign In",
+    "loginButton": "Zaloguj",
     "hasAccount": "Already have an account? Sign in",
     "signupDescription": "Create an account to get started",
     "noAccount": "Don't have an account? Sign up",
     "checkingPassword": "Checking password security...",
     "emailPlaceholder": "your@email.com",
     "email": "Email",
-    "signup": "Sign Up"
+    "signup": "Rejestracja"
   },
   "legal": {
     "cookies": {
@@ -1139,29 +1139,29 @@
     "selectImage": "Select an image"
   },
   "analytics": {
-    "feedingsPerMonth": "Feedings per month",
+    "feedingsPerMonth": "Karmienia/miesiąc",
     "title": "Analytics",
-    "unhatched": "Unhatched",
+    "unhatched": "Niewyklute",
     "weightEvolution": "Average weight evolution",
-    "distribution": "Distribution of your reptiles",
-    "reproductionStats": "Reproduction",
-    "stillborn": "Stillborn",
-    "resolved": "Resolved",
-    "healthStats": "Health statistics",
-    "topSpecies": "Top species",
-    "hatched": "Hatched",
-    "active": "Active",
+    "distribution": "Rozkład gadów",
+    "reproductionStats": "Rozmnażanie",
+    "stillborn": "Martwo urodzone",
+    "resolved": "Rozwiązane",
+    "healthStats": "Statystyki zdrowia",
+    "topSpecies": "Najczęstsze gatunki",
+    "hatched": "Wyklute",
+    "active": "Aktywne",
     "top10Species": "Top 10 species",
     "description": "Advanced statistics and detailed charts of your breeding.",
-    "byCategory": "By category"
+    "byCategory": "Według kategorii"
   },
   "nfc": {
     "iosNotSupported": "NFC not available on iPhone",
     "iosNotSupportedDescription": "Apple does not allow NFC access from web apps. Install the native app to use NFC."
   },
   "premium": {
-    "featureLockedDescription": "This feature is reserved for Premium subscribers.",
-    "upgradeToPremium": "Upgrade to Premium",
+    "featureLockedDescription": "Funkcja Premium.",
+    "upgradeToPremium": "Premium",
     "upgradeToAccess": "Upgrade to Premium to unlock this feature."
   }
 }

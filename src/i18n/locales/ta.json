@@ -999,7 +999,7 @@
     "signupButton": "Sign Up",
     "passwordSecure": "Secure password",
     "passwordMedium": "Medium",
-    "login": "Login",
+    "login": "உள்நுழைவு",
     "loginDescription": "Sign in to access your reptiles",
     "privacyPolicy": "Privacy Policy",
     "passwordPlaceholder": "Minimum 12 characters",
@@ -1013,7 +1013,7 @@
     "checkingPassword": "Checking password security...",
     "emailPlaceholder": "your@email.com",
     "email": "Email",
-    "signup": "Sign Up"
+    "signup": "பதிவு செய்யுங்கள்"
   },
   "legal": {
     "cookies": {
@@ -1102,7 +1102,7 @@
     "title": "Analytics",
     "unhatched": "Unhatched",
     "weightEvolution": "Average weight evolution",
-    "distribution": "Distribution of your reptiles",
+    "distribution": "ஊர்வன விநியோகம்",
     "reproductionStats": "Reproduction",
     "stillborn": "Stillborn",
     "resolved": "Resolved",
@@ -1112,15 +1112,15 @@
     "active": "Active",
     "top10Species": "Top 10 species",
     "description": "Advanced statistics and detailed charts of your breeding.",
-    "byCategory": "By category"
+    "byCategory": "வகை வாரியாக"
   },
   "nfc": {
     "iosNotSupported": "NFC not available on iPhone",
     "iosNotSupportedDescription": "Apple does not allow NFC access from web apps. Install the native app to use NFC."
   },
   "premium": {
-    "featureLockedDescription": "This feature is reserved for Premium subscribers.",
-    "upgradeToPremium": "Upgrade to Premium",
+    "featureLockedDescription": "Premium அம்சம்.",
+    "upgradeToPremium": "Premium மேம்படுத்து",
     "upgradeToAccess": "Upgrade to Premium to unlock this feature."
   }
 }

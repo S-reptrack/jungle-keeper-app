@@ -273,8 +273,8 @@
     "language": "Taal",
     "back": "Terug",
     "loading": "Laden...",
-    "close": "Close",
-    "forSale": "For Sale"
+    "close": "Sluiten",
+    "forSale": "Te koop"
   },
   "admin": {
     "dashboard": "Beheer",
@@ -295,17 +295,17 @@
       "alreadyTester": "This user is already a tester",
       "note": "Testers can access the app even in maintenance mode, but don't have admin privileges.",
       "userNotFound": "No user found with this email",
-      "add": "Add",
+      "add": "Toevoegen",
       "addSuccess": "Tester added successfully",
       "emailPlaceholder": "Tester email",
       "errorFetching": "Error fetching testers",
       "removeSuccess": "{{email}} removed from testers",
       "errorAdding": "Error adding tester",
       "tester": "Tester",
-      "noTesters": "No testers yet",
+      "noTesters": "Geen testers",
       "enterEmail": "Please enter an email",
       "description": "Testers can access the app during maintenance",
-      "title": "Tester Management",
+      "title": "Testerbeheer",
       "errorRemoving": "Error removing tester"
     }
   },
@@ -603,8 +603,8 @@
     "compareTransfer": "Dieroverdracht",
     "compareSale": "Te koop aanbieden",
     "compareMorphCalculator": "Genetica calculator",
-    "legalNotice": "Legal Notice",
-    "termsOfService": "Terms of Service"
+    "legalNotice": "Juridisch",
+    "termsOfService": "Voorwaarden"
   },
   "species": {
     "python-molurus-bivittatus": "Birmese python",
@@ -1036,25 +1036,25 @@
     "searchPlaceholder": "Search..."
   },
   "auth": {
-    "password": "Password",
-    "signupButton": "Sign Up",
+    "password": "Wachtwoord",
+    "signupButton": "Registreren",
     "passwordSecure": "Secure password",
     "passwordMedium": "Medium",
-    "login": "Login",
+    "login": "Inloggen",
     "loginDescription": "Sign in to access your reptiles",
     "privacyPolicy": "Privacy Policy",
     "passwordPlaceholder": "Minimum 12 characters",
     "strength": "Strength",
     "passwordWeak": "Weak",
     "passwordStrong": "Strong",
-    "loginButton": "Sign In",
+    "loginButton": "Inloggen",
     "hasAccount": "Already have an account? Sign in",
     "signupDescription": "Create an account to get started",
     "noAccount": "Don't have an account? Sign up",
     "checkingPassword": "Checking password security...",
     "emailPlaceholder": "your@email.com",
-    "email": "Email",
-    "signup": "Sign Up"
+    "email": "E-mail",
+    "signup": "Registreren"
   },
   "legal": {
     "cookies": {
@@ -1139,29 +1139,29 @@
     "selectImage": "Select an image"
   },
   "analytics": {
-    "feedingsPerMonth": "Feedings per month",
+    "feedingsPerMonth": "Voedingen/maand",
     "title": "Analytics",
-    "unhatched": "Unhatched",
+    "unhatched": "Niet uitgekomen",
     "weightEvolution": "Average weight evolution",
-    "distribution": "Distribution of your reptiles",
-    "reproductionStats": "Reproduction",
-    "stillborn": "Stillborn",
-    "resolved": "Resolved",
-    "healthStats": "Health statistics",
-    "topSpecies": "Top species",
-    "hatched": "Hatched",
-    "active": "Active",
+    "distribution": "Verdeling reptielen",
+    "reproductionStats": "Voortplanting",
+    "stillborn": "Doodgeboren",
+    "resolved": "Opgelost",
+    "healthStats": "Gezondheidsstatistieken",
+    "topSpecies": "Topsoorten",
+    "hatched": "Uitgekomen",
+    "active": "Actief",
     "top10Species": "Top 10 species",
     "description": "Advanced statistics and detailed charts of your breeding.",
-    "byCategory": "By category"
+    "byCategory": "Per categorie"
   },
   "nfc": {
     "iosNotSupported": "NFC not available on iPhone",
     "iosNotSupportedDescription": "Apple does not allow NFC access from web apps. Install the native app to use NFC."
   },
   "premium": {
-    "featureLockedDescription": "This feature is reserved for Premium subscribers.",
-    "upgradeToPremium": "Upgrade to Premium",
+    "featureLockedDescription": "Premium functie.",
+    "upgradeToPremium": "Premium upgraden",
     "upgradeToAccess": "Upgrade to Premium to unlock this feature."
   }
 }

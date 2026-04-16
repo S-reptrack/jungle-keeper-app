@@ -562,8 +562,8 @@
     "compareTransfer": "動物の移転",
     "compareSale": "販売出品",
     "compareMorphCalculator": "遺伝計算機",
-    "legalNotice": "Legal Notice",
-    "termsOfService": "Terms of Service"
+    "legalNotice": "法的事項",
+    "termsOfService": "利用規約"
   },
   "species": {
     "python-regius": "ボールパイソン",
@@ -995,25 +995,25 @@
     "searchPlaceholder": "Search..."
   },
   "auth": {
-    "password": "Password",
-    "signupButton": "Sign Up",
+    "password": "パスワード",
+    "signupButton": "登録",
     "passwordSecure": "Secure password",
     "passwordMedium": "Medium",
-    "login": "Login",
+    "login": "ログイン",
     "loginDescription": "Sign in to access your reptiles",
     "privacyPolicy": "Privacy Policy",
     "passwordPlaceholder": "Minimum 12 characters",
     "strength": "Strength",
     "passwordWeak": "Weak",
     "passwordStrong": "Strong",
-    "loginButton": "Sign In",
+    "loginButton": "ログイン",
     "hasAccount": "Already have an account? Sign in",
     "signupDescription": "Create an account to get started",
     "noAccount": "Don't have an account? Sign up",
     "checkingPassword": "Checking password security...",
     "emailPlaceholder": "your@email.com",
-    "email": "Email",
-    "signup": "Sign Up"
+    "email": "メール",
+    "signup": "登録"
   },
   "legal": {
     "cookies": {
@@ -1098,29 +1098,29 @@
     "selectImage": "Select an image"
   },
   "analytics": {
-    "feedingsPerMonth": "Feedings per month",
+    "feedingsPerMonth": "月間給餌数",
     "title": "Analytics",
-    "unhatched": "Unhatched",
+    "unhatched": "未孵化",
     "weightEvolution": "Average weight evolution",
-    "distribution": "Distribution of your reptiles",
-    "reproductionStats": "Reproduction",
-    "stillborn": "Stillborn",
-    "resolved": "Resolved",
-    "healthStats": "Health statistics",
-    "topSpecies": "Top species",
-    "hatched": "Hatched",
-    "active": "Active",
+    "distribution": "爬虫類の分布",
+    "reproductionStats": "繁殖",
+    "stillborn": "死産",
+    "resolved": "解決済み",
+    "healthStats": "健康統計",
+    "topSpecies": "人気の種",
+    "hatched": "孵化",
+    "active": "アクティブ",
     "top10Species": "Top 10 species",
     "description": "Advanced statistics and detailed charts of your breeding.",
-    "byCategory": "By category"
+    "byCategory": "カテゴリ別"
   },
   "nfc": {
     "iosNotSupported": "NFC not available on iPhone",
     "iosNotSupportedDescription": "Apple does not allow NFC access from web apps. Install the native app to use NFC."
   },
   "premium": {
-    "featureLockedDescription": "This feature is reserved for Premium subscribers.",
-    "upgradeToPremium": "Upgrade to Premium",
+    "featureLockedDescription": "Premium会員限定機能です。",
+    "upgradeToPremium": "Premiumにアップグレード",
     "upgradeToAccess": "Upgrade to Premium to unlock this feature."
   }
 }

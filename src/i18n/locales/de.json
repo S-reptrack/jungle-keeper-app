@@ -40,8 +40,8 @@
     "language": "Sprache",
     "back": "Zurück",
     "loading": "Wird geladen...",
-    "close": "Close",
-    "forSale": "For Sale"
+    "close": "Schließen",
+    "forSale": "Zu verkaufen"
   },
   "admin": {
     "dashboard": "Verwaltung",
@@ -59,21 +59,21 @@
     "comingSoon": "Demnächst: Benutzerverwaltung, Stripe-Abonnements, detaillierte Statistiken...",
     "errorFetchingStats": "Fehler beim Abrufen der Statistiken",
     "testers": {
-      "alreadyTester": "This user is already a tester",
-      "note": "Testers can access the app even in maintenance mode, but don't have admin privileges.",
-      "userNotFound": "No user found with this email",
-      "add": "Add",
-      "addSuccess": "Tester added successfully",
-      "emailPlaceholder": "Tester email",
-      "errorFetching": "Error fetching testers",
-      "removeSuccess": "{{email}} removed from testers",
-      "errorAdding": "Error adding tester",
+      "alreadyTester": "Bereits Tester",
+      "note": "Tester haben Zugriff im Wartungsmodus.",
+      "userNotFound": "Benutzer nicht gefunden",
+      "add": "Hinzufügen",
+      "addSuccess": "Tester hinzugefügt",
+      "emailPlaceholder": "Tester-E-Mail",
+      "errorFetching": "Fehler beim Abrufen",
+      "removeSuccess": "{{email}} entfernt",
+      "errorAdding": "Fehler beim Hinzufügen",
       "tester": "Tester",
-      "noTesters": "No testers yet",
-      "enterEmail": "Please enter an email",
-      "description": "Testers can access the app during maintenance",
-      "title": "Tester Management",
-      "errorRemoving": "Error removing tester"
+      "noTesters": "Keine Tester",
+      "enterEmail": "E-Mail eingeben",
+      "description": "Tester können während der Wartung zugreifen",
+      "title": "Tester-Verwaltung",
+      "errorRemoving": "Fehler beim Entfernen"
     }
   },
   "gdpr": {
@@ -169,13 +169,13 @@
         "laying": "Eiablage",
         "other": "Andere"
       },
-      "today": "Today",
-      "expectedDate": "Expected date",
-      "multipleHatchingSoon": "{{count}} hatchings are expected soon!",
-      "oneHatchingSoon": "A hatching is expected soon!",
-      "hatchingAlerts": "Hatching alerts"
+      "today": "Heute",
+      "expectedDate": "Voraussichtliches Datum",
+      "multipleHatchingSoon": "{{count}} Schlupfe stehen bevor!",
+      "oneHatchingSoon": "Ein Schlupf steht bevor!",
+      "hatchingAlerts": "Schlupf-Alarme"
     },
-    "viewAll": "View all",
+    "viewAll": "Alle ansehen",
     "bornInCaptivity": "Born in captivity"
   },
   "feeding": {
@@ -569,8 +569,8 @@
     "compareTransfer": "Tiertransfer",
     "compareSale": "Zum Verkauf anbieten",
     "compareMorphCalculator": "Genetik-Rechner",
-    "legalNotice": "Legal Notice",
-    "termsOfService": "Terms of Service"
+    "legalNotice": "Impressum",
+    "termsOfService": "AGB"
   },
   "species": {
     "python-molurus-bivittatus": "Burma-Python",
@@ -1002,25 +1002,25 @@
     "searchPlaceholder": "Search..."
   },
   "auth": {
-    "password": "Password",
-    "signupButton": "Sign Up",
-    "passwordSecure": "Secure password",
-    "passwordMedium": "Medium",
-    "login": "Login",
-    "loginDescription": "Sign in to access your reptiles",
-    "privacyPolicy": "Privacy Policy",
-    "passwordPlaceholder": "Minimum 12 characters",
-    "strength": "Strength",
-    "passwordWeak": "Weak",
-    "passwordStrong": "Strong",
-    "loginButton": "Sign In",
-    "hasAccount": "Already have an account? Sign in",
-    "signupDescription": "Create an account to get started",
-    "noAccount": "Don't have an account? Sign up",
-    "checkingPassword": "Checking password security...",
-    "emailPlaceholder": "your@email.com",
-    "email": "Email",
-    "signup": "Sign Up"
+    "password": "Passwort",
+    "signupButton": "Registrieren",
+    "passwordSecure": "Sicheres Passwort",
+    "passwordMedium": "Mittel",
+    "login": "Anmelden",
+    "loginDescription": "Melden Sie sich an",
+    "privacyPolicy": "Datenschutz",
+    "passwordPlaceholder": "Mindestens 12 Zeichen",
+    "strength": "Stärke",
+    "passwordWeak": "Schwach",
+    "passwordStrong": "Stark",
+    "loginButton": "Anmelden",
+    "hasAccount": "Bereits ein Konto? Anmelden",
+    "signupDescription": "Erstellen Sie ein Konto",
+    "noAccount": "Kein Konto? Registrieren",
+    "checkingPassword": "Sicherheit wird überprüft...",
+    "emailPlaceholder": "ihre@email.com",
+    "email": "E-Mail",
+    "signup": "Registrieren"
   },
   "legal": {
     "cookies": {
@@ -1105,29 +1105,29 @@
     "selectImage": "Select an image"
   },
   "analytics": {
-    "feedingsPerMonth": "Feedings per month",
+    "feedingsPerMonth": "Fütterungen pro Monat",
     "title": "Analytics",
-    "unhatched": "Unhatched",
-    "weightEvolution": "Average weight evolution",
-    "distribution": "Distribution of your reptiles",
-    "reproductionStats": "Reproduction",
-    "stillborn": "Stillborn",
-    "resolved": "Resolved",
-    "healthStats": "Health statistics",
-    "topSpecies": "Top species",
-    "hatched": "Hatched",
-    "active": "Active",
-    "top10Species": "Top 10 species",
+    "unhatched": "Nicht geschlüpft",
+    "weightEvolution": "Gewichtsentwicklung",
+    "distribution": "Verteilung Ihrer Reptilien",
+    "reproductionStats": "Reproduktion",
+    "stillborn": "Totgeboren",
+    "resolved": "Gelöst",
+    "healthStats": "Gesundheitsstatistiken",
+    "topSpecies": "Top-Arten",
+    "hatched": "Geschlüpft",
+    "active": "Aktiv",
+    "top10Species": "Die 10 häufigsten Arten",
     "description": "Advanced statistics and detailed charts of your breeding.",
-    "byCategory": "By category"
+    "byCategory": "Nach Kategorie"
   },
   "nfc": {
-    "iosNotSupported": "NFC not available on iPhone",
-    "iosNotSupportedDescription": "Apple does not allow NFC access from web apps. Install the native app to use NFC."
+    "iosNotSupported": "NFC nicht verfügbar auf iPhone",
+    "iosNotSupportedDescription": "Apple erlaubt keinen NFC-Zugriff von Web-Apps."
   },
   "premium": {
-    "featureLockedDescription": "This feature is reserved for Premium subscribers.",
-    "upgradeToPremium": "Upgrade to Premium",
-    "upgradeToAccess": "Upgrade to Premium to unlock this feature."
+    "featureLockedDescription": "Diese Funktion ist Premium-Abonnenten vorbehalten.",
+    "upgradeToPremium": "Premium upgraden",
+    "upgradeToAccess": "Auf Premium upgraden."
   }
 }
