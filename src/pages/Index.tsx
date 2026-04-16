@@ -274,9 +274,9 @@ const Index = () => {
     const diffTime = today.getTime() - feedDate.getTime();
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     
-    if (diffDays === 0) return "Aujourd'hui";
-    if (diffDays === 1) return "Il y a 1 jour";
-    return `Il y a ${diffDays} jours`;
+    if (diffDays === 0) return t("timeAgo.today");
+    if (diffDays === 1) return t("timeAgo.yesterday");
+    return t("timeAgo.daysAgo", { days: diffDays });
   };
 
   const calculateAge = (birthDate: string) => {
@@ -286,13 +286,13 @@ const Index = () => {
     const months = today.getMonth() - birth.getMonth();
     
     if (years > 0) {
-      return `${years} an${years > 1 ? 's' : ''}`;
+      return years > 1 ? t("timeAgo.yearsPlural", { count: years }) : t("timeAgo.years", { count: years });
     }
-    return `${months} mois`;
+    return t("timeAgo.months", { count: months });
   };
 
   if (authLoading) {
-    return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
+    return <div className="min-h-screen flex items-center justify-center">{t("common.loading")}</div>;
   }
 
   if (!user) {

@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,16 +11,21 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const HealthDashboard = () => {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const { alerts, summaries, stats, loading, refresh } = useHealthDashboard();
+
+  const formatLocalDate = (dateStr: string) => {
+    return new Date(dateStr).toLocaleDateString(i18n.language, { day: "numeric", month: "short" });
+  };
 
   if (!user) {
     return (
       <div className="min-h-screen bg-background">
         <Navigation />
         <main className="max-w-4xl mx-auto px-4 py-6 md:mt-16 text-center pt-32">
-          <p className="text-muted-foreground">Connectez-vous pour accéder au tableau de bord santé</p>
-          <Button onClick={() => navigate("/auth")} className="mt-4">Se connecter</Button>
+          <p className="text-muted-foreground">{t("healthDashboard.loginRequired")}</p>
+          <Button onClick={() => navigate("/auth")} className="mt-4">{t("healthDashboard.login")}</Button>
         </main>
       </div>
     );
@@ -33,7 +39,7 @@ const HealthDashboard = () => {
         <div className="mb-6">
           <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="mb-3 -ml-2">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Retour
+            {t("common.back")}
           </Button>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -41,8 +47,8 @@ const HealthDashboard = () => {
                 <HeartPulse className="w-6 h-6 text-emerald-400" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-foreground">Tableau de bord Santé</h1>
-                <p className="text-sm text-muted-foreground">Vue d'ensemble de la santé de vos animaux</p>
+                <h1 className="text-2xl font-bold text-foreground">{t("healthDashboard.title")}</h1>
+                <p className="text-sm text-muted-foreground">{t("healthDashboard.subtitle")}</p>
               </div>
             </div>
             <Button variant="ghost" size="icon" onClick={refresh} className="flex-shrink-0">
@@ -62,10 +68,10 @@ const HealthDashboard = () => {
           <>
             {/* Stats Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-              <StatsCard icon={<CheckCircle2 className="w-5 h-5" />} label="En bonne santé" value={stats.healthy} color="text-emerald-500" bgColor="bg-emerald-500/10" />
-              <StatsCard icon={<AlertTriangle className="w-5 h-5" />} label="Attention" value={stats.warnings} color="text-amber-500" bgColor="bg-amber-500/10" />
-              <StatsCard icon={<ShieldAlert className="w-5 h-5" />} label="Critiques" value={stats.critical} color="text-destructive" bgColor="bg-destructive/10" />
-              <StatsCard icon={<HeartPulse className="w-5 h-5" />} label="Total animaux" value={stats.total} color="text-primary" bgColor="bg-primary/10" />
+              <StatsCard icon={<CheckCircle2 className="w-5 h-5" />} label={t("healthDashboard.healthy")} value={stats.healthy} color="text-emerald-500" bgColor="bg-emerald-500/10" />
+              <StatsCard icon={<AlertTriangle className="w-5 h-5" />} label={t("healthDashboard.warnings")} value={stats.warnings} color="text-amber-500" bgColor="bg-amber-500/10" />
+              <StatsCard icon={<ShieldAlert className="w-5 h-5" />} label={t("healthDashboard.critical")} value={stats.critical} color="text-destructive" bgColor="bg-destructive/10" />
+              <StatsCard icon={<HeartPulse className="w-5 h-5" />} label={t("healthDashboard.totalAnimals")} value={stats.total} color="text-primary" bgColor="bg-primary/10" />
             </div>
 
             {/* Alerts Section */}
@@ -74,7 +80,9 @@ const HealthDashboard = () => {
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center gap-2 text-base">
                     <AlertTriangle className="w-5 h-5 text-amber-500" />
-                    {alerts.length} alerte{alerts.length > 1 ? "s" : ""} active{alerts.length > 1 ? "s" : ""}
+                    {alerts.length > 1 
+                      ? t("healthDashboard.activeAlertsPlural", { count: alerts.length })
+                      : t("healthDashboard.activeAlerts", { count: alerts.length })}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
@@ -83,7 +91,7 @@ const HealthDashboard = () => {
                   ))}
                   {alerts.length > 10 && (
                     <p className="text-xs text-muted-foreground text-center pt-2">
-                      + {alerts.length - 10} autres alertes
+                      {t("healthDashboard.moreAlerts", { count: alerts.length - 10 })}
                     </p>
                   )}
                 </CardContent>
@@ -94,14 +102,14 @@ const HealthDashboard = () => {
               <Card className="mb-6 border-emerald-500/20 bg-emerald-500/5">
                 <CardContent className="py-8 text-center">
                   <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto mb-3" />
-                  <p className="font-medium text-foreground">Tous vos animaux sont en bonne santé !</p>
-                  <p className="text-sm text-muted-foreground mt-1">Aucune alerte détectée</p>
+                  <p className="font-medium text-foreground">{t("healthDashboard.allHealthy")}</p>
+                  <p className="text-sm text-muted-foreground mt-1">{t("healthDashboard.noAlerts")}</p>
                 </CardContent>
               </Card>
             )}
 
             {/* Reptile Health Summaries */}
-            <h2 className="text-lg font-semibold text-foreground mb-3">Détail par animal</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">{t("healthDashboard.detailByAnimal")}</h2>
             <div className="space-y-3">
               {summaries.map((summary) => (
                 <ReptileSummaryCard 
@@ -116,7 +124,7 @@ const HealthDashboard = () => {
               <Card className="border-dashed border-2">
                 <CardContent className="py-12 text-center">
                   <HeartPulse className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
-                  <p className="text-muted-foreground">Ajoutez des reptiles pour voir leur état de santé</p>
+                  <p className="text-muted-foreground">{t("healthDashboard.addReptilesToSee")}</p>
                 </CardContent>
               </Card>
             )}
@@ -153,7 +161,9 @@ const getAlertIcon = (type: HealthAlert["type"]) => {
   }
 };
 
-const AlertRow = ({ alert, onNavigate }: { alert: HealthAlert; onNavigate: () => void }) => (
+const AlertRow = ({ alert, onNavigate }: { alert: HealthAlert; onNavigate: () => void }) => {
+  const { t } = useTranslation();
+  return (
   <button
     onClick={onNavigate}
     className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left"
@@ -173,19 +183,21 @@ const AlertRow = ({ alert, onNavigate }: { alert: HealthAlert; onNavigate: () =>
           className="text-[9px] flex-shrink-0 gap-1"
         >
           {getAlertIcon(alert.type)}
-          {alert.severity === "danger" ? "Critique" : "Attention"}
+          {alert.severity === "danger" ? t("healthDashboard.criticalLabel") : t("healthDashboard.attention")}
         </Badge>
       </div>
       <p className="text-xs text-muted-foreground truncate">{alert.message}</p>
     </div>
   </button>
-);
+  );
+};
 
 const ReptileSummaryCard = ({ summary, onNavigate }: { summary: ReptileHealthSummary; onNavigate: () => void }) => {
+  const { t, i18n } = useTranslation();
   const statusConfig = {
-    good: { color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/20", label: "OK" },
-    warning: { color: "text-amber-500", bg: "bg-amber-500/10", border: "border-amber-500/20", label: "Attention" },
-    danger: { color: "text-destructive", bg: "bg-destructive/10", border: "border-destructive/20", label: "Critique" },
+    good: { color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/20", label: t("healthDashboard.ok") },
+    warning: { color: "text-amber-500", bg: "bg-amber-500/10", border: "border-amber-500/20", label: t("healthDashboard.attention") },
+    danger: { color: "text-destructive", bg: "bg-destructive/10", border: "border-destructive/20", label: t("healthDashboard.criticalLabel") },
   };
   const config = statusConfig[summary.status];
 
@@ -214,19 +226,19 @@ const ReptileSummaryCard = ({ summary, onNavigate }: { summary: ReptileHealthSum
         {/* Quick stats row */}
         <div className="grid grid-cols-3 gap-2 text-center">
           <div className="p-2 rounded-lg bg-muted/50">
-            <p className="text-[10px] text-muted-foreground">Dernier repas</p>
+            <p className="text-[10px] text-muted-foreground">{t("healthDashboard.lastMeal")}</p>
             <p className="text-xs font-medium text-foreground">
-              {summary.lastFeeding ? new Date(summary.lastFeeding).toLocaleDateString("fr-FR", { day: "numeric", month: "short" }) : "—"}
+              {summary.lastFeeding ? new Date(summary.lastFeeding).toLocaleDateString(i18n.language, { day: "numeric", month: "short" }) : "—"}
             </p>
           </div>
           <div className="p-2 rounded-lg bg-muted/50">
-            <p className="text-[10px] text-muted-foreground">Dernière mue</p>
+            <p className="text-[10px] text-muted-foreground">{t("healthDashboard.lastShedding")}</p>
             <p className="text-xs font-medium text-foreground">
-              {summary.lastShedding ? new Date(summary.lastShedding).toLocaleDateString("fr-FR", { day: "numeric", month: "short" }) : "—"}
+              {summary.lastShedding ? new Date(summary.lastShedding).toLocaleDateString(i18n.language, { day: "numeric", month: "short" }) : "—"}
             </p>
           </div>
           <div className="p-2 rounded-lg bg-muted/50">
-            <p className="text-[10px] text-muted-foreground">Poids</p>
+            <p className="text-[10px] text-muted-foreground">{t("healthDashboard.weight")}</p>
             <p className="text-xs font-medium text-foreground">
               {summary.lastWeight ? `${summary.lastWeight.weight}g` : "—"}
               {summary.lastWeight && summary.previousWeight && (

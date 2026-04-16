@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Egg } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface HatchingCardProps {
   reptileId: string;
@@ -21,9 +22,10 @@ export const HatchingCard = ({
   image,
 }: HatchingCardProps) => {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("fr-FR", {
+    return new Date(dateString).toLocaleDateString(i18n.language, {
       day: "numeric",
       month: "long",
       year: "numeric"
@@ -31,9 +33,9 @@ export const HatchingCard = ({
   };
 
   const getDaysText = (days: number) => {
-    if (days === 0) return "Aujourd'hui !";
-    if (days === 1) return "Demain";
-    return `Dans ${days} jours`;
+    if (days === 0) return t("timeAgo.todayExclaim");
+    if (days === 1) return t("timeAgo.tomorrow");
+    return t("timeAgo.inDays", { days });
   };
 
   return (
@@ -69,7 +71,7 @@ export const HatchingCard = ({
       <CardContent>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Calendar className="h-4 w-4" />
-          <span>Éclosion prévue: {formatDate(expectedHatchDate)}</span>
+          <span>{t("reptile.reproduction.expectedDate")}: {formatDate(expectedHatchDate)}</span>
         </div>
       </CardContent>
     </Card>
