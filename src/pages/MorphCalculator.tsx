@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Dna, Plus, X, Baby, FlaskConical, Info, Search } from "lucide-react";
+import { ArrowLeft, Dna, Plus, X, Baby, FlaskConical, Info, Search, AlertTriangle } from "lucide-react";
 import { RotateCcw } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { speciesGenetics, MorphGene, findSpeciesGenetics } from "@/data/morphGenetics";
 import { AlleleStatus, ParentGene, calculateMultiGeneCross, OffspringResult } from "@/lib/geneticsCalculator";
 import { getAllSpecies } from "@/data/citesSpecies";
@@ -616,6 +617,23 @@ const ParentCard = ({
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium">{pg.gene.name}</span>
                 {getInheritanceBadge(pg.gene.inheritance)}
+                {pg.gene.inheritance === "codominant" && !pg.gene.superForm && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-destructive bg-destructive/10 border border-destructive/30 rounded px-1.5 py-0.5">
+                          <AlertTriangle className="w-3 h-3" />
+                          {t("morphCalculator.superLethal", "Super létal")}
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="max-w-xs">
+                        <p className="text-xs">
+                          {t("morphCalculator.superLethalTooltip", "La forme super (homozygote) de ce gène codominant est non viable. Évitez de croiser deux porteurs visuels.")}
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
               </div>
               <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => onRemoveGene(pg.gene.name)}>
                 <X className="w-3 h-3" />
@@ -667,16 +685,22 @@ const ParentCard = ({
               </div>
             </SelectTrigger>
             <SelectContent>
-              {unusedGenes.map(g => (
-                <SelectItem key={g.name} value={g.name} className="text-xs">
-                  <div className="flex items-center gap-2">
-                    {g.name}
-                    <span className="text-[10px] text-muted-foreground">
-                      ({g.inheritance === "recessive" ? t("morphCalculator.recessive") : g.inheritance === "codominant" ? t("morphCalculator.codominant") : t("morphCalculator.dominant")})
-                    </span>
-                  </div>
-                </SelectItem>
-              ))}
+              {unusedGenes.map(g => {
+                const isSuperLethal = g.inheritance === "codominant" && !g.superForm;
+                return (
+                  <SelectItem key={g.name} value={g.name} className="text-xs">
+                    <div className="flex items-center gap-2">
+                      {g.name}
+                      <span className="text-[10px] text-muted-foreground">
+                        ({g.inheritance === "recessive" ? t("morphCalculator.recessive") : g.inheritance === "codominant" ? t("morphCalculator.codominant") : t("morphCalculator.dominant")})
+                      </span>
+                      {isSuperLethal && (
+                        <AlertTriangle className="w-3 h-3 text-destructive" aria-label={t("morphCalculator.superLethal", "Super létal")} />
+                      )}
+                    </div>
+                  </SelectItem>
+                );
+              })}
             </SelectContent>
           </Select>
         )}
