@@ -1,5 +1,13 @@
 import { SpeciesGenetics } from "./types";
 
+/**
+ * Base génétique des lézards - corrigée selon MorphMarket / Morphpedia.
+ *
+ * Convention :
+ *  - "codominant" couvre aussi les incomplete dominants (super létal possible).
+ *  - "dominant" = dominant pur sans super distinct.
+ *  - "recessive" = expression visuelle uniquement à l'état homozygote.
+ */
 export const lizardGenetics: SpeciesGenetics[] = [
   // ========== EUBLEPHARIS MACULARIUS (Leopard Gecko) ==========
   {
@@ -7,7 +15,7 @@ export const lizardGenetics: SpeciesGenetics[] = [
     commonName: "Gecko léopard",
     category: "lizard",
     genes: [
-      // Récessif
+      // ----- Récessif -----
       { name: "Tremper Albino", inheritance: "recessive" },
       { name: "Bell Albino", inheritance: "recessive" },
       { name: "Rainwater Albino", inheritance: "recessive" },
@@ -16,33 +24,35 @@ export const lizardGenetics: SpeciesGenetics[] = [
       { name: "Patternless (Murphy)", inheritance: "recessive" },
       { name: "RAPTOR", inheritance: "recessive" },
       { name: "Cipher", inheritance: "recessive" },
-      { name: "BAE", inheritance: "recessive" },
+      { name: "BAE (Black Eyed)", inheritance: "recessive" },
       { name: "Diablo Blanco", inheritance: "recessive" },
       { name: "Lavender", inheritance: "recessive" },
-      // Codominant
+      // ----- Co-dominant / Incomplete dominant -----
       { name: "Mack Snow", inheritance: "codominant", superForm: "Super Snow" },
       { name: "TUG Snow", inheritance: "codominant", superForm: "Super TUG Snow" },
+      { name: "Gem Snow", inheritance: "codominant", superForm: "Super Gem Snow" },
       { name: "Giant", inheritance: "codominant", superForm: "Super Giant" },
       { name: "Lemon Frost", inheritance: "codominant", superForm: "Super Lemon Frost" },
-      // Dominant / Polygenic
+      // White & Yellow et Enigma : incomplete dominant — super peut être létal/syndrome
+      { name: "White & Yellow (W&Y)", inheritance: "codominant" },
+      { name: "Enigma", inheritance: "codominant" },
+      // ----- Dominant / Polygénique -----
       { name: "Tangerine", inheritance: "dominant" },
       { name: "Carrot Tail", inheritance: "dominant" },
+      { name: "Carrot Head", inheritance: "dominant" },
       { name: "Bold Stripe", inheritance: "dominant" },
+      { name: "Reverse Stripe", inheritance: "dominant" },
+      { name: "Red Stripe", inheritance: "dominant" },
       { name: "Jungle", inheritance: "dominant" },
       { name: "High Yellow", inheritance: "dominant" },
-      { name: "Enigma", inheritance: "dominant" },
-      { name: "White & Yellow (W&Y)", inheritance: "dominant" },
       { name: "Black Night", inheritance: "dominant" },
       { name: "Black Pearl", inheritance: "dominant" },
       { name: "Bandit", inheritance: "dominant" },
       { name: "Blood", inheritance: "dominant" },
-      { name: "Carrot Head", inheritance: "dominant" },
       { name: "Electric", inheritance: "dominant" },
       { name: "Emerine", inheritance: "dominant" },
       { name: "Halloween", inheritance: "dominant" },
       { name: "Inferno", inheritance: "dominant" },
-      { name: "Reverse Stripe", inheritance: "dominant" },
-      { name: "Red Stripe", inheritance: "dominant" },
       { name: "Snake Eyes", inheritance: "dominant" },
     ],
   },
@@ -53,21 +63,23 @@ export const lizardGenetics: SpeciesGenetics[] = [
     commonName: "Gecko à crête",
     category: "lizard",
     genes: [
-      { name: "Lilly White", inheritance: "codominant", superForm: "Super Lilly White" },
+      // Lilly White : incomplete dominant — super létal
+      { name: "Lilly White", inheritance: "codominant" },
       { name: "Axanthic", inheritance: "recessive" },
-      // Polygéniques
+      // Polygéniques (traits sélectionnés, traités comme dominants)
       { name: "Dalmatian", inheritance: "dominant" },
       { name: "Harlequin", inheritance: "dominant" },
+      { name: "Extreme Harlequin", inheritance: "dominant" },
       { name: "Pinstripe", inheritance: "dominant" },
       { name: "Flame", inheritance: "dominant" },
       { name: "Tiger", inheritance: "dominant" },
+      { name: "Brindle", inheritance: "dominant" },
       { name: "Phantom", inheritance: "dominant" },
       { name: "Tricolor", inheritance: "dominant" },
-      { name: "Extreme Harlequin", inheritance: "dominant" },
+      { name: "Bi-Color", inheritance: "dominant" },
       { name: "Cream", inheritance: "dominant" },
       { name: "Red", inheritance: "dominant" },
       { name: "Dark", inheritance: "dominant" },
-      { name: "Bi-Color", inheritance: "dominant" },
     ],
   },
 
@@ -77,17 +89,20 @@ export const lizardGenetics: SpeciesGenetics[] = [
     commonName: "Dragon barbu",
     category: "lizard",
     genes: [
-      // Récessif
+      // ----- Récessif -----
       { name: "Hypo (Hypomelanistic)", inheritance: "recessive" },
-      { name: "Trans (Translucent)", inheritance: "codominant", superForm: "Super Trans" },
       { name: "Witblits", inheritance: "recessive" },
       { name: "Zero", inheritance: "recessive" },
-      { name: "Dunner", inheritance: "dominant" },
-      { name: "Silkback", inheritance: "codominant", superForm: "Silkback (homozygote)" },
-      { name: "Leatherback", inheritance: "codominant", superForm: "Silkback" },
-      { name: "Paradox", inheritance: "recessive" },
       { name: "Wero", inheritance: "recessive" },
-      // Dominant / Polygenic
+      { name: "Paradox", inheritance: "recessive" },
+      // ----- Co-dominant / Incomplete dominant -----
+      // Leatherback hétéro = écailles réduites ; Super = Silkback (sans écailles, fragile)
+      { name: "Leatherback", inheritance: "codominant", superForm: "Silkback" },
+      // Translucent : incomplete dominant
+      { name: "Translucent", inheritance: "codominant", superForm: "Super Translucent" },
+      // Dunner : co-dominant (motif modifié)
+      { name: "Dunner", inheritance: "codominant" },
+      // ----- Dominant / Polygénique -----
       { name: "Red", inheritance: "dominant" },
       { name: "Orange", inheritance: "dominant" },
       { name: "Citrus", inheritance: "dominant" },
@@ -114,7 +129,7 @@ export const lizardGenetics: SpeciesGenetics[] = [
     commonName: "Caméléon panthère",
     category: "lizard",
     genes: [
-      // Localités
+      // Localités (pas de morphs génétiques simples)
       { name: "Ambilobe", inheritance: "dominant" },
       { name: "Nosy Be", inheritance: "dominant" },
       { name: "Ambanja", inheritance: "dominant" },
@@ -137,8 +152,8 @@ export const lizardGenetics: SpeciesGenetics[] = [
     genes: [
       { name: "Albino (T-)", inheritance: "recessive" },
       { name: "Axanthic", inheritance: "recessive" },
-      { name: "Hyper", inheritance: "codominant", superForm: "Super Hyper" },
       { name: "Caramel", inheritance: "recessive" },
+      { name: "Hyper", inheritance: "codominant", superForm: "Super Hyper" },
     ],
   },
 
@@ -181,8 +196,10 @@ export const lizardGenetics: SpeciesGenetics[] = [
     commonName: "Gecko chahoua",
     category: "lizard",
     genes: [
+      // Localités
       { name: "Mainland", inheritance: "dominant" },
       { name: "Pine Island", inheritance: "dominant" },
+      // Couleurs polygéniques
       { name: "Red", inheritance: "dominant" },
       { name: "Pink", inheritance: "dominant" },
       { name: "Yellow", inheritance: "dominant" },
