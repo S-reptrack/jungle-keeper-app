@@ -43,6 +43,7 @@ import OfflineIndicator from "./components/OfflineIndicator";
 import Support from "./pages/Support";
 import MorphCalculator from "./pages/MorphCalculator";
 import HealthDashboard from "./pages/HealthDashboard";
+import { PremiumFeatureGate } from "./components/PremiumFeatureGate";
 
 const queryClient = new QueryClient();
 
