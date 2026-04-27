@@ -89,12 +89,12 @@ const App = () => (
             <Route path="/all-reptiles" element={<TesterSuspensionGuard><MaintenanceGuard><AllReptilesList /></MaintenanceGuard></TesterSuspensionGuard>} />
             <Route path="/for-sale" element={<TesterSuspensionGuard><MaintenanceGuard><ForSale /></MaintenanceGuard></TesterSuspensionGuard>} />
             <Route path="/transfers" element={<TesterSuspensionGuard><MaintenanceGuard><Transfers /></MaintenanceGuard></TesterSuspensionGuard>} />
-            <Route path="/nfc" element={<TesterSuspensionGuard><MaintenanceGuard><NFCReader /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/nfc" element={<TesterSuspensionGuard><MaintenanceGuard><PremiumFeatureGate featureName="NFC"><NFCReader /></PremiumFeatureGate></MaintenanceGuard></TesterSuspensionGuard>} />
             <Route path="/cost-breakdown" element={<TesterSuspensionGuard><MaintenanceGuard><CostBreakdown /></MaintenanceGuard></TesterSuspensionGuard>} />
             <Route path="/analytics" element={<TesterSuspensionGuard><MaintenanceGuard><Analytics /></MaintenanceGuard></TesterSuspensionGuard>} />
             <Route path="/genealogy" element={<TesterSuspensionGuard><MaintenanceGuard><Genealogy /></MaintenanceGuard></TesterSuspensionGuard>} />
-            <Route path="/morph-calculator" element={<TesterSuspensionGuard><MaintenanceGuard><MorphCalculator /></MaintenanceGuard></TesterSuspensionGuard>} />
-            <Route path="/health-dashboard" element={<TesterSuspensionGuard><MaintenanceGuard><HealthDashboard /></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/morph-calculator" element={<TesterSuspensionGuard><MaintenanceGuard><PremiumFeatureGate featureName="Calculateur de morphs"><MorphCalculator /></PremiumFeatureGate></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/health-dashboard" element={<TesterSuspensionGuard><MaintenanceGuard><PremiumFeatureGate featureName="Tableau de bord santé"><HealthDashboard /></PremiumFeatureGate></MaintenanceGuard></TesterSuspensionGuard>} />
             
             {/* Catch-all route - TOUJOURS en dernier */}
             <Route path="*" element={<NotFound />} />
