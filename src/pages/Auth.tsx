@@ -130,6 +130,11 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <SEO
+        title="Connexion / Inscription — S-reptrack"
+        description="Connectez-vous ou créez votre compte S-reptrack pour gérer votre élevage de reptiles : nourrissage, santé, reproduction, NFC."
+        canonical="/auth"
+      />
       {/* Back Button */}
       <Button
         variant="ghost"

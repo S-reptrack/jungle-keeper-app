@@ -12,6 +12,11 @@ const Support = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Support & Contact — S-reptrack"
+        description="Besoin d'aide ? Contactez l'équipe S-reptrack par email à contact@s-reptrack.app. Réponse sous 24-48h."
+        canonical="/support"
+      />
       <Navigation />
       <div className="max-w-2xl mx-auto px-4 py-8 space-y-8">
         <div className="space-y-2">

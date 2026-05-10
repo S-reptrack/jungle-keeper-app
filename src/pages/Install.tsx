@@ -216,6 +216,11 @@ const Install = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Installer S-reptrack sur iPhone, iPad et Android"
+        description="Guide d'installation de S-reptrack en application sur iOS et Android. Profitez du NFC, des notifications et du mode hors ligne."
+        canonical="/install"
+      />
       <Navigation />
       <main className="max-w-2xl mx-auto px-4 py-8 pb-24">
         <header className="mb-8 text-center">
