@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Navigation from "@/components/Navigation";
 import sreptrackLogo from "@/assets/sreptrack-logo.png";
+import SEO from "@/components/SEO";
 
 const Support = () => {
   const { t } = useTranslation();
