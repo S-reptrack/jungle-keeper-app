@@ -107,7 +107,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     const emailResponse = await resend.emails.send({
       from: "S-RepTrack <contact@s-reptrack.app>",
-      to: [email],
+      to: [normalizedEmail],
       subject: "🦎 Invitation à tester S-RepTrack",
       html: `
         <!DOCTYPE html>
