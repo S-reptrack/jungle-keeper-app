@@ -12,6 +12,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import jungleHero from "@/assets/jungle-hero.jpg";
 import { validatePassword, validatePasswordComplete, type PasswordValidationResult } from "@/lib/passwordValidation";
 import LanguageSelector from "@/components/LanguageSelector";
+import SEO from "@/components/SEO";
 
 const Auth = () => {
   const { t } = useTranslation();
