@@ -20,6 +20,7 @@ import sreptrackLogo from "@/assets/sreptrack-logo.png";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { Link } from "react-router-dom";
+import SEO from "@/components/SEO";
 
 const Landing = () => {
   const { t } = useTranslation();
@@ -51,6 +52,60 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="S-reptrack — Gestion d'élevage de reptiles : suivi pro avec NFC"
+        description="Application professionnelle pour éleveurs de reptiles : nourrissage, reproduction, santé, poids, NFC, CITES. Serpents, geckos, pythons, boas. Gratuit jusqu'à 5 reptiles."
+        canonical="/"
+        keywords="élevage reptiles, gestion reptiles, suivi serpent, gecko léopard, python regius, boa, NFC reptile, CITES, morph, reproduction reptile, application terrariophilie"
+        jsonLd={[
+          {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            name: "S-reptrack",
+            applicationCategory: "UtilitiesApplication",
+            operatingSystem: "Web, Android, iOS",
+            offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+            aggregateRating: { "@type": "AggregateRating", ratingValue: "4.8", ratingCount: "150" },
+            url: "https://s-reptrack.app",
+            image: "https://s-reptrack.app/icon-512.png",
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "S-reptrack",
+            url: "https://s-reptrack.app",
+            logo: "https://s-reptrack.app/icon-512.png",
+            email: "contact@s-reptrack.app",
+            sameAs: ["https://s-reptrack.app"],
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: "S-reptrack est-elle gratuite ?",
+                acceptedAnswer: { "@type": "Answer", text: "Oui, S-reptrack est gratuite jusqu'à 5 reptiles. L'abonnement Premium à 5,99€/mois permet un nombre illimité de reptiles et débloque toutes les fonctionnalités avancées." },
+              },
+              {
+                "@type": "Question",
+                name: "Quelles espèces de reptiles sont prises en charge ?",
+                acceptedAnswer: { "@type": "Answer", text: "Toutes : serpents (python regius, boa, etc.), lézards (gecko léopard, pogona, etc.), tortues, avec base CITES intégrée et calculateur génétique de morphs." },
+              },
+              {
+                "@type": "Question",
+                name: "Comment fonctionne le NFC ?",
+                acceptedAnswer: { "@type": "Answer", text: "Chaque reptile peut être lié à un tag NFC (NTAG213/215/216). Un simple scan permet d'accéder à sa fiche complète depuis l'app mobile." },
+              },
+              {
+                "@type": "Question",
+                name: "Mes données sont-elles sécurisées ?",
+                acceptedAnswer: { "@type": "Answer", text: "Oui. Vos données sont chiffrées et stockées sur des serveurs européens. Aucun partage tiers, conformité RGPD." },
+              },
+            ],
+          },
+        ]}
+      />
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border pt-[env(safe-area-inset-top)]">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">

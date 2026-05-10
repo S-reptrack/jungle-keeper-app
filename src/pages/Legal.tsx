@@ -3,12 +3,18 @@ import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import SEO from "@/components/SEO";
 
 const Legal = () => {
   const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Mentions légales — S-reptrack"
+        description="Mentions légales de S-reptrack : éditeur, hébergeur, propriété intellectuelle et contact."
+        canonical="/legal"
+      />
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <Link to="/">
           <Button variant="ghost" className="mb-6">
