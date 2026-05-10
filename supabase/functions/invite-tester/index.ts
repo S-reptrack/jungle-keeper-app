@@ -69,15 +69,45 @@ const handler = async (req: Request): Promise<Response> => {
 
     const { email, appUrl }: InviteTesterRequest = await req.json();
 
-    if (!email) {
-      throw new Error("Email is required");
+    if (!email || typeof email !== "string") {
+      return new Response(JSON.stringify({ error: "Email is required" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(normalizedEmail) || normalizedEmail.length > 255) {
+      return new Response(JSON.stringify({ error: "Invalid email format" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
+    // Validate appUrl to prevent injection in email template
+    if (appUrl && typeof appUrl === "string") {
+      try {
+        const parsed = new URL(appUrl);
+        if (!["http:", "https:"].includes(parsed.protocol)) {
+          return new Response(JSON.stringify({ error: "Invalid appUrl" }), {
+            status: 400,
+            headers: { "Content-Type": "application/json", ...corsHeaders },
+          });
+        }
+      } catch {
+        return new Response(JSON.stringify({ error: "Invalid appUrl" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        });
+      }
     }
 
     const signupUrl = `${appUrl}/auth?mode=signup&tester=true`;
 
     const emailResponse = await resend.emails.send({
       from: "S-RepTrack <contact@s-reptrack.app>",
-      to: [email],
+      to: [normalizedEmail],
       subject: "🦎 Invitation à tester S-RepTrack",
       html: `
         <!DOCTYPE html>
