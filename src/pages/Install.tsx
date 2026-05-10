@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Navigation from "@/components/Navigation";
 import { useTranslation } from "react-i18next";
+import SEO from "@/components/SEO";
 import { 
   Smartphone, 
   Apple, 
