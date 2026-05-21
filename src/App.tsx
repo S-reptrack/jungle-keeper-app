@@ -104,6 +104,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
             </Routes>
           </Router>
+          </BiometricLockGate>
         </TooltipProvider>
       </ThemeProvider>
     </AuthProvider>
