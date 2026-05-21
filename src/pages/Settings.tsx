@@ -220,6 +220,35 @@ const Settings = () => {
             </CardContent>
           </Card>
 
+          {/* Sécurité — Face ID / Touch ID (iOS natif uniquement) */}
+          {isNativeIOS() && biometricAvailable && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Fingerprint className="w-5 h-5" />
+                  Sécurité
+                </CardTitle>
+                <CardDescription>
+                  Protégez l'accès à vos reptiles avec Face ID ou Touch ID.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5 pr-4">
+                    <Label htmlFor="biometric-lock">Verrou Face ID / Touch ID</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Demande une authentification biométrique à chaque ouverture de l'app.
+                    </p>
+                  </div>
+                  <Switch
+                    id="biometric-lock"
+                    checked={biometricLock}
+                    onCheckedChange={handleToggleBiometric}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Transferts */}
           <Card>
