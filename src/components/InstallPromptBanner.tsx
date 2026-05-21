@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { X, Download, Smartphone, Share2, Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
+import { Capacitor } from "@capacitor/core";
+import { isNativeIOS, isNativeAndroid } from "@/lib/platformUtils";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
