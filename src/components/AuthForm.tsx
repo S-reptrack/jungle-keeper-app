@@ -105,7 +105,13 @@ export const AuthForm = () => {
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
+                autoComplete="email"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                inputMode="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -115,7 +121,12 @@ export const AuthForm = () => {
               <Label htmlFor="password">Mot de passe</Label>
               <Input
                 id="password"
+                name="password"
                 type="password"
+                autoComplete={isLogin ? "current-password" : "new-password"}
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
