@@ -100,14 +100,14 @@ export const AuthForm = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleAuth} className="space-y-4">
+          <form onSubmit={handleAuth} className="space-y-4" autoComplete="on">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
-                name="email"
+                name={isLogin ? "username" : "email"}
                 type="email"
-                autoComplete="email"
+                autoComplete={isLogin ? "username" : "email"}
                 autoCapitalize="none"
                 autoCorrect="off"
                 spellCheck={false}
