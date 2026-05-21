@@ -66,10 +66,14 @@ const SubscriptionCard = () => {
   }, [searchParams, setSearchParams, checkSubscription, t]);
 
   const handleSubscribe = async (tier: "monthly" | "yearly") => {
+    // Feedback IMMÉDIAT pour que le bouton ne paraisse jamais "mort" (exigence Apple iPad)
+    setCheckoutLoading(tier);
+    toast.loading(t("subscription.preparingCheckout") || "Préparation du paiement...", { id: `checkout-${tier}` });
     try {
-      setCheckoutLoading(tier);
       await createCheckout(SUBSCRIPTION_TIERS[tier].priceId);
+      toast.dismiss(`checkout-${tier}`);
     } catch (error) {
+      toast.dismiss(`checkout-${tier}`);
       const errorMessage = error instanceof Error ? error.message : "";
       console.error("[Subscribe] Error:", errorMessage);
       if (isApple && errorMessage.includes("not available")) {
@@ -77,7 +81,7 @@ const SubscriptionCard = () => {
       } else if (isApple && errorMessage.includes("not found")) {
         toast.error(t("subscription.productNotFound") || "Produit non trouvé. Veuillez réessayer plus tard.");
       } else {
-        toast.error(t("subscription.checkoutError") || "Erreur lors de la création du paiement");
+        toast.error(`${t("subscription.checkoutError") || "Erreur lors du paiement"}${errorMessage ? `: ${errorMessage}` : ""}`);
       }
     } finally {
       setCheckoutLoading(null);
@@ -258,6 +262,7 @@ const SubscriptionCard = () => {
 
                   <Button
                     className="w-full"
+                    style={{ minHeight: "44px", touchAction: "manipulation" }}
                     onClick={() => handleSubscribe("monthly")}
                     disabled={checkoutLoading !== null}
                   >
@@ -306,6 +311,7 @@ const SubscriptionCard = () => {
 
                   <Button
                     className="w-full"
+                    style={{ minHeight: "44px", touchAction: "manipulation" }}
                     onClick={() => handleSubscribe("yearly")}
                     disabled={checkoutLoading !== null}
                   >
