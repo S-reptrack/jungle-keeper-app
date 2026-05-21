@@ -45,6 +45,7 @@ import MorphCalculator from "./pages/MorphCalculator";
 import HealthDashboard from "./pages/HealthDashboard";
 import { PremiumFeatureGate } from "./components/PremiumFeatureGate";
 import { AuthProvider } from "./hooks/useAuth";
+import BiometricLockGate from "./components/BiometricLockGate";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,7 @@ const App = () => (
         <TooltipProvider>
           <Toaster />
           <Sonner />
+          <BiometricLockGate>
           <Router>
             <TesterActivityTracker />
             
@@ -102,6 +104,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
             </Routes>
           </Router>
+          </BiometricLockGate>
         </TooltipProvider>
       </ThemeProvider>
     </AuthProvider>
