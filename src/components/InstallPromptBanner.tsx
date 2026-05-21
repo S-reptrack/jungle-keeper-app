@@ -44,8 +44,8 @@ const InstallPromptBanner = () => {
   const [showIosInstructions, setShowIosInstructions] = useState(false);
 
   useEffect(() => {
-    // Don't show if already installed
-    if (isStandalone()) {
+    // Don't show in native apps (already installed) or if running standalone (PWA installed)
+    if (Capacitor.isNativePlatform() || isNativeIOS() || isNativeAndroid() || isStandalone()) {
       return;
     }
 
