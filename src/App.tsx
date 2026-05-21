@@ -44,6 +44,7 @@ import Support from "./pages/Support";
 import MorphCalculator from "./pages/MorphCalculator";
 import HealthDashboard from "./pages/HealthDashboard";
 import { PremiumFeatureGate } from "./components/PremiumFeatureGate";
+import { AuthProvider } from "./hooks/useAuth";
 
 const queryClient = new QueryClient();
 
@@ -51,17 +52,18 @@ const Router = Capacitor.isNativePlatform() ? HashRouter : BrowserRouter;
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <Router>
-          <TesterActivityTracker />
-          
-          <HatchingNotificationDialog />
-          <InstallPromptBanner />
-          <OfflineIndicator />
-          <Routes>
+    <AuthProvider>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <Router>
+            <TesterActivityTracker />
+            
+            <HatchingNotificationDialog />
+            <InstallPromptBanner />
+            <OfflineIndicator />
+            <Routes>
             {/* Routes publiques sans garde — accessibles sans auth */}
             <Route path="/auth" element={<Auth />} />
             <Route path="/privacy" element={<Privacy />} />
@@ -98,10 +100,11 @@ const App = () => (
             
             {/* Catch-all route - TOUJOURS en dernier */}
             <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Router>
-      </TooltipProvider>
-    </ThemeProvider>
+            </Routes>
+          </Router>
+        </TooltipProvider>
+      </ThemeProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
