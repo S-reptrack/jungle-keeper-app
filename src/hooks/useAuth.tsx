@@ -1,12 +1,39 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { Capacitor } from "@capacitor/core";
+import { App as CapacitorApp } from "@capacitor/app";
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const isMounted = useRef(true);
+
+  const syncSession = useCallback(async (keepLoading = false) => {
+    if (!keepLoading && isMounted.current) {
+      setLoading(true);
+    }
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (!isMounted.current) return;
+
+      setSession(session);
+      setUser(session?.user ?? null);
+
+      if (session) {
+        await supabase.auth.refreshSession();
+      }
+    } catch (error) {
+      console.error("[useAuth] Error syncing session:", error);
+    } finally {
+      if (isMounted.current) {
+        setLoading(false);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     isMounted.current = true;
@@ -22,26 +49,30 @@ export const useAuth = () => {
     );
 
     // 2. THEN get initial session (controls loading)
-    const initializeAuth = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!isMounted.current) return;
-        setSession(session);
-        setUser(session?.user ?? null);
-      } catch (error) {
-        console.error("[useAuth] Error getting session:", error);
-      } finally {
-        if (isMounted.current) setLoading(false);
-      }
-    };
+    syncSession(true);
 
-    initializeAuth();
+    let appStateListener: { remove: () => Promise<void> } | null = null;
+
+    if (Capacitor.isNativePlatform()) {
+      CapacitorApp.addListener("appStateChange", ({ isActive }) => {
+        if (isActive) {
+          void syncSession();
+        }
+      }).then((listener) => {
+        appStateListener = listener;
+      }).catch((error) => {
+        console.error("[useAuth] Error attaching appStateChange listener:", error);
+      });
+    }
 
     return () => {
       isMounted.current = false;
       subscription.unsubscribe();
+      if (appStateListener) {
+        void appStateListener.remove();
+      }
     };
-  }, []);
+  }, [syncSession]);
 
   const signOut = async () => {
     await supabase.auth.signOut();
