@@ -17,8 +17,8 @@ if [ ! -f "$LOGO" ]; then
 fi
 
 if [ ! -d "$ICONSET" ]; then
-  echo "❌ Dossier AppIcon introuvable. Lancez d'abord : npx cap add ios"
-  exit 1
+  echo "📁 Dossier AppIcon.appiconset introuvable, création..."
+  mkdir -p "$ICONSET"
 fi
 
 echo "🎨 Génération des icônes iOS depuis $LOGO"
