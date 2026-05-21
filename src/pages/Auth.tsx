@@ -183,7 +183,13 @@ const Auth = () => {
                 <Label htmlFor="email">{t('auth.email')}</Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
+                  autoComplete="email"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  inputMode="email"
                   placeholder={t('auth.emailPlaceholder')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -194,7 +200,12 @@ const Auth = () => {
                 <Label htmlFor="password">{t('auth.password')}</Label>
                 <Input
                   id="password"
+                  name="password"
                   type="password"
+                  autoComplete={isLogin ? "current-password" : "new-password"}
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
                   placeholder={isLogin ? "••••••••" : t('auth.passwordPlaceholder')}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
