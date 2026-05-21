@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Globe, LogOut, User, Shield, Send, ArrowLeft, MessageSquare } from "lucide-react";
+import { Moon, Sun, Globe, LogOut, User, Shield, Send, ArrowLeft, MessageSquare, Fingerprint } from "lucide-react";
 import { useTheme } from "next-themes";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,6 +30,8 @@ const Settings = () => {
   
   const [weightUnit, setWeightUnit] = useState(localStorage.getItem('weightUnit') || 'grams');
   const [feedingReminders, setFeedingReminders] = useState(localStorage.getItem('feedingReminders') === 'true');
+  const [biometricLock, setBiometricLockState] = useState(localStorage.getItem('biometricLockEnabled') === 'true');
+  const [biometricAvailable, setBiometricAvailable] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('weightUnit', weightUnit);
@@ -38,6 +40,29 @@ const Settings = () => {
   useEffect(() => {
     localStorage.setItem('feedingReminders', feedingReminders.toString());
   }, [feedingReminders]);
+
+  // Vérifie la disponibilité de Face ID / Touch ID au montage
+  useEffect(() => {
+    if (!isNativeIOS()) return;
+    import("@/lib/biometricLock").then(({ checkBiometricAvailable }) => {
+      checkBiometricAvailable().then(setBiometricAvailable);
+    });
+  }, []);
+
+  const handleToggleBiometric = async (enabled: boolean) => {
+    const { authenticateBiometric, setBiometricLockEnabled } = await import("@/lib/biometricLock");
+    if (enabled) {
+      // Demande une auth pour confirmer que ça marche avant d'activer
+      const ok = await authenticateBiometric("Activer le verrou Face ID");
+      if (!ok) {
+        toast.error("Authentification échouée. Verrou non activé.");
+        return;
+      }
+    }
+    setBiometricLockEnabled(enabled);
+    setBiometricLockState(enabled);
+    toast.success(enabled ? "Verrou Face ID activé" : "Verrou Face ID désactivé");
+  };
 
   const handleSignOut = async () => {
     try {
