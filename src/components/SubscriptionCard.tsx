@@ -262,6 +262,7 @@ const SubscriptionCard = () => {
 
                   <Button
                     className="w-full"
+                    style={{ minHeight: "44px", touchAction: "manipulation" }}
                     onClick={() => handleSubscribe("monthly")}
                     disabled={checkoutLoading !== null}
                   >
