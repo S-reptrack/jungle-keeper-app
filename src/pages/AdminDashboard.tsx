@@ -3,11 +3,12 @@ import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { Users, Database, Activity, TrendingUp, MessageSquare, FlaskConical } from "lucide-react";
+import { Users, Database, Activity, TrendingUp, MessageSquare, FlaskConical, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import TesterManagement from "@/components/TesterManagement";
 import TesterActivityDashboard from "@/components/TesterActivityDashboard";
 import { BetaTesterManagement } from "@/components/BetaTesterManagement";
+import MarketingAIStudio from "@/components/MarketingAIStudio";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface AdminStats {
@@ -156,7 +157,7 @@ const AdminDashboard = () => {
 
         <div className="mt-8">
           <Tabs defaultValue="testers" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-6">
+            <TabsList className="grid w-full grid-cols-4 mb-6">
               <TabsTrigger value="testers" className="flex items-center gap-2">
                 <Users className="h-4 w-4" />
                 Testeurs
@@ -168,6 +169,10 @@ const AdminDashboard = () => {
               <TabsTrigger value="activity" className="flex items-center gap-2">
                 <MessageSquare className="h-4 w-4" />
                 Feedbacks
+              </TabsTrigger>
+              <TabsTrigger value="marketing" className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4" />
+                Marketing IA
               </TabsTrigger>
             </TabsList>
 
@@ -195,6 +200,10 @@ const AdminDashboard = () => {
 
             <TabsContent value="activity">
               <TesterActivityDashboard />
+            </TabsContent>
+
+            <TabsContent value="marketing">
+              <MarketingAIStudio />
             </TabsContent>
           </Tabs>
         </div>
