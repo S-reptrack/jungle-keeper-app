@@ -50,8 +50,9 @@ echo Creation de local.properties...
   echo sdk.dir=C:\\Users\\berti\\AppData\\Local\\Android\\Sdk
 ) > android\local.properties
 
-echo Modification d'AndroidManifest.xml...
+echo Modification d'AndroidManifest.xml et des versions SDK...
 node public\fix-android-manifest.js
+node public\fix-android-sdk.js
 
 if errorlevel 1 (
   echo ERREUR lors de la configuration
@@ -62,6 +63,10 @@ if errorlevel 1 (
 
 echo Synchronisation Capacitor...
 call npx cap sync android
+
+echo Correction finale des versions SDK apres sync...
+node public\fix-android-sdk.js
+
 
 echo.
 echo ========================================

@@ -20,6 +20,10 @@ echo [2/5] Synchronisation Android...
 call npx cap sync android
 
 echo.
+echo [2b/5] Mise a jour des versions SDK (Play Protect)...
+node public\fix-android-sdk.js
+
+echo.
 echo [3/5] Acces au dossier Android...
 cd android
 

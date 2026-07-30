@@ -40,6 +40,8 @@ if errorlevel 1 (
     pause
     exit /b 1
 )
+echo Mise a jour des versions SDK (Play Protect)...
+node public\fix-android-sdk.js
 echo.
 
 echo ========================================

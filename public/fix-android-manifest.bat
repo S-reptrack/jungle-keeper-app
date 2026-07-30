@@ -37,6 +37,9 @@ echo.
 echo 📦 Synchronisation Android (Capacitor)...
 call npx cap sync android
 
+echo 🔧 Mise a jour des versions SDK (Play Protect)...
+node public\fix-android-sdk.js
+
 echo ▶️ Lancement sur Android...
 call npx cap run android
 

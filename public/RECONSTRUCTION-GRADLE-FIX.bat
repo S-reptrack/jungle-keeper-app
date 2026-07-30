@@ -43,10 +43,15 @@ echo.
 echo [7/8] Configuration SDK et Manifest...
 echo sdk.dir=C:\\Users\\berti\\AppData\\Local\\Android\\Sdk> android\local.properties
 call node public\fix-android-manifest.js
+call node public\fix-android-sdk.js
 
 echo.
 echo [8/8] Synchronisation Android...
 call npx cap sync android
+
+echo.
+echo [8/8] Correction finale des SDK (Play Protect)...
+node public\fix-android-sdk.js
 
 echo.
 echo ========================================

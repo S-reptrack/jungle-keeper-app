@@ -57,10 +57,17 @@ echo sdk.dir=C:\\Users\\berti\\AppData\\Local\\Android\\Sdk> android\local.prope
 if exist public\fix-android-manifest.js (
     call node public\fix-android-manifest.js
 )
+if exist public\fix-android-sdk.js (
+    call node public\fix-android-sdk.js
+)
 
 echo.
 echo [6/7] Synchronisation Android...
 call npx cap sync android
+
+echo.
+echo [6b/7] Correction finale des versions SDK (Play Protect)...
+node public\fix-android-sdk.js
 
 echo.
 echo [7/7] Generation de l'AAB signe...

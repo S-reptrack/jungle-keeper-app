@@ -25,6 +25,9 @@ npm run build
 echo Syncing Capacitor Android platform...
 npx cap sync android
 
+echo Updating Android SDK versions (Play Protect)...
+node public\fix-android-sdk.js
+
 echo Running on Android (device/emulator)...
 npx cap run android
 
