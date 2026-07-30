@@ -23,6 +23,10 @@ if errorlevel 1 (
     exit /b 1
 )
 
+echo Mise a jour des versions SDK (Play Protect)...
+node public\fix-android-sdk.js
+
+
 echo.
 echo [3/3] Lancement sur le telephone...
 call npx cap run android
