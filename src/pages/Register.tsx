@@ -72,7 +72,7 @@ export default function Register() {
   const set = (k: keyof Row, v: string | null) => setEdit((e) => (e ? { ...e, [k]: v } : e));
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background notranslate" translate="no">
       <Navigation />
       <main className="container mx-auto px-4 py-8 pb-32">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
