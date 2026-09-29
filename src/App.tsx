@@ -43,6 +43,7 @@ import OfflineIndicator from "./components/OfflineIndicator";
 import Support from "./pages/Support";
 import MorphCalculator from "./pages/MorphCalculator";
 import HealthDashboard from "./pages/HealthDashboard";
+import Register from "./pages/Register";
 import { PremiumFeatureGate } from "./components/PremiumFeatureGate";
 import { AuthProvider } from "./hooks/useAuth";
 import BiometricLockGate from "./components/BiometricLockGate";
@@ -99,6 +100,7 @@ const App = () => (
             <Route path="/genealogy" element={<TesterSuspensionGuard><MaintenanceGuard><Genealogy /></MaintenanceGuard></TesterSuspensionGuard>} />
             <Route path="/morph-calculator" element={<TesterSuspensionGuard><MaintenanceGuard><PremiumFeatureGate featureName="Calculateur de morphs"><MorphCalculator /></PremiumFeatureGate></MaintenanceGuard></TesterSuspensionGuard>} />
             <Route path="/health-dashboard" element={<TesterSuspensionGuard><MaintenanceGuard><PremiumFeatureGate featureName="Tableau de bord santé"><HealthDashboard /></PremiumFeatureGate></MaintenanceGuard></TesterSuspensionGuard>} />
+            <Route path="/register" element={<TesterSuspensionGuard><MaintenanceGuard><PremiumFeatureGate featureName="Registre des entrées et sorties"><Register /></PremiumFeatureGate></MaintenanceGuard></TesterSuspensionGuard>} />
             
             {/* Catch-all route - TOUJOURS en dernier */}
             <Route path="*" element={<NotFound />} />
