@@ -126,7 +126,7 @@ export default function Register() {
               <div className="grid grid-cols-2 gap-3">
                 <div><Label>Date d'entrée</Label><Input type="date" value={edit.purchase_date || ""} onChange={(e) => set("purchase_date", e.target.value)} /></div>
                 <div><Label>Type</Label>
-                  <Select value={edit.entry_type || ""} onValueChange={(v) => set("entry_type", v)}>
+                  <Select value={edit.entry_type || undefined} onValueChange={(v) => set("entry_type", v)}>
                     <SelectTrigger><SelectValue placeholder="Choisir" /></SelectTrigger>
                     <SelectContent>{Object.entries(ENTRY_TYPES).map(([k, l]) => <SelectItem key={k} value={k}>{l}</SelectItem>)}</SelectContent>
                   </Select>
@@ -137,7 +137,7 @@ export default function Register() {
               <div className="grid grid-cols-2 gap-3">
                 <div><Label>Date de sortie</Label><Input type="date" value={edit.exit_date || ""} onChange={(e) => set("exit_date", e.target.value)} /></div>
                 <div><Label>Type</Label>
-                  <Select value={edit.exit_type || ""} onValueChange={(v) => set("exit_type", v)}>
+                  <Select value={edit.exit_type || undefined} onValueChange={(v) => set("exit_type", v)}>
                     <SelectTrigger><SelectValue placeholder="Choisir" /></SelectTrigger>
                     <SelectContent>{Object.entries(EXIT_TYPES).map(([k, l]) => <SelectItem key={k} value={k}>{l}</SelectItem>)}</SelectContent>
                   </Select>

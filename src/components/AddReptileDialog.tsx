@@ -703,7 +703,7 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                 <Input placeholder="N° d'identification" value={regIdNumber} maxLength={100} onChange={(e) => setRegIdNumber(e.target.value)} />
                 <Input placeholder="N° CITES" value={regCites} maxLength={100} onChange={(e) => setRegCites(e.target.value)} />
               </div>
-              <Select value={regEntryType} onValueChange={setRegEntryType}>
+              <Select value={regEntryType || undefined} onValueChange={setRegEntryType}>
                 <SelectTrigger><SelectValue placeholder="Type d'entrée" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="purchase">Achat</SelectItem>
