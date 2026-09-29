@@ -459,9 +459,16 @@ export type Database = {
           archive_notes: string | null
           birth_date: string | null
           category: string
+          cites_number: string | null
           created_at: string
+          entry_origin: string | null
+          entry_type: string | null
+          exit_date: string | null
+          exit_destination: string | null
+          exit_type: string | null
           feeding_interval_days: number | null
           id: string
+          identification_number: string | null
           image_url: string | null
           morphs: string[] | null
           name: string
@@ -481,9 +488,16 @@ export type Database = {
           archive_notes?: string | null
           birth_date?: string | null
           category: string
+          cites_number?: string | null
           created_at?: string
+          entry_origin?: string | null
+          entry_type?: string | null
+          exit_date?: string | null
+          exit_destination?: string | null
+          exit_type?: string | null
           feeding_interval_days?: number | null
           id?: string
+          identification_number?: string | null
           image_url?: string | null
           morphs?: string[] | null
           name: string
@@ -503,9 +517,16 @@ export type Database = {
           archive_notes?: string | null
           birth_date?: string | null
           category?: string
+          cites_number?: string | null
           created_at?: string
+          entry_origin?: string | null
+          entry_type?: string | null
+          exit_date?: string | null
+          exit_destination?: string | null
+          exit_type?: string | null
           feeding_interval_days?: number | null
           id?: string
+          identification_number?: string | null
           image_url?: string | null
           morphs?: string[] | null
           name?: string
