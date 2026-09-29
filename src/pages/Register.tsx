@@ -85,7 +85,7 @@ export default function Register() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>N°</TableHead><TableHead>Animal</TableHead><TableHead>Identification</TableHead>
+                    <TableHead>N°</TableHead><TableHead>Animal</TableHead><TableHead>Sexe</TableHead><TableHead>Identification</TableHead>
                     <TableHead>N° CITES</TableHead><TableHead>Entrée</TableHead><TableHead>Provenance</TableHead>
                     <TableHead>Sortie</TableHead><TableHead>Destination</TableHead><TableHead />
                   </TableRow>
@@ -94,7 +94,8 @@ export default function Register() {
                   {rows.map((r, i) => (
                     <TableRow key={r.id}>
                       <TableCell>{i + 1}</TableCell>
-                      <TableCell><div className="font-medium">{r.name}</div><div className="text-xs text-muted-foreground italic">{r.species}{r.sex ? ` • ${r.sex}` : ""}</div></TableCell>
+                      <TableCell><div className="font-medium">{r.name}</div><div className="text-xs text-muted-foreground italic">{r.species}</div></TableCell>
+                      <TableCell>{r.sex === "male" ? "Mâle ♂" : r.sex === "female" ? "Femelle ♀" : "Indéterminé"}</TableCell>
                       <TableCell>{r.identification_number || "—"}</TableCell>
                       <TableCell>{r.cites_number || "—"}</TableCell>
                       <TableCell><div>{fmt(r.purchase_date)}</div><div className="text-xs text-muted-foreground">{r.entry_type ? ENTRY_TYPES[r.entry_type] : ""}</div></TableCell>
@@ -104,7 +105,7 @@ export default function Register() {
                       <TableCell><Button size="icon" variant="ghost" aria-label="Modifier" onClick={() => setEdit(r)}><Pencil className="w-4 h-4" /></Button></TableCell>
                     </TableRow>
                   ))}
-                  {rows.length === 0 && <TableRow><TableCell colSpan={9} className="text-center text-muted-foreground">Aucun animal</TableCell></TableRow>}
+                  {rows.length === 0 && <TableRow><TableCell colSpan={10} className="text-center text-muted-foreground">Aucun animal</TableCell></TableRow>}
                 </TableBody>
               </Table>
             )}
