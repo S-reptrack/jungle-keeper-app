@@ -81,6 +81,10 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showLimitDialog, setShowLimitDialog] = useState(false);
   const [isTestEntry, setIsTestEntry] = useState(false);
+  const [regIdNumber, setRegIdNumber] = useState("");
+  const [regCites, setRegCites] = useState("");
+  const [regEntryType, setRegEntryType] = useState("");
+  const [regOrigin, setRegOrigin] = useState("");
   const { role } = useUserRole();
 
   const { subscribed } = useSubscription();
@@ -133,6 +137,10 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
         purchase_date: data.purchaseDate && !data.bornInCaptivity
           ? `${data.purchaseDate.getFullYear()}-${String(data.purchaseDate.getMonth() + 1).padStart(2, '0')}-${String(data.purchaseDate.getDate()).padStart(2, '0')}`
           : null,
+        identification_number: regIdNumber.trim() || null,
+        cites_number: regCites.trim() || null,
+        entry_type: regEntryType || (data.bornInCaptivity ? "birth" : null),
+        entry_origin: regOrigin.trim() || null,
       }).select('id').single();
 
       if (error) throw error;
@@ -688,6 +696,27 @@ const AddReptileDialog = ({ onReptileAdded }: AddReptileDialogProps = {}) => {
                 )}
               />
             )}
+
+            <div className="space-y-3 rounded-md border p-3">
+              <p className="text-sm font-semibold">Registre des entrées (facultatif)</p>
+              <div className="grid grid-cols-2 gap-2">
+                <Input placeholder="N° d'identification" value={regIdNumber} maxLength={100} onChange={(e) => setRegIdNumber(e.target.value)} />
+                <Input placeholder="N° CITES" value={regCites} maxLength={100} onChange={(e) => setRegCites(e.target.value)} />
+              </div>
+              <Select value={regEntryType} onValueChange={setRegEntryType}>
+                <SelectTrigger><SelectValue placeholder="Type d'entrée" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="purchase">Achat</SelectItem>
+                  <SelectItem value="donation">Don</SelectItem>
+                  <SelectItem value="placement">Placement</SelectItem>
+                  <SelectItem value="birth">Naissance à l'élevage</SelectItem>
+                  <SelectItem value="exchange">Échange</SelectItem>
+                  <SelectItem value="rescue">Recueil / sauvetage</SelectItem>
+                  <SelectItem value="other">Autre</SelectItem>
+                </SelectContent>
+              </Select>
+              <Input placeholder="Provenance (nom de l'éleveur, adresse…)" value={regOrigin} maxLength={200} onChange={(e) => setRegOrigin(e.target.value)} />
+            </div>
 
             <div className="flex gap-2 pt-4">
               <Button
