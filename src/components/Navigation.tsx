@@ -1,4 +1,4 @@
-import { Home, List, Tag, Settings, Waves, User, Shield, BarChart3, GitBranch, Bell, Dna, HeartPulse } from "lucide-react";
+import { Home, List, Tag, Settings, Waves, User, Shield, BarChart3, GitBranch, Bell, Dna, HeartPulse, BookOpen } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -157,6 +157,10 @@ const Navigation = () => {
                     <DropdownMenuItem onClick={() => navigate("/health-dashboard")}>
                       <HeartPulse className="w-4 h-4 mr-2" />
                       {t("healthDashboard.title")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/register")}>
+                      <BookOpen className="w-4 h-4 mr-2" />
+                      Registre entrées/sorties
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
