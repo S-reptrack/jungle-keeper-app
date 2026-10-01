@@ -10,8 +10,8 @@ const androidRoot = path.join(__dirname, '..', 'android');
 const variablesGradlePath = path.join(androidRoot, 'variables.gradle');
 const appBuildGradlePath = path.join(androidRoot, 'app', 'build.gradle');
 
-const TARGET_SDK = 35;   // Android 15 — obligatoire pour Play Protect / Play Store
-const COMPILE_SDK = 35;  // Doit correspondre au targetSdk
+const TARGET_SDK = 36;   // Android 16 — valeur par défaut de Capacitor 8, acceptée par le Play Store
+const COMPILE_SDK = 36;  // Requis par androidx (browser 1.9, core 1.17, activity 1.11)
 const MIN_SDK = 24;      // Minimum pour Capacitor 8
 const VERSION_CODE = 9;
 const VERSION_NAME = '1.0.9';
