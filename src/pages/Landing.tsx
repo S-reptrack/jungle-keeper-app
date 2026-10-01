@@ -65,7 +65,6 @@ const Landing = () => {
             applicationCategory: "UtilitiesApplication",
             operatingSystem: "Web, Android, iOS",
             offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
-            aggregateRating: { "@type": "AggregateRating", ratingValue: "4.8", ratingCount: "150" },
             url: "https://s-reptrack.app",
             image: "https://s-reptrack.app/icon-512.png",
           },
