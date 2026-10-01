@@ -63,8 +63,8 @@ try {
     appBuildContent = replaceGradleValue(appBuildContent, 'targetSdk', TARGET_SDK);
     appBuildContent = replaceGradleValue(appBuildContent, 'minSdk', MIN_SDK);
     // Numéro de version Play Store (doit augmenter à chaque envoi)
-    appBuildContent = appBuildContent.replace(/versionCode\s+\d+/, `versionCode ${VERSION_CODE}`);
-    appBuildContent = appBuildContent.replace(/versionName\s+"[^"]*"/, `versionName "${VERSION_NAME}"`);
+    appBuildContent = appBuildContent.replace(/versionCode\s*=?\s*\d+/, `versionCode ${VERSION_CODE}`);
+    appBuildContent = appBuildContent.replace(/versionName\s*=?\s*"[^"]*"/, `versionName "${VERSION_NAME}"`);
     console.log(`✅ Version : ${VERSION_NAME} (${VERSION_CODE})`);
     fs.writeFileSync(appBuildGradlePath, appBuildContent);
     console.log(`✅ app/build.gradle mis à jour : compileSdk=${COMPILE_SDK}, targetSdk=${TARGET_SDK}, minSdk=${MIN_SDK}`);
