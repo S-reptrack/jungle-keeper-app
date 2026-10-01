@@ -25,7 +25,7 @@ const Legal = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-3xl">{t("legal.title")}</CardTitle>
+            <h1 className="text-3xl font-semibold leading-none tracking-tight">{t("legal.title")}</h1>
           </CardHeader>
           <CardContent className="prose dark:prose-invert max-w-none space-y-6">
             <section>
