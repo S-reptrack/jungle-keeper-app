@@ -70,8 +70,7 @@ echo [6b/7] Correction finale des versions SDK (Play Protect)...
 node public\fix-android-sdk.js
 
 echo.
-echo [6c/7] Forcage du numero de version Play Store (9 / 1.0.9)...
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$f='android\app\build.gradle'; $c=Get-Content $f -Raw; $c=$c -replace 'versionCode\s*=?\s*\d+','versionCode 9'; $c=$c -replace 'versionName\s*=?\s*\"[^\"]*\"','versionName \"1.0.9\"'; Set-Content -Path $f -Value $c -Encoding UTF8"
+echo [6c/7] Verification du numero de version Play Store (9 / 1.0.9)...
 echo    Contenu actuel :
 findstr /C:"versionCode" /C:"versionName" android\app\build.gradle
 findstr /C:"versionCode 9" android\app\build.gradle >nul
