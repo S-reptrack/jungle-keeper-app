@@ -6,8 +6,8 @@ const config: CapacitorConfig = {
   webDir: 'dist',
   android: {
     allowMixedContent: true,
-    versionCode: 8,
-    versionName: '1.0.8',
+    versionCode: 9,
+    versionName: '1.0.9',
   },
 };
 

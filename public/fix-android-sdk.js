@@ -13,6 +13,8 @@ const appBuildGradlePath = path.join(androidRoot, 'app', 'build.gradle');
 const TARGET_SDK = 35;   // Android 15 — obligatoire pour Play Protect / Play Store
 const COMPILE_SDK = 35;  // Doit correspondre au targetSdk
 const MIN_SDK = 24;      // Minimum pour Capacitor 8
+const VERSION_CODE = 9;
+const VERSION_NAME = '1.0.9';
 
 function readFile(filePath) {
   if (!fs.existsSync(filePath)) return null;
@@ -60,6 +62,10 @@ try {
     appBuildContent = replaceGradleValue(appBuildContent, 'compileSdk', COMPILE_SDK);
     appBuildContent = replaceGradleValue(appBuildContent, 'targetSdk', TARGET_SDK);
     appBuildContent = replaceGradleValue(appBuildContent, 'minSdk', MIN_SDK);
+    // Numéro de version Play Store (doit augmenter à chaque envoi)
+    appBuildContent = appBuildContent.replace(/versionCode\s+\d+/, `versionCode ${VERSION_CODE}`);
+    appBuildContent = appBuildContent.replace(/versionName\s+"[^"]*"/, `versionName "${VERSION_NAME}"`);
+    console.log(`✅ Version : ${VERSION_NAME} (${VERSION_CODE})`);
     fs.writeFileSync(appBuildGradlePath, appBuildContent);
     console.log(`✅ app/build.gradle mis à jour : compileSdk=${COMPILE_SDK}, targetSdk=${TARGET_SDK}, minSdk=${MIN_SDK}`);
   } else {
