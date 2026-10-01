@@ -95,7 +95,7 @@ const Navigation = () => {
               {totalDueCount > 0 && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="relative">
+                    <Button variant="ghost" size="sm" className="relative" aria-label="Notifications">
                       <Bell className={`w-4 h-4 ${overdueCount > 0 ? 'text-destructive' : 'text-primary'}`} />
                       <span className={`absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full text-[10px] font-bold flex items-center justify-center text-primary-foreground ${overdueCount > 0 ? 'bg-destructive' : 'bg-primary'}`}>
                         {totalDueCount}

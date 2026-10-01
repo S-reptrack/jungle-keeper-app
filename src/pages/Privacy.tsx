@@ -25,7 +25,7 @@ const Privacy = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-3xl">{t("privacy.title")}</CardTitle>
+            <CardTitle asChild className="text-3xl"><h1>{t("privacy.title")}</h1></CardTitle>
           </CardHeader>
           <CardContent className="prose dark:prose-invert max-w-none space-y-6">
             <section>

@@ -313,7 +313,7 @@ const Index = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
         <div className="absolute bottom-8 left-4 right-4 md:left-8">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">
-            {t("common.appName")}
+            {t("common.appName")} <span className="sr-only">— Tableau de bord d'élevage</span>
           </h1>
           <p className="text-lg text-muted-foreground">
             {t("common.tagline")}
