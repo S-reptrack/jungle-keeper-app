@@ -12,6 +12,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { toast } from "sonner";
 import { BookOpen, Pencil, Printer } from "lucide-react";
 import { format } from "date-fns";
+import { Switch } from "@/components/ui/switch";
+import { Link } from "react-router-dom";
 
 const ENTRY_TYPES: Record<string, string> = {
   purchase: "Achat", donation: "Don", placement: "Placement", birth: "Naissance à l'élevage",
@@ -38,6 +40,8 @@ export default function Register() {
   const [loading, setLoading] = useState(true);
   const [edit, setEdit] = useState<Row | null>(null);
   const [saving, setSaving] = useState(false);
+  const [breeder, setBreeder] = useState<{ breeder_name: string | null; cdc_number: string | null; aoe_number: string | null; breeder_address: string | null } | null>(null);
+  const [showBreeder, setShowBreeder] = useState(localStorage.getItem("registerShowBreeder") === "true");
 
   const load = async () => {
     const { data, error } = await supabase
@@ -50,7 +54,14 @@ export default function Register() {
     setLoading(false);
   };
 
-  useEffect(() => { if (user) load(); }, [user]);
+  useEffect(() => {
+    if (!user) return;
+    load();
+    (supabase.from("profiles") as any).select("breeder_name,cdc_number,aoe_number,breeder_address")
+      .eq("user_id", user.id).maybeSingle().then(({ data }: any) => setBreeder(data));
+  }, [user]);
+
+  const toggleBreeder = (v: boolean) => { setShowBreeder(v); localStorage.setItem("registerShowBreeder", String(v)); };
 
   const save = async () => {
     if (!edit) return;
@@ -75,10 +86,33 @@ export default function Register() {
     <div className="min-h-screen bg-background notranslate" translate="no">
       <Navigation />
       <main className="container mx-auto px-4 py-8 pb-32">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
           <h1 className="text-3xl font-bold flex items-center gap-2"><BookOpen className="w-7 h-7" />Registre des entrées et sorties</h1>
           <Button variant="outline" onClick={() => window.print()}><Printer className="w-4 h-4 mr-2" />Imprimer</Button>
         </div>
+        <div className="flex items-center gap-2 mb-4 print:hidden">
+          <Switch id="show-breeder" checked={showBreeder} onCheckedChange={toggleBreeder} />
+          <Label htmlFor="show-breeder" className="cursor-pointer">Afficher mes informations d'éleveur (CDC, AOE)</Label>
+        </div>
+        {showBreeder && (
+          <Card className="mb-4">
+            <CardContent className="p-4 text-sm space-y-1">
+              {breeder && (breeder.breeder_name || breeder.cdc_number || breeder.aoe_number || breeder.breeder_address) ? (
+                <>
+                  {breeder.breeder_name && <div className="font-semibold text-base">{breeder.breeder_name}</div>}
+                  {breeder.breeder_address && <div>{breeder.breeder_address}</div>}
+                  <div className="flex flex-wrap gap-x-6">
+                    <span><strong>N° CDC :</strong> {breeder.cdc_number || "—"}</span>
+                    <span><strong>N° AOE :</strong> {breeder.aoe_number || "—"}</span>
+                  </div>
+                  {user?.email && <div className="text-muted-foreground">{user.email}</div>}
+                </>
+              ) : (
+                <p className="text-muted-foreground print:hidden">Renseignez vos informations dans <Link to="/settings" className="underline">Paramètres → Mon élevage</Link>.</p>
+              )}
+            </CardContent>
+          </Card>
+        )}
         <Card>
           <CardContent className="p-0 overflow-x-auto">
             {loading ? <p className="p-6 text-center text-muted-foreground">Chargement…</p> : (

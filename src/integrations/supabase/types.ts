@@ -191,6 +191,10 @@ export type Database = {
       }
       profiles: {
         Row: {
+          aoe_number: string | null
+          breeder_address: string | null
+          breeder_name: string | null
+          cdc_number: string | null
           created_at: string
           email: string | null
           id: string
@@ -199,6 +203,10 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          aoe_number?: string | null
+          breeder_address?: string | null
+          breeder_name?: string | null
+          cdc_number?: string | null
           created_at?: string
           email?: string | null
           id?: string
@@ -207,6 +215,10 @@ export type Database = {
           user_id: string
         }
         Update: {
+          aoe_number?: string | null
+          breeder_address?: string | null
+          breeder_name?: string | null
+          cdc_number?: string | null
           created_at?: string
           email?: string | null
           id?: string
