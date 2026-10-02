@@ -21,7 +21,6 @@ import DeleteAccountDialog from "@/components/DeleteAccountDialog";
 import SubscriptionCard from "@/components/SubscriptionCard";
 import TesterFeedbackForm from "@/components/TesterFeedbackForm";
 import BreederInfoCard from "@/components/BreederInfoCard";
-import { Switch as _S } from "@/components/ui/switch";
 
 const Settings = () => {
   const { t, i18n } = useTranslation();
