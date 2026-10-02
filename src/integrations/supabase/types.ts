@@ -193,11 +193,14 @@ export type Database = {
         Row: {
           aoe_number: string | null
           breeder_address: string | null
+          breeder_country: string | null
           breeder_name: string | null
           cdc_number: string | null
           created_at: string
           email: string | null
           id: string
+          permit1_label: string | null
+          permit2_label: string | null
           referral_code_used: string | null
           updated_at: string
           user_id: string
@@ -205,11 +208,14 @@ export type Database = {
         Insert: {
           aoe_number?: string | null
           breeder_address?: string | null
+          breeder_country?: string | null
           breeder_name?: string | null
           cdc_number?: string | null
           created_at?: string
           email?: string | null
           id?: string
+          permit1_label?: string | null
+          permit2_label?: string | null
           referral_code_used?: string | null
           updated_at?: string
           user_id: string
@@ -217,11 +223,14 @@ export type Database = {
         Update: {
           aoe_number?: string | null
           breeder_address?: string | null
+          breeder_country?: string | null
           breeder_name?: string | null
           cdc_number?: string | null
           created_at?: string
           email?: string | null
           id?: string
+          permit1_label?: string | null
+          permit2_label?: string | null
           referral_code_used?: string | null
           updated_at?: string
           user_id?: string
