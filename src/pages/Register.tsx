@@ -14,6 +14,7 @@ import { BookOpen, Pencil, Printer } from "lucide-react";
 import { format } from "date-fns";
 import { Switch } from "@/components/ui/switch";
 import { Link } from "react-router-dom";
+import { permitLabels } from "@/lib/breederPermits";
 
 const ENTRY_TYPES: Record<string, string> = {
   purchase: "Achat", donation: "Don", placement: "Placement", birth: "Naissance à l'élevage",
@@ -40,7 +41,7 @@ export default function Register() {
   const [loading, setLoading] = useState(true);
   const [edit, setEdit] = useState<Row | null>(null);
   const [saving, setSaving] = useState(false);
-  const [breeder, setBreeder] = useState<{ breeder_name: string | null; cdc_number: string | null; aoe_number: string | null; breeder_address: string | null } | null>(null);
+  const [breeder, setBreeder] = useState<{ breeder_name: string | null; cdc_number: string | null; aoe_number: string | null; breeder_address: string | null; breeder_country: string | null; permit1_label: string | null; permit2_label: string | null } | null>(null);
   const [showBreeder, setShowBreeder] = useState(localStorage.getItem("registerShowBreeder") === "true");
 
   const load = async () => {
@@ -57,7 +58,7 @@ export default function Register() {
   useEffect(() => {
     if (!user) return;
     load();
-    (supabase.from("profiles") as any).select("breeder_name,cdc_number,aoe_number,breeder_address")
+    (supabase.from("profiles") as any).select("breeder_name,cdc_number,aoe_number,breeder_address,breeder_country,permit1_label,permit2_label")
       .eq("user_id", user.id).maybeSingle().then(({ data }: any) => setBreeder(data));
   }, [user]);
 
@@ -92,7 +93,7 @@ export default function Register() {
         </div>
         <div className="flex items-center gap-2 mb-4 print:hidden">
           <Switch id="show-breeder" checked={showBreeder} onCheckedChange={toggleBreeder} />
-          <Label htmlFor="show-breeder" className="cursor-pointer">Afficher mes informations d'éleveur (CDC, AOE)</Label>
+          <Label htmlFor="show-breeder" className="cursor-pointer">Afficher mes informations d'éleveur (autorisations)</Label>
         </div>
         {showBreeder && (
           <Card className="mb-4">
@@ -102,8 +103,8 @@ export default function Register() {
                   {breeder.breeder_name && <div className="font-semibold text-base">{breeder.breeder_name}</div>}
                   {breeder.breeder_address && <div>{breeder.breeder_address}</div>}
                   <div className="flex flex-wrap gap-x-6">
-                    <span><strong>N° CDC :</strong> {breeder.cdc_number || "—"}</span>
-                    <span><strong>N° AOE :</strong> {breeder.aoe_number || "—"}</span>
+                    <span><strong>{permitLabels(breeder.breeder_country, breeder.permit1_label, breeder.permit2_label).p1} :</strong> {breeder.cdc_number || "—"}</span>
+                    <span><strong>{permitLabels(breeder.breeder_country, breeder.permit1_label, breeder.permit2_label).p2} :</strong> {breeder.aoe_number || "—"}</span>
                   </div>
                   {user?.email && <div className="text-muted-foreground">{user.email}</div>}
                 </>
