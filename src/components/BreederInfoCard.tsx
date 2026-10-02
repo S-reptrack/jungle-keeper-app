@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
+import { breederT } from "@/lib/breederI18n";
 import { COUNTRY_PERMITS, permitLabels } from "@/lib/breederPermits";
 
 type Info = {
@@ -19,6 +21,8 @@ const COLS = "breeder_name,cdc_number,aoe_number,breeder_address,breeder_country
 
 export default function BreederInfoCard() {
   const { user } = useAuth();
+  const { i18n } = useTranslation();
+  const t = breederT(i18n.language);
   const [info, setInfo] = useState<Info>(empty);
   const [saving, setSaving] = useState(false);
 
@@ -43,8 +47,8 @@ export default function BreederInfoCard() {
       breeder_country: info.breeder_country, permit1_label: c(info.permit1_label), permit2_label: c(info.permit2_label),
     }).eq("user_id", user.id);
     setSaving(false);
-    if (error) return toast.error("Erreur lors de l'enregistrement");
-    toast.success("Informations de l'élevage enregistrées");
+    if (error) return toast.error(t.error);
+    toast.success(t.saved);
   };
 
   const set = (k: keyof Info) => (e: React.ChangeEvent<HTMLInputElement>) => setInfo({ ...info, [k]: e.target.value });
@@ -54,31 +58,31 @@ export default function BreederInfoCard() {
   return (
     <Card className="notranslate" translate="no">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2"><Building2 className="w-5 h-5" />Mon élevage</CardTitle>
-        <CardDescription>Vos autorisations, affichables en en-tête du registre imprimé.</CardDescription>
+        <CardTitle className="flex items-center gap-2"><Building2 className="w-5 h-5" />{t.title}</CardTitle>
+        <CardDescription>{t.desc}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
-        <div><Label>Pays</Label>
+        <div><Label>{t.country}</Label>
           <Select value={info.breeder_country} onValueChange={(v) => setInfo({ ...info, breeder_country: v })}>
             <SelectTrigger><SelectValue /></SelectTrigger>
-            <SelectContent>{Object.entries(COUNTRY_PERMITS).map(([k, c]) => <SelectItem key={k} value={k}>{c.name}</SelectItem>)}</SelectContent>
+            <SelectContent>{Object.entries(COUNTRY_PERMITS).map(([k, c]) => <SelectItem key={k} value={k}>{k === "OTHER" ? `🌍 ${t.other}` : c.name}</SelectItem>)}</SelectContent>
           </Select>
         </div>
-        <div><Label>Nom de l'élevage</Label><Input value={info.breeder_name} onChange={set("breeder_name")} /></div>
+        <div><Label>{t.name}</Label><Input value={info.breeder_name} onChange={set("breeder_name")} /></div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div><Label>{labels.p1}</Label><Input value={info.cdc_number} onChange={set("cdc_number")} /></div>
           <div><Label>{labels.p2}</Label><Input value={info.aoe_number} onChange={set("aoe_number")} /></div>
         </div>
-        <div><Label>Adresse de l'élevage</Label><Input value={info.breeder_address} onChange={set("breeder_address")} /></div>
+        <div><Label>{t.address}</Label><Input value={info.breeder_address} onChange={set("breeder_address")} /></div>
         <details className="text-sm">
-          <summary className="cursor-pointer text-muted-foreground">Modifier le nom des autorisations</summary>
+          <summary className="cursor-pointer text-muted-foreground">{t.rename}</summary>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
-            <div><Label>Nom autorisation 1</Label><Input value={info.permit1_label} onChange={set("permit1_label")} placeholder={defaults.p1} /></div>
-            <div><Label>Nom autorisation 2</Label><Input value={info.permit2_label} onChange={set("permit2_label")} placeholder={defaults.p2} /></div>
+            <div><Label>{t.n1}</Label><Input value={info.permit1_label} onChange={set("permit1_label")} placeholder={defaults.p1} /></div>
+            <div><Label>{t.n2}</Label><Input value={info.permit2_label} onChange={set("permit2_label")} placeholder={defaults.p2} /></div>
           </div>
         </details>
-        <p className="text-xs text-muted-foreground">Les intitulés sont indicatifs : vérifiez la réglementation de votre pays ou région.</p>
-        <Button onClick={save} disabled={saving} className="w-full">Enregistrer</Button>
+        <p className="text-xs text-muted-foreground">{t.note}</p>
+        <Button onClick={save} disabled={saving} className="w-full">{t.save}</Button>
       </CardContent>
     </Card>
   );
