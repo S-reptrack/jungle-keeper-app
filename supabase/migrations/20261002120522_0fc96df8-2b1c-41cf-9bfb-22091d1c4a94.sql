@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS breeder_country text, ADD COLUMN IF NOT EXISTS permit1_label text, ADD COLUMN IF NOT EXISTS permit2_label text;
