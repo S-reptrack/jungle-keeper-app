@@ -21,7 +21,7 @@ const PremiumNudges = () => {
           <p className="flex-1 text-sm">
             <strong>Premium offert pendant 7 jours</strong> : il vous reste {days} jour{days > 1 ? "s" : ""} pour tout essayer (registre, génétique, fiches PDF, reptiles illimités…). Aucune carte demandée.
           </p>
-          <Button size="sm" variant="outline" onClick={() => navigate("/premium")}>Découvrir</Button>
+          <Button size="sm" variant="outline" onClick={() => navigate("/settings?tab=subscription")}>Découvrir</Button>
         </CardContent>
       </Card>
     );
