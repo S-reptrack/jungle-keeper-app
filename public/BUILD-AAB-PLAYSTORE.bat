@@ -29,7 +29,7 @@ cd android
 
 echo.
 echo [4/5] Generation de l'AAB signe...
-call gradlew bundleRelease -Pandroid.injected.signing.store.file="C:\Users\berti\Documents\sreptrack-release-key.jks" -Pandroid.injected.signing.store.password="SrepTrack2025!" -Pandroid.injected.signing.key.alias="sreptrack" -Pandroid.injected.signing.key.password="SrepTrack2025!"
+call gradlew bundleRelease -Pandroid.injected.signing.store.file="C:\Users\berti\Documents\sreptrack-release-key.jks" -Pandroid.injected.signing.store.password="SrepTrack2025!" -Pandroid.injected.signing.key.alias="key0" -Pandroid.injected.signing.key.password="SrepTrack2025!"
 
 if errorlevel 1 (
     echo.
