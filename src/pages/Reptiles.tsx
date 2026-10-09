@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
+import { useFormerTesterLock } from "@/hooks/useFormerTesterLock";
 import Navigation from "@/components/Navigation";
 import ReptileCard from "@/components/ReptileCard";
 import ReptileListItem from "@/components/ReptileListItem";
@@ -25,7 +26,9 @@ const Reptiles = () => {
   const { role } = useUserRole();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [reptiles, setReptiles] = useState<any[]>([]);
+  const [rawReptiles, setReptiles] = useState<any[]>([]);
+  const { filterVisible } = useFormerTesterLock();
+  const reptiles = filterVisible(rawReptiles);
   const [archivedReptiles, setArchivedReptiles] = useState<any[]>([]);
   const [transferredReptiles, setTransferredReptiles] = useState<any[]>([]);
   const [testReptiles, setTestReptiles] = useState<any[]>([]);
