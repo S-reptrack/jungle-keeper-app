@@ -8,6 +8,8 @@ import ReptileCard from "@/components/ReptileCard";
 import AddReptileDialog from "@/components/AddReptileDialog";
 import { HatchingCard } from "@/components/HatchingCard";
 import TesterTrialBanner from "@/components/TesterTrialBanner";
+import OnboardingChecklist from "@/components/OnboardingChecklist";
+import PremiumNudges from "@/components/PremiumNudges";
 import jungleHero from "@/assets/jungle-hero.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { useFormerTesterLock } from "@/hooks/useFormerTesterLock";
@@ -328,6 +330,8 @@ const Index = () => {
       <main className="max-w-7xl mx-auto px-4 py-8 md:pb-8" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
         {/* Tester Trial Banner */}
         <TesterTrialBanner />
+        <PremiumNudges />
+        <OnboardingChecklist refreshKey={reptiles.length} />
         
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
