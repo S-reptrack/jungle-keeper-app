@@ -13,7 +13,10 @@ import { AuthForm } from "@/components/AuthForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Printer, ChevronLeft, ChevronRight } from "lucide-react";
+import { Printer, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { filterReptiles } from "@/lib/reptileFilters";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -29,6 +32,12 @@ const Reptiles = () => {
   const [rawReptiles, setReptiles] = useState<any[]>([]);
   const { filterVisible } = useFormerTesterLock();
   const reptiles = filterVisible(rawReptiles);
+  const [search, setSearch] = useState("");
+  const [speciesFilter, setSpeciesFilter] = useState("all");
+  const [sexFilter, setSexFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const speciesOptions = Array.from(new Set(reptiles.map((r) => r.species).filter(Boolean))).sort();
+  const filteredActive = filterReptiles(reptiles, { search, species: speciesFilter, sex: sexFilter, status: statusFilter });
   const [archivedReptiles, setArchivedReptiles] = useState<any[]>([]);
   const [transferredReptiles, setTransferredReptiles] = useState<any[]>([]);
   const [testReptiles, setTestReptiles] = useState<any[]>([]);
@@ -387,15 +396,57 @@ const Reptiles = () => {
             </TabsList>
 
             <TabsContent value="active">
+              {reptiles.length > 0 && (
+                <div className="flex flex-col sm:flex-row gap-2 mb-6">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      value={search}
+                      onChange={(e) => { setSearch(e.target.value); setActivePage(1); }}
+                      placeholder="Rechercher un nom, une espèce, un n° d'identification…"
+                      className="pl-9 text-base"
+                      aria-label="Rechercher un reptile"
+                    />
+                  </div>
+                  <Select value={speciesFilter} onValueChange={(v) => { setSpeciesFilter(v); setActivePage(1); }}>
+                    <SelectTrigger className="sm:w-48" aria-label="Filtrer par espèce"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Toutes les espèces</SelectItem>
+                      {speciesOptions.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                  <Select value={sexFilter} onValueChange={(v) => { setSexFilter(v); setActivePage(1); }}>
+                    <SelectTrigger className="sm:w-40" aria-label="Filtrer par sexe"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Tous les sexes</SelectItem>
+                      <SelectItem value="male">Mâles</SelectItem>
+                      <SelectItem value="female">Femelles</SelectItem>
+                      <SelectItem value="unknown">Indéterminés</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); setActivePage(1); }}>
+                    <SelectTrigger className="sm:w-40" aria-label="Filtrer par statut"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Tous les statuts</SelectItem>
+                      <SelectItem value="active">Actifs</SelectItem>
+                      <SelectItem value="for_sale">À vendre</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
               {reptiles.length === 0 ? (
                 <div className="text-center py-12 border border-dashed border-border rounded-lg">
                   <p className="text-muted-foreground mb-4">Aucun reptile actif</p>
                   <AddReptileDialog onReptileAdded={fetchReptiles} />
                 </div>
+              ) : filteredActive.length === 0 ? (
+                <div className="text-center py-12 border border-dashed border-border rounded-lg text-muted-foreground">
+                  Aucun reptile ne correspond à votre recherche.
+                </div>
               ) : (
                 <>
                   <div className="space-y-8">
-                    {groupBySpecies(paginateReptiles(sortBySpeciesAndName(reptiles), activePage)).map(([species, speciesReptiles]) => (
+                    {groupBySpecies(paginateReptiles(sortBySpeciesAndName(filteredActive), activePage)).map(([species, speciesReptiles]) => (
                       <div key={species}>
                         <h2 className="text-xl font-semibold mb-4 text-foreground">{species}</h2>
                         {viewMode === "grid" ? (
@@ -441,7 +492,7 @@ const Reptiles = () => {
                   </div>
                   <PaginationControls
                     currentPage={activePage}
-                    totalItems={reptiles.length}
+                    totalItems={filteredActive.length}
                     onPageChange={setActivePage}
                   />
                 </>
