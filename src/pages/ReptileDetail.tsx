@@ -23,6 +23,7 @@ import SoldTab from "@/components/SoldTab";
 import DeathTab from "@/components/DeathTab";
 import SheddingTab from "@/components/SheddingTab";
 import { supabase } from "@/integrations/supabase/client";
+import { useFormerTesterLock } from "@/hooks/useFormerTesterLock";
 import { toast } from "sonner";
 import { differenceInYears, differenceInMonths } from "date-fns";
 import { useSignedImageUrl } from "@/lib/storageUtils";
@@ -59,6 +60,14 @@ const ReptileDetail = () => {
   const { subscribed } = useSubscription();
   const { role } = useUserRole();
   const [reptile, setReptile] = useState<Reptile | null>(null);
+  const { isHidden } = useFormerTesterLock();
+  const hiddenByLock = isHidden(reptile as any);
+  useEffect(() => {
+    if (hiddenByLock) {
+      toast.error("Ce reptile est masqué. Passez à Premium pour y accéder à nouveau.");
+      navigate("/reptiles", { replace: true });
+    }
+  }, [hiddenByLock, navigate]);
   const [loading, setLoading] = useState(true);
   
   const [imageUploadOpen, setImageUploadOpen] = useState(false);

@@ -30,5 +30,10 @@ export const useFormerTesterLock = () => {
   const filterVisible = <T extends { id: string }>(list: T[]) =>
     allowedIds ? list.filter((r) => allowedIds.has(r.id)) : list;
 
-  return { phase, locked, filterVisible };
+  /** Vrai si ce reptile (actif, à l'utilisateur) est caché par le verrou. */
+  const isHidden = (r: { id: string; user_id?: string; status?: string } | null) =>
+    !!allowedIds && !!r && r.user_id === user?.id &&
+    ["active", "for_sale"].includes(r.status || "") && !allowedIds.has(r.id);
+
+  return { phase, locked, filterVisible, isHidden };
 };
