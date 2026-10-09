@@ -11,6 +11,7 @@ import {
   isAppleIAPAvailable,
   APPLE_PRODUCT_IDS,
 } from "@/lib/appleIAP";
+import { isInWelcomeTrial, getWelcomeTrialEnd } from "@/lib/welcomeTrial";
 
 // Stripe LIVE price IDs
 export const SUBSCRIPTION_TIERS = {
@@ -39,6 +40,7 @@ interface SubscriptionState {
   testerTrialEnd: string | null;
   testerTrialExpired: boolean;
   paymentProvider: PaymentProvider;
+  welcomeTrialEnd: string | null;
 }
 
 const paymentProvider = getPaymentProvider();
@@ -54,6 +56,7 @@ const defaultState: SubscriptionState = {
   testerTrialEnd: null,
   testerTrialExpired: false,
   paymentProvider,
+  welcomeTrialEnd: null,
 };
 
 export const useSubscription = () => {
@@ -165,6 +168,17 @@ export const useSubscription = () => {
     try {
       setState((prev) => ({ ...prev, loading: true, error: null }));
       const result = await checkRealSubscription();
+      if (!result.subscribed && isInWelcomeTrial(user.created_at)) {
+        // Essai Premium offert de 7 jours après l'inscription
+        setState({
+          ...defaultState,
+          subscribed: true,
+          productId: "welcome_trial",
+          loading: false,
+          welcomeTrialEnd: getWelcomeTrialEnd(user.created_at).toISOString(),
+        });
+        return;
+      }
       setState({
         ...defaultState,
         subscribed: result.subscribed,
