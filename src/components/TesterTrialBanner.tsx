@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Clock, AlertTriangle, Crown, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { getGracePhase, getGraceDates } from "@/lib/formerTesterGrace";
 
 const TesterTrialBanner = () => {
   const { t } = useTranslation();
@@ -44,20 +45,28 @@ const TesterTrialBanner = () => {
 
   const daysRemaining = getDaysRemaining();
 
-  // Affichage pour trial expiré
+  // Ancien testeur : 1 an gratuit avec tous ses reptiles, puis 7 jours de délai
   if (testerTrialExpired) {
+    const phase = getGracePhase(testerTrialEnd);
+    if (phase === "grace") return null;
+    const { graceEnd, bufferEnd } = getGraceDates(testerTrialEnd!);
+    const fmt = (d: Date) => d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+    const title =
+      phase === "warning" ? "Votre offre testeur se termine bientôt"
+      : phase === "buffer" ? "Dernière semaine pour garder tous vos reptiles"
+      : "Offre testeur terminée";
+    const text =
+      phase === "warning" ? `Votre offre testeur se termine le ${fmt(graceEnd)}. Passez à Premium pour conserver l'accès à tous vos reptiles.`
+      : phase === "buffer" ? `Passez à Premium avant le ${fmt(bufferEnd)}. Après cette date, seuls 5 reptiles resteront visibles.`
+      : "Seuls 5 reptiles sont visibles. Les autres sont conservés et réapparaîtront dès que vous passerez à Premium.";
     return (
       <Card className="border-destructive bg-destructive/10 mb-6">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
             <AlertTriangle className="h-5 w-5 text-destructive" />
-            <CardTitle className="text-lg text-destructive">
-              Période de test terminée
-            </CardTitle>
+            <CardTitle className="text-lg text-destructive">{title}</CardTitle>
           </div>
-          <CardDescription>
-            Votre accès testeur a expiré. Souscrivez à un abonnement pour conserver vos données et continuer à utiliser toutes les fonctionnalités.
-          </CardDescription>
+          <CardDescription>{text}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-3 sm:grid-cols-2">
