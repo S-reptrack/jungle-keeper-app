@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Navigation from "@/components/Navigation";
 import { supabase } from "@/integrations/supabase/client";
+import { useFormerTesterLock } from "@/hooks/useFormerTesterLock";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ChevronRight, ArrowLeft } from "lucide-react";
@@ -20,7 +21,9 @@ interface Reptile {
 const AllReptilesList = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [reptiles, setReptiles] = useState<Reptile[]>([]);
+  const [rawReptiles, setReptiles] = useState<Reptile[]>([]);
+  const { filterVisible } = useFormerTesterLock();
+  const reptiles = filterVisible(rawReptiles);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

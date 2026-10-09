@@ -10,6 +10,7 @@ import { HatchingCard } from "@/components/HatchingCard";
 import TesterTrialBanner from "@/components/TesterTrialBanner";
 import jungleHero from "@/assets/jungle-hero.jpg";
 import { supabase } from "@/integrations/supabase/client";
+import { useFormerTesterLock } from "@/hooks/useFormerTesterLock";
 import { useAuth } from "@/hooks/useAuth";
 import { AuthForm } from "@/components/AuthForm";
 
@@ -17,7 +18,9 @@ const Index = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
-  const [reptiles, setReptiles] = useState<any[]>([]);
+  const [rawReptiles, setReptiles] = useState<any[]>([]);
+  const { filterVisible } = useFormerTesterLock();
+  const reptiles = filterVisible(rawReptiles);
   const [stats, setStats] = useState({
     total: 0,
     healthIssues: 0,
