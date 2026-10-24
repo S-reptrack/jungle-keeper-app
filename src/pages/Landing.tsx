@@ -11,6 +11,9 @@ import {
   Check,
   X,
   Crown,
+  Mail,
+  ArrowUpRight,
+  MessageCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -300,29 +303,36 @@ const Landing = () => {
       </section>
 
       {/* Support / Contact Section */}
-      <section id="support" className="py-16 px-4">
-        <div className="max-w-2xl mx-auto text-center space-y-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground">
-            {t("landing.supportTitle") || "Support & Contact"}
-          </h2>
-          <p className="text-muted-foreground">
-            {t("landing.supportDescription") || "Une question, un problème ou une suggestion ? Notre équipe est là pour vous aider."}
-          </p>
-          <div className="bg-card border border-border rounded-xl p-6 space-y-4">
-            <div className="flex flex-col items-center gap-2">
-              <p className="text-sm text-muted-foreground">
-                {t("landing.supportEmail") || "Contactez-nous par email :"}
-              </p>
-              <a 
-                href="mailto:contact@s-reptrack.app" 
-                className="text-primary font-semibold text-lg hover:underline"
-              >
-                contact@s-reptrack.app
-              </a>
+      <section id="support" aria-labelledby="support-title" className="border-t border-border bg-secondary/30 px-5 py-12 sm:py-16">
+        <div className="max-w-5xl mx-auto grid gap-8 md:grid-cols-2 md:gap-12 md:items-center">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-sm font-semibold text-primary">
+              <MessageCircle className="h-4 w-4" aria-hidden="true" />
+              <span>{t("landing.supportEyebrow")}</span>
             </div>
-            <p className="text-xs text-muted-foreground">
-              {t("landing.supportResponseTime") || "Nous répondons généralement sous 24 à 48 heures."}
+            <h2 id="support-title" className="text-3xl font-bold text-foreground leading-tight tracking-normal">
+              {t("landing.supportTitle")}
+            </h2>
+            <p className="text-muted-foreground leading-relaxed max-w-md">
+              {t("landing.supportDescription")}
             </p>
+          </div>
+          <div className="border-t md:border-t-0 md:border-l border-border pt-6 md:pt-0 md:pl-10 space-y-5 min-w-0">
+            <div className="flex items-center gap-3">
+              <div className="h-11 w-11 shrink-0 rounded-lg bg-accent/15 text-accent-foreground flex items-center justify-center">
+                <Mail className="h-5 w-5" aria-hidden="true" />
+              </div>
+              <p className="text-sm font-medium text-muted-foreground">{t("landing.supportEmail")}</p>
+            </div>
+            <a href="mailto:contact@s-reptrack.app" className="block text-lg sm:text-xl font-semibold text-primary break-all underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm">
+              contact@s-reptrack.app
+            </a>
+            <Button asChild variant="outline" className="min-h-11 bg-background gap-3">
+              <a href="mailto:contact@s-reptrack.app">
+                {t("landing.supportWrite")}
+                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              </a>
+            </Button>
           </div>
         </div>
       </section>
