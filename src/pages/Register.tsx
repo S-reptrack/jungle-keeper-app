@@ -15,6 +15,7 @@ import { format } from "date-fns";
 import { Switch } from "@/components/ui/switch";
 import { Link } from "react-router-dom";
 import { permitLabels } from "@/lib/breederPermits";
+import { sortRegisterRows } from "@/lib/registerOrder";
 
 const ENTRY_TYPES: Record<string, string> = {
   purchase: "Achat", donation: "Don", placement: "Placement", birth: "Naissance à l'élevage",
@@ -51,7 +52,7 @@ export default function Register() {
       .eq("user_id", user!.id)
       .order("purchase_date", { ascending: true, nullsFirst: false });
     if (error) toast.error("Impossible de charger le registre");
-    setRows((data as Row[]) || []);
+    setRows(sortRegisterRows((data as Row[]) || []));
     setLoading(false);
   };
 
