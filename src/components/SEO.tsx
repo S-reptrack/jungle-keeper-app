@@ -13,7 +13,7 @@ interface SEOProps {
 
 const SITE_URL = "https://s-reptrack.app";
 const DEFAULT_IMAGE = `${SITE_URL}/icon-512.png`;
-const LOCALES = ["fr", "en", "es", "de", "it", "pt", "nl", "pl", "ru", "ja", "zh", "hi", "pa", "ta", "th", "id"];
+const LOCALES = ["fr", "en", "es", "de", "pt", "nl", "pl", "ja", "zh"];
 
 export const SEO = ({
   title,

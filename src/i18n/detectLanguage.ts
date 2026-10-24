@@ -12,22 +12,12 @@ const countryToLanguage: Record<string, string> = {
   SV: 'es', NI: 'es', CR: 'es', PA: 'es', UY: 'es',
   // German-speaking
   DE: 'de', AT: 'de', LI: 'de',
-  // Italian
-  IT: 'it', SM: 'it',
   // Portuguese
   PT: 'pt', BR: 'pt', AO: 'pt', MZ: 'pt',
   // Dutch
   NL: 'nl', SR: 'nl',
   // Polish
   PL: 'pl',
-  // Hindi/Indian languages
-  IN: 'hi',
-  // Thai
-  TH: 'th',
-  // Indonesian
-  ID: 'id',
-  // Russian
-  RU: 'ru', BY: 'ru', KZ: 'ru', KG: 'ru',
   // Japanese
   JP: 'ja',
   // Chinese
