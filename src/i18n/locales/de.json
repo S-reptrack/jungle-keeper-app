@@ -923,6 +923,10 @@
     "title": "Terms of Use"
   },
   "subscription": {
+    "restoreNone": "Keine Einkäufe zum Wiederherstellen",
+    "restoreError": "Fehler beim Wiederherstellen der Einkäufe",
+    "iapNotAvailable": "In-App-Käufe sind nicht verfügbar. Bitte starten Sie die App neu.",
+    "productNotFound": "Produkt nicht gefunden. Bitte später erneut versuchen.",
     "restorePurchases": "Restore my purchases",
     "expiresOn": "Expires on",
     "yearlySavings": "Save 30%!",
@@ -1249,5 +1253,19 @@
     "lastMeal": "Letzte Mahlzeit",
     "nextMealPlanned": "Nächste geplante Mahlzeit",
     "overdueBy": "{{days}} Tag{{plural}} überfällig"
-  }
-}
+  },
+  "upgrade": {
+    "title": "S-reptrack Premium",
+    "subtitle": "Das komplette Herden-Tracking ohne 5-Reptilien-Grenze.",
+    "featuresTitle": "In Premium enthalten",
+    "featureRegister": "Register für Zugang und Abgang",
+    "featureGenetics": "Genetik-Rechner",
+    "featureHealth": "Gesundheits-Dashboard",
+    "featurePdf": "PDF-Blätter und Foto-Verlauf",
+    "featureAnalytics": "Statistiken und Abstammung",
+    "signInTitle": "Zum Fortfahren anmelden",
+    "signInText": "Wählen Sie Ihren Tarif nach der Anmeldung.",
+    "signInButton": "Anmelden",
+    "trialEndsOn": "Ihre kostenlose Premium-Testphase endet am {{date}}",
+    "backToApp": "Zurück zur App"
+  }}

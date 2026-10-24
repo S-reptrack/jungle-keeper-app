@@ -297,7 +297,7 @@ const Upgrade = () => {
                       <Check className="h-4 w-4 text-primary" />
                       <span className="font-medium text-foreground">{t("subscription.freeTitle")}</span>
                       <span className="text-muted-foreground">
-                        — {t("subscription.reptilesUsed", { count })}
+                        — {t("subscription.freeFeature1")}
                       </span>
                     </div>
                     <span className="text-sm text-muted-foreground">

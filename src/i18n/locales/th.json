@@ -916,6 +916,10 @@
     "title": "Terms of Use"
   },
   "subscription": {
+    "restoreNone": "ไม่มีการซื้อที่ต้องกู้คืน",
+    "restoreError": "เกิดข้อผิดพลาดในการกู้คืนการซื้อ",
+    "iapNotAvailable": "การซื้อภายในแอปไม่พร้อมใช้งาน กรุณารีสตาร์ทแอป",
+    "productNotFound": "ไม่พบผลิตภัณฑ์ กรุณาลองใหม่ภายหลัง",
     "restorePurchases": "Restore my purchases",
     "expiresOn": "Expires on",
     "yearlySavings": "Save 30%!",
@@ -1242,5 +1246,19 @@
     "lastMeal": "Last meal",
     "nextMealPlanned": "Next meal planned",
     "overdueBy": "Overdue by {{days}} day{{plural}}"
-  }
-}
+  },
+  "upgrade": {
+    "title": "S-reptrack Premium",
+    "subtitle": "บันทึกการเลี้ยงครบถ้วน โดยไม่จำกัดแค่ 5 สัตว์เลื้อยคลาน",
+    "featuresTitle": "รวมอยู่ใน Premium",
+    "featureRegister": "ทะเบียนรับเข้า-ส่งออกสัตว์",
+    "featureGenetics": "เครื่องคำนวณพันธุกรรม",
+    "featureHealth": "แดชบอร์ดสุขภาพ",
+    "featurePdf": "ใบข้อมูล PDF และประวัติรูปภาพ",
+    "featureAnalytics": "สถิติและสายพันธุ์",
+    "signInTitle": "เข้าสู่ระบบเพื่อดำเนินการต่อ",
+    "signInText": "เลือกแผนของคุณหลังเข้าสู่ระบบ",
+    "signInButton": "เข้าสู่ระบบ",
+    "trialEndsOn": "ช่วงทดลอง Premium ฟรีของคุณจะสิ้นสุดวันที่ {{date}}",
+    "backToApp": "กลับสู่แอป"
+  }}

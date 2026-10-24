@@ -921,6 +921,10 @@
     "title": "Terms of Use"
   },
   "subscription": {
+    "restoreNone": "Nessun acquisto da ripristinare",
+    "restoreError": "Errore durante il ripristino degli acquisti",
+    "iapNotAvailable": "Gli acquisti in-app non sono disponibili. Riavvia l'app.",
+    "productNotFound": "Prodotto non trovato. Riprova più tardi.",
     "restorePurchases": "Restore my purchases",
     "expiresOn": "Expires on",
     "yearlySavings": "Save 30%!",
@@ -1247,5 +1251,19 @@
     "lastMeal": "Ultimo pasto",
     "nextMealPlanned": "Prossimo pasto previsto",
     "overdueBy": "In ritardo di {{days}} giorno{{plural}}"
-  }
-}
+  },
+  "upgrade": {
+    "title": "S-reptrack Premium",
+    "subtitle": "Tutto il monitoraggio del tuo allevamento, senza il limite di 5 rettili.",
+    "featuresTitle": "Incluso in Premium",
+    "featureRegister": "Registro di entrate e uscite",
+    "featureGenetics": "Calcolatore di genetica",
+    "featureHealth": "Dashboard salute",
+    "featurePdf": "Schede PDF e storico foto",
+    "featureAnalytics": "Statistiche e genealogia",
+    "signInTitle": "Accedi per continuare",
+    "signInText": "Scegli il tuo piano dopo l'accesso.",
+    "signInButton": "Accedi",
+    "trialEndsOn": "La tua prova Premium gratuita termina il {{date}}",
+    "backToApp": "Torna all'app"
+  }}

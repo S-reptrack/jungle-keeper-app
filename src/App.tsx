@@ -44,6 +44,7 @@ import Support from "./pages/Support";
 import MorphCalculator from "./pages/MorphCalculator";
 import HealthDashboard from "./pages/HealthDashboard";
 import Register from "./pages/Register";
+import Upgrade from "./pages/Upgrade";
 import { PremiumFeatureGate } from "./components/PremiumFeatureGate";
 import { AuthProvider } from "./hooks/useAuth";
 import BiometricLockGate from "./components/BiometricLockGate";
@@ -73,6 +74,7 @@ const App = () => (
             <Route path="/terms" element={<Terms />} />
             <Route path="/legal" element={<Legal />} />
             <Route path="/support" element={<Support />} />
+            <Route path="/upgrade" element={<Upgrade />} />
 
             {/* Route Admin - priorité haute */}
             <Route path="/admin" element={<TesterSuspensionGuard><AdminRoute><AdminDashboard /></AdminRoute></TesterSuspensionGuard>} />

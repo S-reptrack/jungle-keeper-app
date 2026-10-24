@@ -957,6 +957,10 @@
     "title": "Terms of Use"
   },
   "subscription": {
+    "restoreNone": "Não há compras para restaurar",
+    "restoreError": "Erro ao restaurar as compras",
+    "iapNotAvailable": "As compras no app não estão disponíveis. Reinicie o app.",
+    "productNotFound": "Produto não encontrado. Tente novamente mais tarde.",
     "restorePurchases": "Restore my purchases",
     "expiresOn": "Expires on",
     "yearlySavings": "Save 30%!",
@@ -1283,5 +1287,19 @@
     "lastMeal": "Última refeição",
     "nextMealPlanned": "Próxima refeição prevista",
     "overdueBy": "Atrasado {{days}} dia{{plural}}"
-  }
-}
+  },
+  "upgrade": {
+    "title": "S-reptrack Premium",
+    "subtitle": "Todo o acompanhamento do seu criadouro, sem o limite de 5 répteis.",
+    "featuresTitle": "Incluído no Premium",
+    "featureRegister": "Registro de entradas e saídas",
+    "featureGenetics": "Calculadora de genética",
+    "featureHealth": "Painel de saúde",
+    "featurePdf": "Fichas em PDF e histórico de fotos",
+    "featureAnalytics": "Estatísticas e genealogia",
+    "signInTitle": "Inicie sessão para continuar",
+    "signInText": "Escolha o seu plano depois de iniciar sessão.",
+    "signInButton": "Iniciar sessão",
+    "trialEndsOn": "O seu teste gratuito Premium termina em {{date}}",
+    "backToApp": "Voltar à app"
+  }}

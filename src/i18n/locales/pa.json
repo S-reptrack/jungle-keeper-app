@@ -916,6 +916,10 @@
     "title": "Terms of Use"
   },
   "subscription": {
+    "restoreNone": "ਬਹਾਲ ਕਰਨ ਲਈ ਕੋਈ ਖ਼ਰੀਦ ਨਹੀਂ",
+    "restoreError": "ਖ਼ਰੀਦ ਬਹਾਲ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ",
+    "iapNotAvailable": "ਐਪ ਅੰਦਰ ਖ਼ਰੀਦ ਉਪਲਬਧ ਨਹੀਂ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਐਪ ਮੁੜ ਚਾਲੂ ਕਰੋ।",
+    "productNotFound": "ਉਤਪਾਦ ਨਹੀਂ ਮਿਲਿਆ। ਕਿਰਪਾ ਕਰਕੇ ਬਾਅਦ ਵਿੱਚ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
     "restorePurchases": "Restore my purchases",
     "expiresOn": "Expires on",
     "yearlySavings": "Save 30%!",
@@ -1242,5 +1246,19 @@
     "lastMeal": "Last meal",
     "nextMealPlanned": "Next meal planned",
     "overdueBy": "Overdue by {{days}} day{{plural}}"
-  }
-}
+  },
+  "upgrade": {
+    "title": "S-reptrack Premium",
+    "subtitle": "ਆਪਣੇ ਪਾਲਣ ਦਾ ਪੂਰਾ ਰਿਕਾਰਡ, 5 ਸਰੀਸ੍ਰਪਾਂ ਦੀ ਹੱਦ ਤੋਂ ਬਿਨਾਂ।",
+    "featuresTitle": "Premium ਵਿੱਚ ਸ਼ਾਮਲ",
+    "featureRegister": "ਜਾਨਵਰਾਂ ਦੀ ਆਵਾਗਮਨ ਰਜਿਸਟਰ",
+    "featureGenetics": "ਅਨੁਵੰਸ਼ਿਕਤਾ ਕੈਲਕੁਲੇਟਰ",
+    "featureHealth": "ਸਿਹਤ ਡੈਸ਼ਬੋਰਡ",
+    "featurePdf": "PDF ਸ਼ੀਟਾਂ ਅਤੇ ਫ਼ੋਟੋ ਇਤਿਹਾਸ",
+    "featureAnalytics": "ਅੰਕੜੇ ਅਤੇ ਸ਼ਜਰ",
+    "signInTitle": "ਜਾਰੀ ਰੱਖਣ ਲਈ ਸਾਈਨ ਇਨ ਕਰੋ",
+    "signInText": "ਸਾਈਨ ਇਨ ਕਰਨ ਤੋਂ ਬਾਅਦ ਆਪਣਾ ਪਲਾਨ ਚੁਣੋ।",
+    "signInButton": "ਸਾਈਨ ਇਨ ਕਰੋ",
+    "trialEndsOn": "ਤੁਹਾਡਾ ਮੁਫ਼ਤ Premium ਅਜ਼ਮਾਇਸ਼ {{date}} ਨੂੰ ਖ਼ਤਮ ਹੋਵੇਗਾ",
+    "backToApp": "ਐਪ ਵੱਲ ਵਾਪਸ"
+  }}

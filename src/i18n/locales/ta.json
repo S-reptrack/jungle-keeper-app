@@ -916,6 +916,10 @@
     "title": "Terms of Use"
   },
   "subscription": {
+    "restoreNone": "மீட்டெடுக்க கொள்வனவுகள் இல்லை",
+    "restoreError": "கொள்வனவுகளை மீட்டெடுக்கும்போது பிழை",
+    "iapNotAvailable": "ஆப் உள்ள கொள்வனவுகள் கிடைக்கவில்லை. ஆப்ஐ மீண்டும் தொடங்கவும்.",
+    "productNotFound": "தயாரிப்பு கிடைக்கவில்லை. பிறகு முயற்சிக்கவும்.",
     "restorePurchases": "Restore my purchases",
     "expiresOn": "Expires on",
     "yearlySavings": "Save 30%!",
@@ -1242,5 +1246,19 @@
     "lastMeal": "Last meal",
     "nextMealPlanned": "Next meal planned",
     "overdueBy": "Overdue by {{days}} day{{plural}}"
-  }
-}
+  },
+  "upgrade": {
+    "title": "S-reptrack Premium",
+    "subtitle": "உங்கள் வளர்ப்பின் முழுப் பதிவு, 5 ஊர்வன வரம்பு இல்லாமல்.",
+    "featuresTitle": "Premium-இல் அடங்கும்",
+    "featureRegister": "விலங்குகள் நுழைவு-வெளியேறும் பதிவேடு",
+    "featureGenetics": "மரபணு கால்குலேட்டர்",
+    "featureHealth": "சுகாதார டாஷ்போர்டு",
+    "featurePdf": "PDF தாள்கள் மற்றும் புகைப்பட வரலாறு",
+    "featureAnalytics": "புள்ளிவிவரங்கள் மற்றும் மரபு",
+    "signInTitle": "தொடர உள்நுழையவும்",
+    "signInText": "உள்நுழைந்த பிறகு உங்கள் திட்டத்தைத் தேர்ந்தெடுக்கவும்.",
+    "signInButton": "உள்நுழைக",
+    "trialEndsOn": "உங்கள் இலவச Premium சோதனை {{date}} அன்று முடியும்",
+    "backToApp": "ஆப் பக்கம் திரும்பு"
+  }}

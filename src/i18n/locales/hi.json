@@ -916,6 +916,10 @@
     "title": "Terms of Use"
   },
   "subscription": {
+    "restoreNone": "बहाल करने के लिए कोई खरीद नहीं",
+    "restoreError": "खरीद बहाल करते समय त्रुटि",
+    "iapNotAvailable": "इन-ऐप खरीद उपलब्ध नहीं है। कृपया ऐप फिर से चालू करें।",
+    "productNotFound": "उत्पाद नहीं मिला। कृपया बाद में फिर कोशिश करें।",
     "restorePurchases": "Restore my purchases",
     "expiresOn": "Expires on",
     "yearlySavings": "Save 30%!",
@@ -1242,5 +1246,19 @@
     "lastMeal": "Last meal",
     "nextMealPlanned": "Next meal planned",
     "overdueBy": "Overdue by {{days}} day{{plural}}"
-  }
-}
+  },
+  "upgrade": {
+    "title": "S-reptrack Premium",
+    "subtitle": "अपने पालन का पूरा रिकॉर्ड, 5 सरीसृपों की सीमा के बिना।",
+    "featuresTitle": "Premium में शामिल",
+    "featureRegister": "जानवरों के आगमन-निकास पंजी",
+    "featureGenetics": "आनुवंशिकी कैलकुलेटर",
+    "featureHealth": "स्वास्थ्य डैशबोर्ड",
+    "featurePdf": "PDF शीट और फ़ोटो इतिहास",
+    "featureAnalytics": "आँकड़े और वंशावली",
+    "signInTitle": "जारी रखने के लिए साइन इन करें",
+    "signInText": "साइन इन करने के बाद अपना प्लान चुनें।",
+    "signInButton": "साइन इन करें",
+    "trialEndsOn": "आपका निःशुल्क Premium परीक्षण {{date}} को समाप्त होगा",
+    "backToApp": "ऐप पर वापस जाएँ"
+  }}

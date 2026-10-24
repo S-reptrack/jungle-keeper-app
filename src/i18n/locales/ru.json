@@ -916,6 +916,10 @@
     "title": "Terms of Use"
   },
   "subscription": {
+    "restoreNone": "Нет покупок для восстановления",
+    "restoreError": "Ошибка при восстановлении покупок",
+    "iapNotAvailable": "Внутриприложенческие покупки недоступны. Перезапустите приложение.",
+    "productNotFound": "Товар не найден. Попробуйте позже.",
     "restorePurchases": "Restore my purchases",
     "expiresOn": "Expires on",
     "yearlySavings": "Save 30%!",
@@ -1242,5 +1246,19 @@
     "lastMeal": "Last meal",
     "nextMealPlanned": "Next meal planned",
     "overdueBy": "Overdue by {{days}} day{{plural}}"
-  }
-}
+  },
+  "upgrade": {
+    "title": "S-reptrack Premium",
+    "subtitle": "Полный учёт вашего питомника без ограничения в 5 рептилий.",
+    "featuresTitle": "Входит в Premium",
+    "featureRegister": "Журнал поступления и выбытия животных",
+    "featureGenetics": "Калькулятор генетики",
+    "featureHealth": "Панель здоровья",
+    "featurePdf": "PDF-карточки и история фото",
+    "featureAnalytics": "Статистика и родословная",
+    "signInTitle": "Войдите, чтобы продолжить",
+    "signInText": "Выберите тариф после входа.",
+    "signInButton": "Войти",
+    "trialEndsOn": "Бесплатный пробный период Premium завершается {{date}}",
+    "backToApp": "Вернуться в приложение"
+  }}
