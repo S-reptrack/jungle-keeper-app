@@ -12,3 +12,8 @@
 - [x] Recherche + filtres (espèce, sexe, statut) dans la liste des reptiles
 - [x] Export de toutes ses données en Excel (gratuit)
 - [x] Mode sombre (existait déjà)
+
+## 7. Page Premium dédiée
+- [x] Nouvelle page /upgrade : avantages, tarifs, gestion de l'abonnement, en 16 langues
+- [x] Prix regroupés dans un seul fichier (plus de saisie en double)
+- [ ] Prix Stripe à relier : le compte Stripe connecté ne reconnaît pas les deux prix actuels — en attente de votre accord pour regarder dans Stripe
