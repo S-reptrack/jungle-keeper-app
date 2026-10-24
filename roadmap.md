@@ -16,4 +16,4 @@
 ## 7. Page Premium dédiée
 - [x] Nouvelle page /upgrade : avantages, tarifs, gestion de l'abonnement, en 16 langues
 - [x] Prix regroupés dans un seul fichier (plus de saisie en double)
-- [ ] Prix Stripe à relier : le compte Stripe connecté ne reconnaît pas les deux prix actuels — en attente de votre accord pour regarder dans Stripe
+- [x] Prix Stripe vérifiés : les deux prix créent bien une vraie page de paiement Stripe (5,99 €/mois et 49,99 €/an)
