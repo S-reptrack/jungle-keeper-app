@@ -20,3 +20,9 @@
 
 ## 8. Registre professionnel
 - [x] Classement par date d'entrée, de la plus ancienne à la plus récente (naissances à l'élevage : date de naissance ; fiches sans date à la fin)
+
+## 9. Refonte visuelle
+- [x] Nouvelle palette « Émeraude moderne » (vert émeraude + fond crème + touche dorée), modes clair et sombre
+- [x] Nouvelles polices : Sora (titres) et Manrope (texte)
+- [x] Langues réduites à 9 : fr, en, es, de, pt, nl, pl, ja, zh (retrait de it, hi, pa, ta, th, id, ru)
+- [ ] Publier la refonte sur s-reptrack.app (puis la reprendre dans les versions iOS/Android)

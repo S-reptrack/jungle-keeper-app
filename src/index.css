@@ -8,114 +8,114 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 45 20% 96%;
-    --foreground: 120 45% 12%;
+    --background: 43 23% 95%;
+    --foreground: 152 30% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 120 45% 12%;
+    --card-foreground: 152 30% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 120 45% 12%;
+    --popover-foreground: 152 30% 12%;
 
-    --primary: 110 55% 25%;
-    --primary-foreground: 45 35% 90%;
+    --primary: 152 69% 19%;
+    --primary-foreground: 43 30% 96%;
 
-    --secondary: 35 40% 45%;
-    --secondary-foreground: 45 35% 90%;
+    --secondary: 150 18% 90%;
+    --secondary-foreground: 152 30% 15%;
 
-    --muted: 45 15% 88%;
-    --muted-foreground: 120 15% 40%;
+    --muted: 43 15% 90%;
+    --muted-foreground: 150 10% 40%;
 
-    --accent: 35 50% 65%;
-    --accent-foreground: 120 45% 12%;
+    --accent: 40 60% 58%;
+    --accent-foreground: 152 30% 12%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 45 35% 90%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 43 30% 96%;
 
-    --border: 120 20% 85%;
-    --input: 120 20% 90%;
-    --ring: 110 55% 35%;
+    --border: 40 14% 85%;
+    --input: 40 14% 85%;
+    --ring: 160 84% 39%;
 
-    --radius: 0.75rem;
+    --radius: 0.875rem;
     
-    --jungle-deep: 110 60% 18%;
-    --jungle-mid: 110 55% 30%;
-    --jungle-light: 100 45% 45%;
-    --earth: 25 45% 35%;
-    --amber: 35 50% 65%;
+    --jungle-deep: 152 69% 14%;
+    --jungle-mid: 152 69% 22%;
+    --jungle-light: 160 60% 40%;
+    --earth: 30 35% 40%;
+    --amber: 40 60% 58%;
     
     --gradient-jungle: linear-gradient(135deg, hsl(var(--jungle-deep)), hsl(var(--jungle-mid)));
     --gradient-tropical: linear-gradient(180deg, hsl(var(--jungle-light)), hsl(var(--primary)));
-    --shadow-soft: 0 4px 20px -5px hsl(var(--jungle-deep) / 0.2);
-    --shadow-elevated: 0 10px 30px -10px hsl(var(--jungle-deep) / 0.3);
+    --shadow-soft: 0 4px 20px -5px hsl(var(--jungle-deep) / 0.15);
+    --shadow-elevated: 0 10px 30px -10px hsl(var(--jungle-deep) / 0.25);
     
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    --sidebar-background: 0 0% 98%;
+    --sidebar-background: 43 23% 97%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-foreground: 152 30% 15%;
 
-    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary: 152 69% 19%;
 
-    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-primary-foreground: 43 30% 96%;
 
-    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent: 150 18% 92%;
 
-    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-accent-foreground: 152 30% 15%;
 
-    --sidebar-border: 220 13% 91%;
+    --sidebar-border: 40 14% 88%;
 
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 160 84% 39%;
   }
 
   .dark {
-    --background: 120 35% 8%;
-    --foreground: 45 35% 90%;
+    --background: 152 30% 7%;
+    --foreground: 43 25% 92%;
 
-    --card: 120 30% 12%;
-    --card-foreground: 45 35% 90%;
+    --card: 152 25% 11%;
+    --card-foreground: 43 25% 92%;
 
-    --popover: 120 30% 12%;
-    --popover-foreground: 45 35% 90%;
+    --popover: 152 25% 11%;
+    --popover-foreground: 43 25% 92%;
 
-    --primary: 100 45% 45%;
-    --primary-foreground: 45 35% 90%;
+    --primary: 160 60% 45%;
+    --primary-foreground: 152 40% 8%;
 
-    --secondary: 35 40% 35%;
-    --secondary-foreground: 45 35% 90%;
+    --secondary: 152 15% 18%;
+    --secondary-foreground: 43 25% 92%;
 
-    --muted: 120 20% 20%;
-    --muted-foreground: 45 20% 65%;
+    --muted: 152 15% 16%;
+    --muted-foreground: 43 10% 65%;
 
-    --accent: 35 50% 55%;
-    --accent-foreground: 45 35% 90%;
+    --accent: 40 55% 55%;
+    --accent-foreground: 152 40% 8%;
 
-    --destructive: 0 62.8% 40%;
-    --destructive-foreground: 45 35% 90%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 43 25% 92%;
 
-    --border: 120 25% 18%;
-    --input: 120 25% 18%;
-    --ring: 100 45% 55%;
+    --border: 152 15% 20%;
+    --input: 152 15% 20%;
+    --ring: 160 60% 45%;
     
-    --jungle-deep: 110 60% 15%;
-    --jungle-mid: 110 50% 25%;
-    --jungle-light: 100 40% 35%;
-    --earth: 25 35% 30%;
-    --amber: 35 45% 55%;
+    --jungle-deep: 152 60% 12%;
+    --jungle-mid: 152 50% 22%;
+    --jungle-light: 160 45% 38%;
+    --earth: 30 30% 30%;
+    --amber: 40 55% 55%;
     
     --gradient-jungle: linear-gradient(135deg, hsl(var(--jungle-deep)), hsl(var(--jungle-mid)));
     --gradient-tropical: linear-gradient(180deg, hsl(var(--jungle-light)), hsl(var(--primary)));
     --shadow-soft: 0 4px 20px -5px hsl(0 0% 0% / 0.4);
     --shadow-elevated: 0 10px 30px -10px hsl(0 0% 0% / 0.5);
     
-    --sidebar-background: 120 35% 10%;
-    --sidebar-foreground: 45 35% 85%;
-    --sidebar-primary: 100 45% 40%;
-    --sidebar-primary-foreground: 45 35% 90%;
-    --sidebar-accent: 120 25% 15%;
-    --sidebar-accent-foreground: 45 35% 85%;
-    --sidebar-border: 120 25% 15%;
-    --sidebar-ring: 100 45% 50%;
+    --sidebar-background: 152 30% 9%;
+    --sidebar-foreground: 43 25% 88%;
+    --sidebar-primary: 160 60% 45%;
+    --sidebar-primary-foreground: 152 40% 8%;
+    --sidebar-accent: 152 15% 16%;
+    --sidebar-accent-foreground: 43 25% 88%;
+    --sidebar-border: 152 15% 18%;
+    --sidebar-ring: 160 60% 45%;
   }
 }
 
@@ -126,14 +126,19 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
-    /* Reserve space for bottom navigation + device safe area */
-    padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+    font-family: 'Manrope', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-  
-  /* Ensure proper spacing for mobile navigation */
-  @supports (padding-bottom: env(safe-area-inset-bottom)) {
-    .mobile-safe-bottom {
-      padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
-    }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Sora', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-elevated hover:-translate-y-0.5;
   }
 }
