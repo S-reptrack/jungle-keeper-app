@@ -749,6 +749,10 @@
     "mauremys-japonica": "Tortue japonaise"
   },
   "subscription": {
+    "restoreNone": "Aucun achat à restaurer"
+    "restoreError": "Erreur lors de la restauration"
+    "iapNotAvailable": "Les achats intégrés ne sont pas disponibles. Veuillez redémarrer l'app."
+    "productNotFound": "Produit non trouvé. Veuillez réessayer plus tard."
     "title": "Abonnement",
     "inactiveDescription": "Gérez jusqu'à 5 reptiles gratuitement. Passez à Premium pour un nombre illimité.",
     "activeDescription": "Vous bénéficiez de toutes les fonctionnalités Premium",
@@ -762,7 +766,7 @@
     "monthlyTitle": "Mensuel",
     "yearlyTitle": "Annuel",
     "bestValue": "Meilleur prix",
-    "yearlySavings": "Économisez 2 mois !",
+    "yearlySavings": "Économisez 30 % !",
     "feature1": "Nombre illimité de reptiles",
     "feature2": "Suivi de reproduction avancé",
     "feature3": "Scanner NFC",
@@ -1611,5 +1615,19 @@
     "male": "Mâle",
     "female": "Femelle",
     "unknown": "Inconnu"
-  }
-}
+  },
+  "upgrade": {
+    "title": "S-reptrack Premium",
+    "subtitle": "Tout le suivi de votre élevage, sans limite de 5 reptiles.",
+    "featuresTitle": "Inclus dans Premium",
+    "featureRegister": "Registre des entrées et sorties",
+    "featureGenetics": "Calculateur de génétique",
+    "featureHealth": "Tableau de bord santé",
+    "featurePdf": "Fiches PDF et historique photos",
+    "featureAnalytics": "Statistiques et généalogie",
+    "signInTitle": "Connectez-vous pour continuer",
+    "signInText": "Choisissez votre formule après vous être connecté.",
+    "signInButton": "Se connecter",
+    "trialEndsOn": "Votre essai Premium offert se termine le {{date}}",
+    "backToApp": "Retour à l'app"
+  }}
