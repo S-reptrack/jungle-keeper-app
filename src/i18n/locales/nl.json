@@ -957,6 +957,10 @@
     "title": "Terms of Use"
   },
   "subscription": {
+    "restoreNone": "Geen aankopen om te herstellen",
+    "restoreError": "Fout bij het herstellen van aankopen",
+    "iapNotAvailable": "In-app aankopen zijn niet beschikbaar. Start de app opnieuw.",
+    "productNotFound": "Product niet gevonden. Probeer het later opnieuw.",
     "restorePurchases": "Restore my purchases",
     "expiresOn": "Expires on",
     "yearlySavings": "Save 30%!",
@@ -1283,5 +1287,19 @@
     "lastMeal": "Last meal",
     "nextMealPlanned": "Next meal planned",
     "overdueBy": "Overdue by {{days}} day{{plural}}"
-  }
-}
+  },
+  "upgrade": {
+    "title": "S-reptrack Premium",
+    "subtitle": "Volledige tracking voor uw kwekerij, zonder de limiet van 5 reptielen.",
+    "featuresTitle": "Inbegrepen in Premium",
+    "featureRegister": "Register van in- en uitgaan van dieren",
+    "featureGenetics": "Genetica-rekenmachine",
+    "featureHealth": "Gezondheidsdashboard",
+    "featurePdf": "Pdf-fiches en fotohistorie",
+    "featureAnalytics": "Statistieken en stamboom",
+    "signInTitle": "Log in om verder te gaan",
+    "signInText": "Kies uw plan na het inloggen.",
+    "signInButton": "Inloggen",
+    "trialEndsOn": "Uw gratis Premium-proefperiode eindigt op {{date}}",
+    "backToApp": "Terug naar de app"
+  }}

@@ -12,22 +12,10 @@ import {
   APPLE_PRODUCT_IDS,
 } from "@/lib/appleIAP";
 import { isInWelcomeTrial, getWelcomeTrialEnd } from "@/lib/welcomeTrial";
+import { SUBSCRIPTION_TIERS } from "@/lib/pricing";
 
-// Stripe LIVE price IDs
-export const SUBSCRIPTION_TIERS = {
-  monthly: {
-    priceId: "price_1T8QmuBpVrf7V1XbxPqwnald",
-    productId: "prod_U6e5gpDvGNmPGR",
-    price: 5.99,
-    interval: "month" as const,
-  },
-  yearly: {
-    priceId: "price_1T8Qo3BpVrf7V1XbtNBklIDu",
-    productId: "prod_U6e6twDbrf5BlB",
-    price: 49.99,
-    interval: "year" as const,
-  },
-};
+// Tarifs et identifiants de prix : source unique dans src/lib/pricing.ts
+export { SUBSCRIPTION_TIERS };
 
 interface SubscriptionState {
   subscribed: boolean;

@@ -916,6 +916,10 @@
     "title": "Terms of Use"
   },
   "subscription": {
+    "restoreNone": "復元できる購入はありません",
+    "restoreError": "購入の復元中にエラーが発生しました",
+    "iapNotAvailable": "アプリ内課金が利用できません。アプリを再起動してください。",
+    "productNotFound": "商品が見つかりません。後で再試行してください。",
     "restorePurchases": "Restore my purchases",
     "expiresOn": "Expires on",
     "yearlySavings": "Save 30%!",
@@ -1242,5 +1246,19 @@
     "lastMeal": "Last meal",
     "nextMealPlanned": "Next meal planned",
     "overdueBy": "Overdue by {{days}} day{{plural}}"
-  }
-}
+  },
+  "upgrade": {
+    "title": "S-reptrack Premium",
+    "subtitle": "5匹の上限なく、ブリーディングを完全記録。",
+    "featuresTitle": "Premiumに含まれるもの",
+    "featureRegister": "動物の出入り台帳",
+    "featureGenetics": "遺伝計算ツール",
+    "featureHealth": "健康ダッシュボード",
+    "featurePdf": "PDFシートと写真履歴",
+    "featureAnalytics": "統計と系図",
+    "signInTitle": "続行するにはサインイン",
+    "signInText": "サインイン後にプランをお選びください。",
+    "signInButton": "サインイン",
+    "trialEndsOn": "Premium無料おためしは{{date}}に終了します",
+    "backToApp": "アプリに戻る"
+  }}

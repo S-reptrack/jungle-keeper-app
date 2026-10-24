@@ -916,6 +916,10 @@
     "title": "Terms of Use"
   },
   "subscription": {
+    "restoreNone": "没有可恢复的购买",
+    "restoreError": "恢复购买时出错",
+    "iapNotAvailable": "应用内购买不可用。请重新启动应用。",
+    "productNotFound": "未找到产品。请稍后再试。",
     "restorePurchases": "Restore my purchases",
     "expiresOn": "Expires on",
     "yearlySavings": "Save 30%!",
@@ -1242,5 +1246,19 @@
     "lastMeal": "Last meal",
     "nextMealPlanned": "Next meal planned",
     "overdueBy": "Overdue by {{days}} day{{plural}}"
-  }
-}
+  },
+  "upgrade": {
+    "title": "S-reptrack Premium",
+    "subtitle": "完整记录您的繁育工作，没有 5 只爬行动物的限制。",
+    "featuresTitle": "Premium 包含内容",
+    "featureRegister": "动物进出登记簿",
+    "featureGenetics": "基因计算器",
+    "featureHealth": "健康仪表盘",
+    "featurePdf": "PDF 档案与照片历史",
+    "featureAnalytics": "统计与系谱",
+    "signInTitle": "登录以继续",
+    "signInText": "登录后选择您的套餐。",
+    "signInButton": "登录",
+    "trialEndsOn": "您的免费 Premium 试用将于 {{date}} 结束",
+    "backToApp": "返回应用"
+  }}

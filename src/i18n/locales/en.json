@@ -755,6 +755,10 @@
     "description": "Our reptile breeding management application is coming very soon. Stay tuned!"
   },
   "subscription": {
+    "restoreNone": "No purchases to restore",
+    "restoreError": "Error while restoring purchases",
+    "iapNotAvailable": "In-app purchases are not available. Please restart the app.",
+    "productNotFound": "Product not found. Please try again later.",
     "title": "Subscription",
     "inactiveDescription": "Manage up to 5 reptiles for free. Upgrade to Premium for unlimited.",
     "activeDescription": "You have access to all Premium features",
@@ -1613,5 +1617,19 @@
     "male": "Male",
     "female": "Female",
     "unknown": "Unknown"
-  }
-}
+  },
+  "upgrade": {
+    "title": "S-reptrack Premium",
+    "subtitle": "Full tracking for your breeding room, with no 5-reptile limit.",
+    "featuresTitle": "Included in Premium",
+    "featureRegister": "Animal entry & exit register",
+    "featureGenetics": "Morph genetics calculator",
+    "featureHealth": "Health dashboard",
+    "featurePdf": "PDF sheets and photo history",
+    "featureAnalytics": "Analytics and genealogy",
+    "signInTitle": "Sign in to continue",
+    "signInText": "Choose your plan after signing in.",
+    "signInButton": "Sign in",
+    "trialEndsOn": "Your free Premium trial ends on {{date}}",
+    "backToApp": "Back to the app"
+  }}

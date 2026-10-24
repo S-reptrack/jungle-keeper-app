@@ -957,6 +957,10 @@
     "title": "Terms of Use"
   },
   "subscription": {
+    "restoreNone": "Brak zakupów do przywrócenia",
+    "restoreError": "Błąd podczas przywracania zakupów",
+    "iapNotAvailable": "Zakupy w aplikacji są niedostępne. Uruchom aplikację ponownie.",
+    "productNotFound": "Nie znaleziono produktu. Spróbuj później.",
     "restorePurchases": "Restore my purchases",
     "expiresOn": "Expires on",
     "yearlySavings": "Save 30%!",
@@ -1283,5 +1287,19 @@
     "lastMeal": "Last meal",
     "nextMealPlanned": "Next meal planned",
     "overdueBy": "Overdue by {{days}} day{{plural}}"
-  }
-}
+  },
+  "upgrade": {
+    "title": "S-reptrack Premium",
+    "subtitle": "Pełne prowadzenie hodowli bez limitu 5 gadów.",
+    "featuresTitle": "W cenie Premium",
+    "featureRegister": "Rejestr przyjęć i wydań zwierząt",
+    "featureGenetics": "Kalkulator genetyki",
+    "featureHealth": "Panel zdrowia",
+    "featurePdf": "Karty PDF i historia zdjęć",
+    "featureAnalytics": "Statystyki i genealogia",
+    "signInTitle": "Zaloguj się, aby kontynuować",
+    "signInText": "Wybierz plan po zalogowaniu.",
+    "signInButton": "Zaloguj się",
+    "trialEndsOn": "Twój bezpłatny okres próbny Premium kończy się {{date}}",
+    "backToApp": "Wróć do aplikacji"
+  }}

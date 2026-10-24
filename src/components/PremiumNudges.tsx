@@ -21,7 +21,7 @@ const PremiumNudges = () => {
           <p className="flex-1 text-sm">
             <strong>Premium offert pendant 7 jours</strong> : il vous reste {days} jour{days > 1 ? "s" : ""} pour tout essayer (registre, génétique, fiches PDF, reptiles illimités…). Aucune carte demandée.
           </p>
-          <Button size="sm" variant="outline" onClick={() => navigate("/settings?tab=subscription")}>Découvrir</Button>
+          <Button size="sm" variant="outline" onClick={() => navigate("/upgrade")}>Découvrir</Button>
         </CardContent>
       </Card>
     );
@@ -38,7 +38,7 @@ const PremiumNudges = () => {
               ? `Vous avez atteint la limite gratuite de ${FREE_TIER_LIMIT} reptiles. Passez à Premium pour en ajouter autant que vous voulez.`
               : `Plus qu'une place gratuite (${count}/${FREE_TIER_LIMIT} reptiles). Avec Premium, ajoutez autant de reptiles que vous voulez.`}
           </p>
-          <Button size="sm" onClick={() => navigate("/settings?tab=subscription")}>Passer à Premium</Button>
+          <Button size="sm" onClick={() => navigate("/upgrade")}>Passer à Premium</Button>
         </CardContent>
       </Card>
     );

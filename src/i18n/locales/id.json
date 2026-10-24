@@ -916,6 +916,10 @@
     "title": "Terms of Use"
   },
   "subscription": {
+    "restoreNone": "Tidak ada pembelian untuk dipulihkan",
+    "restoreError": "Kesalahan saat memulihkan pembelian",
+    "iapNotAvailable": "Pembelian dalam aplikasi tidak tersedia. Silakan mulai ulang aplikasi.",
+    "productNotFound": "Produk tidak ditemukan. Coba lagi nanti.",
     "restorePurchases": "Restore my purchases",
     "expiresOn": "Expires on",
     "yearlySavings": "Save 30%!",
@@ -1242,5 +1246,19 @@
     "lastMeal": "Last meal",
     "nextMealPlanned": "Next meal planned",
     "overdueBy": "Overdue by {{days}} day{{plural}}"
-  }
-}
+  },
+  "upgrade": {
+    "title": "S-reptrack Premium",
+    "subtitle": "Pencatatan lengkap untuk penangkaran Anda, tanpa batas 5 reptil.",
+    "featuresTitle": "Termasuk dalam Premium",
+    "featureRegister": "Daftar masuk dan keluar hewan",
+    "featureGenetics": "Kalkulator genetika",
+    "featureHealth": "Dasbor kesehatan",
+    "featurePdf": "Lembar PDF dan riwayat foto",
+    "featureAnalytics": "Statistik dan silsilah",
+    "signInTitle": "Masuk untuk melanjutkan",
+    "signInText": "Pilih paket Anda setelah masuk.",
+    "signInButton": "Masuk",
+    "trialEndsOn": "Masa uji Premium gratis Anda berakhir pada {{date}}",
+    "backToApp": "Kembali ke aplikasi"
+  }}

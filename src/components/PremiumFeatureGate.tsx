@@ -48,7 +48,7 @@ export const PremiumFeatureGate = ({
             {t("premium.upgradeToAccess")}
           </p>
           <Button 
-            onClick={() => navigate("/settings?tab=subscription")}
+            onClick={() => navigate("/upgrade")}
             className="w-full"
           >
             <Crown className="w-4 h-4 mr-2" />
