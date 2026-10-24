@@ -41,8 +41,8 @@ i18n
       ja: { translation: ja },
       zh: { translation: zh },
     },
-    lng: savedLanguage || 'en',
-    fallbackLng: 'en',
+    lng: savedLanguage || 'fr',
+    fallbackLng: 'fr',
     interpolation: {
       escapeValue: false,
     },
