@@ -749,10 +749,10 @@
     "mauremys-japonica": "Tortue japonaise"
   },
   "subscription": {
-    "restoreNone": "Aucun achat à restaurer"
-    "restoreError": "Erreur lors de la restauration"
-    "iapNotAvailable": "Les achats intégrés ne sont pas disponibles. Veuillez redémarrer l'app."
-    "productNotFound": "Produit non trouvé. Veuillez réessayer plus tard."
+    "restoreNone": "Aucun achat à restaurer",
+    "restoreError": "Erreur lors de la restauration",
+    "iapNotAvailable": "Les achats intégrés ne sont pas disponibles. Veuillez redémarrer l'app.",
+    "productNotFound": "Produit non trouvé. Veuillez réessayer plus tard.",
     "title": "Abonnement",
     "inactiveDescription": "Gérez jusqu'à 5 reptiles gratuitement. Passez à Premium pour un nombre illimité.",
     "activeDescription": "Vous bénéficiez de toutes les fonctionnalités Premium",
