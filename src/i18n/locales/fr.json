@@ -510,6 +510,11 @@
     "readOnlyAccess": "Vous consultez un animal que vous avez transféré. Vous ne pouvez que consulter les informations, pas les modifier."
   },
   "landing": {
+    "supportEyebrow": "Restons en contact",
+    "supportTitle": "Une question ? Parlons-en.",
+    "supportDescription": "Besoin d’aide avec S-reptrack ou envie de partager une suggestion ? Écrivez-nous, nous sommes à votre écoute.",
+    "supportEmail": "Contact par e-mail",
+    "supportWrite": "Nous écrire",
     "login": "Connexion",
     "badge": "Application professionnelle d'élevage",
     "heroTitle": "Gérez votre élevage de",
