@@ -35,7 +35,7 @@ export async function detectLanguageFromIP(): Promise<string | null> {
     const data = await res.json();
     const country = data?.country_code?.toUpperCase();
     if (!country) return null;
-    return countryToLanguage[country] || 'en';
+    return countryToLanguage[country] || 'fr';
   } catch {
     return null;
   }
