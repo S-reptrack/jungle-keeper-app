@@ -23,6 +23,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
+import { reptilePhotoPath } from "@/lib/reptilePhotoPath";
 
 interface Photo {
   id: string;
@@ -59,12 +60,13 @@ export const PhotoHistoryTab = ({ reptileId }: PhotoHistoryTabProps) => {
   }, [user, reptileId, subscribed]);
 
   const fetchPhotos = async () => {
+    if (!user) return;
     try {
       const { data, error } = await supabase
         .from("reptile_photos")
         .select("*")
         .eq("reptile_id", reptileId)
-        .eq("user_id", user!.id)
+        .eq("user_id", user.id)
         .order("taken_at", { ascending: false });
 
       if (error) throw error;
@@ -77,6 +79,10 @@ export const PhotoHistoryTab = ({ reptileId }: PhotoHistoryTabProps) => {
   };
 
   const handleUpload = async () => {
+    if (!user) {
+      toast.error(t("photoHistory.sessionExpired", { defaultValue: "Votre session a expiré. Reconnectez-vous avant d’ajouter une photo." }));
+      return;
+    }
     if (!selectedFile) {
       toast.error(t("photoHistory.selectFile"));
       return;
@@ -85,8 +91,7 @@ export const PhotoHistoryTab = ({ reptileId }: PhotoHistoryTabProps) => {
     setUploading(true);
     try {
       // Upload to storage
-      const fileExt = selectedFile.name.split('.').pop();
-      const fileName = `${reptileId}/${Date.now()}.${fileExt}`;
+      const fileName = reptilePhotoPath(user.id, reptileId, selectedFile.name);
       
       const { error: uploadError } = await supabase.storage
         .from("reptile-images")
@@ -94,23 +99,19 @@ export const PhotoHistoryTab = ({ reptileId }: PhotoHistoryTabProps) => {
 
       if (uploadError) throw uploadError;
 
-      // Get signed URL
-      const { data: urlData } = await supabase.storage
-        .from("reptile-images")
-        .createSignedUrl(fileName, 60 * 60 * 24 * 365); // 1 year
-
-      if (!urlData?.signedUrl) throw new Error("Failed to get signed URL");
-
       // Save to database
       const { error: dbError } = await supabase.from("reptile_photos").insert({
         reptile_id: reptileId,
-        user_id: user!.id,
+        user_id: user.id,
         image_url: fileName,
         caption: caption.trim() || null,
         taken_at: takenAt
       });
 
-      if (dbError) throw dbError;
+      if (dbError) {
+        await supabase.storage.from("reptile-images").remove([fileName]);
+        throw dbError;
+      }
 
       toast.success(t("photoHistory.photoAdded"));
       setDialogOpen(false);
@@ -120,7 +121,7 @@ export const PhotoHistoryTab = ({ reptileId }: PhotoHistoryTabProps) => {
       fetchPhotos();
     } catch (error) {
       console.error("Upload error:", error);
-      toast.error(t("common.error"));
+      toast.error(t("photoHistory.uploadError", { defaultValue: "La photo n’a pas pu être enregistrée. Vérifiez votre connexion et réessayez." }));
     } finally {
       setUploading(false);
     }
@@ -145,7 +146,7 @@ export const PhotoHistoryTab = ({ reptileId }: PhotoHistoryTabProps) => {
       setSelectedPhotoIndex(null);
       fetchPhotos();
     } catch (error) {
-      toast.error(t("common.error"));
+      toast.error(t("photoHistory.deleteError", { defaultValue: "La photo n’a pas pu être supprimée. Réessayez." }));
     }
   };
 

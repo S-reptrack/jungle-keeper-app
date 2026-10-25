@@ -1,5 +1,9 @@
 # Roadmap
 
+## Ajout de photos
+- [x] Corriger le dossier privé utilisé par l’historique photo et remplacer le message d’erreur non traduit.
+- [ ] Vérifier une vraie prise de photo sur iPhone — nécessite la prochaine version native et un essai sur l’appareil.
+
 ## 1. Accueil des nouveaux inscrits
 - [x] Guide en 3 étapes à la première connexion
 - [ ] E-mail de relance 3 jours après inscription sans reptile — bloqué : e-mail de relance non autorisé par le service d'e-mails de l'app
