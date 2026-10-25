@@ -1070,7 +1070,10 @@
     "noPhotos": "Aucune photo dans l'historique.",
     "photoAdded": "Photo ajoutée !",
     "photoDeleted": "Photo supprimée",
-    "selectFile": "Veuillez sélectionner un fichier"
+    "selectFile": "Veuillez sélectionner un fichier",
+    "uploadError": "La photo n’a pas pu être enregistrée. Vérifiez votre connexion et réessayez.",
+    "deleteError": "La photo n’a pas pu être supprimée. Réessayez.",
+    "sessionExpired": "Votre session a expiré. Reconnectez-vous avant d’ajouter une photo."
   },
   "installBanner": {
     "title": "Installer S-reptrack",
