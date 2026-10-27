@@ -131,6 +131,13 @@ All colors MUST be HSL.
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* Reserve space for the fixed mobile bottom navigation + device safe area */
+  @media (max-width: 767px) {
+    body {
+      padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+    }
+  }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Sora', ui-sans-serif, system-ui, -apple-system, sans-serif;
     letter-spacing: -0.02em;
