@@ -1,10 +1,11 @@
 # Roadmap
 
 ## Sécurité — audit du 27/10/2026
-- [ ] Protéger les envois aux testeurs et le générateur marketing par un contrôle administrateur.
-- [ ] Désactiver les anciens envois d’authentification et récompenses de parrainage.
-- [ ] Restreindre les statistiques privées, sécuriser les retours de paiement et les exports, retirer les e-mails des journaux.
-- [ ] Vérifier les refus d’accès et le parcours Premium après correction.
+- [x] Protéger les envois aux testeurs et le générateur marketing par un contrôle administrateur.
+- [x] Désactiver les anciens envois d’authentification et récompenses de parrainage.
+- [x] Restreindre les statistiques privées, sécuriser les retours de paiement et les exports, retirer les e-mails des journaux.
+- [x] Vérifier les refus d’accès, les droits administrateur et la création authentifiée de paiement après correction.
+- [ ] Vérifier le parcours Premium connecté dans l’aperçu — bloqué : la session valide côté service n’est pas conservée dans le navigateur de contrôle.
 
 ## Ajout de photos
 - [x] Corriger le dossier privé utilisé par l’historique photo et remplacer le message d’erreur non traduit.
