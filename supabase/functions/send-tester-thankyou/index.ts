@@ -41,7 +41,7 @@ const EMAIL_HTML = `
       <h2>Deux options s'offrent à vous :</h2>
       
       <div class="option">
-        🌟 <strong>Version Premium</strong> (4,99€/mois ou 39,99€/an)<br>
+        🌟 <strong>Version Premium</strong> (5,99€/mois ou 49,99€/an)<br>
         Vous retrouvez l'intégralité de vos données et continuez à profiter de toutes les fonctionnalités sans aucune interruption. Aucune ressaisie nécessaire.
       </div>
       
