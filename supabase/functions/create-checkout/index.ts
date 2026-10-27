@@ -1,3 +1,4 @@
+import { billingOrigin } from '../_shared/billingOrigin.ts';
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
@@ -8,8 +9,7 @@ const corsHeaders = {
 };
 
 const logStep = (step: string, details?: any) => {
-  const detailsStr = details ? ` - ${JSON.stringify(details)}` : '';
-  console.log(`[CREATE-CHECKOUT] ${step}${detailsStr}`);
+  console.log(`[CREATE-CHECKOUT] ${step}`);
 };
 
 serve(async (req) => {
@@ -25,9 +25,9 @@ serve(async (req) => {
   try {
     logStep("Function started");
 
-    const { priceId, referralCode } = await req.json();
+    const { priceId } = await req.json();
     if (!priceId) throw new Error("Price ID is required");
-    logStep("Price ID received", { priceId, referralCode });
+    logStep("Price ID received");
 
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) throw new Error("Authorization header required - please log in first");
@@ -35,7 +35,7 @@ serve(async (req) => {
     const { data } = await supabaseClient.auth.getUser(token);
     const user = data.user;
     if (!user?.email) throw new Error("User not authenticated or email not available");
-    logStep("User authenticated", { userId: user.id, email: user.email });
+    logStep("User authenticated");
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2025-08-27.basil" });
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
@@ -45,14 +45,8 @@ serve(async (req) => {
       logStep("Found existing customer", { customerId });
     }
 
-    const origin = req.headers.get("origin") || "http://localhost:3000";
+    const origin = billingOrigin(req.headers.get("origin"));
     
-    // Build metadata with referral code if present
-    const metadata: Record<string, string> = {};
-    if (referralCode) {
-      metadata.referral_code = referralCode;
-    }
-
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
@@ -63,9 +57,8 @@ serve(async (req) => {
         },
       ],
       mode: "subscription",
-      success_url: `${origin}/settings?subscription=success${referralCode ? `&ref=${referralCode}` : ''}`,
-      cancel_url: `${origin}/settings?subscription=cancelled`,
-      metadata,
+      success_url: `${origin}/upgrade?subscription=success`,
+      cancel_url: `${origin}/upgrade?subscription=cancelled`,
     });
 
     logStep("Checkout session created", { sessionId: session.id, url: session.url });

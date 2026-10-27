@@ -1,3 +1,4 @@
+import { escapeHtml } from "./escapeHtml";
 import { supabase } from "@/integrations/supabase/client";
 
 interface ReptilePDFData {
@@ -67,7 +68,7 @@ export function generateHealthPDF(data: ReptilePDFData, printWindow?: Window | n
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Fiche Santé - ${reptile.name}</title>
+  <title>Fiche Santé - ${escapeHtml(reptile.name)}</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #1a1a1a; padding: 40px; font-size: 12px; line-height: 1.5; }
@@ -100,12 +101,12 @@ export function generateHealthPDF(data: ReptilePDFData, printWindow?: Window | n
 <body>
   <div class="header">
     <div>
-      <h1>🦎 ${reptile.name}</h1>
-      <div class="species">${reptile.species} — ${reptile.category}</div>
+      <h1>🦎 ${escapeHtml(reptile.name)}</h1>
+      <div class="species">${escapeHtml(reptile.species)} — ${escapeHtml(reptile.category)}</div>
       <div style="margin-top: 8px;">
-        <span class="badge badge-status">${reptile.status === "active" ? "Actif" : reptile.status}</span>
+        <span class="badge badge-status">${reptile.status === "active" ? "Actif" : escapeHtml(reptile.status)}</span>
         <span class="badge badge-morph">${sexLabel(reptile.sex)}</span>
-        ${(reptile.morphs || []).map(m => `<span class="badge badge-morph">${m}</span>`).join("")}
+        ${(reptile.morphs || []).map(m => `<span class="badge badge-morph">${escapeHtml(m)}</span>`).join("")}
       </div>
     </div>
     <div class="date">
@@ -161,8 +162,8 @@ export function generateHealthPDF(data: ReptilePDFData, printWindow?: Window | n
         ${healthRecords.map(h => `
           <tr>
             <td>${formatDate(h.diagnosis_date)}</td>
-            <td>${h.condition}</td>
-            <td>${h.treatment || "—"}</td>
+            <td>${escapeHtml(h.condition)}</td>
+            <td>${escapeHtml(h.treatment || "—")}</td>
             <td class="${h.resolved ? 'resolved' : 'unresolved'}">${h.resolved ? "✓ Résolu" : "⚠ En cours"}</td>
           </tr>
         `).join("")}
@@ -179,10 +180,10 @@ export function generateHealthPDF(data: ReptilePDFData, printWindow?: Window | n
         ${feedings.slice(0, 20).map(f => `
           <tr>
             <td>${formatDate(f.feeding_date)}</td>
-            <td>${f.rodent_type}</td>
-            <td>${f.rodent_stage}</td>
+            <td>${escapeHtml(f.rodent_type)}</td>
+            <td>${escapeHtml(f.rodent_stage)}</td>
             <td>${f.quantity}</td>
-            <td>${f.notes || "—"}</td>
+            <td>${escapeHtml(f.notes || "—")}</td>
           </tr>
         `).join("")}
       </tbody>
@@ -198,7 +199,7 @@ export function generateHealthPDF(data: ReptilePDFData, printWindow?: Window | n
         ${sheddings.map(s => `
           <tr>
             <td>${formatDate(s.shedding_date)}</td>
-            <td>${s.quality === "complete" ? "✓ Complète" : s.quality === "partial" ? "⚠ Partielle" : s.quality}</td>
+            <td>${s.quality === "complete" ? "✓ Complète" : s.quality === "partial" ? "⚠ Partielle" : escapeHtml(s.quality)}</td>
           </tr>
         `).join("")}
       </tbody>
@@ -214,6 +215,7 @@ export function generateHealthPDF(data: ReptilePDFData, printWindow?: Window | n
   // Use provided window or open a new one
   const win = printWindow || window.open("", "_blank");
   if (win) {
+    win.opener = null;
     win.document.open();
     win.document.write(html);
     win.document.close();
