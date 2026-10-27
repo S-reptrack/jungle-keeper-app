@@ -30,4 +30,4 @@
 - [x] Nouvelle palette « Émeraude moderne » (vert émeraude + fond crème + touche dorée), modes clair et sombre
 - [x] Nouvelles polices : Sora (titres) et Manrope (texte)
 - [x] Langues réduites à 9 : fr, en, es, de, pt, nl, pl, ja, zh (retrait de it, hi, pa, ta, th, id, ru)
-- [ ] Publier la refonte sur s-reptrack.app (puis la reprendre dans les versions iOS/Android)
+- [x] Publier la refonte sur s-reptrack.app (publié le 27/10/2026 ; reste à la reprendre dans les versions iOS/Android)
