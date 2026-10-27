@@ -1,5 +1,11 @@
 # Roadmap
 
+## Sécurité — audit du 27/10/2026
+- [ ] Protéger les envois aux testeurs et le générateur marketing par un contrôle administrateur.
+- [ ] Désactiver les anciens envois d’authentification et récompenses de parrainage.
+- [ ] Restreindre les statistiques privées, sécuriser les retours de paiement et les exports, retirer les e-mails des journaux.
+- [ ] Vérifier les refus d’accès et le parcours Premium après correction.
+
 ## Ajout de photos
 - [x] Corriger le dossier privé utilisé par l’historique photo et remplacer le message d’erreur non traduit.
 - [ ] Vérifier une vraie prise de photo sur iPhone — nécessite la prochaine version native et un essai sur l’appareil.
