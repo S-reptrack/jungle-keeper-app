@@ -7,8 +7,7 @@ const corsHeaders = {
 };
 
 const logStep = (step: string, details?: any) => {
-  const detailsStr = details ? ` - ${JSON.stringify(details)}` : '';
-  console.log(`[VALIDATE-APPLE-RECEIPT] ${step}${detailsStr}`);
+  console.log(`[VALIDATE-APPLE-RECEIPT] ${step}`);
 };
 
 // Apple verifyReceipt endpoints
@@ -38,7 +37,7 @@ serve(async (req) => {
     if (userError) throw new Error(`Authentication error: ${userError.message}`);
     const user = userData.user;
     if (!user?.email) throw new Error("User not authenticated");
-    logStep("User authenticated", { userId: user.id, email: user.email });
+    logStep("User authenticated");
 
     const { receiptData, transactionId } = await req.json();
     if (!receiptData) {

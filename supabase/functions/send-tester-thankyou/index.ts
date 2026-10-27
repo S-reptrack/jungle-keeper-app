@@ -1,10 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { createClient } from 'npm:@supabase/supabase-js@2';
+import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
+import { requireAdmin } from '../_shared/adminAuth.ts';
 
 const EMAIL_HTML = `
 <!DOCTYPE html>
@@ -68,13 +65,16 @@ serve(async (req) => {
   }
 
   try {
+    const denial = await requireAdmin(req);
+    if (denial) return denial;
+    if (req.method !== 'POST') return new Response(null, { status: 405, headers: corsHeaders });
     const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
     if (!RESEND_API_KEY) {
       throw new Error('RESEND_API_KEY is not configured');
     }
 
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Get all testers (users with 'tester' role)
@@ -100,7 +100,7 @@ serve(async (req) => {
 
     if (profilesError) throw new Error(`Error fetching profiles: ${profilesError.message}`);
 
-    const emails = profiles?.filter(p => p.email).map(p => p.email!) || [];
+    const emails = profiles?.flatMap(p => p.email ? [p.email] : []) || [];
 
     if (emails.length === 0) {
       return new Response(JSON.stringify({ success: true, message: 'No tester emails found', sent: 0 }), {

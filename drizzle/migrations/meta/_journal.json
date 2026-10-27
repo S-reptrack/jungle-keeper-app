@@ -8,6 +8,13 @@
       "when": 1791849503184,
       "tag": "0000_sync_register_exit_on_archive",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793131987532,
+      "tag": "0001_restrict_private_security_definer_functions",
+      "breakpoints": true
     }
   ]
 }

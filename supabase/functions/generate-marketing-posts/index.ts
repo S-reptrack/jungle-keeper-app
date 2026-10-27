@@ -1,17 +1,23 @@
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 
-const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+import { requireAdmin } from '../_shared/adminAuth.ts';
+import { z } from 'npm:zod@3';
 
-interface Body {
-  network: "instagram" | "facebook" | "tiktok" | "twitter" | "linkedin";
-  theme?: string;
-  count?: number;
-}
+const BodySchema = z.object({
+  network: z.enum(['instagram', 'facebook', 'tiktok', 'twitter', 'linkedin']),
+  theme: z.string().max(1000).optional(),
+  count: z.number().int().min(1).max(10).default(3),
+});
+
+const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
+    const denial = await requireAdmin(req);
+    if (denial) return denial;
+    if (req.method !== 'POST') return new Response(null, { status: 405, headers: corsHeaders });
     if (!LOVABLE_API_KEY) {
       return new Response(JSON.stringify({ error: "LOVABLE_API_KEY manquante" }), {
         status: 500,
@@ -19,7 +25,9 @@ Deno.serve(async (req) => {
       });
     }
 
-    const { network, theme, count = 3 }: Body = await req.json();
+    const parsedBody = BodySchema.safeParse(await req.json().catch(() => null));
+    if (!parsedBody.success) return new Response(JSON.stringify({ error: 'Invalid input' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    const { network, theme, count } = parsedBody.data;
 
     const networkGuide: Record<string, string> = {
       instagram: "Post Instagram : accroche visuelle forte, 3-5 lignes maximum, emojis pertinents, style storytelling reptile, terminer par un appel à l'action doux (ex: 'télécharge S-reptrack'). Inclure 8-12 hashtags ciblés.",

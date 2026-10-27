@@ -92,7 +92,6 @@ export const useSubscription = () => {
             // Check for real subscription (Stripe or Apple)
             const hasRealSub = await checkRealSubscription();
             if (hasRealSub.subscribed) {
-              await supabase.rpc("remove_tester_role_on_subscribe", { user_email: profile.email });
               setState({
                 ...defaultState,
                 subscribed: true,
