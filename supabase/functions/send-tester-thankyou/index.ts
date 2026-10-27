@@ -44,7 +44,7 @@ const EMAIL_HTML = `
       
       <div class="option free">
         🆓 <strong>Version Gratuite</strong><br>
-        Vous conservez tous les animaux déjà enregistrés, même au-delà de la limite habituelle de 5. C'est un avantage exclusif réservé à nos testeurs ! En revanche, vous ne pourrez pas en ajouter de nouveaux et seules les fonctionnalités de base seront accessibles (suivi d'alimentation, poids actuel, QR code, photo de profil).
+        Vos données sont conservées. Les anciens testeurs bénéficient d'un maintien de l'accès à leurs animaux pendant un an après la fin du test, puis de sept jours pour passer à Premium. Ensuite, les cinq animaux actifs les plus anciens restent visibles ; les autres réapparaissent avec Premium. L'ajout reste limité à cinq animaux en version gratuite. Seules les fonctionnalités de base restent accessibles.
       </div>
       
       <p>Dans les deux cas, <strong>rien n'est perdu</strong>. Vos données vous attendent. 🎉</p>
