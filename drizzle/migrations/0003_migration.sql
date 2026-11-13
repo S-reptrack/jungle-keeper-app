@@ -1,0 +1,1 @@
+GRANT EXECUTE ON FUNCTION public.remove_tester_role_on_subscribe(text), public.get_referral_reward_count(uuid), public.validate_referral_code(text), public.generate_referral_code() TO service_role;
